@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>취득세 계산기 (2026년 최신 세율) - 영크루</title>
+<meta name="description" content="2026년 주택 취득세를 주택 수·조정대상지역·전용면적 기준으로 자동 계산합니다. 지방교육세·농어촌특별세 포함 총 납부세액까지 한 번에 확인하세요.">
+<link rel="canonical" href="https://yeongcrew.co.kr/acquisition-tax.html">
+<meta property="og:title" content="취득세 계산기 (2026년 최신 세율) - 영크루">
+<meta property="og:description" content="2026년 주택 취득세를 주택 수·조정대상지역·전용면적 기준으로 자동 계산합니다. 지방교육세·농어촌특별세 포함 총 납부세액까지 한 번에 확인하세요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yeongcrew.co.kr/acquisition-tax.html">
+<meta property="og:site_name" content="영크루 - 부동산 계산기 모음">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+:root{--navy:#1b2a4a;--navy2:#243b6b;--teal:#0e9f8a;--teal-l:#e6f6f3;--bg:#f6f8fb;--card:#ffffff;--txt:#22304a;--sub:#64748b;--line:#e5eaf2;--accent:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--txt);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+header.top{background:var(--navy);color:#fff}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+.logo span{color:#5eead4}
+nav.gnb{display:flex;gap:18px;font-size:.9rem;color:#cbd5e1}
+nav.gnb a:hover{color:#fff}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#2d4a86 100%);color:#fff;padding:44px 0 52px;text-align:center}
+.hero h1{font-size:1.7rem;letter-spacing:-.02em;margin-bottom:10px}
+.hero p{color:#c7d2e4;font-size:.98rem}
+main{padding:36px 0 56px}
+h2.sec{font-size:1.25rem;margin:34px 0 16px;letter-spacing:-.02em}
+h2.sec:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;transition:.15s;display:block}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,42,74,.08);border-color:#c9d6ec}
+.card .ic{font-size:1.5rem}
+.card h3{font-size:1.02rem;margin:8px 0 4px}
+.card p{font-size:.86rem;color:var(--sub)}
+.tool-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:22px}
+.tool-box h2{font-size:1.15rem;margin-bottom:16px}
+label.f{display:block;font-size:.88rem;font-weight:600;margin:14px 0 6px;color:var(--navy)}
+input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-size:1rem;background:#fff;color:var(--txt)}
+input.f:focus,select.f:focus{outline:none;border-color:var(--teal)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.seg button{flex:1;min-width:90px;padding:10px 8px;border:1.5px solid var(--line);background:#fff;border-radius:10px;font-size:.88rem;cursor:pointer;color:var(--sub)}
+.seg button.on{border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:700}
+button.go{width:100%;margin-top:20px;padding:14px;border:none;border-radius:12px;background:var(--teal);color:#fff;font-size:1.05rem;font-weight:700;cursor:pointer}
+button.go:hover{background:#0c8a78}
+.result{display:none;margin-top:20px;background:var(--teal-l);border:1.5px solid #b8e6dd;border-radius:12px;padding:20px}
+.result.show{display:block}
+.result .big{font-size:1.5rem;font-weight:800;color:var(--teal)}
+.result table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
+.result td,.result th{padding:7px 4px;border-bottom:1px solid #cde9e3;text-align:right}
+.result td:first-child,.result th:first-child{text-align:left;color:var(--sub)}
+.note{font-size:.82rem;color:var(--sub);margin-top:14px}
+article.post{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px}
+article.post h1{font-size:1.45rem;margin-bottom:6px;letter-spacing:-.02em}
+article.post .meta{font-size:.85rem;color:var(--sub);margin-bottom:22px}
+article.post h2{font-size:1.15rem;margin:28px 0 10px;color:var(--navy);border-left:4px solid var(--teal);padding-left:10px}
+article.post p{margin-bottom:14px;font-size:.95rem}
+article.post table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:.88rem}
+article.post th{background:var(--navy);color:#fff;padding:9px 8px;font-weight:600}
+article.post td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:center}
+article.post ul{margin:0 0 14px 20px;font-size:.95rem}
+article.post li{margin-bottom:6px}
+.tip{background:#fff8e9;border:1px solid #f3dfae;border-radius:10px;padding:14px 16px;font-size:.9rem;margin:14px 0}
+.rel{margin-top:26px}
+.ad-slot{margin:26px 0;padding:22px;text-align:center;background:#eef1f6;border:1px dashed #c9d2e0;border-radius:10px;color:#94a3b8;font-size:.82rem}
+footer{background:var(--navy);color:#94a3b8;padding:30px 0;font-size:.85rem;text-align:center}
+footer a{color:#cbd5e1;margin:0 8px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
+.crumb a{color:var(--teal)}
+@media(max-width:600px){.hero h1{font-size:1.35rem}.row2{grid-template-columns:1fr}nav.gnb{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/">영크루<span>.</span> <small style="font-weight:500;font-size:.75rem;color:#94a3b8">부동산 계산기</small></a>
+<nav class="gnb">
+<a href="/loan-calculator.html">대출·DSR</a>
+<a href="/acquisition-tax.html">취득세</a>
+<a href="/brokerage-fee.html">중개보수</a>
+<a href="/jeonse-monthly.html">전월세 전환</a>
+<a href="/youth-housing.html">청년 지원</a>
+<a href="/#guide">가이드</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+
+<div class="crumb"><a href="/">홈</a> › 취득세 계산기</div>
+<div class="tool-box">
+<h2>🧾 주택 취득세 계산기 (2026 기준)</h2>
+<label class="f">취득가액 (만원)</label>
+<input class="f" id="tAmt" type="number" placeholder="예: 70000 (7억)">
+<label class="f">취득 후 보유 주택 수 (이번 주택 포함)</label>
+<div class="seg" id="tCnt">
+<button data-v="1" class="on">1주택</button>
+<button data-v="2">2주택</button>
+<button data-v="3">3주택</button>
+<button data-v="4">4주택 이상</button>
+</div>
+<label class="f">조정대상지역 여부</label>
+<div class="seg" id="tAdj">
+<button data-v="n" class="on">비조정지역</button>
+<button data-v="y">조정대상지역</button>
+</div>
+<label class="f">전용면적</label>
+<div class="seg" id="tSize">
+<button data-v="s" class="on">85㎡ 이하</button>
+<button data-v="b">85㎡ 초과</button>
+</div>
+<button class="go" onclick="calcTax()">계산하기</button>
+<div class="result" id="tRes"></div>
+<p class="note">유상거래(매매) 기준입니다. 일시적 2주택(종전 주택 3년 내 처분)은 1주택 세율이 적용됩니다. 생애최초 감면 등 개별 감면은 반영되지 않으니 참고용으로 활용하세요.</p>
+</div>
+
+<div class="rel"><h2 class="sec">함께 보면 좋은 콘텐츠</h2><div class="grid">
+<a class="card" href="/real-estate-tax.html"><div class="ic">📖</div><h3>부동산 세금 한눈에</h3><p>취득세·보유세·양도세 기초 정리</p></a>
+<a class="card" href="/brokerage-calculator.html"><div class="ic">🤝</div><h3>중개보수 계산기</h3><p>복비 상한 요율 자동 계산</p></a>
+</div></div>
+
+</div></main>
+<footer><div class="wrap">
+영크루 · 부동산 계산기 &amp; 주거지원 툴박스<br>
+본 사이트의 계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a>
+</div></footer>
+
+<script>
+function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+document.querySelectorAll('.seg').forEach(function(seg){
+  seg.addEventListener('click',function(e){
+    if(e.target.tagName!=='BUTTON')return;
+    seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});
+    e.target.classList.add('on');
+  });
+});
+function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
+function baseRate(eok){
+  if(eok<=6) return 1;
+  if(eok<=9) return eok*2/3-3;
+  return 3;
+}
+function calcTax(){
+  var man=(+document.getElementById('tAmt').value);
+  if(!man){alert('취득가액을 입력해주세요');return;}
+  var price=man*10000, eok=man/10000;
+  var cnt=+segVal('tCnt'), adj=segVal('tAdj')==='y', big=segVal('tSize')==='b';
+  var rate, heavy=false;
+  if(cnt===1){rate=baseRate(eok);}
+  else if(cnt===2){ if(adj){rate=8;heavy=true;} else {rate=baseRate(eok);} }
+  else if(cnt===3){ if(adj){rate=12;heavy=true;} else {rate=8;heavy=true;} }
+  else {rate=12;heavy=true;}
+  var acq=price*rate/100;
+  var edu = heavy ? price*0.004 : acq*0.1;
+  var farm=0;
+  if(big){ farm = heavy ? (rate===8?price*0.006:price*0.010) : price*0.002; }
+  var total=acq+edu+farm;
+  var el=document.getElementById('tRes');
+  el.innerHTML='<div>총 납부세액 (세율 '+rate.toFixed(2).replace(/\.?0+$/,'')+'%)</div><div class="big">'+fmt(total)+'원</div>'
+  +'<table><tr><td>취득세</td><td>'+fmt(acq)+'원</td></tr>'
+  +'<tr><td>지방교육세</td><td>'+fmt(edu)+'원</td></tr>'
+  +'<tr><td>농어촌특별세'+(big?'':' (85㎡ 이하 비과세)')+'</td><td>'+fmt(farm)+'원</td></tr></table>';
+  el.classList.add('show');
+}
+</script>
+
+</body>
+</html>

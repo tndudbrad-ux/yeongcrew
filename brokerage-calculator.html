@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>부동산 중개보수(복비) 계산기 - 매매·전세·월세 - 영크루</title>
+<meta name="description" content="매매·전세·월세 중개보수 상한액을 국토부 요율표 기준으로 자동 계산합니다. 월세 환산보증금, 부가세 포함 금액까지 확인하세요.">
+<link rel="canonical" href="https://yeongcrew.co.kr/brokerage-calculator.html">
+<meta property="og:title" content="부동산 중개보수(복비) 계산기 - 매매·전세·월세 - 영크루">
+<meta property="og:description" content="매매·전세·월세 중개보수 상한액을 국토부 요율표 기준으로 자동 계산합니다. 월세 환산보증금, 부가세 포함 금액까지 확인하세요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yeongcrew.co.kr/brokerage-calculator.html">
+<meta property="og:site_name" content="영크루 - 부동산 계산기 모음">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+:root{--navy:#1b2a4a;--navy2:#243b6b;--teal:#0e9f8a;--teal-l:#e6f6f3;--bg:#f6f8fb;--card:#ffffff;--txt:#22304a;--sub:#64748b;--line:#e5eaf2;--accent:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:var(--txt);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+header.top{background:var(--navy);color:#fff}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+.logo span{color:#5eead4}
+nav.gnb{display:flex;gap:18px;font-size:.9rem;color:#cbd5e1}
+nav.gnb a:hover{color:#fff}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#2d4a86 100%);color:#fff;padding:44px 0 52px;text-align:center}
+.hero h1{font-size:1.7rem;letter-spacing:-.02em;margin-bottom:10px}
+.hero p{color:#c7d2e4;font-size:.98rem}
+main{padding:36px 0 56px}
+h2.sec{font-size:1.25rem;margin:34px 0 16px;letter-spacing:-.02em}
+h2.sec:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;transition:.15s;display:block}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(27,42,74,.08);border-color:#c9d6ec}
+.card .ic{font-size:1.5rem}
+.card h3{font-size:1.02rem;margin:8px 0 4px}
+.card p{font-size:.86rem;color:var(--sub)}
+.tool-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin-bottom:22px}
+.tool-box h2{font-size:1.15rem;margin-bottom:16px}
+label.f{display:block;font-size:.88rem;font-weight:600;margin:14px 0 6px;color:var(--navy)}
+input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font-size:1rem;background:#fff;color:var(--txt)}
+input.f:focus,select.f:focus{outline:none;border-color:var(--teal)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.seg button{flex:1;min-width:90px;padding:10px 8px;border:1.5px solid var(--line);background:#fff;border-radius:10px;font-size:.88rem;cursor:pointer;color:var(--sub)}
+.seg button.on{border-color:var(--teal);background:var(--teal-l);color:var(--teal);font-weight:700}
+button.go{width:100%;margin-top:20px;padding:14px;border:none;border-radius:12px;background:var(--teal);color:#fff;font-size:1.05rem;font-weight:700;cursor:pointer}
+button.go:hover{background:#0c8a78}
+.result{display:none;margin-top:20px;background:var(--teal-l);border:1.5px solid #b8e6dd;border-radius:12px;padding:20px}
+.result.show{display:block}
+.result .big{font-size:1.5rem;font-weight:800;color:var(--teal)}
+.result table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
+.result td,.result th{padding:7px 4px;border-bottom:1px solid #cde9e3;text-align:right}
+.result td:first-child,.result th:first-child{text-align:left;color:var(--sub)}
+.note{font-size:.82rem;color:var(--sub);margin-top:14px}
+article.post{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px}
+article.post h1{font-size:1.45rem;margin-bottom:6px;letter-spacing:-.02em}
+article.post .meta{font-size:.85rem;color:var(--sub);margin-bottom:22px}
+article.post h2{font-size:1.15rem;margin:28px 0 10px;color:var(--navy);border-left:4px solid var(--teal);padding-left:10px}
+article.post p{margin-bottom:14px;font-size:.95rem}
+article.post table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:.88rem}
+article.post th{background:var(--navy);color:#fff;padding:9px 8px;font-weight:600}
+article.post td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:center}
+article.post ul{margin:0 0 14px 20px;font-size:.95rem}
+article.post li{margin-bottom:6px}
+.tip{background:#fff8e9;border:1px solid #f3dfae;border-radius:10px;padding:14px 16px;font-size:.9rem;margin:14px 0}
+.rel{margin-top:26px}
+.ad-slot{margin:26px 0;padding:22px;text-align:center;background:#eef1f6;border:1px dashed #c9d2e0;border-radius:10px;color:#94a3b8;font-size:.82rem}
+footer{background:var(--navy);color:#94a3b8;padding:30px 0;font-size:.85rem;text-align:center}
+footer a{color:#cbd5e1;margin:0 8px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
+.crumb a{color:var(--teal)}
+@media(max-width:600px){.hero h1{font-size:1.35rem}.row2{grid-template-columns:1fr}nav.gnb{display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/">영크루<span>.</span> <small style="font-weight:500;font-size:.75rem;color:#94a3b8">부동산 계산기</small></a>
+<nav class="gnb">
+<a href="/loan-calculator.html">대출·DSR</a>
+<a href="/acquisition-tax.html">취득세</a>
+<a href="/brokerage-fee.html">중개보수</a>
+<a href="/jeonse-monthly.html">전월세 전환</a>
+<a href="/youth-housing.html">청년 지원</a>
+<a href="/#guide">가이드</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+
+<div class="crumb"><a href="/">홈</a> › 중개보수(복비) 계산기</div>
+<div class="tool-box">
+<h2>🤝 부동산 중개보수 계산기</h2>
+<label class="f">거래 유형</label>
+<div class="seg" id="bType">
+<button data-v="sale" class="on">매매·교환</button>
+<button data-v="jeonse">전세</button>
+<button data-v="monthly">월세</button>
+</div>
+<div id="bSaleBox">
+<label class="f">거래금액 (만원)</label>
+<input class="f" id="bAmt" type="number" placeholder="예: 50000 (5억)">
+</div>
+<div id="bMonBox" style="display:none">
+<div class="row2">
+<div><label class="f">보증금 (만원)</label><input class="f" id="bDep" type="number" placeholder="예: 1000"></div>
+<div><label class="f">월세 (만원)</label><input class="f" id="bMon" type="number" placeholder="예: 60"></div>
+</div>
+</div>
+<button class="go" onclick="calcFee()">계산하기</button>
+<div class="result" id="bRes"></div>
+<p class="note">국토교통부 주택 중개보수 상한요율 기준(대부분 시·도 동일)입니다. 상한이므로 중개사와 협의해 낮출 수 있고, 부가가치세(10%)는 별도입니다. 오피스텔·상가는 요율이 다릅니다.</p>
+</div>
+
+<div class="rel"><h2 class="sec">함께 보면 좋은 콘텐츠</h2><div class="grid">
+<a class="card" href="/jeonse-contract.html"><div class="ic">📋</div><h3>전세 계약 체크리스트</h3><p>계약 전 꼭 확인할 10가지</p></a>
+<a class="card" href="/jeonse-monthly.html"><div class="ic">🔄</div><h3>전월세 전환 계산기</h3><p>전세↔월세 적정 금액 환산</p></a>
+</div></div>
+
+</div></main>
+<footer><div class="wrap">
+영크루 · 부동산 계산기 &amp; 주거지원 툴박스<br>
+본 사이트의 계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a>
+</div></footer>
+
+<script>
+function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+document.querySelectorAll('.seg').forEach(function(seg){
+  seg.addEventListener('click',function(e){
+    if(e.target.tagName!=='BUTTON')return;
+    seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});
+    e.target.classList.add('on');
+    if(seg.id==='bType'){
+      var m=e.target.dataset.v==='monthly';
+      document.getElementById('bMonBox').style.display=m?'block':'none';
+      document.getElementById('bSaleBox').style.display=m?'none':'block';
+    }
+  });
+});
+function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
+var SALE=[[5000,0.6,25],[20000,0.5,80],[90000,0.4,null],[120000,0.5,null],[150000,0.6,null],[Infinity,0.7,null]];
+var RENT=[[5000,0.5,20],[10000,0.4,30],[60000,0.3,null],[120000,0.4,null],[150000,0.5,null],[Infinity,0.6,null]];
+function lookup(tbl,man){
+  for(var i=0;i<tbl.length;i++){ if(man<tbl[i][0]) return tbl[i]; }
+  return tbl[tbl.length-1];
+}
+function calcFee(){
+  var type=segVal('bType'), man, label;
+  if(type==='monthly'){
+    var dep=(+document.getElementById('bDep').value)||0;
+    var mon=(+document.getElementById('bMon').value)||0;
+    if(!dep&&!mon){alert('보증금·월세를 입력해주세요');return;}
+    man=dep+mon*100;
+    if(man<5000) man=dep+mon*70;
+    label='환산보증금 '+fmt(man*10000)+'원 기준';
+  }else{
+    man=(+document.getElementById('bAmt').value);
+    if(!man){alert('거래금액을 입력해주세요');return;}
+    label='거래금액 '+fmt(man*10000)+'원 기준';
+  }
+  var tbl = type==='sale' ? SALE : RENT;
+  var row=lookup(tbl,man);
+  var fee=man*10000*row[1]/100;
+  var capped=false;
+  if(row[2]!==null && fee>row[2]*10000){fee=row[2]*10000;capped=true;}
+  var el=document.getElementById('bRes');
+  el.innerHTML='<div>'+label+' · 상한요율 '+row[1]+'%'+(capped?' (한도 적용)':'')+'</div><div class="big">최대 '+fmt(fee)+'원</div><div style="font-size:.88rem;margin-top:6px">부가세 포함 시 최대 '+fmt(fee*1.1)+'원</div>';
+  el.classList.add('show');
+}
+</script>
+
+</body>
+</html>
