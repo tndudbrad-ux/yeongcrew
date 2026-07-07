@@ -96,6 +96,7 @@ function offerChips(){
   c.appendChild(b);body.appendChild(c);scrollDown();
 }
 var FLOW=null;
+function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
 function parseMoney(t){
   t=t.replace(/,/g,'').replace(/원/g,'').trim();
   var eok=t.match(/([0-9.]+)\s*억/);
