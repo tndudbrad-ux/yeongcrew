@@ -40,6 +40,7 @@ var ANSWERS={
  jeonse:'보증금 지키는 게 최우선이죠.\n\n• 등기부등본 PDF 올려서 위험 확인 → <a href="/jeonse-safety-check.html">전세사기 체크</a>\n• 계약 전 확인 목록 → <a href="/jeonse-contract.html">전세 계약 체크리스트</a>\n• 사기 수법 미리 알기 → <a href="/jeonse-fraud.html">전세사기 유형 7가지</a>\n• 전세↔월세 뭐가 유리? → <a href="/jeonse-monthly.html">전월세 전환 계산기</a>',
  couple:'부부의 큰 결정 두 가지!\n\n• 혼인신고 지금 할까 미룰까 → <a href="/marriage-check.html">혼인신고 자가진단</a>\n• 집 명의 공동 vs 단독 → <a href="/myeongui-check.html">명의 자가진단</a>\n\n각각 12~13개 질문이면 우리 부부 답이 나와요.',
  support:'받을 수 있는 건 다 받아야죠.\n\n• 내게 맞는 지원제도 찾기 → <a href="/youth-housing.html">청년·신혼 주거지원 진단</a>\n• 청약 처음이라면 → <a href="/cheongyak-guide.html">청약 완벽 가이드</a>\n• 첫 집 로드맵 → <a href="/first-home.html">생애 첫 집 마련</a>',
+ contract:'계약하고 나면 다 불안해요. 정상이에요!\n\n<a href="/contract-check.html">계약 셀프 검진</a>에서 월세 적정성·전세 안전장치·복비 초과 여부를 숫자로 확인해보세요. 이미 한 계약도 지금 할 일을 알려드려요.',
  moving:'큰 날일수록 순서가 생명이에요.\n\n• 매매 계약 전 → 잔금일 → 이사날, 단계별로 하나씩 체크 → <a href="/moving-guide.html">훤 로드맵</a>\n• 임대주택 입주라면 하자 점검부터 → <a href="/rental-care.html">하자 체크리스트</a>\n\n체크한 진행률은 저장되니까, 이사 준비하면서 하나씩 지워나가요!',
  expert:'혼자 결정하기 어려운 순간이네요.\n\n<a href="/experts.html">훤 매치 (전문가 찾기)</a>에서 중개사·세무사·법무사·변호사·대출상담사가 언제 필요한지, 고르는 법, 바로 연결 링크까지 정리해뒀어요.'
 };
@@ -50,6 +51,7 @@ var KEYWORDS=[
  [/혼인|결혼|신고|명의|공동|단독|부부/i,'couple'],
  [/청약|특공|지원|월세지원|신혼부부|청년/i,'support'],
  [/전문가|세무사|중개사|변호사|법무사|상담|연결/i,'expert'],
+ [/잘.*계약|계약.*맞|적정|바가지|비싸게|호구|검진/i,'contract'],
  [/이사|잔금|입주|이삿짐|전입|로드맵|절차|순서/i,'moving'],
  [/수익률|월세.*수익|상가|오피스텔.*투자/i,'tax'],
  [/복비|중개보수|수수료/i,'tax']
