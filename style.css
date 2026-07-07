@@ -5,6 +5,7 @@
    Pretendard 300/500 · 후광 링 시그니처
    ============================================ */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
 
 :root{
   --mint:#2AC1BC; --teal:#20A6A2; --cream:#F0FAF8; --forest:#0D2A29;
@@ -13,7 +14,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  font-family:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic",sans-serif;
+  font-family:"Wanted Sans Variable","Wanted Sans","Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic",sans-serif;
   background:var(--cream); color:var(--forest);
   line-height:1.65; font-weight:400; -webkit-font-smoothing:antialiased;
 }
@@ -58,13 +59,13 @@ a{color:inherit;text-decoration:none}
   filter:drop-shadow(0 0 14px rgba(42,193,188,.85)) drop-shadow(0 0 44px rgba(42,193,188,.45));
 }
 .hero h1{
-  font-size:2.1rem; font-weight:300; letter-spacing:-.03em; line-height:1.3; margin-bottom:14px;
+  font-size:2.1rem; font-weight:400; letter-spacing:-.03em; line-height:1.3; margin-bottom:14px;
 }
-.hero h1 .em{font-weight:500; color:#7FE8E3}
-.hero p{color:#9FC4C1; font-size:1rem; font-weight:300; letter-spacing:-.01em}
+.hero h1 .em{font-weight:600; color:#7FE8E3}
+.hero p{color:#9FC4C1; font-size:1rem; font-weight:400; letter-spacing:-.01em}
 .hero .tag{
   display:inline-block; margin-bottom:26px; font-size:.72rem; letter-spacing:.42em;
-  color:#6FB9B5; font-weight:300; text-transform:uppercase;
+  color:#6FB9B5; font-weight:500; text-transform:uppercase;
 }
 
 /* ---------- Sections & Cards ---------- */
