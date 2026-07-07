@@ -1,4 +1,4 @@
-/* 훤봇 v1 — FAQ 네비게이터 (규칙 기반, 서버 없음) */
+/* 부비 v1 — 훤AI의 부동산 비서 (규칙 기반, 서버 없음) */
 (function(){
 var css=document.createElement('style');
 css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;z-index:9998;background:linear-gradient(180deg,#33CCC7,#1B918D);box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 30px rgba(42,193,188,.35);display:flex;align-items:center;justify-content:center}'
@@ -55,9 +55,9 @@ var KEYWORDS=[
  [/복비|중개보수|수수료/i,'tax']
 ];
 function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
-var btn=el('button','',null);btn.id='hwbBtn';btn.setAttribute('aria-label','훤봇 열기');btn.appendChild(el('span','ring',''));
+var btn=el('button','',null);btn.id='hwbBtn';btn.setAttribute('aria-label','부비 열기');btn.appendChild(el('span','ring',''));
 var panel=el('div','',null);panel.id='hwbPanel';
-panel.innerHTML='<div id="hwbHead"><span class="r"></span><div><b>훤봇</b><small>부동산이, 훤해요 · 무엇이든 물어보세요</small></div><button id="hwbClose" aria-label="닫기">✕</button></div><div id="hwbBody"></div><div id="hwbInputRow"><input id="hwbInput" placeholder="예: 전세 계약 전에 뭘 확인해야 해?"><button id="hwbSend">전송</button></div>';
+panel.innerHTML='<div id="hwbHead"><span class="r"></span><div><b>부비</b><small>훤AI 부동산 비서 · 무엇이든 물어보세요</small></div><button id="hwbClose" aria-label="닫기">✕</button></div><div id="hwbBody"></div><div id="hwbInputRow"><input id="hwbInput" placeholder="예: 전세 계약 전에 뭘 확인해야 해?"><button id="hwbSend">전송</button></div>';
 document.body.appendChild(btn);document.body.appendChild(panel);
 btn.classList.add('pulse');
 var teaser=null;
@@ -65,7 +65,7 @@ function hideTeaser(){ if(teaser){teaser.classList.remove('show');setTimeout(fun
 try{
  if(!sessionStorage.getItem('hwbSeen')){
   teaser=el('div','',null);teaser.id='hwbTeaser';
-  teaser.innerHTML='부동산, 깜깜한 게 있나요?<br><b>훤봇</b>에게 물어보세요 🔆<span class="x">✕</span>';
+  teaser.innerHTML='부동산, 깜깜한 게 있나요?<br>비서 <b>부비</b>에게 물어보세요 🔆<span class="x">✕</span>';
   document.body.appendChild(teaser);
   setTimeout(function(){teaser&&teaser.classList.add('show');},1400);
   setTimeout(hideTeaser,13000);
@@ -104,7 +104,7 @@ btn.onclick=function(){
   panel.classList.toggle('open');
   if(panel.classList.contains('open')&&!opened){
     opened=true;
-    bot('안녕하세요, 훤봇이에요 🔆\n부동산의 깜깜한 곳을 훤히 밝혀드릴게요.\n어떤 게 궁금하세요?');
+    bot('안녕하세요, 부비예요! 🔆\n훤AI의 부동산 비서, 부동산 비서라서 부비 🙋\n깜깜한 곳을 훤히 밝혀드릴게요. 어떤 게 궁금하세요?');
     chips();
   }
 };
