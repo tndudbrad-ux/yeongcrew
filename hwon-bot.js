@@ -22,6 +22,12 @@ css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:58px;height
 +'#hwbInput:focus{outline:none;border-color:#2AC1BC}'
 +'#hwbSend{border:none;background:#2AC1BC;color:#fff;border-radius:12px;padding:0 16px;font-weight:600;cursor:pointer;font-family:inherit}'
 +'#hwbClose{margin-left:auto;background:none;border:none;color:#9FC4C1;font-size:1.1rem;cursor:pointer}';
+css.textContent+='@keyframes hwbPulse{0%{box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 0 0 rgba(42,193,188,.55)}70%{box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 0 16px rgba(42,193,188,0)}100%{box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 0 0 rgba(42,193,188,0)}}'
++'#hwbBtn.pulse{animation:hwbPulse 2.2s ease-out infinite}'
++'#hwbTeaser{position:fixed;right:88px;bottom:26px;z-index:9998;background:#0D2A29;color:#EAF7F6;padding:12px 40px 12px 16px;border-radius:16px;border-bottom-right-radius:4px;font-size:.86rem;line-height:1.5;box-shadow:0 10px 30px rgba(13,42,41,.35);cursor:pointer;max-width:240px;opacity:0;transform:translateY(8px);transition:.35s ease;font-family:inherit}'
++'#hwbTeaser.show{opacity:1;transform:translateY(0)}'
++'#hwbTeaser b{color:#7FE8E3;font-weight:600}'
++'#hwbTeaser .x{position:absolute;top:8px;right:10px;color:#6FB9B5;font-size:.85rem;padding:2px 4px}';
 document.head.appendChild(css);
 
 var MENUS=[
@@ -50,6 +56,21 @@ var btn=el('button','',null);btn.id='hwbBtn';btn.setAttribute('aria-label','훤�
 var panel=el('div','',null);panel.id='hwbPanel';
 panel.innerHTML='<div id="hwbHead"><span class="r"></span><div><b>훤봇</b><small>부동산이, 훤해요 · 무엇이든 물어보세요</small></div><button id="hwbClose" aria-label="닫기">✕</button></div><div id="hwbBody"></div><div id="hwbInputRow"><input id="hwbInput" placeholder="예: 전세 계약 전에 뭘 확인해야 해?"><button id="hwbSend">전송</button></div>';
 document.body.appendChild(btn);document.body.appendChild(panel);
+btn.classList.add('pulse');
+var teaser=null;
+function hideTeaser(){ if(teaser){teaser.classList.remove('show');setTimeout(function(){teaser&&teaser.remove();teaser=null;},350);} }
+try{
+ if(!sessionStorage.getItem('hwbSeen')){
+  teaser=el('div','',null);teaser.id='hwbTeaser';
+  teaser.innerHTML='부동산, 깜깜한 게 있나요?<br><b>훤봇</b>에게 물어보세요 🔆<span class="x">✕</span>';
+  document.body.appendChild(teaser);
+  setTimeout(function(){teaser&&teaser.classList.add('show');},1400);
+  setTimeout(hideTeaser,13000);
+  teaser.querySelector('.x').addEventListener('click',function(e){e.stopPropagation();hideTeaser();sessionStorage.setItem('hwbSeen','1');});
+  teaser.addEventListener('click',function(){btn.click();});
+ }
+}catch(e){}
+
 var body=panel.querySelector('#hwbBody');
 function scrollDown(){body.scrollTop=body.scrollHeight;}
 function bot(html){body.appendChild(el('div','hwbMsg hwbBot',html));scrollDown();}
@@ -76,6 +97,7 @@ function answer(t){
 }
 var opened=false;
 btn.onclick=function(){
+  hideTeaser();btn.classList.remove('pulse');try{sessionStorage.setItem('hwbSeen','1');}catch(e){}
   panel.classList.toggle('open');
   if(panel.classList.contains('open')&&!opened){
     opened=true;
