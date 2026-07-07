@@ -1,0 +1,95 @@
+/* 훤봇 v1 — FAQ 네비게이터 (규칙 기반, 서버 없음) */
+(function(){
+var css=document.createElement('style');
+css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;z-index:9998;background:linear-gradient(180deg,#33CCC7,#1B918D);box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 30px rgba(42,193,188,.35);display:flex;align-items:center;justify-content:center}'
++'#hwbBtn .ring{width:26px;height:26px;border-radius:50%;border:6px solid #fff;box-sizing:border-box}'
++'#hwbPanel{position:fixed;right:16px;bottom:90px;width:min(360px,calc(100vw - 32px));max-height:min(560px,calc(100vh - 120px));background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(13,42,41,.3);z-index:9999;display:none;flex-direction:column;overflow:hidden;font-family:inherit}'
++'#hwbPanel.open{display:flex}'
++'#hwbHead{background:linear-gradient(135deg,#0D2A29,#133A37);color:#EAF7F6;padding:14px 18px;display:flex;align-items:center;gap:10px}'
++'#hwbHead .r{width:18px;height:18px;border-radius:50%;border:4.5px solid #2AC1BC;box-sizing:border-box;box-shadow:0 0 10px rgba(42,193,188,.8)}'
++'#hwbHead b{font-weight:500;font-size:.98rem}'
++'#hwbHead small{color:#9FC4C1;font-weight:300;font-size:.72rem;display:block}'
++'#hwbBody{flex:1;overflow-y:auto;padding:14px;background:#F0FAF8}'
++'.hwbMsg{max-width:85%;padding:10px 13px;border-radius:14px;margin-bottom:9px;font-size:.87rem;line-height:1.55;white-space:pre-line}'
++'.hwbBot{background:#fff;border:1px solid #DCEEEC;border-bottom-left-radius:4px}'
++'.hwbUser{background:#2AC1BC;color:#fff;margin-left:auto;border-bottom-right-radius:4px}'
++'.hwbMsg a{color:#20A6A2;font-weight:600;text-decoration:none}'
++'.hwbChips{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 10px}'
++'.hwbChips button{border:1.5px solid #BFE9E6;background:#fff;color:#20A6A2;border-radius:20px;padding:7px 12px;font-size:.8rem;cursor:pointer;font-family:inherit}'
++'.hwbChips button:hover{background:#E5F8F6}'
++'#hwbInputRow{display:flex;gap:8px;padding:10px;border-top:1px solid #DCEEEC;background:#fff}'
++'#hwbInput{flex:1;border:1.5px solid #DCEEEC;border-radius:12px;padding:10px 12px;font-size:.88rem;font-family:inherit}'
++'#hwbInput:focus{outline:none;border-color:#2AC1BC}'
++'#hwbSend{border:none;background:#2AC1BC;color:#fff;border-radius:12px;padding:0 16px;font-weight:600;cursor:pointer;font-family:inherit}'
++'#hwbClose{margin-left:auto;background:none;border:none;color:#9FC4C1;font-size:1.1rem;cursor:pointer}';
+document.head.appendChild(css);
+
+var MENUS=[
+ ['💰 대출·DSR','loan'],['🧾 세금','tax'],['🛡️ 전세 안전','jeonse'],
+ ['💍 혼인신고·명의','couple'],['🏡 청약·지원제도','support'],['🤝 전문가 연결','expert']
+];
+var ANSWERS={
+ loan:'대출 관련이군요!\n\n• 월 상환액·총이자·DSR 확인 → <a href="/loan-calculator.html">대출·DSR 계산기</a>\n• LTV·DTI·DSR 개념부터 → <a href="/mortgage-basics.html">주담대 기초 가이드</a>\n\n은행권 DSR 한도는 40%예요. 계산기에 연소득을 넣으면 내 한도가 바로 나와요.',
+ tax:'어떤 세금인가요?\n\n• 집 살 때 → <a href="/acquisition-tax.html">취득세 계산기</a>\n• 살 때·보유·팔 때 전체 구조 → <a href="/real-estate-tax.html">부동산 세금 한눈에</a>\n• 복비(중개보수) → <a href="/brokerage-calculator.html">중개보수 계산기</a>\n• 부부 명의에 따른 세금 → <a href="/myeongui-check.html">명의 자가진단</a>',
+ jeonse:'보증금 지키는 게 최우선이죠.\n\n• 등기부등본 PDF 올려서 위험 확인 → <a href="/jeonse-safety-check.html">전세사기 체크</a>\n• 계약 전 확인 목록 → <a href="/jeonse-contract.html">전세 계약 체크리스트</a>\n• 사기 수법 미리 알기 → <a href="/jeonse-fraud.html">전세사기 유형 7가지</a>\n• 전세↔월세 뭐가 유리? → <a href="/jeonse-monthly.html">전월세 전환 계산기</a>',
+ couple:'부부의 큰 결정 두 가지!\n\n• 혼인신고 지금 할까 미룰까 → <a href="/marriage-check.html">혼인신고 자가진단</a>\n• 집 명의 공동 vs 단독 → <a href="/myeongui-check.html">명의 자가진단</a>\n\n각각 12~13개 질문이면 우리 부부 답이 나와요.',
+ support:'받을 수 있는 건 다 받아야죠.\n\n• 내게 맞는 지원제도 찾기 → <a href="/youth-housing.html">청년·신혼 주거지원 진단</a>\n• 청약 처음이라면 → <a href="/cheongyak-guide.html">청약 완벽 가이드</a>\n• 첫 집 로드맵 → <a href="/first-home.html">생애 첫 집 마련</a>',
+ expert:'혼자 결정하기 어려운 순간이네요.\n\n<a href="/experts.html">훤 매치 (전문가 찾기)</a>에서 중개사·세무사·법무사·변호사·대출상담사가 언제 필요한지, 고르는 법, 바로 연결 링크까지 정리해뒀어요.'
+};
+var KEYWORDS=[
+ [/대출|dsr|한도|금리|이자|주담대|디딤돌|버팀목/i,'loan'],
+ [/취득세|양도|보유세|종부세|재산세|세금|절세/i,'tax'],
+ [/전세|보증금|등기부|깡통|사기|월세.*전환|전환.*월세|임차/i,'jeonse'],
+ [/혼인|결혼|신고|명의|공동|단독|부부/i,'couple'],
+ [/청약|특공|지원|월세지원|신혼부부|청년/i,'support'],
+ [/전문가|세무사|중개사|변호사|법무사|상담|연결/i,'expert'],
+ [/복비|중개보수|수수료/i,'tax']
+];
+function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
+var btn=el('button','',null);btn.id='hwbBtn';btn.setAttribute('aria-label','훤봇 열기');btn.appendChild(el('span','ring',''));
+var panel=el('div','',null);panel.id='hwbPanel';
+panel.innerHTML='<div id="hwbHead"><span class="r"></span><div><b>훤봇</b><small>부동산이, 훤해요 · 무엇이든 물어보세요</small></div><button id="hwbClose" aria-label="닫기">✕</button></div><div id="hwbBody"></div><div id="hwbInputRow"><input id="hwbInput" placeholder="예: 전세 계약 전에 뭘 확인해야 해?"><button id="hwbSend">전송</button></div>';
+document.body.appendChild(btn);document.body.appendChild(panel);
+var body=panel.querySelector('#hwbBody');
+function scrollDown(){body.scrollTop=body.scrollHeight;}
+function bot(html){body.appendChild(el('div','hwbMsg hwbBot',html));scrollDown();}
+function user(t){body.appendChild(el('div','hwbMsg hwbUser',t.replace(/</g,'&lt;')));scrollDown();}
+function chips(){
+  var c=el('div','hwbChips',null);
+  MENUS.forEach(function(m){
+    var b=el('button','',m[0]);
+    b.onclick=function(){user(m[0]);setTimeout(function(){bot(ANSWERS[m[1]]);offerChips();},250);};
+    c.appendChild(b);
+  });
+  body.appendChild(c);scrollDown();
+}
+function offerChips(){
+  var c=el('div','hwbChips',null);
+  var b=el('button','','다른 질문 보기');
+  b.onclick=function(){chips();};
+  c.appendChild(b);body.appendChild(c);scrollDown();
+}
+function answer(t){
+  for(var i=0;i<KEYWORDS.length;i++){ if(KEYWORDS[i][0].test(t)){ bot(ANSWERS[KEYWORDS[i][1]]); offerChips(); return; } }
+  bot('음, 그 질문은 아직 준비 중이에요. 아래 주제에서 골라보시거나, <a href="/contact.html">문의</a>로 남겨주시면 콘텐츠로 만들어 답해드릴게요!');
+  chips();
+}
+var opened=false;
+btn.onclick=function(){
+  panel.classList.toggle('open');
+  if(panel.classList.contains('open')&&!opened){
+    opened=true;
+    bot('안녕하세요, 훤봇이에요 🔆\n부동산의 깜깜한 곳을 훤히 밝혀드릴게요.\n어떤 게 궁금하세요?');
+    chips();
+  }
+};
+panel.querySelector('#hwbClose').onclick=function(){panel.classList.remove('open');};
+function send(){
+  var inp=panel.querySelector('#hwbInput');
+  var t=inp.value.trim(); if(!t)return;
+  user(t); inp.value='';
+  setTimeout(function(){answer(t);},300);
+}
+panel.querySelector('#hwbSend').onclick=send;
+panel.querySelector('#hwbInput').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+})();
