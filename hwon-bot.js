@@ -95,9 +95,108 @@ function offerChips(){
   b.onclick=function(){chips();};
   c.appendChild(b);body.appendChild(c);scrollDown();
 }
+var FLOW=null;
+function parseMoney(t){
+  t=t.replace(/,/g,'').replace(/원/g,'').trim();
+  var eok=t.match(/([0-9.]+)\s*억/);
+  var man=t.match(/([0-9.]+)\s*(천만|만)?/);
+  var v=0;
+  if(eok){ v+=parseFloat(eok[1])*10000; t=t.replace(eok[0],''); }
+  var rest=t.match(/([0-9.]+)\s*(천만|천|만)?/);
+  if(rest&&rest[1]){
+    var n=parseFloat(rest[1]);
+    if(rest[2]==='천만'||rest[2]==='천') v+=n*1000;
+    else v+=n;
+  }
+  return v>0?Math.round(v):null;
+}
+function startWolseFlow(){
+  FLOW={type:'wolse',step:0,data:{}};
+  bot('오, 그 불안 제가 잘 알아요. 숫자로 확인해봐요!\n\n<b>보증금</b>이 얼마예요? (예: 1000, 5000)');
+}
+function startFeeFlow(){
+  FLOW={type:'fee',step:0,data:{}};
+  bot('복비 검증 들어갑니다.\n\n어떤 계약이었어요? <b>매매 / 전세 / 월세</b> 중 하나로 답해주세요.');
+}
+function flowStep(t){
+  var f=FLOW, d=f.data;
+  if(/그만|취소|아니야|됐어/.test(t)){ FLOW=null; bot('알겠어요, 언제든 다시 물어보세요!'); chips(); return; }
+  if(f.type==='wolse'){
+    if(f.step===0){
+      var v=parseMoney(t);
+      if(v===null){ bot('만원 단위 숫자로 알려주세요. 예: 1000 (천만원), 1억이면 10000'); return; }
+      d.dep=v; f.step=1;
+      bot('보증금 '+fmt(v*10000)+'원, 접수! <b>월세</b>는 얼마예요? (관리비 빼고)');
+      return;
+    }
+    if(f.step===1){
+      var v=parseMoney(t);
+      if(v===null||v>1000){ bot('월세를 만원 단위로요. 예: 65'); return; }
+      d.rent=v; f.step=2;
+      bot('마지막! 같은 건물이나 동네의 <b>전세 시세</b>를 알면 알려주세요 (예: 1.8억, 18000).\n모르면 "몰라"라고 해도 돼요.');
+      return;
+    }
+    if(f.step===2){
+      var conv=d.dep+Math.round(d.rent*12/0.045);
+      var msg='정리해볼게요 🔍\n\n보증금 '+fmt(d.dep*10000)+'원 + 월세 '+fmt(d.rent*10000)+'원\n= 전세로 환산하면 <b>'+fmt(conv*10000)+'원</b> (법정 전환율 4.5%)\n\n';
+      if(/몰라|모름|모르/.test(t)){
+        msg+='이 환산가를 네이버부동산의 같은 건물 전세 매물가와 비교해보세요. 환산가가 시세보다 <b>낮으면 잘한 계약</b>이에요.\n\n더 자세한 검진은 → <a href="/contract-check.html">계약 셀프 검진</a>';
+      } else {
+        var js_=parseMoney(t);
+        if(js_===null){ bot('시세를 숫자로 알려주시거나 "몰라"라고 해주세요!'); return; }
+        var ratio=conv/js_*100;
+        var verdict = ratio<=95 ? '🟢 시세보다 유리해요. 잘 계약하셨어요, 걱정 놓으셔도 됩니다!' : ratio<=110 ? '🟡 시세 수준의 평범한 계약이에요. 바가지 아닙니다.' : '🟠 전세 시세 대비 '+(ratio-100).toFixed(0)+'% 비싼 편이에요. 갱신 때 이 숫자로 협상해보세요.';
+        msg+='전세 시세 '+fmt(js_*10000)+'원 대비 <b>'+ratio.toFixed(0)+'%</b>\n\n'+verdict+'\n\n영수증 챙길 것: 전입신고+확정일자는 하셨죠? 안 했으면 오늘 정부24에서 5분!';
+      }
+      FLOW=null; bot(msg); offerChips(); return;
+    }
+  }
+  if(f.type==='fee'){
+    if(f.step===0){
+      var m=t.match(/매매|전세|월세/);
+      if(!m){ bot('매매 / 전세 / 월세 중 하나로 답해주세요!'); return; }
+      d.t=m[0]; f.step=1;
+      bot(d.t==='월세'?'보증금과 월세를 알려주세요. 예: "보증금 1000 월세 60"':'<b>거래금액</b>이 얼마였어요? (예: 3억, 30000)');
+      return;
+    }
+    if(f.step===1){
+      if(d.t==='월세'){
+        var dep=t.match(/보증금\s*([0-9.억천만,]+)/); var mon=t.match(/월세\s*([0-9.,]+)/);
+        var depV=dep?parseMoney(dep[1]):null; var monV=mon?parseMoney(mon[1]):null;
+        if(depV===null||monV===null){ bot('"보증금 1000 월세 60" 형식으로 알려주세요!'); return; }
+        d.man=depV+monV*100; if(d.man<5000)d.man=depV+monV*70;
+      } else {
+        var v=parseMoney(t);
+        if(v===null){ bot('금액을 숫자로요. 예: 3억 또는 30000'); return; }
+        d.man=v;
+      }
+      f.step=2;
+      bot('실제로 <b>낸(요구받은) 복비</b>는 얼마예요? (만원 단위, 부가세 빼고)');
+      return;
+    }
+    if(f.step===2){
+      var paid=parseMoney(t);
+      if(paid===null){ bot('낸 복비를 만원 단위 숫자로요. 예: 90'); return; }
+      var SALE=[[5000,0.6,25],[20000,0.5,80],[90000,0.4,null],[120000,0.5,null],[150000,0.6,null],[Infinity,0.7,null]];
+      var RENT=[[5000,0.5,20],[10000,0.4,30],[60000,0.3,null],[120000,0.4,null],[150000,0.5,null],[Infinity,0.6,null]];
+      var tbl=d.t==='매매'?SALE:RENT;
+      var row=tbl[tbl.length-1];
+      for(var i=0;i<tbl.length;i++){ if(d.man<tbl[i][0]){row=tbl[i];break;} }
+      var cap=d.man*row[1]/100; if(row[2]!==null&&cap>row[2])cap=row[2];
+      var msg='법정 상한: <b>'+fmt(cap*10000)+'원</b> (요율 '+row[1]+'%)\n낸 금액: '+fmt(paid*10000)+'원\n\n';
+      if(paid<=cap*1.001) msg+='🟢 상한 이내 — 정상적인 복비예요!';
+      else if(paid<=cap*1.1+1.1) msg+='🟡 살짝 넘는데 부가세 10% 포함이면 정상일 수 있어요. 영수증에서 부가세 표기를 확인하세요.';
+      else msg+='🔴 상한을 '+fmt((paid-cap)*10000)+'원 초과! 초과분은 반환 청구가 가능해요. 자세한 건 → <a href="/contract-check.html">계약 검진</a>';
+      FLOW=null; bot(msg); offerChips(); return;
+    }
+  }
+}
 function answer(t){
+  if(FLOW){ flowStep(t); return; }
+  if(/월세/.test(t)&&/적당|적정|비싸|맞나|맞는|괜찮|잘.*계약|잘한/.test(t)){ startWolseFlow(); return; }
+  if(/복비|중개보수|수수료/.test(t)&&/많|비싸|맞나|맞는|적정|요구|달라/.test(t)){ startFeeFlow(); return; }
   for(var i=0;i<KEYWORDS.length;i++){ if(KEYWORDS[i][0].test(t)){ bot(ANSWERS[KEYWORDS[i][1]]); offerChips(); return; } }
-  bot('음, 그 질문은 아직 준비 중이에요. 아래 주제에서 골라보시거나, <a href="/contact.html">문의</a>로 남겨주시면 콘텐츠로 만들어 답해드릴게요!');
+  bot('제가 바로 답할 수 있게 배우는 중이에요! 이런 건 지금 당장 도와드릴 수 있어요:\n\n• "월세 적당한지 모르겠어" → 대화로 바로 검진\n• "복비 많이 낸 건가?" → 법정 상한 확인\n\n아니면 아래에서 골라주세요 👇');
   chips();
 }
 var opened=false;
