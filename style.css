@@ -130,3 +130,44 @@ article.post strong{font-weight:600}
   .site-header nav{display:none}
   article.post{padding:28px 20px}
 }
+
+/* ---------- Hero Intro : 링 드로잉 → 플래시 → 호흡 글로우 ---------- */
+.hero .ring-stage{width:76px;height:76px;margin:0 auto 30px;position:relative}
+.hero svg.ring-draw{width:76px;height:76px;transform:rotate(-90deg)}
+.hero svg.ring-draw circle.track{fill:none;stroke:rgba(42,193,188,.12);stroke-width:12}
+.hero svg.ring-draw circle.arc{
+  fill:none;stroke:url(#hwGrad);stroke-width:12;stroke-linecap:round;
+  stroke-dasharray:100;stroke-dashoffset:100;
+  animation:hwDraw 1.15s cubic-bezier(.65,0,.35,1) .25s forwards;
+}
+.hero .ring-stage{
+  filter:drop-shadow(0 0 10px rgba(42,193,188,.55));
+  animation:hwFlash .7s ease-out 1.35s, hwBreathe 3.6s ease-in-out 2.1s infinite;
+}
+@keyframes hwDraw{to{stroke-dashoffset:0}}
+@keyframes hwFlash{
+  0%{filter:drop-shadow(0 0 10px rgba(42,193,188,.55))}
+  38%{filter:drop-shadow(0 0 26px rgba(42,193,188,1)) drop-shadow(0 0 70px rgba(42,193,188,.75)) brightness(1.35)}
+  100%{filter:drop-shadow(0 0 14px rgba(42,193,188,.7))}
+}
+@keyframes hwBreathe{
+  0%,100%{filter:drop-shadow(0 0 12px rgba(42,193,188,.6))}
+  50%{filter:drop-shadow(0 0 24px rgba(42,193,188,.95)) drop-shadow(0 0 50px rgba(42,193,188,.4))}
+}
+.hero .tag{opacity:0;letter-spacing:.15em;animation:hwTag 1s ease .15s forwards}
+@keyframes hwTag{to{opacity:1;letter-spacing:.42em}}
+.hero h1{opacity:0;transform:translateY(16px);animation:hwRise .8s cubic-bezier(.22,1,.36,1) 1.25s forwards}
+.hero p{opacity:0;transform:translateY(12px);animation:hwRise .8s cubic-bezier(.22,1,.36,1) 1.5s forwards}
+@keyframes hwRise{to{opacity:1;transform:translateY(0)}}
+.hero h1 .em{position:relative;display:inline-block}
+.hero h1 .em::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,#7FE8E3,transparent);
+  transform:scaleX(0);animation:hwUnderline .6s ease 2s forwards;
+}
+@keyframes hwUnderline{to{transform:scaleX(1)}}
+@media (prefers-reduced-motion: reduce){
+  .hero svg.ring-draw circle.arc{animation:none;stroke-dashoffset:0}
+  .hero .ring-stage,.hero .tag,.hero h1,.hero p,.hero h1 .em::after{animation:none;opacity:1;transform:none;letter-spacing:.42em}
+  .hero h1,.hero p{letter-spacing:normal}
+}
