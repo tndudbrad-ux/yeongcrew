@@ -1,0 +1,19 @@
+/* 훤 UI 폴리시 v1 — 인터랙션/힌트 공통 */
+nav.gnb a{position:relative;display:inline-block;padding:4px 2px;transition:color .18s ease,transform .18s ease}
+nav.gnb a::after{content:"";position:absolute;left:50%;bottom:-3px;width:0;height:2px;border-radius:2px;background:linear-gradient(90deg,#8FE9E4,#20A6A2);box-shadow:0 0 8px rgba(42,193,188,.55);transition:width .22s cubic-bezier(.22,.9,.35,1),left .22s cubic-bezier(.22,.9,.35,1)}
+nav.gnb a:hover{color:#20A6A2;transform:translateY(-1px)}
+nav.gnb a:hover::after{width:100%;left:0}
+.logo .ring{transition:transform .5s cubic-bezier(.22,.9,.35,1),box-shadow .3s}
+.logo:hover .ring{transform:rotate(180deg) scale(1.08);box-shadow:0 0 16px rgba(42,193,188,.6)}
+.card{will-change:transform}
+.card .ic{display:inline-block;transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+.card:hover .ic{transform:scale(1.18) rotate(-5deg)}
+.card:hover h3{color:#20A6A2;transition:color .18s}
+button.go{transition:transform .15s ease,box-shadow .15s ease}
+button.go:active{transform:scale(.98)}
+.seg button{transition:all .16s ease}
+.seg button:hover{border-color:#8FE9E4;color:#20A6A2;transform:translateY(-1px)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #2AC1BC;outline-offset:2px;border-radius:4px}
+.hwHint{font-size:.86rem;color:#20A6A2;font-weight:600;margin-top:5px;min-height:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .2s ease,opacity .25s ease;letter-spacing:-.01em}
+.hwHint.on{max-height:26px;opacity:1}
+.hwHint::before{content:"= ";color:#9FC4C1;font-weight:400}

@@ -1,5 +1,9 @@
-/* 부비 v1 — 훤AI의 부동산 비서 (규칙 기반, 서버 없음) */
+/* 부비 — 훤AI의 부동산 비서 */
 (function(){
+if(!document.querySelector('link[href="/hwon-ui.css"]')){
+  var uiL=document.createElement('link');uiL.rel='stylesheet';uiL.href='/hwon-ui.css';document.head.appendChild(uiL);
+  var uiS=document.createElement('script');uiS.src='/hwon-ui.js';uiS.defer=true;document.body.appendChild(uiS);
+}
 var css=document.createElement('style');
 css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;z-index:9998;background:linear-gradient(180deg,#33CCC7,#1B918D);box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 30px rgba(42,193,188,.35);display:flex;align-items:center;justify-content:center}'
 +'#hwbBtn .ring{width:26px;height:26px;border-radius:50%;border:6px solid #fff;box-sizing:border-box}'
