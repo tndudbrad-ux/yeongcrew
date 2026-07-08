@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>종부세 계산기 (2026년 종합부동산세) - 훤AI</title>
+<meta name="description" content="2026년 주택분 종합부동산세를 공시가격으로 자동 계산합니다. 1세대1주택 12억 공제, 고령자·장기보유 세액공제, 3주택 중과, 부부 공동명의 특례 비교까지 한 번에.">
+<link rel="canonical" href="https://yeongcrew.co.kr/jongbuse-calculator.html">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="종부세 계산기 (2026년 종합부동산세) - 훤AI">
+<meta property="og:description" content="2026년 주택분 종합부동산세를 공시가격으로 자동 계산합니다. 1세대1주택 12억 공제, 고령자·장기보유 세액공제, 3주택 중과, 부부 공동명의 특례 비교까지 한 번에.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yeongcrew.co.kr/jongbuse-calculator.html">
+<meta property="og:site_name" content="훤AI - 부동산이, 훤해요">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#F0FAF8;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+header.top{background:rgba(240,250,248,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500;letter-spacing:-.01em}
+.logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);box-shadow:0 2px 8px rgba(42,193,188,.35)}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+main{padding:40px 0 64px}
+h2.sec{font-size:1.28rem;font-weight:500;letter-spacing:-.02em;margin:40px 0 16px;display:flex;align-items:center;gap:10px}
+h2.sec::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(180deg,#8FE9E4,#20A6A2);box-shadow:0 0 8px var(--glow)}
+h2.sec:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;transition:.18s;display:block}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(32,166,162,.14);border-color:#B5E4E1}
+.card .ic{font-size:1.4rem}
+.card h3{font-size:1rem;font-weight:500;margin:8px 0 4px;letter-spacing:-.015em}
+.card p{font-size:.85rem;color:var(--sub)}
+.tool-box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 28px;margin-bottom:22px}
+.tool-box h2{font-size:1.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.tool-box h2::before{content:"";flex:0 0 12px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, transparent 26%),linear-gradient(180deg,#8FE9E4,#1B918D);-webkit-mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);box-shadow:0 0 9px var(--glow)}
+label.f{display:block;font-size:.87rem;font-weight:500;margin:15px 0 6px;color:var(--forest)}
+input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
+input.f:focus,select.f:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.seg button{flex:1;min-width:90px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
+.seg button.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:600;box-shadow:0 0 10px rgba(42,193,188,.18)}
+button.go{width:100%;margin-top:22px;padding:15px;border:none;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.35);transition:.15s}
+button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(42,193,188,.45)}
+.result{display:none;margin-top:22px;background:linear-gradient(180deg,#EAFAF8,#F0FAF8);border:1.5px solid #BFE9E6;border-radius:16px;padding:22px}
+.result.show{display:block}
+.result .big{font-size:1.55rem;font-weight:600;color:var(--teal);letter-spacing:-.02em}
+.result table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
+.result td,.result th{padding:8px 4px;border-bottom:1px solid #CBEBE8;text-align:right}
+.result td:first-child,.result th:first-child{text-align:left;color:var(--sub)}
+.note{font-size:.82rem;color:var(--sub);margin-top:14px;font-weight:300}
+article.post{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:36px 32px}
+article.post h1{font-size:1.5rem;font-weight:500;margin-bottom:6px;letter-spacing:-.025em}
+article.post .meta{font-size:.84rem;color:var(--sub);margin-bottom:24px;font-weight:300}
+article.post h2{font-size:1.13rem;font-weight:500;margin:30px 0 10px;color:var(--forest);padding-left:14px;position:relative}
+article.post h2::before{content:"";position:absolute;left:0;top:.4em;width:5px;height:5px;border-radius:50%;background:var(--mint);box-shadow:0 0 7px var(--glow)}
+article.post p{margin-bottom:14px;font-size:.95rem}
+article.post table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:.88rem}
+article.post th{background:var(--forest);color:#DFF5F3;padding:10px 8px;font-weight:500}
+article.post td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center}
+article.post ul{margin:0 0 14px 20px;font-size:.95rem}
+article.post li{margin-bottom:6px}
+.tip{background:#EAFAF8;border:1px solid #BFE9E6;border-radius:12px;padding:14px 16px;font-size:.9rem;margin:14px 0}
+.rel{margin-top:28px}
+.ad-slot{display:none}
+footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
+footer a{color:#B9DCD9;margin:0 8px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
+.crumb a{color:var(--teal)}
+@media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><span class="ring"></span>훤AI</a>
+<nav class="gnb">
+<a href="/loan-calculator.html">대출·DSR</a>
+<a href="/acquisition-tax.html">취득세</a>
+<a href="/brokerage-fee.html">중개보수</a>
+<a href="/jeonse-monthly.html">전월세 전환</a>
+<a href="/youth-housing.html">청년 지원</a>
+<a href="/rental-board.html">임대주택</a>
+<a href="/experts.html">전문가 찾기</a>
+<a href="/#guide">가이드</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+
+<div class="crumb"><a href="/">홈</a> › 종부세 계산기</div>
+<div class="tool-box">
+<h2>🏛️ 종합부동산세 계산기 (2026 기준)</h2>
+<label class="f">보유 주택 공시가격 합산 (만원) — 실거래가 아닌 <a href="https://www.realtyprice.kr" target="_blank" rel="noopener" style="color:var(--teal)">공시가격</a> 기준</label>
+<input class="f" id="jVal" type="number" placeholder="예: 150000 (공시 15억)">
+<label class="f">주택 수</label>
+<div class="seg" id="jCnt"><button data-v="1" class="on">1주택</button><button data-v="2">2주택</button><button data-v="3">3주택 이상</button></div>
+<div id="jOneOpts">
+<label class="f">명의</label>
+<div class="seg" id="jOwn"><button data-v="single" class="on">단독 명의</button><button data-v="joint">부부 공동명의</button></div>
+<div class="row2">
+<div><label class="f">나이 (세액공제)</label>
+<select class="f" id="jAge"><option value="0">60세 미만</option><option value="20">60~64세 (20%)</option><option value="30">65~69세 (30%)</option><option value="40">70세 이상 (40%)</option></select></div>
+<div><label class="f">보유기간 (세액공제)</label>
+<select class="f" id="jHold"><option value="0">5년 미만</option><option value="20">5~9년 (20%)</option><option value="40">10~14년 (40%)</option><option value="50">15년 이상 (50%)</option></select></div>
+</div>
+</div>
+<button class="go" onclick="calcJBS()">계산하기</button>
+<div class="result" id="jRes"></div>
+<p class="note">2026년 현행 기준(기본공제 9억·1주택 12억, 공정시장가액비율 60%, 농특세 20%). 재산세 중복분은 표준세율 근사로 차감했고, 세부담 상한(전년 대비 150%)·합산배제 임대주택 등 개별 사정은 미반영이니 고지서와 차이가 날 수 있어요.</p>
+</div>
+
+<div class="rel"><h2 class="sec">함께 보면 좋은 콘텐츠</h2><div class="grid">
+<a class="card" href="/capital-gains-tax.html"><div class="ic">💸</div><h3>양도세 계산기</h3><p>팔 때 세금은 얼마?</p></a>
+<a class="card" href="/acquisition-tax.html"><div class="ic">🧾</div><h3>취득세 계산기</h3><p>살 때 세금은 얼마?</p></a>
+<a class="card" href="/experts.html"><div class="ic">🧑‍💼</div><h3>세무사 찾기</h3><p>합산배제·특례 신청 상담</p></a>
+</div></div>
+
+<div class="faqsec"><h2 class="sec">자주 묻는 질문</h2>
+<details class="faq"><summary>종부세는 누가 내나요?</summary><p>매년 6월 1일 기준으로 소유한 주택의 공시가격을 사람별로 합산해서, 9억원(1세대 1주택자는 12억원)을 넘으면 과세돼요. 공시가격 기준이라 실거래가보다 낮게 잡히는 게 보통이고, 시가 약 15~17억원 아파트 한 채라면 1주택자는 대체로 비과세권이에요.</p></details>
+<details class="faq"><summary>공정시장가액비율 60%가 뭔가요?</summary><p>공제 후 남은 공시가격에 60%를 곱해 과세표준을 만드는 비율이에요. 2022년부터 60%가 유지되고 있는데, 인상(최대 80%)이 검토된다는 보도가 있어 바뀌면 세 부담이 커질 수 있어요. 이 계산기는 2026년 현행 60%를 적용합니다.</p></details>
+<details class="faq"><summary>부부 공동명의면 종부세가 줄어드나요?</summary><p>공동명의는 각자 9억씩, 합산 효과 18억원까지 공제받아요. 다만 고령자·장기보유 세액공제(최대 80%)는 못 받아요. 9월 16~30일에 특례를 신청하면 단독명의처럼 12억 공제+세액공제를 선택할 수 있어서, 고가 주택을 오래 보유한 고령자일수록 특례가 유리할 수 있어요. 이 계산기가 두 방식을 모두 계산해 비교해줍니다.</p></details>
+<details class="faq"><summary>종부세는 언제 어떻게 내나요?</summary><p>국세청이 12월 1일~15일에 고지서를 보내면 그 기간에 납부해요. 250만원을 넘으면 6개월 분납이 가능하고, 고지 내용이 다르면 신고납부를 선택할 수도 있어요. 종부세액의 20%가 농어촌특별세로 함께 부과됩니다.</p></details>
+</div>
+<style>.faq{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 18px}.faq summary{cursor:pointer;font-weight:500;font-size:.95rem;padding:15px 0;list-style:none;position:relative}.faq summary::after{content:"+";position:absolute;right:2px;color:var(--teal);font-size:1.1rem}.faq[open] summary::after{content:"−"}.faq p{font-size:.88rem;color:var(--sub);padding:0 0 15px;line-height:1.7}</style>
+
+</div></main>
+<footer><div class="wrap">
+훤AI — 부동산이, 훤해요<br>
+계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>© 2026 영크루 · 
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a><br>
+<span style="font-size:.75rem;color:#5D8683">상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074 · 서울특별시 동작구 만양로 75 · tndud.brad@gmail.com</span>
+</div></footer>
+
+<script>
+function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});e.target.classList.add('on');refreshJ();});});
+function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
+function refreshJ(){ document.getElementById('jOneOpts').style.display = segVal('jCnt')==='1'?'block':'none'; }
+var R2=[[30000,0.5,0],[60000,0.7,60],[120000,1.0,240],[250000,1.3,600],[500000,1.5,1100],[940000,2.0,3600],[Infinity,2.7,10180]];
+var R3=[[30000,0.5,0],[60000,0.7,60],[120000,1.0,240],[250000,2.0,1440],[500000,3.0,3940],[940000,4.0,8940],[Infinity,5.0,18340]];
+function bracket(tb,T){ for(var i=0;i<T.length;i++){ if(tb<=T[i][0]) return {rate:T[i][1], tax: tb*T[i][1]/100 - T[i][2]}; } }
+function propTax(x){
+  if(x<=6000) return x*0.001;
+  if(x<=15000) return x*0.0015-3;
+  if(x<=30000) return x*0.0025-18;
+  return x*0.004-63;
+}
+function jbsCore(gongsi, deduct, cnt, creditRate){
+  var tb=(gongsi-deduct)*0.6;
+  if(tb<=0) return {total:0, tax:0, tb:0, rate:0, farm:0, prop:0, credit:0};
+  var b=bracket(tb, cnt>=3?R3:R2);
+  var tax=b.tax;
+  var prop=propTax(tb*0.6); if(prop>tax)prop=tax;
+  tax-=prop;
+  var credit=0;
+  if(creditRate>0){ credit=tax*Math.min(creditRate,80)/100; tax-=credit; }
+  if(tax<0)tax=0;
+  var farm=tax*0.2;
+  return {total:tax+farm, tax:tax, tb:tb, rate:b.rate, farm:farm, prop:prop, credit:credit};
+}
+function row(k,v){return '<tr><td>'+k+'</td><td>'+v+'</td></tr>';}
+function calcJBS(){
+  var gongsi=+document.getElementById('jVal').value;
+  if(!gongsi){alert('공시가격 합산액을 입력해주세요');return;}
+  var cnt=+segVal('jCnt');
+  var el=document.getElementById('jRes'); el.classList.add('show');
+  var cr=(+document.getElementById('jAge').value)+(+document.getElementById('jHold').value);
+  if(cnt===1 && segVal('jOwn')==='joint'){
+    var each=jbsCore(gongsi/2, 90000, 1, 0);
+    var perPerson={total:each.total*2, tax:each.tax*2, farm:each.farm*2};
+    var special=jbsCore(gongsi, 120000, 1, cr);
+    var best = perPerson.total<=special.total ? '인별 과세(기본)' : '1주택 특례 신청';
+    var html='<div>부부 공동명의 비교 결과</div>'
+    +'<div class="big">'+fmt(Math.min(perPerson.total,special.total)*10000)+'원</div>'
+    +'<div style="font-size:.9rem;margin-top:4px">유리한 방식: <b>'+best+'</b></div>'
+    +'<table>'
+    +row('① 인별 과세 (각자 9억 공제, 세액공제 없음)', fmt(perPerson.total*10000)+'원')
+    +row('② 1주택 특례 (12억 공제 + 세액공제 '+Math.min(cr,80)+'%)', fmt(special.total*10000)+'원')
+    +'</table>'
+    +'<div style="font-size:.83rem;color:var(--sub);margin-top:10px">특례가 유리하면 매년 9월 16~30일에 관할 세무서에 신청하세요.</div>'+cta();
+    el.innerHTML=html; return;
+  }
+  var deduct = cnt===1?120000:90000;
+  var r=jbsCore(gongsi, deduct, cnt, cnt===1?cr:0);
+  if(r.total<=0){
+    el.innerHTML='<div>종부세 대상 아님</div><div class="big">0원</div><div style="font-size:.88rem;margin-top:8px">공시가격 합산이 공제금액('+(deduct===120000?'12억':'9억')+') 이하라 종부세가 부과되지 않아요. 재산세만 납부하면 됩니다.</div>'+cta();
+    return;
+  }
+  var html='<div>예상 납부액 (농특세 포함)</div><div class="big">'+fmt(r.total*10000)+'원</div>'
+  +'<table>'
+  +row('과세표준 (공제 후 ×60%)', fmt(r.tb*10000)+'원')
+  +row('종부세 산출세액 (최고세율 '+r.rate+'%)', fmt((r.tax+r.prop+r.credit)*10000)+'원')
+  +row('재산세 중복분 차감 (근사)', '−'+fmt(r.prop*10000)+'원')
+  +(r.credit>0?row('1세대 1주택 세액공제 ('+Math.min(cr,80)+'%)','−'+fmt(r.credit*10000)+'원'):'')
+  +row('납부할 종부세', fmt(r.tax*10000)+'원')
+  +row('농어촌특별세 (20%)', fmt(r.farm*10000)+'원')
+  +'</table>';
+  if(cnt>=3) html+='<div style="font-size:.83rem;color:var(--sub);margin-top:10px">⚠️ 3주택 이상 중과세율(과표 12억 초과분 최대 5%)이 적용됐어요.</div>';
+  html+=cta();
+  el.innerHTML=html;
+}
+function cta(){
+  return '<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💡 종부세는 <b>12월 1~15일</b> 고지서로 납부해요 (250만원 초과 시 분납 가능).<br>→ 합산배제 임대주택·공동명의 특례는 <a href="/experts.html" style="color:var(--teal);font-weight:600">세무사 상담</a>으로 절세 여지를 확인하세요<br>→ 팔까 고민 중이라면 <a href="/capital-gains-tax.html" style="color:var(--teal);font-weight:600">양도세도 계산</a>해보세요</div>';
+}
+refreshJ();
+</script>
+\n<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "종부세 계산기", "url": "https://yeongcrew.co.kr/jongbuse-calculator.html", "description": "2026년 주택분 종합부동산세 무료 계산기. 1주택 12억 공제, 세액공제, 3주택 중과, 공동명의 특례 비교", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "훤AI", "url": "https://yeongcrew.co.kr"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "종부세는 누가 내나요?", "acceptedAnswer": {"@type": "Answer", "text": "매년 6월 1일 기준으로 소유한 주택의 공시가격을 사람별로 합산해서, 9억원(1세대 1주택자는 12억원)을 넘으면 과세돼요. 공시가격 기준이라 실거래가보다 낮게 잡히는 게 보통이고, 시가 약 15~17억원 아파트 한 채라면 1주택자는 대체로 비과세권이에요."}}, {"@type": "Question", "name": "공정시장가액비율 60%가 뭔가요?", "acceptedAnswer": {"@type": "Answer", "text": "공제 후 남은 공시가격에 60%를 곱해 과세표준을 만드는 비율이에요. 2022년부터 60%가 유지되고 있는데, 인상(최대 80%)이 검토된다는 보도가 있어 바뀌면 세 부담이 커질 수 있어요. 이 계산기는 2026년 현행 60%를 적용합니다."}}, {"@type": "Question", "name": "부부 공동명의면 종부세가 줄어드나요?", "acceptedAnswer": {"@type": "Answer", "text": "공동명의는 각자 9억씩, 합산 효과 18억원까지 공제받아요. 다만 고령자·장기보유 세액공제(최대 80%)는 못 받아요. 9월 16~30일에 특례를 신청하면 단독명의처럼 12억 공제+세액공제를 선택할 수 있어서, 고가 주택을 오래 보유한 고령자일수록 특례가 유리할 수 있어요. 이 계산기가 두 방식을 모두 계산해 비교해줍니다."}}, {"@type": "Question", "name": "종부세는 언제 어떻게 내나요?", "acceptedAnswer": {"@type": "Answer", "text": "국세청이 12월 1일~15일에 고지서를 보내면 그 기간에 납부해요. 250만원을 넘으면 6개월 분납이 가능하고, 고지 내용이 다르면 신고납부를 선택할 수도 있어요. 종부세액의 20%가 농어촌특별세로 함께 부과됩니다."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://yeongcrew.co.kr/"}, {"@type": "ListItem", "position": 2, "name": "종부세 계산기", "item": "https://yeongcrew.co.kr/jongbuse-calculator.html"}]}</script>
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+</body>
+</html>
