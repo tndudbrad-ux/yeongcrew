@@ -27,7 +27,11 @@ css.textContent+='@keyframes hwbPulse{0%{box-shadow:0 6px 20px rgba(42,193,188,.
 +'#hwbTeaser{position:fixed;right:88px;bottom:26px;z-index:9998;background:#0D2A29;color:#EAF7F6;padding:12px 40px 12px 16px;border-radius:16px;border-bottom-right-radius:4px;font-size:.86rem;line-height:1.5;box-shadow:0 10px 30px rgba(13,42,41,.35);cursor:pointer;max-width:240px;opacity:0;transform:translateY(8px);transition:.35s ease;font-family:inherit}'
 +'#hwbTeaser.show{opacity:1;transform:translateY(0)}'
 +'#hwbTeaser b{color:#7FE8E3;font-weight:600}'
-+'#hwbTeaser .x{position:absolute;top:8px;right:10px;color:#6FB9B5;font-size:.85rem;padding:2px 4px}';
++'#hwbTeaser .x{position:absolute;top:8px;right:10px;color:#6FB9B5;font-size:.85rem;padding:2px 4px}'
++'.hwbCtas{display:flex;flex-direction:column;gap:6px;margin:-3px 0 10px;max-width:85%}'
++'.hwbCtas a{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#2AC1BC;color:#fff;text-decoration:none;border-radius:12px;padding:10px 14px;font-size:.85rem;font-weight:600;box-shadow:0 3px 10px rgba(42,193,188,.35)}'
++'.hwbCtas a:hover{background:#20A6A2}'
++'.hwbCtas a .ar{font-weight:400}';
 document.head.appendChild(css);
 
 var MENUS=[
@@ -108,6 +112,35 @@ function botTyping(){
  var e=el('div','hwbMsg hwbBot','생각 중<span class="hwbDots">...</span>');
  e.id='hwbTyping'; body.appendChild(e); scrollDown(); return e;
 }
+var TOOLCTA=[
+ ['/yield-calculator.html',/수익률|임대\s*수익/,'📈 임대수익 계산하러 가기'],
+ ['/loan-calculator.html',/DSR|대출/i,'💰 대출·DSR 계산하러 가기'],
+ ['/acquisition-tax.html',/취득세/,'🧾 취득세 계산하러 가기'],
+ ['/brokerage-calculator.html',/중개보수|복비/,'🤝 중개보수 확인하러 가기'],
+ ['/jeonse-monthly.html',/전월세\s*전환|전환율/,'🔁 전월세 전환 계산하러 가기'],
+ ['/contract-check.html',/계약\s*(셀프)?\s*검진/,'🩺 계약 셀프 검진 하러 가기'],
+ ['/jeonse-safety-check.html',/등기부/,'🛡️ 등기부 안전 체크하러 가기'],
+ ['/myeongui-check.html',/명의/,'👥 명의 자가진단 하러 가기'],
+ ['/marriage-check.html',/혼인신고/,'💍 혼인신고 자가진단 하러 가기'],
+ ['/youth-housing.html',/주거지원|버팀목|디딤돌/,'🏡 주거지원 확인하러 가기'],
+ ['/moving-guide.html',/잔금|이사/,'📦 이사·잔금 로드맵 보기'],
+ ['/rental-board.html',/행복주택|임대주택\s*공고/,'🏢 임대주택 공고 보기'],
+ ['/invest.html',/경매|소액\s*투자/,'📊 소액 투자 물건 보기'],
+ ['/experts.html',/세무사|법무사|변호사|중개사|전문가/,'🧑‍💼 전문가 찾으러 가기']
+];
+function ctas(raw){
+ var hits=[],i;
+ for(i=0;i<TOOLCTA.length&&hits.length<2;i++){ if(raw.indexOf(TOOLCTA[i][0])>-1) hits.push(TOOLCTA[i]); }
+ for(i=0;i<TOOLCTA.length&&hits.length<2;i++){ if(hits.indexOf(TOOLCTA[i])<0&&TOOLCTA[i][1].test(raw)) hits.push(TOOLCTA[i]); }
+ if(!hits.length)return;
+ var c=el('div','hwbCtas',null);
+ hits.forEach(function(h){
+   var a=document.createElement('a');a.href=h[0];
+   a.innerHTML='<span>'+h[2]+'</span><span class="ar">→</span>';
+   c.appendChild(a);
+ });
+ body.appendChild(c);scrollDown();
+}
 function llmAnswer(t){
  HIST.push({role:'user',content:t});
  if(HIST.length>12)HIST=HIST.slice(-12);
@@ -121,6 +154,7 @@ function llmAnswer(t){
    if(!d.reply)throw new Error('empty');
    HIST.push({role:'assistant',content:d.reply});
    bot(mdLite(d.reply));
+   ctas(d.reply);
  })
  .catch(function(){
    ty.remove();
@@ -256,3 +290,4 @@ function send(){
 panel.querySelector('#hwbSend').onclick=send;
 panel.querySelector('#hwbInput').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
 })();
+/* v2.1 cta */
