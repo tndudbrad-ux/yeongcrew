@@ -95,6 +95,38 @@ function offerChips(){
   b.onclick=function(){chips();};
   c.appendChild(b);body.appendChild(c);scrollDown();
 }
+var BOOBI_API='https://hwon-boobi.tndud-brad.workers.dev/chat';
+var HIST=[];
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function mdLite(s){
+ s=escapeHtml(s);
+ s=s.replace(/\[([^\]]+)\]\((\/[^)\s]+|https?:[^)\s]+)\)/g,'<a href="$2">$1</a>');
+ s=s.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+ return s.replace(/\n/g,'<br>');
+}
+function botTyping(){
+ var e=el('div','hwbMsg hwbBot','생각 중<span class="hwbDots">...</span>');
+ e.id='hwbTyping'; body.appendChild(e); scrollDown(); return e;
+}
+function llmAnswer(t){
+ HIST.push({role:'user',content:t});
+ if(HIST.length>12)HIST=HIST.slice(-12);
+ var ty=botTyping();
+ var ctrl=new AbortController();
+ var to=setTimeout(function(){ctrl.abort();},15000);
+ fetch(BOOBI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:HIST}),signal:ctrl.signal})
+ .then(function(r){clearTimeout(to);if(!r.ok)throw new Error('bad');return r.json();})
+ .then(function(d){
+   ty.remove();
+   if(!d.reply)throw new Error('empty');
+   HIST.push({role:'assistant',content:d.reply});
+   bot(mdLite(d.reply));
+ })
+ .catch(function(){
+   ty.remove();
+   ruleAnswer(t);
+ });
+}
 var FLOW=null;
 function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
 function parseMoney(t){
@@ -192,13 +224,17 @@ function flowStep(t){
     }
   }
 }
+function ruleAnswer(t){
+  for(var i=0;i<KEYWORDS.length;i++){ if(KEYWORDS[i][0].test(t)){ bot(ANSWERS[KEYWORDS[i][1]]); offerChips(); return; } }
+  bot('제가 바로 답할 수 있게 배우는 중이에요! 이런 건 지금 당장 도와드릴 수 있어요:\n\n• "월세 적당한지 모르겠어" → 대화로 바로 검진\n• "복비 많이 낸 건가?" → 법정 상한 확인\n\n아니면 아래에서 골라주세요 👇');
+  chips();
+}
 function answer(t){
   if(FLOW){ flowStep(t); return; }
   if(/월세/.test(t)&&/적당|적정|비싸|맞나|맞는|괜찮|잘.*계약|잘한/.test(t)){ startWolseFlow(); return; }
   if(/복비|중개보수|수수료/.test(t)&&/많|비싸|맞나|맞는|적정|요구|달라/.test(t)){ startFeeFlow(); return; }
-  for(var i=0;i<KEYWORDS.length;i++){ if(KEYWORDS[i][0].test(t)){ bot(ANSWERS[KEYWORDS[i][1]]); offerChips(); return; } }
-  bot('제가 바로 답할 수 있게 배우는 중이에요! 이런 건 지금 당장 도와드릴 수 있어요:\n\n• "월세 적당한지 모르겠어" → 대화로 바로 검진\n• "복비 많이 낸 건가?" → 법정 상한 확인\n\n아니면 아래에서 골라주세요 👇');
-  chips();
+  if(BOOBI_API.indexOf('http')===0){ llmAnswer(t); return; }
+  ruleAnswer(t);
 }
 var opened=false;
 btn.onclick=function(){
