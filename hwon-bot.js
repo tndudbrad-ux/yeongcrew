@@ -6,6 +6,11 @@ if(!document.querySelector('link[href="/hwon-ui.css"]')){
 if(!document.querySelector('script[src="/hwon-ui.js"]')){
   var uiS=document.createElement('script');uiS.src='/hwon-ui.js';uiS.defer=true;document.body.appendChild(uiS);
 }
+if(!document.querySelector('link[rel~="icon"]')){
+  var fv=document.createElement('link');fv.rel='icon';fv.type='image/svg+xml';
+  fv.href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E";
+  document.head.appendChild(fv);
+}
 var css=document.createElement('style');
 css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;z-index:9998;background:linear-gradient(180deg,#33CCC7,#1B918D);box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 30px rgba(42,193,188,.35);display:flex;align-items:center;justify-content:center}'
 +'#hwbBtn .ring{width:26px;height:26px;border-radius:50%;border:6px solid #fff;box-sizing:border-box}'
