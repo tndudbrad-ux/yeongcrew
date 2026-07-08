@@ -2,6 +2,8 @@
 (function(){
 if(!document.querySelector('link[href="/hwon-ui.css"]')){
   var uiL=document.createElement('link');uiL.rel='stylesheet';uiL.href='/hwon-ui.css';document.head.appendChild(uiL);
+}
+if(!document.querySelector('script[src="/hwon-ui.js"]')){
   var uiS=document.createElement('script');uiS.src='/hwon-ui.js';uiS.defer=true;document.body.appendChild(uiS);
 }
 var css=document.createElement('style');
