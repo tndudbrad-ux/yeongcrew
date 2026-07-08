@@ -133,6 +133,14 @@ footer a{color:#B9DCD9;margin:0 8px}
 <a class="card" href="/jeonse-monthly.html"><div class="ic">🔄</div><h3>전월세 전환 계산기</h3><p>전세↔월세 적정 금액 환산</p></a>
 </div></div>
 
+
+<div class="faqsec"><h2 class="sec">자주 묻는 질문</h2>
+<details class="faq"><summary>DSR 40%는 무슨 뜻인가요?</summary><p>1년 동안 갚아야 하는 모든 대출의 원금+이자가 연소득의 40%를 넘으면 은행권에서 추가 대출이 어렵다는 뜻이에요. 연소득 5,000만원이면 연간 원리금 상환액이 2,000만원 이내여야 합니다.</p></details>
+<details class="faq"><summary>스트레스 DSR이 뭔가요?</summary><p>대출 한도를 계산할 때 실제 금리에 가산금리(스트레스 금리, 최대 +1.5%p)를 얹어 심사하는 제도예요. 금리가 오를 상황까지 미리 반영하기 때문에 실제 대출 한도가 그만큼 줄어듭니다.</p></details>
+<details class="faq"><summary>원리금균등과 원금균등 중 뭐가 유리한가요?</summary><p>총이자는 원금균등이 더 적지만 초기 상환 부담이 커요. 원리금균등은 매달 같은 금액이라 자금 계획이 쉽습니다. 계산기에서 두 방식의 월 상환액과 총이자를 비교해보세요.</p></details>
+<details class="faq"><summary>디딤돌·버팀목 같은 정책대출도 DSR에 걸리나요?</summary><p>정책 서민금융 상품은 DSR 산정에서 제외되는 경우가 많아요. 청년 버팀목 전세대출(만 19~34세, 일정 소득 요건) 등 내게 맞는 상품은 주거지원 진단에서 확인할 수 있어요.</p></details>
+</div>
+<style>.faq{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 18px}.faq summary{cursor:pointer;font-weight:500;font-size:.95rem;padding:15px 0;list-style:none;position:relative}.faq summary::after{content:"+";position:absolute;right:2px;color:var(--teal);font-size:1.1rem}.faq[open] summary::after{content:"−"}.faq p{font-size:.88rem;color:var(--sub);padding:0 0 15px;line-height:1.7}</style>
 </div></main>
 <footer><div class="wrap">
 훤AI — 부동산이, 훤해요<br>
@@ -194,5 +202,8 @@ function calcDSR(){
 
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "대출·DSR 계산기", "url": "https://yeongcrew.co.kr/loan-calculator.html", "description": "주택담보대출 월 상환액·총이자와 DSR(총부채원리금상환비율)을 연소득 기준으로 자동 계산하는 무료 계산기", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "훤AI", "url": "https://yeongcrew.co.kr"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "DSR 40%는 무슨 뜻인가요?", "acceptedAnswer": {"@type": "Answer", "text": "1년 동안 갚아야 하는 모든 대출의 원금+이자가 연소득의 40%를 넘으면 은행권에서 추가 대출이 어렵다는 뜻이에요. 연소득 5,000만원이면 연간 원리금 상환액이 2,000만원 이내여야 합니다."}}, {"@type": "Question", "name": "스트레스 DSR이 뭔가요?", "acceptedAnswer": {"@type": "Answer", "text": "대출 한도를 계산할 때 실제 금리에 가산금리(스트레스 금리, 최대 +1.5%p)를 얹어 심사하는 제도예요. 금리가 오를 상황까지 미리 반영하기 때문에 실제 대출 한도가 그만큼 줄어듭니다."}}, {"@type": "Question", "name": "원리금균등과 원금균등 중 뭐가 유리한가요?", "acceptedAnswer": {"@type": "Answer", "text": "총이자는 원금균등이 더 적지만 초기 상환 부담이 커요. 원리금균등은 매달 같은 금액이라 자금 계획이 쉽습니다. 계산기에서 두 방식의 월 상환액과 총이자를 비교해보세요."}}, {"@type": "Question", "name": "디딤돌·버팀목 같은 정책대출도 DSR에 걸리나요?", "acceptedAnswer": {"@type": "Answer", "text": "정책 서민금융 상품은 DSR 산정에서 제외되는 경우가 많아요. 청년 버팀목 전세대출(만 19~34세, 일정 소득 요건) 등 내게 맞는 상품은 주거지원 진단에서 확인할 수 있어요."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://yeongcrew.co.kr/"}, {"@type": "ListItem", "position": 2, "name": "대출·DSR 계산기", "item": "https://yeongcrew.co.kr/loan-calculator.html"}]}</script>
 </body>
 </html>
