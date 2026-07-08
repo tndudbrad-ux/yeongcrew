@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 아파트 찾기 — 예산·라이프스타일 맞춤 추천 | 훤AI</title>
+<meta name="description" content="현금·소득·직장·자녀·연식 조건을 입력하면 국토부 실거래 데이터로 예산에 맞는 아파트 5곳을 추천해드립니다. 내집마련, 훤히.">
+<link rel="canonical" href="https://yeongcrew.co.kr/apt-finder.html">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="내 아파트 찾기 — 예산·라이프스타일 맞춤 추천 | 훤AI">
+<meta property="og:description" content="현금·소득·직장·자녀·연식 조건을 입력하면 국토부 실거래 데이터로 예산에 맞는 아파트 5곳을 추천해드립니다. 내집마련, 훤히.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yeongcrew.co.kr/apt-finder.html">
+<meta property="og:site_name" content="훤AI - 부동산이, 훤해요">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#F0FAF8;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+header.top{background:rgba(240,250,248,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500;letter-spacing:-.01em}
+.logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);box-shadow:0 2px 8px rgba(42,193,188,.35)}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+main{padding:40px 0 64px}
+h2.sec{font-size:1.28rem;font-weight:500;letter-spacing:-.02em;margin:40px 0 16px;display:flex;align-items:center;gap:10px}
+h2.sec::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(180deg,#8FE9E4,#20A6A2);box-shadow:0 0 8px var(--glow)}
+h2.sec:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;transition:.18s;display:block}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(32,166,162,.14);border-color:#B5E4E1}
+.card .ic{font-size:1.4rem}
+.card h3{font-size:1rem;font-weight:500;margin:8px 0 4px;letter-spacing:-.015em}
+.card p{font-size:.85rem;color:var(--sub)}
+.tool-box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 28px;margin-bottom:22px}
+.tool-box h2{font-size:1.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.tool-box h2::before{content:"";flex:0 0 12px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, transparent 26%),linear-gradient(180deg,#8FE9E4,#1B918D);-webkit-mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);box-shadow:0 0 9px var(--glow)}
+label.f{display:block;font-size:.87rem;font-weight:500;margin:15px 0 6px;color:var(--forest)}
+input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
+input.f:focus,select.f:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.seg button{flex:1;min-width:90px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
+.seg button.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:600;box-shadow:0 0 10px rgba(42,193,188,.18)}
+button.go{width:100%;margin-top:22px;padding:15px;border:none;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.35);transition:.15s}
+button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(42,193,188,.45)}
+.result{display:none;margin-top:22px;background:linear-gradient(180deg,#EAFAF8,#F0FAF8);border:1.5px solid #BFE9E6;border-radius:16px;padding:22px}
+.result.show{display:block}
+.result .big{font-size:1.55rem;font-weight:600;color:var(--teal);letter-spacing:-.02em}
+.result table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
+.result td,.result th{padding:8px 4px;border-bottom:1px solid #CBEBE8;text-align:right}
+.result td:first-child,.result th:first-child{text-align:left;color:var(--sub)}
+.note{font-size:.82rem;color:var(--sub);margin-top:14px;font-weight:300}
+article.post{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:36px 32px}
+article.post h1{font-size:1.5rem;font-weight:500;margin-bottom:6px;letter-spacing:-.025em}
+article.post .meta{font-size:.84rem;color:var(--sub);margin-bottom:24px;font-weight:300}
+article.post h2{font-size:1.13rem;font-weight:500;margin:30px 0 10px;color:var(--forest);padding-left:14px;position:relative}
+article.post h2::before{content:"";position:absolute;left:0;top:.4em;width:5px;height:5px;border-radius:50%;background:var(--mint);box-shadow:0 0 7px var(--glow)}
+article.post p{margin-bottom:14px;font-size:.95rem}
+article.post table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:.88rem}
+article.post th{background:var(--forest);color:#DFF5F3;padding:10px 8px;font-weight:500}
+article.post td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center}
+article.post ul{margin:0 0 14px 20px;font-size:.95rem}
+article.post li{margin-bottom:6px}
+.tip{background:#EAFAF8;border:1px solid #BFE9E6;border-radius:12px;padding:14px 16px;font-size:.9rem;margin:14px 0}
+.rel{margin-top:28px}
+.ad-slot{display:none}
+footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
+footer a{color:#B9DCD9;margin:0 8px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
+.crumb a{color:var(--teal)}
+@media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><span class="ring"></span>훤AI</a>
+<nav class="gnb">
+<a href="/loan-calculator.html">대출·DSR</a>
+<a href="/acquisition-tax.html">취득세</a>
+<a href="/brokerage-fee.html">중개보수</a>
+<a href="/jeonse-monthly.html">전월세 전환</a>
+<a href="/youth-housing.html">청년 지원</a>
+<a href="/rental-board.html">임대주택</a>
+<a href="/experts.html">전문가 찾기</a>
+<a href="/#guide">가이드</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+
+<div class="crumb"><a href="/">홈</a> › 내 아파트 찾기</div>
+<div class="tool-box">
+<h2>🔎 내 아파트 찾기 <span style="font-weight:300;font-size:.85rem;color:var(--sub)">내집마련, 훤히</span></h2>
+<p style="font-size:.88rem;color:var(--sub);margin-bottom:4px">7개 질문에 답하면, 부비가 <b>국토부 실거래 데이터</b>를 조회해서 조건에 맞는 아파트 5곳을 추려드려요.</p>
+
+<label class="f">① 현금 가용액 (만원) — 예금·주식 등 동원 가능한 자기자본</label>
+<input class="f" id="fCash" type="number" placeholder="예: 30000 (3억)">
+<div class="row2">
+<div><label class="f">② 연소득 (만원, 세전)</label><input class="f" id="fIncome" type="number" placeholder="예: 7000"></div>
+<div><label class="f">기존 대출 연 상환액 (만원)</label><input class="f" id="fDebt" type="number" placeholder="없으면 0"></div>
+</div>
+<label class="f">③ 직장 위치</label>
+<input class="f" id="fWork" type="text" placeholder="예: 강남역, 여의도, 판교테크노밸리">
+<label class="f">④ 희망 지역 (시군구 단위) — 비워두면 직장 기준으로 추천</label>
+<input class="f" id="fArea" type="text" placeholder="예: 서울 마포구, 경기 성남시 분당구">
+<label class="f">⑤ 나이대</label>
+<div class="seg" id="fAge"><button data-v="20대" >20대</button><button data-v="30대" class="on">30대</button><button data-v="40대">40대</button><button data-v="50대 이상">50대+</button></div>
+<label class="f">⑥ 자녀</label>
+<div class="seg" id="fKids"><button data-v="없음" class="on">없음</button><button data-v="영유아">영유아·예정</button><button data-v="초등학생">초등</button><button data-v="중고등학생">중·고등</button></div>
+<label class="f">⑦ 연식 선호</label>
+<div class="seg" id="fYear"><button data-v="10년 이내 신축·준신축" class="on">신축·준신축</button><button data-v="연식 무관">연식 무관</button><button data-v="재건축 기대 구축도 좋음">재건축 노림</button></div>
+<label class="f">희망 전용면적</label>
+<div class="seg" id="fSize"><button data-v="전용 59㎡ 이하">~59㎡</button><button data-v="전용 59~84㎡" class="on">59~84㎡</button><button data-v="전용 84㎡ 이상">84㎡~</button></div>
+<button class="go" id="fGo" onclick="findApt()">내 아파트 5곳 찾기</button>
+<div id="fBudget" style="display:none;background:#EAFAF8;border:1.5px solid #BFE9E6;border-radius:14px;padding:16px 18px;margin-top:18px;font-size:.92rem"></div>
+<div id="fLoading" style="display:none;text-align:center;padding:28px 0">
+<div style="width:34px;height:34px;border-radius:50%;border:7px solid #DCEEEC;border-top-color:#2AC1BC;margin:0 auto 12px;animation:fSpin 1s linear infinite"></div>
+<div style="font-size:.9rem;color:var(--sub)" id="fLoadMsg">부비가 실거래 데이터를 뒤지는 중...</div>
+</div>
+<div class="result" id="fRes" style="white-space:normal"></div>
+<p class="note">추천은 국토부 실거래가 공개 데이터와 AI 분석 기반의 참고 정보이며, 투자 권유가 아닙니다. 대출 한도는 DSR 40%·30년·금리 4.2% 가정의 추정치로 실제 한도(LTV·스트레스 DSR 포함)와 다를 수 있어요.</p>
+</div>
+
+<div class="rel"><h2 class="sec">추천받은 다음엔</h2><div class="grid">
+<a class="card" href="/loan-calculator.html"><div class="ic">💰</div><h3>대출·DSR 계산기</h3><p>내 실제 한도 정밀 확인</p></a>
+<a class="card" href="/moving-guide.html"><div class="ic">📦</div><h3>매매 로드맵</h3><p>계약 전 체크리스트</p></a>
+<a class="card" href="/acquisition-tax.html"><div class="ic">🧾</div><h3>취득세 계산기</h3><p>사기 전 세금 확인</p></a>
+</div></div>
+<style>@keyframes fSpin{to{transform:rotate(360deg)}}
+#fRes h3,#fRes b{color:var(--forest)} #fRes a{color:var(--teal);font-weight:600}
+#fRes .apt{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;font-size:.9rem;line-height:1.65}</style>
+</div></main>
+<footer><div class="wrap">
+훤AI — 부동산이, 훤해요<br>
+계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>© 2026 영크루 · 
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a><br>
+<span style="font-size:.75rem;color:#5D8683">상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074 · 서울특별시 동작구 만양로 75 · tndud.brad@gmail.com</span>
+</div></footer>
+
+<script>
+var BOOBI_API='https://hwon-boobi.tndud-brad.workers.dev/chat';
+function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});e.target.classList.add('on');});});
+function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
+function loanLimit(income, debt){
+  var payYear=Math.max(0, income*0.4 - debt);
+  var r=0.042/12, n=360, m=payYear/12;
+  return m*( (Math.pow(1+r,n)-1) / (r*Math.pow(1+r,n)) );
+}
+function readMan(v){ v=Math.round(v); var eok=Math.floor(v/10000), man=v%10000, s=''; if(eok>0){s=eok.toLocaleString('ko-KR')+'억'; if(man>=1000)s+=' '+Math.round(man/1000)+'천';}else{s=man.toLocaleString('ko-KR')+'만원';} return s; }
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function md(s){
+  s=esc(s);
+  s=s.replace(/\[([^\]]+)\]\((\/[^)\s]+|https?:[^)\s]+)\)/g,'<a href="$2">$1</a>');
+  s=s.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+  var blocks=s.split(/\n(?=\*\*\d\.)/);
+  if(blocks.length>=4){
+    return blocks.map(function(b,i){ return i===0? b.replace(/\n/g,'<br>') : '<div class="apt">'+b.replace(/\n/g,'<br>')+'</div>'; }).join('');
+  }
+  return s.replace(/\n/g,'<br>');
+}
+var MSGS=['부비가 실거래 데이터를 뒤지는 중...','예산에 맞는 단지를 추리는 중...','학군·직주근접을 따져보는 중...','추천 이유를 정리하는 중...'];
+function findApt(){
+  var cash=+document.getElementById('fCash').value, income=+document.getElementById('fIncome').value;
+  if(!cash&&cash!==0||!income){alert('현금 가용액과 연소득을 입력해주세요');return;}
+  var debt=+document.getElementById('fDebt').value||0;
+  var work=document.getElementById('fWork').value.trim()||'미입력';
+  var area=document.getElementById('fArea').value.trim();
+  var loan=loanLimit(income,debt);
+  var budget=cash+loan;
+  var bEl=document.getElementById('fBudget');
+  bEl.style.display='block';
+  bEl.innerHTML='💰 추정 예산: <b style="font-size:1.15rem;color:var(--teal)">'+readMan(budget)+'</b><span style="color:var(--sub);font-size:.84rem"> = 현금 '+readMan(cash)+' + 대출한도 약 '+readMan(loan)+' (DSR 40% 추정)</span>';
+  var profile='[아파트찾기] 내 조건에 맞는 아파트 5곳을 추천해줘.\n'
+   +'- 총 예산: 약 '+readMan(budget)+' (현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+')\n'
+   +'- 직장: '+work+'\n'
+   +'- 희망 지역: '+(area||('직장('+work+') 출퇴근 30~40분권에서 골라줘'))+'\n'
+   +'- 나이: '+segVal('fAge')+', 자녀: '+segVal('fKids')+'\n'
+   +'- 연식: '+segVal('fYear')+', 면적: '+segVal('fSize');
+  var load=document.getElementById('fLoading'), res=document.getElementById('fRes'), btn=document.getElementById('fGo');
+  res.classList.remove('show'); res.innerHTML='';
+  load.style.display='block'; btn.disabled=true; btn.style.opacity=.6;
+  var mi=0; var tick=setInterval(function(){ mi=(mi+1)%MSGS.length; document.getElementById('fLoadMsg').textContent=MSGS[mi]; },4000);
+  var ctrl=new AbortController();
+  var to=setTimeout(function(){ctrl.abort();},75000);
+  fetch(BOOBI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:profile}]}),signal:ctrl.signal})
+  .then(function(r){clearTimeout(to);if(!r.ok)throw new Error('bad');return r.json();})
+  .then(function(d){
+    clearInterval(tick); load.style.display='none'; btn.disabled=false; btn.style.opacity=1;
+    if(!d.reply)throw new Error('empty');
+    res.innerHTML=md(d.reply)+'<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💬 더 자세히 알아보고 싶은 단지가 있다면 오른쪽 아래 <b>부비</b>에게 단지명을 물어보세요!</div>';
+    res.classList.add('show');
+    res.scrollIntoView({behavior:'smooth',block:'start'});
+  })
+  .catch(function(){
+    clearInterval(tick); load.style.display='none'; btn.disabled=false; btn.style.opacity=1;
+    res.innerHTML='일시적으로 추천을 불러오지 못했어요. 잠시 후 다시 시도해주세요. 급하시면 오른쪽 아래 부비에게 직접 물어봐도 돼요!';
+    res.classList.add('show');
+  });
+}
+</script>
+\n<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "내 아파트 찾기", "url": "https://yeongcrew.co.kr/apt-finder.html", "description": "예산·직장·자녀·연식 조건 진단 후 국토부 실거래가 기반으로 아파트 5곳을 추천하는 무료 서비스", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "훤AI", "url": "https://yeongcrew.co.kr"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://yeongcrew.co.kr/"}, {"@type": "ListItem", "position": 2, "name": "내 아파트 찾기", "item": "https://yeongcrew.co.kr/apt-finder.html"}]}</script>
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+</body>
+</html>
