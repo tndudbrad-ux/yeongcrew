@@ -171,7 +171,8 @@ function calcLoan(){
     monthly=P*r; totInt=monthly*n; first=monthly;
     html='<div>매달 이자</div><div class="big">'+fmt(monthly)+'원</div><div style="font-size:.9rem;margin-top:4px">만기에 원금 '+fmt(P)+'원 상환</div>';
   }
-  html+='<table><tr><td>총 이자</td><td>'+fmt(totInt)+'원</td></tr><tr><td>총 상환액</td><td>'+fmt(P+totInt)+'원</td></tr></table>';
+  html+='<table><tr><td>총 이자</td><td>'+fmt(totInt)+'원</td></tr><tr><td>총 상환액</td><td>'+fmt(P+totInt)+'원</td></tr></table>'
+  +'<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💡 상환 계획이 섰다면 다음 단계는 계약이에요.<br>→ <a href="/moving-guide.html" style="color:var(--teal);font-weight:600">계약 전 확인 7단계 로드맵</a> · <a href="/acquisition-tax.html" style="color:var(--teal);font-weight:600">취득세도 미리 계산</a></div>';
   var el=document.getElementById('lRes'); el.innerHTML=html; el.classList.add('show');
   var annual = mode==='won-geum' ? (first*12) : (monthly*12);
   document.getElementById('dNew').value=Math.round(annual/10000);
@@ -185,7 +186,8 @@ function calcDSR(){
   var cap40=inc*0.4, room=cap40-(nw+od);
   var msg = dsr<=40 ? '은행권 기준(40%) 이내입니다. 연 '+fmt(room)+'만원 여유가 있어요.' : '은행권 기준(40%)을 초과합니다. 대출 승인이 어려울 수 있어요.';
   var el=document.getElementById('dRes');
-  el.innerHTML='<div>내 DSR</div><div class="big">'+dsr.toFixed(1)+'%</div><div style="font-size:.9rem;margin-top:6px">'+msg+'</div>';
+  el.innerHTML='<div>내 DSR</div><div class="big">'+dsr.toFixed(1)+'%</div><div style="font-size:.9rem;margin-top:6px">'+msg+'</div>'
+  +'<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💡 정책대출(버팀목·디딤돌) 대상인지도 확인해보세요 → <a href="/youth-housing.html" style="color:var(--teal);font-weight:600">주거지원 진단</a> · 은행별 조건 비교가 필요하면 <a href="/experts.html" style="color:var(--teal);font-weight:600">대출상담사 찾기</a></div>';
   el.classList.add('show');
 }
 </script>

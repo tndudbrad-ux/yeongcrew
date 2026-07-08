@@ -161,7 +161,8 @@ function calcConv(){
     if(!j){alert('전세보증금을 입력해주세요');return;}
     if(d>=j){alert('새 보증금이 전세보증금보다 작아야 합니다');return;}
     var monthly=(j-d)*10000*rate/12;
-    el.innerHTML='<div>보증금 '+fmt(d*10000)+'원일 때 적정 월세</div><div class="big">월 '+fmt(monthly)+'원</div><div style="font-size:.88rem;margin-top:6px">연간 월세 총액 '+fmt(monthly*12)+'원</div>';
+    el.innerHTML='<div>보증금 '+fmt(d*10000)+'원일 때 적정 월세</div><div class="big">월 '+fmt(monthly)+'원</div><div style="font-size:.88rem;margin-top:6px">연간 월세 총액 '+fmt(monthly*12)+'원</div>'
+    +'<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💡 이미 계약하셨다면 적정했는지 검진받아보세요 → <a href="/contract-check.html" style="color:var(--teal);font-weight:600">계약 셀프 검진</a> · 보증금 안전은 <a href="/jeonse-safety-check.html" style="color:var(--teal);font-weight:600">등기부 체크</a></div>';
   }else{
     var d2=(+document.getElementById('cDep2').value)||0;
     var m2=(+document.getElementById('cMon2').value);

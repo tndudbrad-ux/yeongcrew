@@ -163,7 +163,8 @@ function calcYield(){
   +(cost?'<tr><td>연 기타비용</td><td>−'+fmt(cost)+'원</td></tr>':'')
   +'<tr><td><b>월 현금흐름</b></td><td><b>'+fmt(monthlyCF)+'원</b></td></tr>'
   +'</table>'
-  +'<div style="font-size:.88rem;margin-top:10px">'+comment+'</div>';
+  +'<div style="font-size:.88rem;margin-top:10px">'+comment+'</div>'
+  +'<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💡 수익형 부동산은 세금 설계가 수익률을 좌우해요 → <a href="/experts.html" style="color:var(--teal);font-weight:600">부동산 전문 세무사 찾기</a> · 취득 비용은 <a href="/acquisition-tax.html" style="color:var(--teal);font-weight:600">취득세 계산기</a></div>';
   var el=document.getElementById('yRes');el.innerHTML=h;el.classList.add('show');
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
 }

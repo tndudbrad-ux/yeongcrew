@@ -170,7 +170,8 @@ function calcTax(){
   el.innerHTML='<div>총 납부세액 (세율 '+rate.toFixed(2).replace(/\.?0+$/,'')+'%)</div><div class="big">'+fmt(total)+'원</div>'
   +'<table><tr><td>취득세</td><td>'+fmt(acq)+'원</td></tr>'
   +'<tr><td>지방교육세</td><td>'+fmt(edu)+'원</td></tr>'
-  +'<tr><td>농어촌특별세'+(big?'':' (85㎡ 이하 비과세)')+'</td><td>'+fmt(farm)+'원</td></tr></table>';
+  +'<tr><td>농어촌특별세'+(big?'':' (85㎡ 이하 비과세)')+'</td><td>'+fmt(farm)+'원</td></tr></table>'
+  +'<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💡 취득세를 계산하신다는 건 <b>잔금일이 다가온다</b>는 거죠?<br>→ <a href="/moving-guide.html" style="color:var(--teal);font-weight:600">잔금일에 해야 할 7가지 체크리스트</a><br>→ 등기·세금 신고가 처음이라면 <a href="/experts.html" style="color:var(--teal);font-weight:600">법무사·세무사 찾기</a></div>';
   el.classList.add('show');
 }
 </script>
