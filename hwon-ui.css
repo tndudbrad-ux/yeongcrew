@@ -17,3 +17,20 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #2AC1
 .hwHint{font-size:.86rem;color:#20A6A2;font-weight:600;margin-top:5px;min-height:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .2s ease,opacity .25s ease;letter-spacing:-.01em}
 .hwHint.on{max-height:26px;opacity:1}
 .hwHint::before{content:"= ";color:#9FC4C1;font-weight:400}
+.hwReveal{opacity:0;transform:translateY(16px);transition:opacity .55s cubic-bezier(.22,.9,.35,1),transform .55s cubic-bezier(.22,.9,.35,1)}
+.hwReveal.hwIn{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){.hwReveal{opacity:1;transform:none;transition:none}}
+button.go.hwPress{animation:hwPress .3s ease}
+@keyframes hwPress{0%{transform:scale(1)}40%{transform:scale(.97)}100%{transform:scale(1)}}
+.hwRates{background:#fff;border:1.5px solid #DCEEEC;border-radius:18px;padding:20px 22px;margin:20px 0}
+.hwRates h4{font-size:1.02rem;font-weight:600;color:#0D2A29;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.hwRates .upd{font-size:.76rem;color:#547471;font-weight:400;margin-left:auto}
+.hwRatesGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:12px}
+.hwRateCard{background:#F0FAF8;border:1px solid #DCEEEC;border-radius:12px;padding:12px 14px;transition:transform .18s,box-shadow .18s}
+.hwRateCard:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(32,166,162,.14)}
+.hwRateCard .nm{font-size:.78rem;color:#547471;font-weight:500}
+.hwRateCard .rt{font-size:1.32rem;font-weight:700;color:#0D2A29;letter-spacing:-.02em;margin:2px 0}
+.hwRateCard .ch{font-size:.75rem;font-weight:600}
+.hwRateCard .ch.up{color:#C2410C}.hwRateCard .ch.down{color:#1D4ED8}.hwRateCard .ch.flat{color:#547471}
+.hwRateCard .as{font-size:.7rem;color:#7DA09C;margin-top:3px}
+.hwRates .nt{font-size:.8rem;color:#547471;margin-top:12px;line-height:1.6}
