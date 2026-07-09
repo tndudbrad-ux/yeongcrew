@@ -163,6 +163,15 @@ function loanLimit(income, debt){
   var r=0.042/12, n=360, m=payYear/12;
   return m*( (Math.pow(1+r,n)-1) / (r*Math.pow(1+r,n)) );
 }
+
+function maxBudget(cash,income,debtPay){
+  var dsr=loanLimit(income,debtPay);
+  var t1=Math.min(cash+Math.min(dsr,60000),150000);
+  var p2=cash+Math.min(dsr,40000); var t2=(p2>150000)?Math.min(p2,250000):0;
+  var p3=cash+Math.min(dsr,20000); var t3=(p3>250000)?p3:0;
+  var P=Math.max(t1,t2,t3);
+  return {P:P, loan:Math.max(0,P-cash), dsrOnly:dsr};
+}
 function readMan(v){ v=Math.round(v); var eok=Math.floor(v/10000), man=v%10000, s=''; if(eok>0){s=eok.toLocaleString('ko-KR')+'억'; if(man>=1000)s+=' '+Math.round(man/1000)+'천';}else{s=man.toLocaleString('ko-KR')+'만원';} return s; }
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function md(s){
@@ -182,13 +191,14 @@ function findApt(){
   var debt=+document.getElementById('fDebt').value||0;
   var work=document.getElementById('fWork').value.trim()||'미입력';
   var area=document.getElementById('fArea').value.trim();
-  var loan=loanLimit(income,debt);
-  var budget=cash+loan;
+  var mb=maxBudget(cash,income,debt);
+  var loan=mb.loan, budget=mb.P;
+  var capped=mb.dsrOnly>loan+1;
   var bEl=document.getElementById('fBudget');
   bEl.style.display='block';
-  bEl.innerHTML='💰 추정 예산: <b style="font-size:1.15rem;color:var(--teal)">'+readMan(budget)+'</b><span style="color:var(--sub);font-size:.84rem"> = 현금 '+readMan(cash)+' + 대출한도 약 '+readMan(loan)+' (DSR 40% 추정)</span>';
+  bEl.innerHTML='💰 추정 예산: <b style="font-size:1.15rem;color:var(--teal)">'+readMan(budget)+'</b><span style="color:var(--sub);font-size:.84rem"> = 현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+(capped?' · <b>규제지역 대출한도 차등 적용</b>(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)':' (DSR 40% 추정)')+'</span>';
   var profile='[아파트찾기] 내 조건에 맞는 아파트 5곳을 추천해줘.\n'
-   +'- 총 예산: 약 '+readMan(budget)+' (현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+')\n'
+   +'- 총 예산: 약 '+readMan(budget)+' (현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+', 규제지역 가격 차등 대출한도 반영)\n'
    +'- 직장: '+work+'\n'
    +'- 희망 지역: '+(area||('직장('+work+') 출퇴근 30~40분권에서 골라줘'))+'\n'
    +'- 나이: '+segVal('fAge')+', 자녀: '+segVal('fKids')+'\n'

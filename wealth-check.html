@@ -152,6 +152,15 @@ document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('cl
 function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
 var PEER={20:10796,30:25060,40:48389,50:55161,60:53591};
 function loanLimit(income,debtPay){ var pay=Math.max(0,income*0.4-debtPay); var r=0.042/12,n=360,m=pay/12; return m*((Math.pow(1+r,n)-1)/(r*Math.pow(1+r,n))); }
+
+function maxBudget(cash,income,debtPay){
+  var dsr=loanLimit(income,debtPay);
+  var t1=Math.min(cash+Math.min(dsr,60000),150000);
+  var p2=cash+Math.min(dsr,40000); var t2=(p2>150000)?Math.min(p2,250000):0;
+  var p3=cash+Math.min(dsr,20000); var t3=(p3>250000)?p3:0;
+  var P=Math.max(t1,t2,t3);
+  return {P:P, loan:Math.max(0,P-cash), dsrOnly:dsr};
+}
 function bar(label, re, fin, note){
   return '<div style="font-size:.8rem;font-weight:600;margin-top:10px">'+label+'</div>'
   +'<div class="wcBar"><span style="width:'+re+'%;background:#2AC1BC"></span><span style="width:'+fin+'%;background:#0D2A29"></span><span style="flex:1;background:#DCEEEC"></span></div>'
@@ -183,10 +192,10 @@ function calcWealth(){
   +bar('KB 부자 (금융자산 10억+)', 55, 37,'기타 8%')
   +'</div>';
   var diag='';
-  var avail=cash+fin*0.7+loanLimit(inc,0);
+  var mbW=maxBudget(cash+fin*0.7, inc, 0); var avail=mbW.P;
   if(re===0){
     diag='🔍 <b>부동산 자산이 비어 있어요.</b> 일반 가구도 자산의 76%가 부동산·실물이고, 부자 포트폴리오에서도 부동산이 55%예요. 무주택이라면 자산 성장의 큰 축이 꺼져 있는 셈이에요.'
-    +'<div style="margin-top:10px">지금 가용자금은 약 <b style="color:var(--teal);font-size:1.05rem">'+readMan(avail)+'</b> <span style="font-size:.8rem;color:var(--sub)">(현금 전액 + 금융자산 70% + 대출한도 추정)</span></div>'
+    +'<div style="margin-top:10px">지금 가용자금은 약 <b style="color:var(--teal);font-size:1.05rem">'+readMan(avail)+'</b> <span style="font-size:.8rem;color:var(--sub)">(현금 + 금융자산 70% + 대출 가능액 — 규제지역 가격 차등 한도 반영)</span></div>'
     +'<div style="margin-top:8px;font-size:.9rem">'+regionGuide(avail)+'</div>'
     +'<a href="/apt-finder.html?cash='+Math.round(cash+fin*0.7)+'&income='+inc+'" style="display:block;text-align:center;margin-top:14px;padding:14px;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;text-decoration:none">🔎 이 예산으로 내 아파트 찾기 → 거주지·직장·자녀 조건까지 넣으면 5곳 추천</a>';
   } else if(myRe>85){
