@@ -52,6 +52,35 @@
 </div>
 <main><div class="wrap">
 
+<section id="quick" aria-label="바로가기">
+<style>
+.quickGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:4px 0 10px}
+@media(max-width:760px){.quickGrid{grid-template-columns:repeat(4,1fr);gap:9px}}
+@media(max-width:420px){.quickGrid{grid-template-columns:repeat(3,1fr)}}
+.qt{display:flex;flex-direction:column;align-items:center;gap:8px;padding:15px 4px 13px;background:#fff;border:1px solid var(--line);border-radius:16px;transition:transform .18s,box-shadow .18s,border-color .18s}
+.qt:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(32,166,162,.15);border-color:#B5E4E1}
+.qt:hover .qi{transform:scale(1.12)}
+.qi{width:46px;height:46px;border-radius:14px;background:linear-gradient(180deg,#EFFBFA,#E2F6F4);display:flex;align-items:center;justify-content:center;font-size:1.35rem;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.ql{font-size:.78rem;font-weight:600;color:var(--forest);letter-spacing:-.01em;white-space:nowrap}
+.qt.hot .qi{background:linear-gradient(180deg,#33CCC7,#20A6A2)}
+</style>
+<div class="quickGrid">
+<a class="qt hot" href="apt-finder.html"><span class="qi">🔎</span><span class="ql">아파트 찾기</span></a>
+<a class="qt" href="wealth-check.html"><span class="qi">🧭</span><span class="ql">자산 진단</span></a>
+<a class="qt" href="#" onclick="var b=document.getElementById('hwbBtn');if(b){b.click();}return false;"><span class="qi">💬</span><span class="ql">부비에게 질문</span></a>
+<a class="qt" href="contract-check.html"><span class="qi">🩺</span><span class="ql">계약 검진</span></a>
+<a class="qt" href="jeonse-safety-check.html"><span class="qi">🛡️</span><span class="ql">전세사기 체크</span></a>
+<a class="qt" href="repair-check.html"><span class="qi">🔧</span><span class="ql">수리 책임</span></a>
+<a class="qt" href="acquisition-tax.html"><span class="qi">🧾</span><span class="ql">취득세</span></a>
+<a class="qt" href="capital-gains-tax.html"><span class="qi">💸</span><span class="ql">양도세</span></a>
+<a class="qt" href="jongbuse-calculator.html"><span class="qi">🏛️</span><span class="ql">종부세</span></a>
+<a class="qt" href="gift-tax.html"><span class="qi">🎁</span><span class="ql">증여·상속</span></a>
+<a class="qt" href="loan-calculator.html"><span class="qi">💰</span><span class="ql">대출·DSR</span></a>
+<a class="qt" href="experts.html"><span class="qi">🤝</span><span class="ql">전문가 찾기</span></a>
+</div>
+</section>
+
+
 <section id="check"><h2>훤 진단 — 계약 전에, 훤히</h2><div class="grid">
 <a class="card" href="wealth-check.html"><h3>🧭 내 자산 진단</h3><p>또래 평균·KB 부자와 비교하면 내 다음 한 수가 보여요. 부족한 자산과 예산까지 진단.</p></a>
 <a class="card" href="repair-check.html"><h3>🔧 수리 책임 진단</h3><p>보일러·곰팡이·형광등... 임대인이 고칠까 내가 고칠까? 30초 만에 판정.</p></a>
