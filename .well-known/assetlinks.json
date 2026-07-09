@@ -1,0 +1,8 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+          "namespace": "android_app",
+          "package_name": "kr.co.yeongcrew.hwonai",
+          "sha256_cert_fingerprints": ["48:10:2A:06:AC:5E:92:76:A5:AF:A3:EF:52:AD:B4:CE:6A:85:3F:7F:7E:22:93:55:4C:B7:53:DA:19:37:75:CB"]
+    }
+}]
