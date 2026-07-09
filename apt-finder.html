@@ -112,6 +112,8 @@ footer a{color:#B9DCD9;margin:0 8px}
 <input class="f" id="fWork" type="text" placeholder="예: 강남역, 여의도, 판교테크노밸리">
 <label class="f">④ 희망 지역 (시군구 단위) — 비워두면 직장 기준으로 추천</label>
 <input class="f" id="fArea" type="text" placeholder="예: 서울 마포구, 경기 성남시 분당구">
+<label class="f">지역 규제 여부 <span style="font-weight:300;color:var(--sub)">— 모르면 '자동'으로 두세요, 희망 지역으로 판별해드려요</span></label>
+<div class="seg" id="fReg"><button data-v="auto" class="on">🧭 자동 판별</button><button data-v="y">규제지역</button><button data-v="n">비규제</button></div>
 <label class="f">⑤ 나이대</label>
 <div class="seg" id="fAge"><button data-v="20대" >20대</button><button data-v="30대" class="on">30대</button><button data-v="40대">40대</button><button data-v="50대 이상">50대+</button></div>
 <label class="f">⑥ 자녀</label>
@@ -172,6 +174,13 @@ function maxBudget(cash,income,debtPay){
   var P=Math.max(t1,t2,t3);
   return {P:P, loan:Math.max(0,P-cash), dsrOnly:dsr};
 }
+function isRegulated(txt){
+  if(!txt) return true;
+  var t=txt.replace(/\s/g,'');
+  if(/만안|기흥|처인|권선/.test(t)) return false;
+  if(/서울|과천|광명|분당|수정|중원|영통|장안|팔달|동안구|수지|의왕|하남|성남|수원|안양|용인/.test(t)) return true;
+  return false;
+}
 function readMan(v){ v=Math.round(v); var eok=Math.floor(v/10000), man=v%10000, s=''; if(eok>0){s=eok.toLocaleString('ko-KR')+'억'; if(man>=1000)s+=' '+Math.round(man/1000)+'천';}else{s=man.toLocaleString('ko-KR')+'만원';} return s; }
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function md(s){
@@ -191,14 +200,18 @@ function findApt(){
   var debt=+document.getElementById('fDebt').value||0;
   var work=document.getElementById('fWork').value.trim()||'미입력';
   var area=document.getElementById('fArea').value.trim();
-  var mb=maxBudget(cash,income,debt);
-  var loan=mb.loan, budget=mb.P;
-  var capped=mb.dsrOnly>loan+1;
+  var regSel=segVal('fReg');
+  var regArea=(document.getElementById('fArea').value.trim()||document.getElementById('fWork').value.trim());
+  var reg = regSel==='auto' ? isRegulated(regArea) : regSel==='y';
+  var mb, loan, budget, capped=false;
+  if(reg){ mb=maxBudget(cash,income,debt); loan=mb.loan; budget=mb.P; capped=mb.dsrOnly>loan+1; }
+  else { loan=loanLimit(income,debt); budget=cash+loan; }
   var bEl=document.getElementById('fBudget');
   bEl.style.display='block';
-  bEl.innerHTML='💰 추정 예산: <b style="font-size:1.15rem;color:var(--teal)">'+readMan(budget)+'</b><span style="color:var(--sub);font-size:.84rem"> = 현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+(capped?' · <b>규제지역 대출한도 차등 적용</b>(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)':' (DSR 40% 추정)')+'</span>';
+  var regLabel = reg ? ('🔒 '+(regSel==='auto'?'규제지역으로 판별':'규제지역')+(capped?' — <b>대출한도 차등 적용</b>(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)':' (한도 내 DSR 적용)')) : '🔓 비규제지역 — DSR 한도만 적용';
+  bEl.innerHTML='💰 추정 예산: <b style="font-size:1.15rem;color:var(--teal)">'+readMan(budget)+'</b><span style="color:var(--sub);font-size:.84rem"> = 현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+' · '+regLabel+'</span>';
   var profile='[아파트찾기] 내 조건에 맞는 아파트 5곳을 추천해줘.\n'
-   +'- 총 예산: 약 '+readMan(budget)+' (현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+', 규제지역 가격 차등 대출한도 반영)\n'
+   +'- 총 예산: 약 '+readMan(budget)+' (현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+', '+(reg?'규제지역 가격 차등 대출한도 반영':'비규제지역 DSR 기준')+')\n'
    +'- 직장: '+work+'\n'
    +'- 희망 지역: '+(area||('직장('+work+') 출퇴근 30~40분권에서 골라줘'))+'\n'
    +'- 나이: '+segVal('fAge')+', 자녀: '+segVal('fKids')+'\n'
