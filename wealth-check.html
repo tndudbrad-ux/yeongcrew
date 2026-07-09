@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 자산 진단 — 또래 대비 내 위치는? (KB 부자 비교) - 훤AI</title>
+<meta name="description" content="현금·금융자산·부동산·부채를 입력하면 통계청 가계금융복지조사 또래 평균과 KB 한국부자보고서 포트폴리오에 비교해 부족한 자산을 진단하고, 내 가용자금으로 볼 만한 지역까지 안내합니다.">
+<link rel="canonical" href="https://yeongcrew.co.kr/wealth-check.html">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="내 자산 진단 — 또래 대비 내 위치는? (KB 부자 비교) - 훤AI">
+<meta property="og:description" content="현금·금융자산·부동산·부채를 입력하면 통계청 가계금융복지조사 또래 평균과 KB 한국부자보고서 포트폴리오에 비교해 부족한 자산을 진단하고, 내 가용자금으로 볼 만한 지역까지 안내합니다.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yeongcrew.co.kr/wealth-check.html">
+<meta property="og:site_name" content="훤AI - 부동산이, 훤해요">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#F0FAF8;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+header.top{background:rgba(240,250,248,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500;letter-spacing:-.01em}
+.logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);box-shadow:0 2px 8px rgba(42,193,188,.35)}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+main{padding:40px 0 64px}
+h2.sec{font-size:1.28rem;font-weight:500;letter-spacing:-.02em;margin:40px 0 16px;display:flex;align-items:center;gap:10px}
+h2.sec::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(180deg,#8FE9E4,#20A6A2);box-shadow:0 0 8px var(--glow)}
+h2.sec:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;transition:.18s;display:block}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(32,166,162,.14);border-color:#B5E4E1}
+.card .ic{font-size:1.4rem}
+.card h3{font-size:1rem;font-weight:500;margin:8px 0 4px;letter-spacing:-.015em}
+.card p{font-size:.85rem;color:var(--sub)}
+.tool-box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 28px;margin-bottom:22px}
+.tool-box h2{font-size:1.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.tool-box h2::before{content:"";flex:0 0 12px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, transparent 26%),linear-gradient(180deg,#8FE9E4,#1B918D);-webkit-mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);box-shadow:0 0 9px var(--glow)}
+label.f{display:block;font-size:.87rem;font-weight:500;margin:15px 0 6px;color:var(--forest)}
+input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
+input.f:focus,select.f:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.seg button{flex:1;min-width:90px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
+.seg button.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:600;box-shadow:0 0 10px rgba(42,193,188,.18)}
+button.go{width:100%;margin-top:22px;padding:15px;border:none;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.35);transition:.15s}
+button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(42,193,188,.45)}
+.result{display:none;margin-top:22px;background:linear-gradient(180deg,#EAFAF8,#F0FAF8);border:1.5px solid #BFE9E6;border-radius:16px;padding:22px}
+.result.show{display:block}
+.result .big{font-size:1.55rem;font-weight:600;color:var(--teal);letter-spacing:-.02em}
+.result table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
+.result td,.result th{padding:8px 4px;border-bottom:1px solid #CBEBE8;text-align:right}
+.result td:first-child,.result th:first-child{text-align:left;color:var(--sub)}
+.note{font-size:.82rem;color:var(--sub);margin-top:14px;font-weight:300}
+article.post{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:36px 32px}
+article.post h1{font-size:1.5rem;font-weight:500;margin-bottom:6px;letter-spacing:-.025em}
+article.post .meta{font-size:.84rem;color:var(--sub);margin-bottom:24px;font-weight:300}
+article.post h2{font-size:1.13rem;font-weight:500;margin:30px 0 10px;color:var(--forest);padding-left:14px;position:relative}
+article.post h2::before{content:"";position:absolute;left:0;top:.4em;width:5px;height:5px;border-radius:50%;background:var(--mint);box-shadow:0 0 7px var(--glow)}
+article.post p{margin-bottom:14px;font-size:.95rem}
+article.post table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:.88rem}
+article.post th{background:var(--forest);color:#DFF5F3;padding:10px 8px;font-weight:500}
+article.post td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center}
+article.post ul{margin:0 0 14px 20px;font-size:.95rem}
+article.post li{margin-bottom:6px}
+.tip{background:#EAFAF8;border:1px solid #BFE9E6;border-radius:12px;padding:14px 16px;font-size:.9rem;margin:14px 0}
+.rel{margin-top:28px}
+.ad-slot{display:none}
+footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
+footer a{color:#B9DCD9;margin:0 8px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
+.crumb a{color:var(--teal)}
+@media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><span class="ring"></span>훤AI</a>
+<nav class="gnb">
+<a href="/loan-calculator.html">대출·DSR</a>
+<a href="/acquisition-tax.html">취득세</a>
+<a href="/brokerage-fee.html">중개보수</a>
+<a href="/jeonse-monthly.html">전월세 전환</a>
+<a href="/youth-housing.html">청년 지원</a>
+<a href="/rental-board.html">임대주택</a>
+<a href="/experts.html">전문가 찾기</a>
+<a href="/#guide">가이드</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+
+<div class="crumb"><a href="/">홈</a> › 내 자산 진단</div>
+<div class="tool-box">
+<h2>🧭 내 자산 진단 <span style="font-weight:300;font-size:.85rem;color:var(--sub)">또래 대비 내 위치, 그리고 다음 한 수</span></h2>
+<p style="font-size:.88rem;color:var(--sub);margin-bottom:4px">통계청 가계금융복지조사(2025)와 KB 한국부자보고서(2025)에 비교해 드려요. 입력값은 저장되지 않아요.</p>
+<label class="f">나이대</label>
+<div class="seg" id="wAge"><button data-v="20">20대</button><button data-v="30" class="on">30대</button><button data-v="40">40대</button><button data-v="50">50대</button><button data-v="60">60대+</button></div>
+<div class="row2">
+<div><label class="f">현금·예금 (만원)</label><input class="f" id="wCash" type="number" placeholder="예: 8000"></div>
+<div><label class="f">투자 금융자산 (만원) — 주식·펀드·코인 등</label><input class="f" id="wFin" type="number" placeholder="예: 5000"></div>
+</div>
+<div class="row2">
+<div><label class="f">부동산 자산 (만원) — 시세 기준, 없으면 0</label><input class="f" id="wRe" type="number" placeholder="예: 0"></div>
+<div><label class="f">전월세 보증금 (만원)</label><input class="f" id="wDep" type="number" placeholder="예: 30000"></div>
+</div>
+<div class="row2">
+<div><label class="f">부채 총액 (만원)</label><input class="f" id="wDebt" type="number" placeholder="예: 20000"></div>
+<div><label class="f">연소득 (만원, 세전)</label><input class="f" id="wInc" type="number" placeholder="예: 6000"></div>
+</div>
+<button class="go" onclick="calcWealth()">진단하기</button>
+<div class="result" id="wRes" style="white-space:normal"></div>
+<p class="note">출처: 국가데이터처 가계금융복지조사(2025.12), KB금융 한국부자보고서(2025.12). 진단은 참고용이며 투자 자문이 아닙니다.</p>
+</div>
+
+<div class="rel"><h2 class="sec">진단 다음 단계</h2><div class="grid">
+<a class="card" href="/apt-finder.html"><div class="ic">🔎</div><h3>내 아파트 찾기</h3><p>예산·직장·자녀 조건으로 5곳 추천</p></a>
+<a class="card" href="/loan-calculator.html"><div class="ic">💰</div><h3>대출·DSR 계산기</h3><p>실제 대출 한도 정밀 확인</p></a>
+<a class="card" href="/youth-housing.html"><div class="ic">🏡</div><h3>주거지원 진단</h3><p>생애최초·청년 혜택 챙기기</p></a>
+</div></div>
+
+<div class="faqsec"><h2 class="sec">자주 묻는 질문</h2>
+<details class="faq"><summary>또래 평균 순자산은 얼마인가요?</summary><p>2025년 가계금융복지조사 기준 가구주 연령대별 평균 순자산은 20대(29세 이하) 약 1억 800만원, 30대 2억 5,060만원, 40대 4억 8,389만원, 50대 5억 5,161만원, 60세 이상 5억 3,591만원이에요. 전체 평균은 4억 7,144만원이지만 중앙값은 2억 3,860만원이라, 평균보다 낮다고 실망할 필요는 없어요 — 절반의 가구가 2.4억 아래입니다.</p></details>
+<details class="faq"><summary>부자의 자산 구성은 뭐가 다른가요?</summary><p>KB 2025 한국부자보고서(금융자산 10억 이상 47.6만명) 기준 부자는 부동산 54.8% : 금융 37.1%로 균형이 잡혀 있어요. 일반 가구는 부동산 등 실물이 75.8%에 쏠려 있죠. 요약하면 일반 가구는 "집 한 채가 전부", 부자는 "집 + 굴러가는 금융자산"의 구조예요.</p></details>
+<details class="faq"><summary>순자산 얼마면 상위 10%인가요?</summary><p>2025년 조사 기준 순자산 10억원 이상 가구가 전체의 11.8%예요. 상위 10% 커트라인은 대략 11억원 수준으로 추정되고, 상위 10% 가구의 평균 순자산은 21억 7천만원입니다.</p></details>
+<details class="faq"><summary>진단 결과의 가용자금은 어떻게 계산되나요?</summary><p>현금·예금 전액 + 금융자산의 70%(급락 대비 버퍼) + 대출 가능액(연소득 기준 DSR 40%, 30년, 금리 4.2% 가정)을 더한 추정치예요. 실제 대출 한도는 LTV·스트레스 DSR에 따라 달라지니 대출·DSR 계산기로 정밀 확인하세요.</p></details>
+</div>
+<style>.faq{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 18px}.faq summary{cursor:pointer;font-weight:500;font-size:.95rem;padding:15px 0;list-style:none;position:relative}.faq summary::after{content:"+";position:absolute;right:2px;color:var(--teal);font-size:1.1rem}.faq[open] summary::after{content:"−"}.faq p{font-size:.88rem;color:var(--sub);padding:0 0 15px;line-height:1.7}
+.wcBar{height:22px;border-radius:8px;overflow:hidden;display:flex;margin:4px 0 2px}
+.wcBar span{display:block;height:100%}
+.wcLbl{font-size:.76rem;color:var(--sub);display:flex;justify-content:space-between;margin-bottom:10px}</style>
+
+</div></main>
+<footer><div class="wrap">
+훤AI — 부동산이, 훤해요<br>
+계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>© 2026 영크루 · 
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a><br>
+<span style="font-size:.75rem;color:#5D8683">상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074 · 서울특별시 동작구 만양로 75 · tndud.brad@gmail.com</span>
+</div></footer>
+
+<script>
+function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+function readMan(v){ v=Math.round(v); if(v<=0)return '0원'; var eok=Math.floor(v/10000), man=v%10000, s=''; if(eok>0){s=eok.toLocaleString('ko-KR')+'억'; if(man>=1000)s+=' '+Math.round(man/1000)+'천';}else{s=man.toLocaleString('ko-KR')+'만원';} return s; }
+document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});e.target.classList.add('on');});});
+function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
+var PEER={20:10796,30:25060,40:48389,50:55161,60:53591};
+function loanLimit(income,debtPay){ var pay=Math.max(0,income*0.4-debtPay); var r=0.042/12,n=360,m=pay/12; return m*((Math.pow(1+r,n)-1)/(r*Math.pow(1+r,n))); }
+function bar(label, re, fin, note){
+  return '<div style="font-size:.8rem;font-weight:600;margin-top:10px">'+label+'</div>'
+  +'<div class="wcBar"><span style="width:'+re+'%;background:#2AC1BC"></span><span style="width:'+fin+'%;background:#0D2A29"></span><span style="flex:1;background:#DCEEEC"></span></div>'
+  +'<div class="wcLbl"><span>🟢 부동산 '+re+'%</span><span>⬛ 금융 '+fin+'%'+(note?' · '+note:'')+'</span></div>';
+}
+function regionGuide(b){
+  if(b<30000) return '수도권 외곽·지방 광역시의 소형 아파트권이에요. 청약(생애최초·신혼 특공)과 <a href="/youth-housing.html" style="color:var(--teal);font-weight:600">주거지원 제도</a>를 먼저 챙기는 게 유리한 구간.';
+  if(b<60000) return '경기 김포·시흥·오산·인천 연수 등 수도권 신축, 또는 서울 노원·도봉·금천의 구축 소형까지 노려볼 수 있어요.';
+  if(b<90000) return '서울 강서·구로·은평의 준신축 59㎡, 노원 84㎡, 경기 남부(안양·군포·용인 수지) 신축권이에요.';
+  if(b<130000) return '마포·성동의 구축 59㎡, 강동·동작 84㎡, 과천·분당 구축까지 사정권이에요.';
+  return '마용성 신축과 강남권 진입을 검토할 수 있는 예산이에요. 이 구간은 단지 선택이 전부 — 실거래 데이터로 좁혀보세요.';
+}
+function calcWealth(){
+  var cash=+document.getElementById('wCash').value||0, fin=+document.getElementById('wFin').value||0;
+  var re=+document.getElementById('wRe').value||0, dep=+document.getElementById('wDep').value||0;
+  var debt=+document.getElementById('wDebt').value||0, inc=+document.getElementById('wInc').value||0;
+  if(!cash&&!fin&&!re&&!dep){alert('자산을 하나 이상 입력해주세요');return;}
+  var total=cash+fin+re+dep, net=total-debt;
+  var age=segVal('wAge'), peer=PEER[age];
+  var ratio=net/peer*100;
+  var el=document.getElementById('wRes'); el.classList.add('show');
+  var pos = net>=110000 ? '상위 10% 구간(순자산 약 11억+)' : net>=100000 ? '순자산 10억 이상 — 전체 가구의 11.8%만 있는 구간' : net>=47144 ? '전국 평균(4억 7,144만) 이상' : net>=23860 ? '전국 중앙값(2억 3,860만) 이상 — 절반보다 위' : '전국 중앙값 아래 — 하지만 절반의 가구가 같은 구간이에요';
+  var html='<div>내 순자산</div><div class="big">'+readMan(net)+'</div>'
+  +'<div style="font-size:.9rem;margin-top:6px">'+age+'대 평균 순자산 <b>'+readMan(peer)+'</b>의 <b>'+fmt(ratio)+'%</b> · '+pos+'</div>';
+  var myRe=total>0?Math.round((re+dep)/total*100):0, myFin=total>0?Math.round((cash+fin)/total*100):0;
+  html+='<div style="background:#fff;border-radius:12px;padding:14px 16px;margin-top:14px">'
+  +bar('나', myRe, myFin,'')
+  +bar('일반 가구 평균', 76, 24,'')
+  +bar('KB 부자 (금융자산 10억+)', 55, 37,'기타 8%')
+  +'</div>';
+  var diag='';
+  var avail=cash+fin*0.7+loanLimit(inc,0);
+  if(re===0){
+    diag='🔍 <b>부동산 자산이 비어 있어요.</b> 일반 가구도 자산의 76%가 부동산·실물이고, 부자 포트폴리오에서도 부동산이 55%예요. 무주택이라면 자산 성장의 큰 축이 꺼져 있는 셈이에요.'
+    +'<div style="margin-top:10px">지금 가용자금은 약 <b style="color:var(--teal);font-size:1.05rem">'+readMan(avail)+'</b> <span style="font-size:.8rem;color:var(--sub)">(현금 전액 + 금융자산 70% + 대출한도 추정)</span></div>'
+    +'<div style="margin-top:8px;font-size:.9rem">'+regionGuide(avail)+'</div>'
+    +'<a href="/apt-finder.html?cash='+Math.round(cash+fin*0.7)+'&income='+inc+'" style="display:block;text-align:center;margin-top:14px;padding:14px;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;text-decoration:none">🔎 이 예산으로 내 아파트 찾기 → 거주지·직장·자녀 조건까지 넣으면 5곳 추천</a>';
+  } else if(myRe>85){
+    diag='🔍 <b>자산이 부동산에 '+myRe+'% 쏠려 있어요.</b> 부자 포트폴리오(부동산 55 : 금융 37)와 비교하면 금융자산 비중이 낮아요. 유동성이 부족하면 기회가 와도 움직이지 못해요. 임대 수익이 있다면 <a href="/yield-calculator.html" style="color:var(--teal);font-weight:600">수익률 점검</a>, 매도 고민이면 <a href="/capital-gains-tax.html" style="color:var(--teal);font-weight:600">양도세 확인</a>부터.';
+  } else {
+    diag='✅ <b>부동산과 금융의 균형이 나쁘지 않아요.</b> 다음 단계는 규모 키우기 — 갈아타기를 고민 중이면 <a href="/capital-gains-tax.html" style="color:var(--teal);font-weight:600">양도세</a>와 <a href="/acquisition-tax.html" style="color:var(--teal);font-weight:600">취득세</a>를 먼저 계산하고, <a href="/apt-finder.html?cash='+Math.round(cash+fin*0.7)+'&income='+inc+'" style="color:var(--teal);font-weight:600">내 아파트 찾기</a>로 상급지 후보를 보세요.';
+  }
+  html+='<div style="background:#EAFAF8;border:1.5px solid #BFE9E6;border-radius:12px;padding:14px 16px;margin-top:12px;font-size:.9rem;line-height:1.7">'+diag+'</div>';
+  el.innerHTML=html;
+}
+</script>
+\n<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "내 자산 진단", "url": "https://yeongcrew.co.kr/wealth-check.html", "description": "통계청 또래 평균·KB 부자보고서와 비교하는 무료 자산 진단. 부족한 자산과 내 예산으로 볼 지역까지 안내", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "훤AI", "url": "https://yeongcrew.co.kr"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "또래 평균 순자산은 얼마인가요?", "acceptedAnswer": {"@type": "Answer", "text": "2025년 가계금융복지조사 기준 가구주 연령대별 평균 순자산은 20대(29세 이하) 약 1억 800만원, 30대 2억 5,060만원, 40대 4억 8,389만원, 50대 5억 5,161만원, 60세 이상 5억 3,591만원이에요. 전체 평균은 4억 7,144만원이지만 중앙값은 2억 3,860만원이라, 평균보다 낮다고 실망할 필요는 없어요 — 절반의 가구가 2.4억 아래입니다."}}, {"@type": "Question", "name": "부자의 자산 구성은 뭐가 다른가요?", "acceptedAnswer": {"@type": "Answer", "text": "KB 2025 한국부자보고서(금융자산 10억 이상 47.6만명) 기준 부자는 부동산 54.8% : 금융 37.1%로 균형이 잡혀 있어요. 일반 가구는 부동산 등 실물이 75.8%에 쏠려 있죠. 요약하면 일반 가구는 \"집 한 채가 전부\", 부자는 \"집 + 굴러가는 금융자산\"의 구조예요."}}, {"@type": "Question", "name": "순자산 얼마면 상위 10%인가요?", "acceptedAnswer": {"@type": "Answer", "text": "2025년 조사 기준 순자산 10억원 이상 가구가 전체의 11.8%예요. 상위 10% 커트라인은 대략 11억원 수준으로 추정되고, 상위 10% 가구의 평균 순자산은 21억 7천만원입니다."}}, {"@type": "Question", "name": "진단 결과의 가용자금은 어떻게 계산되나요?", "acceptedAnswer": {"@type": "Answer", "text": "현금·예금 전액 + 금융자산의 70%(급락 대비 버퍼) + 대출 가능액(연소득 기준 DSR 40%, 30년, 금리 4.2% 가정)을 더한 추정치예요. 실제 대출 한도는 LTV·스트레스 DSR에 따라 달라지니 대출·DSR 계산기로 정밀 확인하세요."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://yeongcrew.co.kr/"}, {"@type": "ListItem", "position": 2, "name": "내 자산 진단", "item": "https://yeongcrew.co.kr/wealth-check.html"}]}</script>
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+</body>
+</html>

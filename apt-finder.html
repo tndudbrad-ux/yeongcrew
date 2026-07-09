@@ -148,6 +148,13 @@ footer a{color:#B9DCD9;margin:0 8px}
 
 <script>
 var BOOBI_API='https://hwon-boobi.tndud-brad.workers.dev/chat';
+(function(){
+  var q=new URLSearchParams(location.search);
+  ['cash','income'].forEach(function(k){
+    var v=q.get(k);
+    if(v&&+v>0){ var el=document.getElementById(k==='cash'?'fCash':'fIncome'); if(el){ el.value=Math.round(+v); el.dispatchEvent(new Event('input',{bubbles:true})); } }
+  });
+})();
 function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
 document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});e.target.classList.add('on');});});
 function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
