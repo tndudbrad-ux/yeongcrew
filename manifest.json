@@ -1,0 +1,22 @@
+{
+  "name": "훤AI — 부동산이, 훤해요",
+  "short_name": "훤AI",
+  "description": "계산기·진단·실거래 조회·AI 비서 부비까지, 부동산 컴패니언 훤AI",
+  "start_url": "/?src=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F0FAF8",
+  "theme_color": "#0D2A29",
+  "lang": "ko",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "내 아파트 찾기", "url": "/apt-finder.html?src=pwa", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "부비에게 질문", "url": "/?src=pwa&boobi=open", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "양도세 계산기", "url": "/capital-gains-tax.html?src=pwa", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

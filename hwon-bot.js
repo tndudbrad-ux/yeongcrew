@@ -11,6 +11,33 @@ if(!document.querySelector('link[rel~="icon"]')){
   fv.href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E";
   document.head.appendChild(fv);
 }
+if(!document.querySelector('link[rel="manifest"]')){
+  var mf=document.createElement('link');mf.rel='manifest';mf.href='/manifest.json';document.head.appendChild(mf);
+}
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').catch(function(){});
+}
+var hwbDeferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(ev){
+  ev.preventDefault();
+  hwbDeferredPrompt=ev;
+  if(document.getElementById('hwbInstall'))return;
+  try{ if(localStorage.getItem('hwbInstallDismiss'))return; }catch(e){}
+  var ib=document.createElement('button');
+  ib.id='hwbInstall';
+  ib.innerHTML='📱 훤AI 앱으로 설치 <span style="opacity:.6;margin-left:6px">✕</span>';
+  ib.style.cssText='position:fixed;left:16px;bottom:20px;z-index:9997;border:none;border-radius:24px;padding:11px 16px;background:#0D2A29;color:#EAF7F6;font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(13,42,41,.35);cursor:pointer;font-family:inherit';
+  ib.addEventListener('click',function(e){
+    var r=ib.getBoundingClientRect();
+    if(e.clientX>r.right-34){ ib.remove(); try{localStorage.setItem('hwbInstallDismiss','1');}catch(x){} return; }
+    if(hwbDeferredPrompt){ hwbDeferredPrompt.prompt(); hwbDeferredPrompt=null; }
+    ib.remove();
+  });
+  document.body.appendChild(ib);
+});
+window.addEventListener('appinstalled',function(){
+  var ib=document.getElementById('hwbInstall'); if(ib)ib.remove();
+});
 var css=document.createElement('style');
 css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;z-index:9998;background:linear-gradient(180deg,#33CCC7,#1B918D);box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 30px rgba(42,193,188,.35);display:flex;align-items:center;justify-content:center}'
 +'#hwbBtn .ring{width:26px;height:26px;border-radius:50%;border:6px solid #fff;box-sizing:border-box}'
@@ -318,5 +345,6 @@ function send(){
 }
 panel.querySelector('#hwbSend').onclick=send;
 panel.querySelector('#hwbInput').addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+if(location.search.indexOf('boobi=open')>-1){ setTimeout(function(){btn.click();},600); }
 })();
 /* v2.1 cta */
