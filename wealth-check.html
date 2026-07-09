@@ -155,7 +155,7 @@ function loanLimit(income,debtPay){ var pay=Math.max(0,income*0.4-debtPay); var 
 function bar(label, re, fin, note){
   return '<div style="font-size:.8rem;font-weight:600;margin-top:10px">'+label+'</div>'
   +'<div class="wcBar"><span style="width:'+re+'%;background:#2AC1BC"></span><span style="width:'+fin+'%;background:#0D2A29"></span><span style="flex:1;background:#DCEEEC"></span></div>'
-  +'<div class="wcLbl"><span>🟢 부동산 '+re+'%</span><span>⬛ 금융 '+fin+'%'+(note?' · '+note:'')+'</span></div>';
+  +'<div class="wcLbl"><span>🟢 부동산·보증금 '+re+'%</span><span>⬛ 금융 '+fin+'%'+(note?' · '+note:'')+'</span></div>';
 }
 function regionGuide(b){
   if(b<30000) return '수도권 외곽·지방 광역시의 소형 아파트권이에요. 청약(생애최초·신혼 특공)과 <a href="/youth-housing.html" style="color:var(--teal);font-weight:600">주거지원 제도</a>를 먼저 챙기는 게 유리한 구간.';
@@ -178,7 +178,7 @@ function calcWealth(){
   +'<div style="font-size:.9rem;margin-top:6px">'+age+'대 평균 순자산 <b>'+readMan(peer)+'</b>의 <b>'+fmt(ratio)+'%</b> · '+pos+'</div>';
   var myRe=total>0?Math.round((re+dep)/total*100):0, myFin=total>0?Math.round((cash+fin)/total*100):0;
   html+='<div style="background:#fff;border-radius:12px;padding:14px 16px;margin-top:14px">'
-  +bar('나', myRe, myFin,'')
+  +bar('나', myRe, myFin, re===0&&dep>0?'(보증금은 부동산 축 포함)':'')
   +bar('일반 가구 평균', 76, 24,'')
   +bar('KB 부자 (금융자산 10억+)', 55, 37,'기타 8%')
   +'</div>';
