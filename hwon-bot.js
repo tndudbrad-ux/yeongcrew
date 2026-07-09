@@ -31,7 +31,10 @@ css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:58px;height
 +'#hwbInputRow{display:flex;gap:8px;padding:10px;border-top:1px solid #DCEEEC;background:#fff}'
 +'#hwbInput{flex:1;border:1.5px solid #DCEEEC;border-radius:12px;padding:10px 12px;font-size:.88rem;font-family:inherit}'
 +'#hwbInput:focus{outline:none;border-color:#2AC1BC}'
-+'#hwbSend{border:none;background:#2AC1BC;color:#fff;border-radius:12px;padding:0 16px;font-weight:600;cursor:pointer;font-family:inherit}'
++'#hwbSend{border:none;background:#2AC1BC;color:#fff;border-radius:12px;padding:0;min-width:46px;width:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;transition:background .15s,transform .12s}'
++'#hwbSend:hover{background:#20A6A2}'
++'#hwbSend:active{transform:scale(.94)}'
++'#hwbSend svg{display:block}'
 +'#hwbClose{margin-left:auto;background:none;border:none;color:#9FC4C1;font-size:1.1rem;cursor:pointer}';
 css.textContent+='@keyframes hwbPulse{0%{box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 0 0 rgba(42,193,188,.55)}70%{box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 0 16px rgba(42,193,188,0)}100%{box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 0 0 rgba(42,193,188,0)}}'
 +'#hwbBtn.pulse{animation:hwbPulse 2.2s ease-out infinite}'
@@ -39,6 +42,10 @@ css.textContent+='@keyframes hwbPulse{0%{box-shadow:0 6px 20px rgba(42,193,188,.
 +'#hwbTeaser.show{opacity:1;transform:translateY(0)}'
 +'#hwbTeaser b{color:#7FE8E3;font-weight:600}'
 +'#hwbTeaser .x{position:absolute;top:8px;right:10px;color:#6FB9B5;font-size:.85rem;padding:2px 4px}'
++'#hwbTyping{display:flex;align-items:center;gap:10px}'
++'.hwbSpin{width:20px;height:20px;border-radius:50%;border:3.5px solid #DCEEEC;border-top-color:#2AC1BC;border-right-color:#7FE8E3;animation:hwbSpinner .75s linear infinite;box-shadow:0 0 10px rgba(42,193,188,.3);flex:0 0 auto;box-sizing:border-box}'
++'@keyframes hwbSpinner{to{transform:rotate(360deg)}}'
++'.hwbTyTxt{font-size:.85rem;color:#547471;transition:opacity .3s}'
 +'.hwbCtas{display:flex;flex-direction:column;gap:6px;margin:-3px 0 10px;max-width:85%}'
 +'.hwbCtas a{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#2AC1BC;color:#fff;text-decoration:none;border-radius:12px;padding:10px 14px;font-size:.85rem;font-weight:600;box-shadow:0 3px 10px rgba(42,193,188,.35)}'
 +'.hwbCtas a:hover{background:#20A6A2}'
@@ -74,7 +81,7 @@ var KEYWORDS=[
 function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
 var btn=el('button','',null);btn.id='hwbBtn';btn.setAttribute('aria-label','부비 열기');btn.appendChild(el('span','ring',''));
 var panel=el('div','',null);panel.id='hwbPanel';
-panel.innerHTML='<div id="hwbHead"><span class="r"></span><div><b>부비</b><small>훤AI 부동산 비서 · 무엇이든 물어보세요</small></div><button id="hwbClose" aria-label="닫기">✕</button></div><div id="hwbBody"></div><div id="hwbInputRow"><input id="hwbInput" placeholder="예: 전세 계약 전에 뭘 확인해야 해?"><button id="hwbSend">전송</button></div>';
+panel.innerHTML='<div id="hwbHead"><span class="r"></span><div><b>부비</b><small>훤AI 부동산 비서 · 무엇이든 물어보세요</small></div><button id="hwbClose" aria-label="닫기">✕</button></div><div id="hwbBody"></div><div id="hwbInputRow"><input id="hwbInput" placeholder="예: 전세 계약 전에 뭘 확인해야 해?"><button id="hwbSend" aria-label="전송"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.4 20.4L20.85 12.92C21.66 12.57 21.66 11.43 20.85 11.08L3.4 3.6C2.74 3.31 2.01 3.8 2.01 4.51L2 9.12C2 9.62 2.37 10.05 2.87 10.11L17 12L2.87 13.88C2.37 13.95 2 14.38 2 14.88L2.01 19.49C2.01 20.2 2.74 20.69 3.4 20.4Z" fill="#fff"/></svg></button></div>';
 document.body.appendChild(btn);document.body.appendChild(panel);
 btn.classList.add('pulse');
 var teaser=null;
@@ -120,8 +127,19 @@ function mdLite(s){
  return s.replace(/\n/g,'<br>');
 }
 function botTyping(){
- var e=el('div','hwbMsg hwbBot','생각 중<span class="hwbDots">...</span>');
- e.id='hwbTyping'; body.appendChild(e); scrollDown(); return e;
+ var e=el('div','hwbMsg hwbBot','');
+ e.id='hwbTyping';
+ e.innerHTML='<span class="hwbSpin"></span><span class="hwbTyTxt">부비가 최적의 답변을 생성 중이에요</span>';
+ body.appendChild(e); scrollDown();
+ var msgs=['부비가 최적의 답변을 생성 중이에요','자료를 꼼꼼히 뒤져보는 중이에요','숫자를 한 번 더 검산하는 중이에요','거의 다 됐어요!'];
+ var i=0;
+ var t=setInterval(function(){
+   if(!document.body.contains(e)){clearInterval(t);return;}
+   i=Math.min(i+1,msgs.length-1);
+   var tx=e.querySelector('.hwbTyTxt');
+   if(tx){ tx.style.opacity=0; setTimeout(function(){ tx.textContent=msgs[i]; tx.style.opacity=1; },250); }
+ },3500);
+ return e;
 }
 var TOOLCTA=[
  ['/yield-calculator.html',/수익률|임대\s*수익/,'📈 임대수익 계산하러 가기'],
