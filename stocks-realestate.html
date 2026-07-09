@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주식과 부동산, 무슨 관계일까? (코스피·나스닥 실시간) - 훤AI</title>
+<meta name="description" content="주식 자금은 어떻게 부동산으로 흘러들어올까? 코스피·코스닥·나스닥 실시간 지수와 함께 유동성 이동, 자산효과, 금리라는 공통분모까지 — 두 자산의 관계를 훤하게 정리합니다.">
+<link rel="canonical" href="https://yeongcrew.co.kr/stocks-realestate.html">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="주식과 부동산, 무슨 관계일까? (코스피·나스닥 실시간) - 훤AI">
+<meta property="og:description" content="주식 자금은 어떻게 부동산으로 흘러들어올까? 코스피·코스닥·나스닥 실시간 지수와 함께 유동성 이동, 자산효과, 금리라는 공통분모까지 — 두 자산의 관계를 훤하게 정리합니다.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yeongcrew.co.kr/stocks-realestate.html">
+<meta property="og:site_name" content="훤AI - 부동산이, 훤해요">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#F0FAF8;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+header.top{background:rgba(240,250,248,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500;letter-spacing:-.01em}
+.logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);box-shadow:0 2px 8px rgba(42,193,188,.35)}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+main{padding:40px 0 64px}
+h2.sec{font-size:1.28rem;font-weight:500;letter-spacing:-.02em;margin:40px 0 16px;display:flex;align-items:center;gap:10px}
+h2.sec::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(180deg,#8FE9E4,#20A6A2);box-shadow:0 0 8px var(--glow)}
+h2.sec:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;transition:.18s;display:block}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(32,166,162,.14);border-color:#B5E4E1}
+.card .ic{font-size:1.4rem}
+.card h3{font-size:1rem;font-weight:500;margin:8px 0 4px;letter-spacing:-.015em}
+.card p{font-size:.85rem;color:var(--sub)}
+.tool-box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 28px;margin-bottom:22px}
+.tool-box h2{font-size:1.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.tool-box h2::before{content:"";flex:0 0 12px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, transparent 26%),linear-gradient(180deg,#8FE9E4,#1B918D);-webkit-mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);box-shadow:0 0 9px var(--glow)}
+label.f{display:block;font-size:.87rem;font-weight:500;margin:15px 0 6px;color:var(--forest)}
+input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
+input.f:focus,select.f:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.seg button{flex:1;min-width:90px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
+.seg button.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:600;box-shadow:0 0 10px rgba(42,193,188,.18)}
+button.go{width:100%;margin-top:22px;padding:15px;border:none;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.35);transition:.15s}
+button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(42,193,188,.45)}
+.result{display:none;margin-top:22px;background:linear-gradient(180deg,#EAFAF8,#F0FAF8);border:1.5px solid #BFE9E6;border-radius:16px;padding:22px}
+.result.show{display:block}
+.result .big{font-size:1.55rem;font-weight:600;color:var(--teal);letter-spacing:-.02em}
+.result table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
+.result td,.result th{padding:8px 4px;border-bottom:1px solid #CBEBE8;text-align:right}
+.result td:first-child,.result th:first-child{text-align:left;color:var(--sub)}
+.note{font-size:.82rem;color:var(--sub);margin-top:14px;font-weight:300}
+article.post{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:36px 32px}
+article.post h1{font-size:1.5rem;font-weight:500;margin-bottom:6px;letter-spacing:-.025em}
+article.post .meta{font-size:.84rem;color:var(--sub);margin-bottom:24px;font-weight:300}
+article.post h2{font-size:1.13rem;font-weight:500;margin:30px 0 10px;color:var(--forest);padding-left:14px;position:relative}
+article.post h2::before{content:"";position:absolute;left:0;top:.4em;width:5px;height:5px;border-radius:50%;background:var(--mint);box-shadow:0 0 7px var(--glow)}
+article.post p{margin-bottom:14px;font-size:.95rem}
+article.post table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:.88rem}
+article.post th{background:var(--forest);color:#DFF5F3;padding:10px 8px;font-weight:500}
+article.post td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center}
+article.post ul{margin:0 0 14px 20px;font-size:.95rem}
+article.post li{margin-bottom:6px}
+.tip{background:#EAFAF8;border:1px solid #BFE9E6;border-radius:12px;padding:14px 16px;font-size:.9rem;margin:14px 0}
+.rel{margin-top:28px}
+.ad-slot{display:none}
+footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
+footer a{color:#B9DCD9;margin:0 8px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
+.crumb a{color:var(--teal)}
+@media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><span class="ring"></span>훤AI</a>
+<nav class="gnb">
+<a href="/loan-calculator.html">대출·DSR</a>
+<a href="/acquisition-tax.html">취득세</a>
+<a href="/brokerage-fee.html">중개보수</a>
+<a href="/jeonse-monthly.html">전월세 전환</a>
+<a href="/youth-housing.html">청년 지원</a>
+<a href="/rental-board.html">임대주택</a>
+<a href="/experts.html">전문가 찾기</a>
+<a href="/#guide">가이드</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+
+<div class="crumb"><a href="/">홈</a> › 주식과 부동산</div>
+<div class="tool-box">
+<h2>📈 주식과 부동산, 무슨 관계일까?</h2>
+<p style="font-size:.92rem;color:var(--sub)">"코스피가 사상 최고인데, 집값은 어떻게 될까?" — 두 자산은 남남이 아니에요. <b>돈(유동성)이 옮겨 다니는 두 개의 큰 그릇</b>입니다.</p>
+<div id="idxGrid" class="hwRatesGrid" style="margin-top:16px"></div>
+<div id="idxNote" style="font-size:.78rem;color:var(--sub);margin-top:8px">지수 불러오는 중...</div>
+</div>
+
+<div class="tool-box">
+<h2 style="font-size:1.15rem">1. 돈은 빠른 그릇에서 무거운 그릇으로 흐른다</h2>
+<p style="font-size:.92rem;line-height:1.75">금리가 내려가 시중에 돈이 풀리면, 그 돈은 <b>클릭 한 번으로 사고파는 주식</b>에 먼저 들어갑니다. 부동산은 계약금·중도금·잔금에 등기까지 몇 달이 걸리는 무거운 자산이라 늦게 반응해요. 그래서 유동성 장세에서는 <b>증시가 먼저 달리고, 부동산이 시차를 두고 따라오는</b> 패턴이 자주 관찰됩니다.</p>
+<h2 style="font-size:1.15rem;margin-top:22px">2. 주식 차익이 부동산 종잣돈이 된다</h2>
+<p style="font-size:.92rem;line-height:1.75">증시 큰 상승장이 끝나갈 무렵이면 "주식 수익 실현해서 집 산다"는 수요가 나타나요. 특히 <b>고가 아파트·하이엔드 주거 상품</b> 시장에서 두드러집니다. 계좌가 불어나면 사지 않아도 씀씀이가 커지는 <b>자산효과</b>까지 더해져서, 증시 호황은 부동산 매수 심리를 데우는 장작이 됩니다. 반대로 증시 급락은 부동산 거래를 얼립니다.</p>
+<h2 style="font-size:1.15rem;margin-top:22px">3. 결국 공통분모는 금리</h2>
+<p style="font-size:.92rem;line-height:1.75">주식과 부동산 모두 <b>금리의 함수</b>예요. 금리가 내리면 예금 대신 자산으로 돈이 이동하고, 대출 이자가 싸져 부동산 구매력도 커집니다. 금리가 오르면 둘 다 눌리는데, 대출 의존도가 높은 부동산이 더 오래 아픕니다. 그래서 부동산 타이밍을 재려면 <a href="/mortgage-basics.html" style="color:var(--teal);font-weight:600">기준금리와 코픽스</a>부터 봐야 해요.</p>
+<h2 style="font-size:1.15rem;margin-top:22px">4. 그래서 지금 뭘 보면 되나</h2>
+<p style="font-size:.92rem;line-height:1.75">위 지수 카드가 달아오르고 있다면 체크할 것: ① 금리 방향 (동결? 인하 시작?) ② 주택 거래량이 따라 늘고 있는지 (<a href="https://rt.molit.go.kr" target="_blank" rel="noopener" style="color:var(--teal)">실거래가 시스템</a>이나 부비에게 물어보세요) ③ 내 예산에서 살 수 있는 물건 (<a href="/apt-finder.html" style="color:var(--teal);font-weight:600">내 아파트 찾기</a>). 시장이 데워지는 초입엔 정보가 무기고, 과열의 끝물엔 절제가 무기입니다.</p>
+<p class="note" style="margin-top:14px">본 콘텐츠는 일반 정보이며 투자 권유가 아닙니다. 과거 패턴이 미래를 보장하지 않아요.</p>
+</div>
+
+<div class="rel"><h2 class="sec">이어서 보기</h2><div class="grid">
+<a class="card" href="/apt-finder.html"><div class="ic">🔎</div><h3>내 아파트 찾기</h3><p>예산 넣으면 실거래 기반 5곳 추천</p></a>
+<a class="card" href="/mortgage-basics.html"><div class="ic">💰</div><h3>기준금리·코픽스 보기</h3><p>주담대 기초 + 실시간 금리</p></a>
+<a class="card" href="/capital-gains-tax.html"><div class="ic">💸</div><h3>양도세 계산기</h3><p>갈아타기 전 세금 확인</p></a>
+</div></div>
+
+<div class="faqsec"><h2 class="sec">자주 묻는 질문</h2>
+<details class="faq"><summary>주가가 오르면 집값도 오르나요?</summary><p>바로는 아니고, 시차를 두고 영향을 주는 경우가 많아요. 주식으로 자산이 불어난 사람들이 차익을 실현해 주택 매수 자금(특히 계약금·잔금)으로 옮기는 흐름이 생기기 때문이에요. 과거에도 증시 큰 상승장 뒤 6개월~1년 시차로 주택 거래량이 늘어난 사례들이 있었어요. 다만 금리·규제·공급 상황이 더 크게 작동할 수 있어서 공식처럼 믿으면 안 됩니다.</p></details>
+<details class="faq"><summary>둘의 공통분모는 뭔가요?</summary><p>금리, 즉 유동성이에요. 기준금리가 내려가면 시중에 돈이 풀리고, 그 돈은 보통 움직임이 빠른 주식으로 먼저, 거래가 무겁고 느린 부동산으로는 나중에 흘러가요. 반대로 금리가 오르면 두 자산 모두 눌리는데, 대출 의존도가 높은 부동산이 더 오래 아파요.</p></details>
+<details class="faq"><summary>자산효과(wealth effect)가 뭔가요?</summary><p>내 주식 계좌가 불어나면 실제로 팔지 않았어도 소비와 투자에 과감해지는 심리 효과예요. 증시 호황기에 고가 아파트·하이엔드 주거 상품 수요가 같이 올라가는 배경 중 하나입니다. 반대로 증시가 급락하면 매수 심리가 얼어붙어 부동산 거래도 함께 줄어드는 경향이 있어요.</p></details>
+<details class="faq"><summary>그럼 지금 주식을 팔고 집을 사야 하나요?</summary><p>그 판단은 각자의 자금 계획·거주 필요·세금에 달려 있어서 정답이 없어요. 훤AI는 투자 권유를 하지 않습니다. 대신 갈아타기를 고민 중이라면 양도세·취득세 계산기로 세금 비용부터 확인하고, 내 아파트 찾기로 예산에 맞는 선택지를 좁혀보세요. 큰 결정 전엔 세무사 상담을 권해요.</p></details>
+</div>
+<style>.faq{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 18px}.faq summary{cursor:pointer;font-weight:500;font-size:.95rem;padding:15px 0;list-style:none;position:relative}.faq summary::after{content:"+";position:absolute;right:2px;color:var(--teal);font-size:1.1rem}.faq[open] summary::after{content:"−"}.faq p{font-size:.88rem;color:var(--sub);padding:0 0 15px;line-height:1.7}</style>
+
+</div></main>
+<footer><div class="wrap">
+훤AI — 부동산이, 훤해요<br>
+계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>© 2026 영크루 · 
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a><br>
+<span style="font-size:.75rem;color:#5D8683">상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074 · 서울특별시 동작구 만양로 75 · tndud.brad@gmail.com</span>
+</div></footer>
+
+<script>
+(function(){
+  var g=document.getElementById('idxGrid'), note=document.getElementById('idxNote');
+  fetch('https://hwon-rtms.vercel.app/api/idx').then(function(r){return r.json();}).then(function(d){
+    var items=[['🇰🇷 코스피',d.kospi],['🇰🇷 코스닥',d.kosdaq],['🇺🇸 나스닥',d.nasdaq]];
+    var html='';
+    items.forEach(function(p){
+      var v=p[1]; if(!v||!v.value)return;
+      var neg=String(v.change).indexOf('-')===0;
+      html+='<div class="hwRateCard"><div class="nm">'+p[0]+'</div><div class="rt">'+v.value+'</div><div class="ch '+(neg?'down':'up')+'">'+(neg?'▼ ':'▲ ')+String(v.change).replace('-','')+' ('+String(v.ratio).replace('-','')+'%)</div><div class="as">전일 대비</div></div>';
+    });
+    if(html){ g.innerHTML=html; note.textContent='10분 간격 갱신 · 나스닥은 미국장 기준'; }
+    else { note.textContent='지수를 잠시 불러오지 못했어요. 새로고침 해주세요.'; }
+  }).catch(function(){ note.textContent='지수를 잠시 불러오지 못했어요. 새로고침 해주세요.'; });
+})();
+</script>
+\n<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "주식과 부동산, 무슨 관계일까?", "description": "유동성 이동, 자산효과, 금리라는 공통분모로 보는 주식과 부동산의 관계", "author": {"@type": "Organization", "name": "훤AI"}, "publisher": {"@type": "Organization", "name": "훤AI", "url": "https://yeongcrew.co.kr"}, "mainEntityOfPage": "https://yeongcrew.co.kr/stocks-realestate.html"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "주가가 오르면 집값도 오르나요?", "acceptedAnswer": {"@type": "Answer", "text": "바로는 아니고, 시차를 두고 영향을 주는 경우가 많아요. 주식으로 자산이 불어난 사람들이 차익을 실현해 주택 매수 자금(특히 계약금·잔금)으로 옮기는 흐름이 생기기 때문이에요. 과거에도 증시 큰 상승장 뒤 6개월~1년 시차로 주택 거래량이 늘어난 사례들이 있었어요. 다만 금리·규제·공급 상황이 더 크게 작동할 수 있어서 공식처럼 믿으면 안 됩니다."}}, {"@type": "Question", "name": "둘의 공통분모는 뭔가요?", "acceptedAnswer": {"@type": "Answer", "text": "금리, 즉 유동성이에요. 기준금리가 내려가면 시중에 돈이 풀리고, 그 돈은 보통 움직임이 빠른 주식으로 먼저, 거래가 무겁고 느린 부동산으로는 나중에 흘러가요. 반대로 금리가 오르면 두 자산 모두 눌리는데, 대출 의존도가 높은 부동산이 더 오래 아파요."}}, {"@type": "Question", "name": "자산효과(wealth effect)가 뭔가요?", "acceptedAnswer": {"@type": "Answer", "text": "내 주식 계좌가 불어나면 실제로 팔지 않았어도 소비와 투자에 과감해지는 심리 효과예요. 증시 호황기에 고가 아파트·하이엔드 주거 상품 수요가 같이 올라가는 배경 중 하나입니다. 반대로 증시가 급락하면 매수 심리가 얼어붙어 부동산 거래도 함께 줄어드는 경향이 있어요."}}, {"@type": "Question", "name": "그럼 지금 주식을 팔고 집을 사야 하나요?", "acceptedAnswer": {"@type": "Answer", "text": "그 판단은 각자의 자금 계획·거주 필요·세금에 달려 있어서 정답이 없어요. 훤AI는 투자 권유를 하지 않습니다. 대신 갈아타기를 고민 중이라면 양도세·취득세 계산기로 세금 비용부터 확인하고, 내 아파트 찾기로 예산에 맞는 선택지를 좁혀보세요. 큰 결정 전엔 세무사 상담을 권해요."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://yeongcrew.co.kr/"}, {"@type": "ListItem", "position": 2, "name": "주식과 부동산", "item": "https://yeongcrew.co.kr/stocks-realestate.html"}]}</script>
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+</body>
+</html>
