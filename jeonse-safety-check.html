@@ -109,12 +109,12 @@ footer a{color:#CFEEEB;margin:0 8px}
 <div style="background:#F0FAF8;border:1.5px solid #BFE9E6;border-radius:14px;padding:15px 15px;margin-bottom:8px">
 <div style="font-weight:600;font-size:.92rem;margin-bottom:7px">🔎 주소로 자동조회 <span style="font-size:.7rem;color:var(--teal);background:#E7F8F6;padding:2px 8px;border-radius:999px;font-weight:700">베타</span></div>
 <div style="display:flex;gap:8px">
-<input class="f" id="dgAddr" placeholder="예: 서울특별시 동작구 만양로 75" style="flex:1">
+<input class="f" id="dgAddr" placeholder="예: 백제고분로7길 23 501호 (도로명·지번 + 호수)" style="flex:1">
 <button type="button" onclick="searchAddr()" style="flex:0 0 auto;padding:0 18px;border-radius:12px;border:none;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;cursor:pointer;font-family:inherit">검색</button>
 </div>
 <div class="hint" id="dgAddrHint" style="min-height:1em"></div>
 <div id="dgCandidates" style="margin-top:4px"></div>
-<div style="font-size:.76rem;color:var(--sub);margin-top:6px">아파트·빌라는 <b>동·호수까지</b> 넣으면 정확해요. 등기부는 자동으로 안전하게 조회돼요.</div>
+<div style="font-size:.76rem;color:var(--sub);margin-top:6px">💡 <b>도로명(또는 지번) + 호수</b>로 넣으면 딱 맞게 나와요 (예: 백제고분로7길 23 501호). 대단지는 <b>"동" 번호는 빼고</b> 호수만 — 못 찾으면 목록에서 층·호로 골라도 돼요.</div>
 <div style="margin-top:8px;background:#FFF7ED;border:1px solid #FDE6C8;border-radius:10px;padding:8px 12px;font-size:.8rem;color:#B45309">🎉 <b>런칭 기념 — 로그인만 하면 무료!</b> <span style="color:#9A6B3F">정식 오픈 시 건당 <s>5,900원</s> → <b>회원 2,900원</b></span></div>
 </div>
 <div style="text-align:center;color:var(--sub);font-size:.8rem;margin:6px 0 2px">— 또는 —</div>
@@ -392,7 +392,14 @@ function searchAddr(){
    .then(function(d){
      var code=d.result?d.result.code:'';
      var list=(d.data&&d.data.resAddrList)||(d.data&&d.data.extraInfo&&d.data.extraInfo.resAddrList)||[];
-     if(code!=='CF-00000'||!list.length){ hint.style.color='#C0342E'; hint.textContent = /12100|12411/.test(code||'')?'결과가 너무 많거나 부족해요. 동·호수까지 더 구체적으로 넣어보세요.':'조회 실패 — 주소를 다시 확인해주세요.'; return; }
+     if(code!=='CF-00000'||!list.length){
+       hint.style.color='#B45309';
+       var msg;
+       if(/13006|13007/.test(code||'')) msg='"동" 번호 때문에 못 찾았을 수 있어요. <b>동을 빼고</b> 도로명(또는 지번) + 호수로 해보세요 (예: 백제고분로7길 23 501호).';
+       else if(/12100/.test(code||'')) msg='범위가 너무 넓어요. 건물명만 말고 <b>도로명·지번 + 호수</b>로 좁혀보세요 (예: 백제고분로7길 23 501호).';
+       else msg='그 형식으론 못 찾았어요. <b>도로명 또는 지번 + 호수</b>로 넣어보세요 (예: 잠실동 180-2 501호 · 백제고분로7길 23 501호).';
+       hint.innerHTML=msg; return;
+     }
      var rank=function(t){t=dgdec(t||'');return /집합/.test(t)?0:(/건물/.test(t)?1:2);}; // 집합건물(아파트)>건물>토지
      list.sort(function(a,b){return rank(a.resType)-rank(b.resType);});
      window.__dgList=list;
