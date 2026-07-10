@@ -88,7 +88,14 @@ footer a{color:#B9DCD9;margin:0 8px}
 .accbody{font-size:.88rem;color:var(--sub);padding:2px 0 14px;line-height:1.7}
 .accbody ol,.accbody ul{margin:0 0 0 18px}
 .accbody li{margin-bottom:6px}
-@media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
+.svcRow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.svcCard{border:1.5px solid var(--line);border-radius:16px;padding:20px;background:#fff;text-align:center;transition:.15s}
+.svcCard:hover{border-color:#B5E4E1;box-shadow:0 10px 24px rgba(32,166,162,.12)}
+.svcIc{font-size:2rem}
+.svcCard h3{font-size:1.05rem;font-weight:600;margin:8px 0 6px}
+.svcCard p{font-size:.85rem;color:var(--sub);line-height:1.6;min-height:66px}
+.svcBtn{width:100%;margin-top:12px;padding:12px;border:none;border-radius:12px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;font-size:.95rem;cursor:pointer;font-family:inherit;box-shadow:0 5px 14px rgba(42,193,188,.3)}
+@media(max-width:620px){.row2{grid-template-columns:1fr}.svcRow{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css">
 </head>
@@ -180,6 +187,26 @@ footer a{color:#B9DCD9;margin:0 8px}
 </ul></div></details>
 </div>
 
+<h2 class="sec">🤝 입주 준비 업체 연결</h2>
+<div class="tool-box">
+<p style="font-size:.9rem;color:var(--sub);margin-bottom:14px">입주청소·사전점검, 여기저기 알아보기 번거롭죠. <b>훤이 검증 업체를 연결하고 무료로 견적을 받아드려요.</b> (검증 파트너 온보딩 중 — 신청 주시면 순차 매칭해드려요)</p>
+<div class="svcRow">
+<div class="svcCard">
+<div class="svcIc">🧹</div>
+<h3>입주청소 업체</h3>
+<p>입주 전 새집 청소 — 시공 잔재·미세먼지·유리·바닥·욕실 마감까지. 평형별 정찰가·검증 업체로 연결해드려요.</p>
+<button class="svcBtn" onclick="reqQuote('cleaning')">무료 견적 요청</button>
+</div>
+<div class="svcCard">
+<div class="svcIc">🔬</div>
+<h3>하자점검(사전점검) 업체</h3>
+<p>라돈·공기질·열화상·평활도 등 장비 점검 + 사진 보고서. 위 체크리스트로 못 잡는 전문 항목까지.</p>
+<button class="svcBtn" onclick="reqQuote('inspect')">무료 견적 요청</button>
+</div>
+</div>
+<div style="font-size:.8rem;color:var(--sub);margin-top:14px;line-height:1.7">🏢 <b>청소·사전점검 업체이신가요?</b> <a href="mailto:tndud.brad@gmail.com?subject=%5B%ED%9B%A4%20%ED%8C%8C%ED%8A%B8%EB%84%88%5D%20%EC%97%85%EC%B2%B4%20%EB%93%B1%EB%A1%9D&body=%E2%96%A0%20%EC%97%85%EC%B2%B4%EB%AA%85%3A%0A%E2%96%A0%20%EC%84%9C%EB%B9%84%EC%8A%A4(%EC%B2%AD%EC%86%8C%2F%EC%82%AC%EC%A0%84%EC%A0%90%EA%B2%80)%3A%0A%E2%96%A0%20%EA%B0%80%EB%8A%A5%20%EC%A7%80%EC%97%AD%3A%0A%E2%96%A0%20%EC%97%B0%EB%9D%BD%EC%B2%98%3A" style="color:var(--teal);font-weight:600">검증 파트너로 등록</a>하면 훤 이용자에게 소개해드려요. &nbsp;💡 직접 비교하려면 숨고·청소연구소 같은 플랫폼도 참고할 수 있어요.</div>
+</div>
+
 <h2 class="sec">훤 리빙 케어 — 오픈 준비 중</h2>
 <div class="tool-box" style="text-align:center">
 <p style="font-size:.95rem;margin-bottom:6px"><b>하자 접수 대행, 계약 갱신 알림, 관리비 점검까지 — 임대주택 입주민의 든든한 대리인을 준비하고 있어요.</b></p>
@@ -269,6 +296,13 @@ function hzReport(){
  h+='<button class="go" style="margin-top:10px" onclick="hzCopy()">📋 리포트 복사하기</button>';
  el.innerHTML=h; el.classList.add('show');
  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function reqQuote(kind){
+ var subj = kind==='cleaning' ? '[훤 업체연결] 입주청소 견적 요청' : '[훤 업체연결] 사전점검 견적 요청';
+ var body = kind==='cleaning'
+  ? '■ 지역/아파트:\n■ 평형(전용면적):\n■ 청소 희망일:\n■ 연락처:\n■ 요청사항(입주청소/거주청소 등):'
+  : '■ 아파트/지역:\n■ 평형:\n■ 점검 희망일:\n■ 연락처:\n■ 요청사항(라돈/열화상/전체 점검 등):';
+ location.href='mailto:tndud.brad@gmail.com?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
 }
 function hzCopy(){
  var t=document.getElementById('hzText');
