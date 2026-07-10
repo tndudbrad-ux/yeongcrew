@@ -478,7 +478,15 @@ async function runCheck(){
   var text='';
   try{ if(file){text=await extractPdf(file);} if(pasted)text+='\n'+pasted; }
   catch(e){ alert('PDF를 읽지 못했어요. 스캔본이면 텍스트를 붙여넣어주세요.'); return; }
-  if(!text.trim()){alert('등기부 PDF를 올리거나 내용을 붙여넣어주세요');return;}
+  if(!text.trim()){
+    // 주소 자동조회 경로를 눌렀는지 판단해 알아서 진행
+    var cands=document.querySelectorAll('#dgCandList .dgcand');
+    if(cands.length===1){ cands[0].click(); return; }
+    if(cands.length>1){ document.getElementById('dgCandidates').scrollIntoView({behavior:'smooth',block:'center'}); alert('위 목록에서 내 집(층·호)을 눌러주세요.'); return; }
+    var addrVal=(document.getElementById('dgAddr')&&document.getElementById('dgAddr').value.trim());
+    if(addrVal){ searchAddr(); return; }
+    alert('위에서 "주소 검색"으로 등기부를 불러오거나, 아래에서 PDF를 올려주세요.'); return;
+  }
   if(text.replace(/\s/g,'').length<80){alert('추출된 텍스트가 너무 짧아요. 스캔본(이미지)일 수 있으니 내용을 붙여넣어주세요.');return;}
   var inp={deposit:deposit, price:+document.getElementById('dgPrice').value||0, gongsi:+document.getElementById('dgGongsi').value||0, type:segVal('dgType'), region:document.getElementById('dgRegion').value, moveIn:document.getElementById('dgMoveIn').value||''};
   render(analyze(text), inp);
