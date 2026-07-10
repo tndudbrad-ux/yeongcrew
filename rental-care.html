@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>임대주택 입주 하자 점검 체크리스트 - 훤 리빙 - 훤AI</title>
-<meta name="description" content="임대주택 입주 첫 2주가 보증금을 지킵니다. 현관·주방·욕실·설비까지 30개 항목 하자 점검 체크리스트로 확인하고, 관리사무소에 보낼 하자 리포트를 자동으로 만들어드립니다.">
+<title>입주 사전점검 체크리스트 + 하자책임 담보기간 (전문가 수준) - 훤AI</title>
+<meta name="description" content="입주 사전점검, 장소별 상세 체크리스트로 셀프 점검하고 관리사무소에 보낼 하자 리포트를 자동 생성. 라돈·공기질·평활도·구배·열화상 등 전문 계측 항목 기준치와 하자책임 담보기간(2·3·5년)까지 한눈에.">
 <link rel="canonical" href="https://yeongcrew.co.kr/rental-care.html">
 <meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
@@ -76,6 +76,18 @@ footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;fo
 footer a{color:#B9DCD9;margin:0 8px}
 .crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
 .crumb a{color:var(--teal)}
+.mtbl{width:100%;border-collapse:collapse;font-size:.86rem}
+.mtbl th{background:var(--forest);color:#DFF5F3;padding:9px 8px;font-weight:500;text-align:left}
+.mtbl td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.mtbl td:first-child{font-weight:600;white-space:nowrap;color:var(--forest)}
+.acc{border:1px solid var(--line);border-radius:12px;margin-bottom:8px;padding:0 16px;background:#fff}
+.acc summary{cursor:pointer;font-weight:600;font-size:.93rem;padding:14px 0;list-style:none;color:var(--forest)}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"+";float:right;color:var(--teal)}
+.acc[open] summary::after{content:"−"}
+.accbody{font-size:.88rem;color:var(--sub);padding:2px 0 14px;line-height:1.7}
+.accbody ol,.accbody ul{margin:0 0 0 18px}
+.accbody li{margin-bottom:6px}
 @media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css">
@@ -104,12 +116,68 @@ footer a{color:#B9DCD9;margin:0 8px}
 </div>
 
 <div class="tool-box">
-<h2>📋 입주 하자 점검 체크리스트</h2>
-<p style="font-size:.86rem;color:var(--sub);margin-bottom:4px">입주 후 2주 안에 점검하는 걸 권장해요. 하자가 <b>있는 항목만</b> 체크하세요. 체크 내용은 이 브라우저에 자동 저장됩니다.</p>
+<h2>📋 입주 사전점검 체크리스트 (장소별)</h2>
+<p style="font-size:.86rem;color:var(--sub);margin-bottom:4px">전문 업체 <b>고객확인서 수준</b>으로 장소·부위별 항목을 담았어요. 입주(사전점검) 때 하자가 <b>있는 항목만</b> 체크하면, 관리사무소·시공사에 보낼 <b>하자 리포트</b>가 자동으로 만들어져요. 체크 내용은 이 브라우저에 자동 저장됩니다.</p>
 <div id="hzWrap"></div>
 <button class="go" onclick="hzReport()">하자 리포트 만들기</button>
 <div class="result" id="hzRes"></div>
 <p class="note">사진을 함께 찍어두세요 — 날짜가 나오게. 하자 통보는 문자·카톡처럼 기록이 남는 수단으로 보내는 게 안전합니다.</p>
+</div>
+
+<div class="tool-box">
+<h2>🔬 전문 장비 계측 항목 — 알아두기</h2>
+<p style="font-size:.86rem;color:var(--sub);margin-bottom:12px">아래는 사전점검 전문 업체가 <b>장비로 측정</b>하는 항목이에요. 눈으로는 확인이 어렵지만, <b>기준치를 알아두면</b> 셀프 점검 때 의심 구간을 잡거나, 전문 업체에 콕 집어 요청할 수 있어요.</p>
+<table class="mtbl">
+<tr><th>항목</th><th>무엇을 / 기준치</th></tr>
+<tr><td>🟢 라돈</td><td>토양·건자재에서 나오는 1급 발암 기체. <b>신축 148 Bq/㎥(4.0 pCi/L) 이하</b>가 기준. 초과 시 환기·저감 필요.</td></tr>
+<tr><td>🌫️ 공기질</td><td>새집증후군 원인. <b>포름알데히드(HCHO) 0.1 이하 · TVOC 0.3 이하 mg/㎥</b>. 초과 시 두통·호흡기 자극.</td></tr>
+<tr><td>📐 평활도</td><td>바닥 수평. 한 실에서 <b>가장 높은 곳과 낮은 곳 차이 12mm 이상이면 하자</b>. 가구 배치·구조 변형 원인.</td></tr>
+<tr><td>💧 구배(물빠짐)</td><td>욕실·발코니·다용도실이 배수구 쪽으로 기울어야 함. <b>물이 고이거나 안 빠지면 하자</b>.</td></tr>
+<tr><td>🔌 전기접지</td><td>콘센트 접지·극성·전압. <b>접지 누락/역방향/전압불량</b>은 감전·화재·기기손상 위험.</td></tr>
+<tr><td>🌡️ 열화상</td><td>창호·벽면 단열, 바닥 <b>난방배관 끊김·편난방</b>을 카메라로 확인. 결로·곰팡이·난방비 원인 파악.</td></tr>
+<tr><td>🐛 가구 혹파리</td><td>붙박이장 파티클보드에 서식하는 '나무곰팡이혹파리' 유충을 <b>현미경</b>으로 확인.</td></tr>
+<tr><td>🔇 창호 소음</td><td>창 닫고 실내소음(dB) 측정. 도로·철도 인접 세대의 방음 확인. (40~50dB=일상, 60dB↑ 시끄러움)</td></tr>
+<tr><td>🪟 로이유리</td><td>단열 코팅 유리(B종) 여부. 분양 사양대로 시공됐는지 측정기로 확인.</td></tr>
+</table>
+<div class="tip" style="margin-top:14px">🔧 이 항목들은 <b>장비가 필요</b>해요. 라돈·단열·평활도가 걱정되거나 고가 계약이라면 <b>사전점검 전문 업체</b> 의뢰를 권해요. <a href="/experts.html" style="color:var(--teal);font-weight:600">검증 전문가 찾기</a>에서 연결해드릴게요. (업체 연결·공동구매 서비스 준비 중)</div>
+</div>
+
+<article class="post" style="margin-bottom:22px">
+<h1 style="font-size:1.3rem">⚖️ 하자책임 담보기간 — 언제까지 청구할 수 있나</h1>
+<p class="meta">공동주택관리법 시행령 제36·37조 기준 · 신축 아파트 기준</p>
+<p><b>하자</b>란 공사상 잘못으로 균열·침하·파손·들뜸·누수·작동불량 등이 생겨 안전·기능·미관에 지장을 주는 결함이에요. <b>기간 안에 청구</b>해야 사업주체(시공사)가 무상 보수해요.</p>
+<table>
+<tr><th>담보기간</th><th>공종(대상)</th></tr>
+<tr><td><b>2년</b></td><td>마감공사 — 미장·수장·도배·타일·석공사(내부)·옥내가구·주방기구·가전제품</td></tr>
+<tr><td><b>3년</b></td><td>설비 — 급수/위생·난방/환기·가스·창호·전기·통신 및 조경공사</td></tr>
+<tr><td><b>5년</b></td><td>구조·방수 — 철근콘크리트·조적·지붕·방수·옹벽공사 등</td></tr>
+</table>
+<p><b>기산일:</b> 전유부분(우리 집 내부)은 <b>입주자에게 인도한 날</b>, 공용부분은 <b>사용검사일</b>부터 세요.</p>
+<div class="tip">💡 <b>사전점검 때 발견한 하자</b>는 사진·문서로 남기고, 입주 후에도 담보기간 내 계속 나오는 하자는 관리사무소·시공사에 접수하세요. 해결이 안 되면 <b>하자심사분쟁조정위원회(<a href="https://www.adc.go.kr" target="_blank" rel="noopener" style="color:var(--teal)">adc.go.kr</a>)</b>에 조정 신청할 수 있어요.</div>
+</article>
+
+<div class="tool-box">
+<h2>🏠 입주 전 필수 가이드</h2>
+<details class="acc"><summary>🔥 베이크아웃 — 새집증후군 빼는 법</summary>
+<div class="accbody"><ol>
+<li><b>밀폐:</b> 창문·현관 다 닫고, 붙박이장·신발장·싱크대 문·서랍은 다 열기.</li>
+<li><b>가열:</b> 난방을 <b>35~40℃로 7~10시간</b> 유지. (첫날은 30℃로 시작해 점진적으로 — 급하면 마루 들뜸·벽지 손상 위험)</li>
+<li><b>환기:</b> 난방 끄고 창·현관 활짝 열어 <b>1~2시간 맞통풍</b>.</li>
+<li><b>반복:</b> 입주 전까지 <b>최소 3~5회</b> 반복해야 효과가 있어요.</li>
+</ol></div></details>
+<details class="acc"><summary>🟢 라돈·유해물질 저감</summary>
+<div class="accbody"><ul>
+<li><b>하루 3번 30분 환기</b> — 아침·점심·저녁 맞통풍이 가장 확실해요.</li>
+<li>날씨 나쁠 땐 천장 <b>전열교환기(환기시스템)</b> 가동.</li>
+<li>바닥·벽 <b>틈새·배관 주변을 실리콘</b>으로 밀폐(라돈 유입 차단).</li>
+</ul></div></details>
+<details class="acc"><summary>📦 입주 전 체크 팁 (이사·통신·전입신고)</summary>
+<div class="accbody"><ul>
+<li><b>이사업체·엘리베이터 예약</b> — 주말/손없는날은 1~2개월 전.</li>
+<li><b>통신(인터넷·TV) 이전 설치</b> — 이사일 1~2주 전 신청. 단자함 위치 파악.</li>
+<li><b>전입신고 14일 내</b> + <b>확정일자</b>(전·월세는 보증금 보호 — 계약서 지참, 정부24/인터넷등기소).</li>
+<li><b>공과금 정산</b>(계량기 수치 확인) + <b>도시가스 연결</b> 2~3일 전 예약.</li>
+</ul></div></details>
 </div>
 
 <h2 class="sec">훤 리빙 케어 — 오픈 준비 중</h2>
@@ -143,12 +211,13 @@ footer a{color:#B9DCD9;margin:0 8px}
 
 <script>
 var HZ=[
- ["🚪 현관·복도",["현관문 개폐 불량·잠금장치 이상","도어락 오작동","현관 타일 깨짐·들뜸","신발장 문짝·경첩 불량"]],
- ["🛋️ 거실·침실",["벽지 찢김·오염·곰팡이","바닥재 긁힘·들뜸·삐걱임","창문 개폐 불량·잠금 이상","방충망 찢어짐·없음","조명 미점등·스위치 불량","콘센트 헐거움·미작동"]],
- ["🍳 주방",["싱크대 누수·배수 불량","수전(수도꼭지) 흔들림·누수","가스레인지·인덕션 미작동","후드 소음·흡입 불량","상부장·하부장 문짝 불량"]],
- ["🚿 욕실",["변기 물내림 불량·누수","세면대 배수 불량·실리콘 곰팡이","샤워기·수전 수압 이상","타일 깨짐·줄눈 오염","환풍기 미작동","문 잠금 불량"]],
- ["🌡️ 설비",["보일러 온수·난방 불량","에어컨 미작동·누수(설치 시)","세탁기 배수구 역류·냄새","누전차단기 작동 확인 안 됨","인터폰·초인종 불량"]],
- ["🌤️ 발코니·기타",["발코니 배수구 막힘","결로·곰팡이 흔적","우수관 누수 흔적","외벽 크랙(균열) 관찰됨"]]
+ ["🚪 현관·중문",["현관문 개폐·도어락·초인종 불량","센서등 미점등·깜빡임","바닥 타일/디딤석 깨짐·들뜸·줄눈 불량","신발장·선반 문짝·경첩·수평 불량","중문 개폐·유리 상태(옵션)","도배 마감·오염·들뜸"]],
+ ["🛋️ 거실·복도",["아트월·도배 마감/오염/들뜸","타일·마루 들뜸·찍힘·파손·삐걱임","걸레받이·바닥 코킹 불량","샤시 수직/수평·개폐 시 창틀 흔들림","유리 상태·코킹 마감 불량","방충망 고정·찢김","조명·스위치·콘센트(접지) 불량","천장 몰딩·점검구·마감 상태"]],
+ ["🛏️ 안방·침실·드레스룸",["문·문틀 개폐·상태","도배 마감/오염, 붙박이장 상태·수평·다보구멍","바닥재 찍힘·파손·들뜸·걸레받이","샤시 수직/수평·창틀 흔들림·유리·코킹","외벽 도장/미장·물끊기 홈","콘센트·스위치·조명"]],
+ ["🍳 주방",["상·하부장 도어 개폐·고정·내부 파손","하부장 수도관 배관·누수","후드 작동·소음·흡입","주방 상판·벽 타일 줄눈·실리콘","싱크대 배수·수전 흔들림·누수","바닥재 들뜸·찍힘·걸레받이·코킹","가스레인지/인덕션·주방가전 작동"]],
+ ["🚿 욕실(공용·부부)",["천장 점검구 누수/이물질·조명·환기구 작동","문짝·문틀 개폐","욕실장·거울·기물 부착·수평","변기·세면대·욕조 부착·코킹 마감","문틀 하부(마블턱)·줄눈·타일 들뜸/균열/파손","바닥 물고임·배수·구배(물빠짐)","배수구 이물질·냄새"]],
+ ["🌤️ 발코니·다용도실·실외기실",["샤시 수직/수평·개폐·유리·코킹","문틀 하부·줄눈·타일 들뜸/균열","바닥 배수·물고임·구배","벽 도장/미장 불량","결로·곰팡이 흔적·우수관 누수","실외기실 피난사다리 주변 코킹(※사다리 열지 말 것)"]],
+ ["🌡️ 설비·전기",["보일러 온수·난방·편난방(부분 안됨) 구간","월패드(냉난방/전열교환기/대기전력) 작동","세대 일괄소등·전등·화재감지기·스프링클러 고정","각 실 콘센트 접지·극성·전압","누전차단기 작동","인터폰·초인종·통신 단자함","에어컨 작동·누수(설치 시)"]]
 ];
 var wrap=document.getElementById('hzWrap');
 HZ.forEach(function(cat,ci){
@@ -194,7 +263,7 @@ function hzReport(){
  var dstr=today.getFullYear()+'.'+(today.getMonth()+1)+'.'+today.getDate();
  var report='[입주 하자 통보] '+dstr+'\n안녕하세요, 입주 점검 중 아래 하자를 발견하여 통보드립니다. 확인 및 보수 부탁드립니다.\n\n';
  items.forEach(function(it,i){report+=(i+1)+'. '+it+'\n';});
- report+='\n※ 각 항목 사진 보유. 입주 전부터 있던 하자로, 원상복구 책임이 없음을 기록으로 남깁니다.';
+ report+='\n※ 각 항목 사진 보유. 입주 시점 하자로 기록하며, 하자담보책임기간(마감 2년·설비 3년·구조 5년) 내 무상 보수를 요청드립니다.\n※ (임대 세대) 입주 전부터 있던 하자로, 퇴거 시 원상복구 책임이 없음을 기록으로 남깁니다.';
  var h='<div>발견된 하자 <b>'+items.length+'건</b> — 아래 내용을 복사해서 관리사무소/임대인에게 보내세요</div>';
  h+='<textarea id="hzText" style="width:100%;margin-top:10px;padding:12px;border:1.5px solid #BFE9E6;border-radius:10px;font-family:inherit;font-size:.85rem;height:200px">'+report+'</textarea>';
  h+='<button class="go" style="margin-top:10px" onclick="hzCopy()">📋 리포트 복사하기</button>';
