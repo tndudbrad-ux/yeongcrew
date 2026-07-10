@@ -191,7 +191,7 @@ function calcCGT(){
   var hw = householdWarn ? '<div style="background:#FFF7ED;border:1.5px solid #FDE4C8;border-radius:12px;padding:13px 16px;font-size:.87rem;line-height:1.7;margin-top:12px">⚠️ <b>세대 합산 주의</b> — 내 명의로는 1주택이어도, 같은 집에 사는 가족(부모·자녀·형제)이 다른 주택을 보유하면 <b>다주택 세대로 봐서 비과세가 부인될 수 있어요.</b> 자녀는 만 30세 이상·혼인·독립생계(중위소득 40%↑) 중 하나여야 별도 세대로 인정돼요. <b>주민등록 세대분리 ≠ 세법상 세대</b>. 매도 전 <a href="/experts.html" style="color:var(--teal);font-weight:600">세무사 확인</a> 필수 — 아래는 비과세 인정 가정 참고치예요.</div>' : '';
   if(oneHouse && sell<=120000){
     el.innerHTML='<div>1세대 1주택 비과세</div><div class="big">0원</div><div style="font-size:.88rem;margin-top:10px">양도가액 12억 이하 + 요건 충족으로 전액 비과세예요. 🎉 신고 의무도 없어요(고가주택 아님).</div>'
-    +cta(); return;
+    +hw+cta(); return;
   }
   var taxGain=gain;
   if(oneHouse && sell>120000){ taxGain = gain*(sell-120000)/sell; notes.push('12억 초과분 안분: 과세대상 양도차익 '+fmt(taxGain*10000)+'원'); }
@@ -221,7 +221,7 @@ function calcCGT(){
   +'<tr><td>양도소득세 (세율 '+r.rate+'%)</td><td>'+fmt(r.tax*10000)+'원</td></tr>'
   +'<tr><td>지방소득세 (10%)</td><td>'+fmt(local*10000)+'원</td></tr></table>';
   if(notes.length) html+='<div style="font-size:.83rem;color:var(--sub);margin-top:10px">'+notes.join('<br>')+'</div>';
-  html+=cta();
+  html+=hw+cta();
   el.innerHTML=html;
 }
 function cta(){
