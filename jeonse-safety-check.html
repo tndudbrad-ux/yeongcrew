@@ -109,12 +109,14 @@ footer a{color:#CFEEEB;margin:0 8px}
 <div style="background:#F0FAF8;border:1.5px solid #BFE9E6;border-radius:14px;padding:15px 15px;margin-bottom:8px">
 <div style="font-weight:600;font-size:.92rem;margin-bottom:7px">🔎 주소로 자동조회 <span style="font-size:.7rem;color:var(--teal);background:#E7F8F6;padding:2px 8px;border-radius:999px;font-weight:700">베타</span></div>
 <div style="display:flex;gap:8px">
-<input class="f" id="dgAddr" placeholder="예: 백제고분로7길 23 501호 (도로명·지번 + 호수)" style="flex:1">
-<button type="button" onclick="searchAddr()" style="flex:0 0 auto;padding:0 18px;border-radius:12px;border:none;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;cursor:pointer;font-family:inherit">검색</button>
+<input class="f" id="dgAddr" placeholder="주소 검색을 눌러 건물을 선택하세요" readonly style="flex:1;background:#F7FCFB;cursor:pointer" onclick="openAddr()">
+<button type="button" onclick="openAddr()" style="flex:0 0 auto;padding:0 18px;border-radius:12px;border:none;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;cursor:pointer;font-family:inherit">주소 검색</button>
 </div>
+<input class="f" id="dgDetail" placeholder="상세주소 — 동·호수 (예: 101동 1201호 · 501호)" style="margin-top:8px">
+<button type="button" onclick="searchAddr()" style="width:100%;margin-top:8px;padding:12px;border:none;border-radius:12px;background:linear-gradient(180deg,#20A6A2,#178F8A);color:#fff;font-weight:600;font-size:.95rem;cursor:pointer;font-family:inherit">🔎 이 주소로 등기부 찾기</button>
 <div class="hint" id="dgAddrHint" style="min-height:1em"></div>
 <div id="dgCandidates" style="margin-top:4px"></div>
-<div style="font-size:.76rem;color:var(--sub);margin-top:6px">💡 <b>도로명(또는 지번) + 호수</b>로 넣으면 딱 맞게 나와요 (예: 백제고분로7길 23 501호). 대단지는 <b>"동" 번호는 빼고</b> 호수만 — 못 찾으면 목록에서 층·호로 골라도 돼요.</div>
+<div style="font-size:.76rem;color:var(--sub);margin-top:6px">💡 <b>주소 검색</b>으로 건물을 고르고 <b>동·호수</b>를 적으면 내 집 등기부가 자동으로 조회돼요. 못 찾으면 아래 목록에서 층·호로 골라도 돼요.</div>
 <div style="margin-top:8px;background:#FFF7ED;border:1px solid #FDE6C8;border-radius:10px;padding:8px 12px;font-size:.8rem;color:#B45309">🎉 <b>런칭 기념 — 로그인만 하면 무료!</b> <span style="color:#9A6B3F">정식 오픈 시 건당 <s>5,900원</s> → <b>회원 2,900원</b></span></div>
 </div>
 <div style="text-align:center;color:var(--sub);font-size:.8rem;margin:6px 0 2px">— 또는 —</div>
@@ -173,6 +175,7 @@ footer a{color:#CFEEEB;margin:0 8px}
 </div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';}
 function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
@@ -382,22 +385,38 @@ function dgRenderCands(f){
   }).join('') || '<div style="font-size:.82rem;color:var(--sub);padding:8px">그 층·호가 안 보여요. 검색어를 지우고 다시 보세요.</div>';
   [].forEach.call(wrap.querySelectorAll('.dgcand'),function(b){b.onmouseenter=function(){b.style.borderColor='#33CCC7';};b.onmouseleave=function(){b.style.borderColor='var(--line)';};b.onclick=function(){fetchRegister(b.dataset.uniq);};});
 }
-function searchAddr(){
+function openAddr(){
+  if(typeof daum==='undefined'||!daum.Postcode){ alert('주소 검색을 불러오는 중이에요. 잠시 후 다시 눌러주세요.'); return; }
+  new daum.Postcode({ oncomplete:function(data){
+    var addr=data.roadAddress||data.jibunAddress||'';
+    document.getElementById('dgAddr').value=addr;
+    window.__pickedJibun=data.jibunAddress||'';
+    var det=document.getElementById('dgDetail'); if(det){ det.focus(); }
+    var h=document.getElementById('dgAddrHint'); if(h){ h.style.color='var(--sub)'; h.textContent='동·호수를 적고 "이 주소로 등기부 찾기"를 눌러주세요'; }
+  } }).open();
+}
+function searchAddr(noHo){
   var addr=document.getElementById('dgAddr').value.trim();
+  var detail=(document.getElementById('dgDetail')?document.getElementById('dgDetail').value.trim():'');
   var hint=document.getElementById('dgAddrHint'), box=document.getElementById('dgCandidates');
-  if(addr.length<5){hint.style.color='#C0342E';hint.textContent='주소를 더 구체적으로 입력해주세요 (동·호수까지)';return;}
+  if(!addr){hint.style.color='#C0342E';hint.textContent='먼저 "주소 검색"으로 건물을 선택해주세요';return;}
+  // 동 번호는 CODEF 검색에서 오류나므로 호수만 추출해 붙임
+  var ho=(detail.match(/(\d+)\s*호/)||[])[0]||'';
+  var q=addr+((ho&&!noHo)?(' '+ho):'');
   hint.style.color='var(--teal)';hint.textContent='검색 중...'; box.innerHTML='';
-  fetch(DG_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({inquiryType:'1',address:addr,recordStatus:'0',issueType:'2'})})
+  fetch(DG_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({inquiryType:'1',address:q,recordStatus:'0',issueType:'2'})})
    .then(function(r){return r.json();})
    .then(function(d){
      var code=d.result?d.result.code:'';
      var list=(d.data&&d.data.resAddrList)||(d.data&&d.data.extraInfo&&d.data.extraInfo.resAddrList)||[];
      if(code!=='CF-00000'||!list.length){
+       // 호수를 붙인 검색이 실패하면 주소만으로 재검색 → 전체 세대 목록에서 고르게
+       if(!noHo && ho){ searchAddr(true); return; }
        hint.style.color='#B45309';
        var msg;
-       if(/13006|13007/.test(code||'')) msg='"동" 번호 때문에 못 찾았을 수 있어요. <b>동을 빼고</b> 도로명(또는 지번) + 호수로 해보세요 (예: 백제고분로7길 23 501호).';
-       else if(/12100/.test(code||'')) msg='범위가 너무 넓어요. 건물명만 말고 <b>도로명·지번 + 호수</b>로 좁혀보세요 (예: 백제고분로7길 23 501호).';
-       else msg='그 형식으론 못 찾았어요. <b>도로명 또는 지번 + 호수</b>로 넣어보세요 (예: 잠실동 180-2 501호 · 백제고분로7길 23 501호).';
+       if(/13006|13007/.test(code||'')) msg='그 동·호수로는 못 찾았어요. 상세주소를 지우고 다시 "찾기"를 누르면 <b>전체 세대 목록</b>에서 고를 수 있어요.';
+       else if(/12100/.test(code||'')) msg='세대가 너무 많아요. 상세주소에 <b>호수</b>를 적거나, 아래 목록에서 층·호로 골라주세요.';
+       else msg='주소를 못 찾았어요. "주소 검색"으로 다시 선택하거나, PDF 업로드를 이용해보세요.';
        hint.innerHTML=msg; return;
      }
      var rank=function(t){t=dgdec(t||'');return /집합/.test(t)?0:(/건물/.test(t)?1:2);}; // 집합건물(아파트)>건물>토지
