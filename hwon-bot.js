@@ -202,7 +202,8 @@ function llmAnswer(t){
  if(HIST.length>12)HIST=HIST.slice(-12);
  var ty=botTyping();
  var ctrl=new AbortController();
- var to=setTimeout(function(){ctrl.abort();},15000);
+ // 실거래 조회(아파트 찾기 등)는 도구 호출로 오래 걸릴 수 있어 넉넉히 45초. 스피너가 도는 동안 사용자는 진행 중임을 알 수 있음.
+ var to=setTimeout(function(){ctrl.abort();},45000);
  fetch(BOOBI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:HIST}),signal:ctrl.signal})
  .then(function(r){clearTimeout(to);if(!r.ok)throw new Error('bad');return r.json();})
  .then(function(d){
@@ -213,8 +214,11 @@ function llmAnswer(t){
    ctas(d.reply);
  })
  .catch(function(){
+   clearTimeout(to);
    ty.remove();
-   ruleAnswer(t);
+   HIST.pop(); // 실패한 질문은 히스토리에서 제거해 재질문이 깨끗하게 되도록
+   bot('앗, 답을 가져오는 데 시간이 걸렸어요 🙏\n아파트 실거래 조회처럼 무거운 질문은 잠깐 느릴 수 있어요. 한 번만 다시 여쭤봐 주세요!');
+   chips();
  });
 }
 var FLOW=null;
