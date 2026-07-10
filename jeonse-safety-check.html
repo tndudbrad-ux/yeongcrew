@@ -371,6 +371,17 @@ function aiOpinion(){
 var DG_API='https://hwon-rtms.vercel.app/api/deunggi';
 function dgdec(s){s=String(s||'').replace(/\+/g,' ');try{return decodeURIComponent(s);}catch(e){return s;}}
 function readInputs(){ return {deposit:+document.getElementById('dgDeposit').value, price:+document.getElementById('dgPrice').value||0, gongsi:+document.getElementById('dgGongsi').value||0, type:segVal('dgType'), region:document.getElementById('dgRegion').value, moveIn:document.getElementById('dgMoveIn').value||''}; }
+function dgRenderCands(f){
+  var list=window.__dgList||[]; f=(f||'').replace(/\s/g,'');
+  var wrap=document.getElementById('dgCandList'); if(!wrap)return;
+  var filt=list.filter(function(it){ return !f || dgdec(it.commAddrLotNumber).replace(/\s/g,'').indexOf(f)>=0; }).slice(0,50);
+  wrap.innerHTML=filt.map(function(it){
+    var t=dgdec(it.resType||''), isLand=/토지/.test(t);
+    var badge='<span style="font-size:.68rem;padding:1px 7px;border-radius:999px;'+(isLand?'background:#FEF3E2;color:#B45309':'background:#E7F8F6;color:#20A6A2')+';font-weight:700;white-space:nowrap">'+t+'</span>';
+    return '<button type="button" class="dgcand" data-uniq="'+it.commUniqueNo+'" style="display:flex;gap:8px;align-items:center;justify-content:space-between;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:6px;cursor:pointer;font-size:.83rem;font-family:inherit"><span>'+dgdec(it.commAddrLotNumber)+'</span>'+badge+'</button>';
+  }).join('') || '<div style="font-size:.82rem;color:var(--sub);padding:8px">그 층·호가 안 보여요. 검색어를 지우고 다시 보세요.</div>';
+  [].forEach.call(wrap.querySelectorAll('.dgcand'),function(b){b.onmouseenter=function(){b.style.borderColor='#33CCC7';};b.onmouseleave=function(){b.style.borderColor='var(--line)';};b.onclick=function(){fetchRegister(b.dataset.uniq);};});
+}
 function searchAddr(){
   var addr=document.getElementById('dgAddr').value.trim();
   var hint=document.getElementById('dgAddrHint'), box=document.getElementById('dgCandidates');
@@ -382,9 +393,13 @@ function searchAddr(){
      var code=d.result?d.result.code:'';
      var list=(d.data&&d.data.resAddrList)||(d.data&&d.data.extraInfo&&d.data.extraInfo.resAddrList)||[];
      if(code!=='CF-00000'||!list.length){ hint.style.color='#C0342E'; hint.textContent = /12100|12411/.test(code||'')?'결과가 너무 많거나 부족해요. 동·호수까지 더 구체적으로 넣어보세요.':'조회 실패 — 주소를 다시 확인해주세요.'; return; }
-     hint.style.color='var(--teal)'; hint.textContent=list.length+'건 조회 — 해당 부동산을 누르면 등기부를 자동으로 열람해요';
-     box.innerHTML=list.slice(0,8).map(function(it){return '<button type="button" class="dgcand" data-uniq="'+it.commUniqueNo+'" style="display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:6px;cursor:pointer;font-size:.85rem;font-family:inherit;transition:.14s"><b>'+dgdec(it.commAddrLotNumber)+'</b> <span style="color:var(--sub)">'+dgdec(it.resType||'')+(it.resUserNm?' · 소유자 '+dgdec(it.resUserNm):'')+'</span></button>';}).join('');
-     [].forEach.call(box.querySelectorAll('.dgcand'),function(b){b.onmouseenter=function(){b.style.borderColor='#33CCC7';};b.onmouseleave=function(){b.style.borderColor='var(--line)';};b.onclick=function(){fetchRegister(b.dataset.uniq);};});
+     var rank=function(t){t=dgdec(t||'');return /집합/.test(t)?0:(/건물/.test(t)?1:2);}; // 집합건물(아파트)>건물>토지
+     list.sort(function(a,b){return rank(a.resType)-rank(b.resType);});
+     window.__dgList=list;
+     hint.style.color='var(--teal)'; hint.textContent=list.length+'건 조회 — 아파트·빌라는 <b>내 층·호</b>를 골라 누르세요';
+     var fbox = list.length>6 ? '<input class="f" id="dgFilter" placeholder="층·호수로 좁히기 (예: 501, 12층)" oninput="dgRenderCands(this.value)" style="margin:6px 0 2px;padding:9px 12px;font-size:.9rem">' : '';
+     box.innerHTML=fbox+'<div id="dgCandList" style="max-height:250px;overflow:auto"></div>';
+     dgRenderCands('');
    })
    .catch(function(){hint.style.color='#C0342E';hint.textContent='조회 중 오류가 났어요. 잠시 후 다시 시도해주세요.';});
 }
@@ -408,7 +423,8 @@ function fetchRegister(uniqueNo){
    .then(function(r){return r.json();})
    .then(function(d){
      if(d.error==='login_required'||d.error==='invalid_token'){hint.style.color='#B45309';hint.textContent='로그인이 만료됐어요. 다시 로그인해 주세요.';return;}
-     if(!d.result||d.result.code!=='CF-00000'){hint.style.color='#C0342E';hint.textContent='열람 실패: '+(dgdec(d.result&&d.result.message)||'오류');return;}
+     if(d.result&&d.result.code==='CF-12100'){hint.style.color='#B45309';hint.textContent='이건 토지 등기부라 전세 진단엔 안 맞아요 🙅 위 목록에서 아파트(집합건물)의 내 층·호를 골라주세요.';return;}
+     if(!d.result||d.result.code!=='CF-00000'){hint.style.color='#C0342E';hint.textContent='열람 실패: '+(dgdec(d.result&&d.result.message)||('코드 '+(d.result&&d.result.code||d.error||'알수없음')));return;}
      var text=flattenReg(d.data);
      if(text.replace(/\s/g,'').length<50){hint.style.color='#C0342E';hint.textContent='등기 내용을 읽지 못했어요. PDF 업로드를 이용해주세요.';return;}
      document.getElementById('dgText').value=text; // 참고용 보관
