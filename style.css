@@ -1,5 +1,5 @@
 /* ============================================
-   훤AI (HWON) Design System
+   부비 (HWON) Design System
    Fresh Mint #2AC1BC · Deep Teal #20A6A2
    Mint Cream #F0FAF8 · Deep Forest #0D2A29
    Pretendard 300/500 · 후광 링 시그니처
@@ -40,7 +40,7 @@ a{color:inherit;text-decoration:none}
   box-shadow:0 2px 8px rgba(42,193,188,.35);
 }
 .logo::after{
-  content:"훤AI"; font-size:1.22rem; font-weight:500; color:var(--forest); letter-spacing:-.01em;
+  content:"부비"; font-size:1.22rem; font-weight:500; color:var(--forest); letter-spacing:-.01em;
 }
 .site-header nav{display:flex;gap:20px;font-size:.9rem;font-weight:400;color:var(--sub)}
 .site-header nav a:hover{color:var(--teal)}

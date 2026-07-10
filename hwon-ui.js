@@ -1,4 +1,4 @@
-/* 훤 UI 폴리시 — 금액 입력 한글 힌트 */
+/* 부비 UI 폴리시 — 금액 입력 한글 힌트 */
 (function(){
 function readMan(v){
   v=Math.round(v);

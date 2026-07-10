@@ -1,4 +1,4 @@
-/* 훤 계정 v1 — Firebase Google 로그인 */
+/* 부비 계정 v1 — Firebase Google 로그인 */
 (function(){
 var CFG={apiKey:"AIzaSyCmz6mI6a8zPWQrsv4AKSTCGpxtdrwZ2Ow",authDomain:"hwon-ai.firebaseapp.com",projectId:"hwon-ai",appId:"1:5783272455:web:d5c9215d615894ee7abea2"};
 function load(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}

@@ -1,7 +1,7 @@
 {
-  "name": "훤AI — 부동산이, 훤해요",
-  "short_name": "훤AI",
-  "description": "계산기·진단·실거래 조회·AI 비서 부비까지, 부동산 컴패니언 훤AI",
+  "name": "부비 — 부동산 비서",
+  "short_name": "부비",
+  "description": "계산기·진단·실거래 조회·AI 비서 부비까지, 부동산 컴패니언 부비",
   "start_url": "/?src=pwa",
   "scope": "/",
   "display": "standalone",

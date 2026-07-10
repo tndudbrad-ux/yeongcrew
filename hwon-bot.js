@@ -1,4 +1,4 @@
-/* 부비 — 훤AI의 부동산 비서 */
+/* 부비 — 부동산 비서 */
 (function(){
 if(!document.querySelector('link[href="/hwon-ui.css"]')){
   var uiL=document.createElement('link');uiL.rel='stylesheet';uiL.href='/hwon-ui.css';document.head.appendChild(uiL);
@@ -25,7 +25,7 @@ window.addEventListener('beforeinstallprompt',function(ev){
   try{ if(localStorage.getItem('hwbInstallDismiss'))return; }catch(e){}
   var ib=document.createElement('button');
   ib.id='hwbInstall';
-  ib.innerHTML='📱 훤AI 앱으로 설치 <span style="opacity:.6;margin-left:6px">✕</span>';
+  ib.innerHTML='📱 부비 앱으로 설치 <span style="opacity:.6;margin-left:6px">✕</span>';
   ib.style.cssText='position:fixed;left:16px;bottom:20px;z-index:9997;border:none;border-radius:24px;padding:11px 16px;background:#0D2A29;color:#EAF7F6;font-size:.85rem;font-weight:600;box-shadow:0 8px 24px rgba(13,42,41,.35);cursor:pointer;font-family:inherit';
   ib.addEventListener('click',function(e){
     var r=ib.getBoundingClientRect();
@@ -90,8 +90,8 @@ var ANSWERS={
  couple:'부부의 큰 결정 두 가지!\n\n• 혼인신고 지금 할까 미룰까 → <a href="/marriage-check.html">혼인신고 자가진단</a>\n• 집 명의 공동 vs 단독 → <a href="/myeongui-check.html">명의 자가진단</a>\n\n각각 12~13개 질문이면 우리 부부 답이 나와요.',
  support:'받을 수 있는 건 다 받아야죠.\n\n• 내게 맞는 지원제도 찾기 → <a href="/youth-housing.html">청년·신혼 주거지원 진단</a>\n• 청약 처음이라면 → <a href="/cheongyak-guide.html">청약 완벽 가이드</a>\n• 첫 집 로드맵 → <a href="/first-home.html">생애 첫 집 마련</a>',
  contract:'계약하고 나면 다 불안해요. 정상이에요!\n\n<a href="/contract-check.html">계약 셀프 검진</a>에서 월세 적정성·전세 안전장치·복비 초과 여부를 숫자로 확인해보세요. 이미 한 계약도 지금 할 일을 알려드려요.',
- moving:'큰 날일수록 순서가 생명이에요.\n\n• 매매 계약 전 → 잔금일 → 이사날, 단계별로 하나씩 체크 → <a href="/moving-guide.html">훤 로드맵</a>\n• 임대주택 입주라면 하자 점검부터 → <a href="/rental-care.html">하자 체크리스트</a>\n\n체크한 진행률은 저장되니까, 이사 준비하면서 하나씩 지워나가요!',
- expert:'혼자 결정하기 어려운 순간이네요.\n\n<a href="/experts.html">훤 매치 (전문가 찾기)</a>에서 중개사·세무사·법무사·변호사·대출상담사가 언제 필요한지, 고르는 법, 바로 연결 링크까지 정리해뒀어요.'
+ moving:'큰 날일수록 순서가 생명이에요.\n\n• 매매 계약 전 → 잔금일 → 이사날, 단계별로 하나씩 체크 → <a href="/moving-guide.html">부비 로드맵</a>\n• 임대주택 입주라면 하자 점검부터 → <a href="/rental-care.html">하자 체크리스트</a>\n\n체크한 진행률은 저장되니까, 이사 준비하면서 하나씩 지워나가요!',
+ expert:'혼자 결정하기 어려운 순간이네요.\n\n<a href="/experts.html">부비 매치 (전문가 찾기)</a>에서 중개사·세무사·법무사·변호사·대출상담사가 언제 필요한지, 고르는 법, 바로 연결 링크까지 정리해뒀어요.'
 };
 var KEYWORDS=[
  [/대출|dsr|한도|금리|이자|주담대|디딤돌|버팀목/i,'loan'],
@@ -108,7 +108,7 @@ var KEYWORDS=[
 function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
 var btn=el('button','',null);btn.id='hwbBtn';btn.setAttribute('aria-label','부비 열기');btn.appendChild(el('span','ring',''));
 var panel=el('div','',null);panel.id='hwbPanel';
-panel.innerHTML='<div id="hwbHead"><span class="r"></span><div><b>부비</b><small>훤AI 부동산 비서 · 무엇이든 물어보세요</small></div><button id="hwbClose" aria-label="닫기">✕</button></div><div id="hwbBody"></div><div id="hwbInputRow"><input id="hwbInput" placeholder="예: 전세 계약 전에 뭘 확인해야 해?"><button id="hwbSend" aria-label="전송"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.4 20.4L20.85 12.92C21.66 12.57 21.66 11.43 20.85 11.08L3.4 3.6C2.74 3.31 2.01 3.8 2.01 4.51L2 9.12C2 9.62 2.37 10.05 2.87 10.11L17 12L2.87 13.88C2.37 13.95 2 14.38 2 14.88L2.01 19.49C2.01 20.2 2.74 20.69 3.4 20.4Z" fill="#fff"/></svg></button></div>';
+panel.innerHTML='<div id="hwbHead"><span class="r"></span><div><b>부비</b><small>부동산 비서 · 무엇이든 물어보세요</small></div><button id="hwbClose" aria-label="닫기">✕</button></div><div id="hwbBody"></div><div id="hwbInputRow"><input id="hwbInput" placeholder="예: 전세 계약 전에 뭘 확인해야 해?"><button id="hwbSend" aria-label="전송"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.4 20.4L20.85 12.92C21.66 12.57 21.66 11.43 20.85 11.08L3.4 3.6C2.74 3.31 2.01 3.8 2.01 4.51L2 9.12C2 9.62 2.37 10.05 2.87 10.11L17 12L2.87 13.88C2.37 13.95 2 14.38 2 14.88L2.01 19.49C2.01 20.2 2.74 20.69 3.4 20.4Z" fill="#fff"/></svg></button></div>';
 document.body.appendChild(btn);document.body.appendChild(panel);
 btn.classList.add('pulse');
 var teaser=null;
@@ -336,7 +336,7 @@ btn.onclick=function(){
   panel.classList.toggle('open');
   if(panel.classList.contains('open')&&!opened){
     opened=true;
-    bot('안녕하세요, 부비예요! 🔆\n훤AI의 부동산 비서, 부동산 비서라서 부비 🙋\n깜깜한 곳을 훤히 밝혀드릴게요. 어떤 게 궁금하세요?');
+    bot('안녕하세요, 부비예요! 🔆\n부동산 비서라서 부비 🙋\n깜깜한 곳을 훤히 밝혀드릴게요. 어떤 게 궁금하세요?');
     chips();
   }
 };
