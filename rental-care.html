@@ -95,6 +95,11 @@ footer a{color:#B9DCD9;margin:0 8px}
 .svcCard h3{font-size:1.05rem;font-weight:600;margin:8px 0 6px}
 .svcCard p{font-size:.85rem;color:var(--sub);line-height:1.6;min-height:66px}
 .svcBtn{width:100%;margin-top:12px;padding:12px;border:none;border-radius:12px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;font-size:.95rem;cursor:pointer;font-family:inherit;box-shadow:0 5px 14px rgba(42,193,188,.3)}
+.pdItem{border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:10px;background:#FBFEFE}
+.pdItemHead{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:.9rem;margin-bottom:8px}
+.pdItemHead button{border:none;background:none;color:#C0342E;font-size:.82rem;cursor:pointer;font-family:inherit}
+.pdThumb{margin-top:8px}
+.pdThumb img{max-width:100%;max-height:180px;border-radius:8px;border:1px solid var(--line)}
 @media(max-width:620px){.row2{grid-template-columns:1fr}.svcRow{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css">
@@ -129,6 +134,21 @@ footer a{color:#B9DCD9;margin:0 8px}
 <button class="go" onclick="hzReport()">하자 리포트 만들기</button>
 <div class="result" id="hzRes"></div>
 <p class="note">사진을 함께 찍어두세요 — 날짜가 나오게. 하자 통보는 문자·카톡처럼 기록이 남는 수단으로 보내는 게 안전합니다.</p>
+</div>
+
+<div class="tool-box">
+<h2>📸 사진 하자 리포트 (PDF) — 파일 하나로 통보</h2>
+<p style="font-size:.86rem;color:var(--sub);margin-bottom:4px">하자 <b>사진과 설명</b>을 추가하면 <b>PDF 리포트</b>를 자동으로 만들어드려요. 집주인·관리사무소에 문자로 하나하나 말할 필요 없이 <b>파일 하나만</b> 보내면 돼요.</p>
+<div style="background:#EAFAF8;border:1px solid #BFE9E6;border-radius:10px;padding:9px 13px;font-size:.8rem;margin-bottom:6px">🔒 사진은 <b>브라우저 안에서만</b> PDF로 만들어져요. 서버로 전송·저장되지 않아요.</div>
+<div class="row2">
+<div><label class="f">아파트 / 주소</label><input class="f" id="pdAddr" placeholder="예: OO아파트 101동 1201호"></div>
+<div><label class="f">점검일</label><input class="f" id="pdDate" type="date"></div>
+</div>
+<label class="f">작성자(임차인) 성함</label><input class="f" id="pdName" placeholder="예: 홍길동">
+<div id="pdList" style="margin-top:6px"></div>
+<button type="button" class="go" style="background:#fff;color:var(--teal);border:1.5px solid var(--mint);box-shadow:none" onclick="pdAdd()">＋ 하자 항목 추가</button>
+<button type="button" class="go" onclick="pdMakePdf()">📄 PDF 리포트 만들기</button>
+<div class="hint" id="pdHint" style="min-height:1em;text-align:center"></div>
 </div>
 
 <div class="tool-box">
@@ -312,6 +332,71 @@ function hzCopy(){
 }
 </script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+/* ===== 사진 하자 리포트 PDF 빌더 ===== */
+var PLACES=['현관','거실','안방','침실','주방','공용욕실','부부욕실','발코니','다용도실','실외기실','기타'];
+var PARTS=['벽','바닥','천장','창호(샤시)','문/문틀','설비/전기','가구','기타'];
+var pdItems=[];
+(function(){var d=document.getElementById('pdDate'); if(d)d.value=new Date().toISOString().slice(0,10);})();
+function pdOpt(arr,sel){return arr.map(function(o){return '<option'+(o===sel?' selected':'')+'>'+o+'</option>';}).join('');}
+function pdRender(){
+  var wrap=document.getElementById('pdList'); if(!wrap)return;
+  wrap.innerHTML=pdItems.map(function(it,i){
+    return '<div class="pdItem"><div class="pdItemHead"><span>하자 #'+(i+1)+'</span><button type="button" onclick="pdRemove('+i+')">삭제</button></div>'
+     +'<div class="row2"><select class="f" onchange="pdItems['+i+'].loc=this.value">'+pdOpt(PLACES,it.loc)+'</select>'
+     +'<select class="f" onchange="pdItems['+i+'].part=this.value">'+pdOpt(PARTS,it.part)+'</select></div>'
+     +'<input class="f" style="margin-top:8px" placeholder="하자 설명 (예: 벽지 들뜸·오염)" value="'+String(it.desc||'').replace(/"/g,'&quot;')+'" oninput="pdItems['+i+'].desc=this.value">'
+     +'<input class="f" style="margin-top:8px;padding:9px" type="file" accept="image/*" capture="environment" onchange="pdPhoto(this,'+i+')">'
+     +'<div class="pdThumb">'+(it.img?'<img src="'+it.img+'">':'')+'</div></div>';
+  }).join('');
+}
+function pdAdd(){ pdItems.push({loc:'거실',part:'벽',desc:'',img:''}); pdRender(); }
+function pdRemove(i){ pdItems.splice(i,1); pdRender(); }
+function pdPhoto(input,i){
+  var f=input.files[0]; if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){ var img=new Image();
+    img.onload=function(){ var max=1200,w=img.width,h=img.height;
+      if(w>max||h>max){ if(w>h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;} }
+      var c=document.createElement('canvas'); c.width=w; c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
+      pdItems[i].img=c.toDataURL('image/jpeg',0.8); pdRender();
+    }; img.src=e.target.result; };
+  r.readAsDataURL(f);
+}
+function pdMakePdf(){
+  var hint=document.getElementById('pdHint');
+  if(!pdItems.length){ hint.style.color='#C0342E'; hint.textContent='＋ 하자 항목 추가로 하자를 먼저 넣어주세요'; return; }
+  if(typeof html2canvas==='undefined'||!window.jspdf){ hint.style.color='#C0342E'; hint.textContent='PDF 도구 로딩 중이에요. 잠시 후 다시 눌러주세요.'; return; }
+  hint.style.color='var(--teal)'; hint.textContent='PDF 만드는 중... ⏳ (사진 많으면 몇 초 걸려요)';
+  var addr=(document.getElementById('pdAddr').value||'').trim();
+  var date=document.getElementById('pdDate').value||new Date().toISOString().slice(0,10);
+  var name=(document.getElementById('pdName').value||'').trim();
+  function esc(s){return String(s||'').replace(/[<>&]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
+  var host=document.createElement('div');
+  host.style.cssText="position:fixed;left:-9999px;top:0;width:800px;background:#fff;font-family:'Wanted Sans','Malgun Gothic',sans-serif;color:#12403B";
+  var b='';
+  b+='<div class="pdBlk" style="padding:34px 40px;border-bottom:3px solid #20A6A2"><div style="color:#20A6A2;font-weight:700;font-size:14px;letter-spacing:2px">HWON · 훤AI</div><div style="font-size:28px;font-weight:700;margin-top:10px">입주 하자 점검 리포트</div><table style="width:100%;margin-top:20px;font-size:15px;border-collapse:collapse"><tr><td style="padding:7px 0;color:#5A7B78;width:110px">대상</td><td style="font-weight:600">'+esc(addr||'-')+'</td></tr><tr><td style="padding:7px 0;color:#5A7B78">점검일</td><td style="font-weight:600">'+esc(date)+'</td></tr><tr><td style="padding:7px 0;color:#5A7B78">작성자</td><td style="font-weight:600">'+esc(name||'-')+'</td></tr><tr><td style="padding:7px 0;color:#5A7B78">발견 하자</td><td style="font-weight:700;color:#C0342E">총 '+pdItems.length+'건</td></tr></table><div style="margin-top:18px;background:#F0FAF8;border:1px solid #BFE9E6;border-radius:10px;padding:14px 16px;font-size:13px;line-height:1.7">아래 하자에 대한 확인 및 보수를 요청드립니다. 하자담보책임기간(마감 2년·설비 3년·구조 5년) 내 무상 보수 대상이며, 입주 시점 사진으로 기록합니다.</div></div>';
+  pdItems.forEach(function(it,i){
+    b+='<div class="pdBlk" style="padding:22px 40px;border-bottom:1px solid #E5F0EE"><div style="font-size:17px;font-weight:700">#'+(i+1)+'. '+esc(it.loc)+' · '+esc(it.part)+'</div><div style="font-size:15px;margin-top:6px;color:#333">'+esc(it.desc||'(설명 없음)')+'</div>'+(it.img?'<div style="margin-top:12px"><img src="'+it.img+'" style="max-width:100%;max-height:420px;border:1px solid #ddd;border-radius:8px"></div>':'')+'</div>';
+  });
+  b+='<div class="pdBlk" style="padding:26px 40px;font-size:13px;color:#5A7B78">작성자 확인: '+esc(name||'________')+' (서명)  ·  '+esc(date)+'<br>본 리포트는 훤AI(yeongcrew.co.kr) 입주 하자점검 도구로 작성되었습니다.</div>';
+  host.innerHTML=b; document.body.appendChild(host);
+  var blks=host.querySelectorAll('.pdBlk');
+  var pdf=new window.jspdf.jsPDF('p','mm','a4');
+  var pageW=210,pageH=297,margin=8,y=margin,idx=0;
+  function step(){
+    if(idx>=blks.length){ pdf.save('입주하자리포트_'+date+'.pdf'); if(host.parentNode)document.body.removeChild(host); hint.style.color='#0E8F5B'; hint.textContent='✅ PDF 저장 완료! 이 파일 하나를 집주인·관리사무소에 보내세요.'; return; }
+    html2canvas(blks[idx],{scale:2,backgroundColor:'#fff',useCORS:true}).then(function(canvas){
+      var w=pageW-margin*2, h=canvas.height*w/canvas.width;
+      if(y+h>pageH-margin && y>margin){ pdf.addPage(); y=margin; }
+      pdf.addImage(canvas.toDataURL('image/jpeg',0.85),'JPEG',margin,y,w,h); y+=h+3; idx++; step();
+    }).catch(function(){ if(host.parentNode)document.body.removeChild(host); hint.style.color='#C0342E'; hint.textContent='PDF 생성 중 오류가 났어요. 사진 수를 줄여 다시 시도해주세요.'; });
+  }
+  step();
+}
+</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 <script src="/hwon-ui.js" defer></script>
