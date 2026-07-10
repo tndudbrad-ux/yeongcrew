@@ -114,14 +114,16 @@ footer a{color:#B9DCD9;margin:0 8px}
 <div id="gLiveWrap"><label class="f">거주기간 (년)</label><input class="f" id="gLive" type="number" step="0.1" placeholder="예: 3 (없으면 0)"></div>
 </div>
 <div id="gHouseOpts">
-<label class="f">양도 시점 보유 주택 수 (이 주택 포함)</label>
+<label class="f">양도 시점 <b>세대 합산</b> 보유 주택 수 (이 주택 포함) <span style="font-weight:300;color:var(--sub)">— 함께 사는 부모·자녀·형제 명의 주택도 포함</span></label>
 <div class="seg" id="gCnt"><button data-v="1" class="on">1주택</button><button data-v="2">2주택</button><button data-v="3">3주택 이상</button></div>
 <label class="f">이 주택이 조정대상지역에 있나요? <span style="font-weight:300;color:var(--sub)">(서울 전역·과천·분당 등 — 2025.10.16 확대)</span></label>
 <div class="seg" id="gAdj"><button data-v="n" class="on">아니요</button><button data-v="y">예</button></div>
 <div id="gGrace" style="display:none"><label class="f">2026.5.9 이전 매매계약 + 계약금 수령 (중과 경과조치)</label>
 <div class="seg" id="gGraceSeg"><button data-v="n" class="on">아니요</button><button data-v="y">예 (중과 배제)</button></div></div>
 <div id="gOneOpts"><label class="f">1세대 1주택 비과세 요건 충족? <span style="font-weight:300;color:var(--sub)">(2년 보유 + 취득 당시 조정지역이면 2년 거주)</span></label>
-<div class="seg" id="gExempt"><button data-v="y" class="on">충족</button><button data-v="n">미충족</button></div></div>
+<div class="seg" id="gExempt"><button data-v="y" class="on">충족</button><button data-v="n">미충족</button></div>
+<label class="f">세대 합산 체크 — 같은 집에 사는 가족(부모·자녀·형제) 중 <b>다른 주택 소유자</b>가 있나요?</label>
+<div class="seg" id="gHousehold"><button data-v="n" class="on">없음</button><button data-v="y">있음 (또는 모름)</button></div></div>
 </div>
 <button class="go" onclick="calcCGT()">계산하기</button>
 <div class="result" id="gRes"></div>
@@ -138,6 +140,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 
 <div class="faqsec"><h2 class="sec">자주 묻는 질문</h2>
 <details class="faq"><summary>다주택자 양도세 중과는 언제부터 다시 적용되나요?</summary><p>2022년 5월부터 이어지던 중과 유예가 2026년 5월 9일로 종료되어, 5월 10일 양도분부터 조정대상지역 주택은 2주택자 +20%p, 3주택 이상 +30%p 중과세율이 적용되고 장기보유특별공제도 배제돼요. 다만 2026년 5월 9일 이전에 매매계약을 체결하고 계약금을 받은 경우 등 경과조치가 있으니 해당되면 세무사와 확인하세요.</p></details>
+<details class="faq"><summary>1주택인데 비과세가 안 될 수도 있나요? (세대 합산)</summary><p>네, 있어요. 양도세 비과세는 '내 명의' 주택 수가 아니라 '세대' 기준으로 판정해요. 같은 집에서 생계를 같이하는 부모·자녀·형제 등이 다른 주택을 보유하면, 내가 1채만 가졌어도 다주택 세대가 되어 비과세가 부인될 수 있습니다. 자녀가 별도 세대로 인정받으려면 만 30세 이상이거나 혼인했거나 중위소득 40% 이상의 독립생계여야 해요. 취학·근무·요양으로 잠시 떨어져 살아도 같은 세대로 보고, 주민등록상 세대분리를 했다고 세법상 세대가 갈리는 것도 아니에요. 사실 판단이라 금액이 크면 반드시 세무사와 확인하세요.</p></details>
 <details class="faq"><summary>1세대 1주택 비과세 요건은 어떻게 되나요?</summary><p>양도가액 12억원 이하이면서 2년 이상 보유하면 비과세예요. 취득 당시 조정대상지역이었다면 보유기간 중 2년 이상 거주 요건이 추가됩니다. 12억원 초과분은 초과 비율만큼만 과세되고, 보유·거주 기간에 따라 최대 80% 장기보유특별공제를 받을 수 있어요.</p></details>
 <details class="faq"><summary>양도세 필요경비로 인정되는 건 뭐가 있나요?</summary><p>취득세, 취득·양도 시 중개보수, 법무사·세무사 수수료, 샷시 설치·발코니 확장·난방 교체 같은 자본적 지출이 인정돼요. 반면 벽지·장판, 싱크대 교체 같은 수익적 지출과 재산세·대출이자는 인정되지 않습니다. 세금계산서·카드전표 등 증빙을 꼭 보관하세요.</p></details>
 <details class="faq"><summary>양도세 신고는 언제까지 해야 하나요?</summary><p>양도일이 속한 달의 말일부터 2개월 이내에 예정신고·납부해야 해요. 예를 들어 7월에 잔금을 받았다면 9월 30일까지예요. 기한을 넘기면 무신고 가산세 20%가 붙습니다. 홈택스에서 셀프 신고도 가능하지만 다주택·감면 적용은 세무사 검토를 권해요.</p></details>
@@ -178,11 +181,14 @@ function calcCGT(){
   var hold=+document.getElementById('gHold').value||0, live=+document.getElementById('gLive').value||0;
   var type=segVal('gType'), cnt=type==='house'?+segVal('gCnt'):1, adj=segVal('gAdj')==='y';
   var grace=segVal('gGraceSeg')==='y', exemptOK=segVal('gExempt')==='y';
+  var household=(document.getElementById('gHousehold')&&segVal('gHousehold')==='y');
   var gain=sell-buy-exp;
   var el=document.getElementById('gRes'); el.classList.add('show');
   if(gain<=0){ el.innerHTML='<div class="big">납부할 양도세 없음</div><div style="font-size:.88rem;margin-top:8px">양도차익이 없거나 손실이에요. 같은 해 다른 자산 양도차익과 통산할 수 있으니 손실도 신고해두면 유리할 수 있어요.</div>'; return; }
   var notes=[];
   var oneHouse = type==='house' && cnt===1 && exemptOK;
+  var householdWarn = (type==='house' && cnt===1 && exemptOK && household);
+  var hw = householdWarn ? '<div style="background:#FFF7ED;border:1.5px solid #FDE4C8;border-radius:12px;padding:13px 16px;font-size:.87rem;line-height:1.7;margin-top:12px">⚠️ <b>세대 합산 주의</b> — 내 명의로는 1주택이어도, 같은 집에 사는 가족(부모·자녀·형제)이 다른 주택을 보유하면 <b>다주택 세대로 봐서 비과세가 부인될 수 있어요.</b> 자녀는 만 30세 이상·혼인·독립생계(중위소득 40%↑) 중 하나여야 별도 세대로 인정돼요. <b>주민등록 세대분리 ≠ 세법상 세대</b>. 매도 전 <a href="/experts.html" style="color:var(--teal);font-weight:600">세무사 확인</a> 필수 — 아래는 비과세 인정 가정 참고치예요.</div>' : '';
   if(oneHouse && sell<=120000){
     el.innerHTML='<div>1세대 1주택 비과세</div><div class="big">0원</div><div style="font-size:.88rem;margin-top:10px">양도가액 12억 이하 + 요건 충족으로 전액 비과세예요. 🎉 신고 의무도 없어요(고가주택 아님).</div>'
     +cta(); return;
