@@ -403,7 +403,7 @@ function searchAddr(){
      var rank=function(t){t=dgdec(t||'');return /집합/.test(t)?0:(/건물/.test(t)?1:2);}; // 집합건물(아파트)>건물>토지
      list.sort(function(a,b){return rank(a.resType)-rank(b.resType);});
      window.__dgList=list;
-     hint.style.color='var(--teal)'; hint.textContent=list.length+'건 조회 — 아파트·빌라는 <b>내 층·호</b>를 골라 누르세요';
+     hint.style.color='var(--teal)'; hint.innerHTML=list.length+'건 조회 — 아파트·빌라는 <b>내 층·호</b>를 골라 누르세요';
      var fbox = list.length>6 ? '<input class="f" id="dgFilter" placeholder="층·호수로 좁히기 (예: 501, 12층)" oninput="dgRenderCands(this.value)" style="margin:6px 0 2px;padding:9px 12px;font-size:.9rem">' : '';
      box.innerHTML=fbox+'<div id="dgCandList" style="max-height:250px;overflow:auto"></div>';
      dgRenderCands('');
