@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>등기부등본 전세사기 체크 - PDF 올리면 위험 자동 진단 - 훤AI</title>
-<meta name="description" content="등기부등본 PDF를 올리면 신탁·압류·가압류·경매·임차권등기·근저당 채권최고액을 자동 분석해 깡통전세·전세사기 위험도를 진단합니다. 파일은 브라우저에서만 처리되고 서버로 전송되지 않습니다.">
+<title>전세사기·깡통전세 정밀진단 (등기부 + 보증보험 가심사) - 훤AI</title>
+<meta name="description" content="등기부등본 PDF를 올리면 위험등기·채권최고액·전세가율에 더해 HUG·HF·SGI 전세보증보험 가입 가능성, 대항력·배당순위, 소액임차인 최우선변제까지 정밀 진단합니다. 부비 AI 종합의견까지 무료·즉시. 파일은 브라우저에서만 처리돼요.">
 <link rel="canonical" href="https://yeongcrew.co.kr/jeonse-safety-check.html">
 <meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
-<meta property="og:title" content="등기부등본 전세사기 체크 - PDF 올리면 위험 자동 진단 - 훤AI">
-<meta property="og:description" content="등기부등본 PDF를 올리면 신탁·압류·가압류·경매·임차권등기·근저당 채권최고액을 자동 분석해 깡통전세·전세사기 위험도를 진단합니다. 파일은 브라우저에서만 처리되고 서버로 전송되지 않습니다.">
+<meta property="og:title" content="전세사기·깡통전세 정밀진단 - 훤AI">
+<meta property="og:description" content="등기부 + 보증보험 3사 가심사 + 대항력·배당 + 최우선변제 + 부비 AI 종합의견. 무료·즉시·브라우저 처리.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yeongcrew.co.kr/jeonse-safety-check.html">
 <meta property="og:site_name" content="훤AI - 부동산이, 훤해요">
@@ -18,21 +18,22 @@
 <style>
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 @import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
-:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#F0FAF8;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#F4FBFA;--forest:#1B4D48;--sub:#5A7B78;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.65;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:880px;margin:0 auto;padding:0 22px}
-header.top{background:rgba(240,250,248,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top{background:rgba(244,251,250,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
 header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
 .logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500;letter-spacing:-.01em}
 .logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);box-shadow:0 2px 8px rgba(42,193,188,.35)}
 nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
 nav.gnb a:hover{color:var(--teal)}
-main{padding:40px 0 64px}
+main{padding:34px 0 64px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
+.crumb a{color:var(--teal)}
 h2.sec{font-size:1.28rem;font-weight:500;letter-spacing:-.02em;margin:40px 0 16px;display:flex;align-items:center;gap:10px}
 h2.sec::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(180deg,#8FE9E4,#20A6A2);box-shadow:0 0 8px var(--glow)}
-h2.sec:first-child{margin-top:0}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;transition:.18s;display:block}
 .card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(32,166,162,.14);border-color:#B5E4E1}
@@ -40,42 +41,47 @@ h2.sec:first-child{margin-top:0}
 .card h3{font-size:1rem;font-weight:500;margin:8px 0 4px;letter-spacing:-.015em}
 .card p{font-size:.85rem;color:var(--sub)}
 .tool-box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 28px;margin-bottom:22px}
-.tool-box h2{font-size:1.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.tool-box h2{font-size:1.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:6px;display:flex;align-items:center;gap:10px}
 .tool-box h2::before{content:"";flex:0 0 12px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, transparent 26%),linear-gradient(180deg,#8FE9E4,#1B918D);-webkit-mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);box-shadow:0 0 9px var(--glow)}
-label.f{display:block;font-size:.87rem;font-weight:500;margin:15px 0 6px;color:var(--forest)}
-input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
-input.f:focus,select.f:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
+label.f{display:block;font-size:.87rem;font-weight:500;margin:14px 0 6px;color:var(--forest)}
+input.f,select.f,textarea.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
+input.f:focus,select.f:focus,textarea.f:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hint{font-size:.78rem;color:var(--teal);margin-top:5px;font-weight:500;min-height:.9em}
 .seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.seg button{flex:1;min-width:90px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
+.seg button{flex:1;min-width:84px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.86rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
 .seg button.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:600;box-shadow:0 0 10px rgba(42,193,188,.18)}
-button.go{width:100%;margin-top:22px;padding:15px;border:none;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.35);transition:.15s}
+button.go{width:100%;margin-top:20px;padding:15px;border:none;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.35);transition:.15s}
 button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(42,193,188,.45)}
-.result{display:none;margin-top:22px;background:linear-gradient(180deg,#EAFAF8,#F0FAF8);border:1.5px solid #BFE9E6;border-radius:16px;padding:22px}
+.result{display:none;margin-top:22px}
 .result.show{display:block}
-.result .big{font-size:1.55rem;font-weight:600;color:var(--teal);letter-spacing:-.02em}
-.result table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
-.result td,.result th{padding:8px 4px;border-bottom:1px solid #CBEBE8;text-align:right}
-.result td:first-child,.result th:first-child{text-align:left;color:var(--sub)}
-.note{font-size:.82rem;color:var(--sub);margin-top:14px;font-weight:300}
-article.post{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:36px 32px}
-article.post h1{font-size:1.5rem;font-weight:500;margin-bottom:6px;letter-spacing:-.025em}
-article.post .meta{font-size:.84rem;color:var(--sub);margin-bottom:24px;font-weight:300}
-article.post h2{font-size:1.13rem;font-weight:500;margin:30px 0 10px;color:var(--forest);padding-left:14px;position:relative}
-article.post h2::before{content:"";position:absolute;left:0;top:.4em;width:5px;height:5px;border-radius:50%;background:var(--mint);box-shadow:0 0 7px var(--glow)}
-article.post p{margin-bottom:14px;font-size:.95rem}
-article.post table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:.88rem}
-article.post th{background:var(--forest);color:#DFF5F3;padding:10px 8px;font-weight:500}
-article.post td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center}
-article.post ul{margin:0 0 14px 20px;font-size:.95rem}
-article.post li{margin-bottom:6px}
-.tip{background:#EAFAF8;border:1px solid #BFE9E6;border-radius:12px;padding:14px 16px;font-size:.9rem;margin:14px 0}
+.scorecard{background:linear-gradient(180deg,#EAFAF8,#F4FBFA);border:1.5px solid #BFE9E6;border-radius:16px;padding:22px}
+.score-num{font-size:2.4rem;font-weight:700;letter-spacing:-.02em;line-height:1}
+.score-grade{font-size:1.05rem;font-weight:600;margin-top:4px}
+.gauge{height:10px;border-radius:6px;background:#E2F1EF;overflow:hidden;margin:14px 0 6px}
+.gauge>i{display:block;height:100%;border-radius:6px;transition:width .6s ease}
+.block{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+.block h4{font-size:.95rem;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.block table{width:100%;border-collapse:collapse;font-size:.88rem}
+.block td{padding:6px 2px;border-bottom:1px solid #EEF6F5;text-align:right}
+.block td:first-child{text-align:left;color:var(--sub)}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.8rem;font-weight:700}
+.b-ok{background:#E7F8EF;color:#0E8F5B}.b-cond{background:#FEF3E2;color:#B45309}.b-no{background:#FEECEC;color:#C0342E}
+.flag{border-radius:10px;padding:11px 13px;margin-top:8px;font-size:.86rem;line-height:1.6}
+.f-high{background:#FEF2F2;border:1px solid #FECACA}.f-mid{background:#FFF7ED;border:1px solid #FDE6C8}.f-info{background:#EEF7FF;border:1px solid #CFE4FB}
+.note{font-size:.8rem;color:var(--sub);margin-top:14px;font-weight:300}
+.aiBtn{width:100%;margin-top:14px;padding:13px;border:1.5px solid var(--mint);border-radius:12px;background:#fff;color:var(--teal);font-weight:600;font-size:.95rem;cursor:pointer;font-family:inherit}
+.aiBtn:hover{background:#E5F8F6}
+.aiOut{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:12px;font-size:.9rem;line-height:1.75;white-space:pre-wrap;display:none}
+.aiOut.show{display:block}
 .rel{margin-top:28px}
-.ad-slot{display:none}
-footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
-footer a{color:#B9DCD9;margin:0 8px}
-.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
-.crumb a{color:var(--teal)}
+footer{background:var(--forest);color:#9FC7C3;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
+footer a{color:#CFEEEB;margin:0 8px}
+.faq{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 18px}
+.faq summary{cursor:pointer;font-weight:500;font-size:.95rem;padding:15px 0;list-style:none;position:relative}
+.faq summary::after{content:"+";position:absolute;right:2px;color:var(--teal);font-size:1.1rem}
+.faq[open] summary::after{content:"−"}
+.faq p{font-size:.88rem;color:var(--sub);padding:0 0 15px;line-height:1.7}
 @media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css">
@@ -84,138 +90,287 @@ footer a{color:#B9DCD9;margin:0 8px}
 <header class="top"><div class="wrap">
 <a class="logo" href="/"><span class="ring"></span>훤AI</a>
 <nav class="gnb">
+<a href="/deunggibu.html">등기부 보는 법</a>
+<a href="/jeonse-fraud.html">전세사기 유형</a>
 <a href="/loan-calculator.html">대출·DSR</a>
-<a href="/acquisition-tax.html">취득세</a>
-<a href="/brokerage-fee.html">중개보수</a>
-<a href="/jeonse-monthly.html">전월세 전환</a>
-<a href="/youth-housing.html">청년 지원</a>
-<a href="/rental-board.html">임대주택</a>
 <a href="/experts.html">전문가 찾기</a>
 <a href="/#guide">가이드</a>
 </nav>
 </div></header>
 
 <main><div class="wrap">
-
-<div class="crumb"><a href="/">홈</a> › 등기부등본 전세사기 체크</div>
+<div class="crumb"><a href="/">홈</a> › 전세사기·깡통전세 정밀진단</div>
 <div class="tool-box">
-<h2>등기부등본 전세사기 체크</h2>
-<p style="font-size:.9rem;color:var(--sub);margin-bottom:4px">인터넷등기소에서 발급받은 등기부등본 PDF를 올리면 <b>신탁·압류·가압류·경매·임차권등기·근저당(채권최고액)</b>을 자동으로 찾아 위험도를 진단합니다.</p>
-<div style="background:#EAFAF8;border:1px solid #BFE9E6;border-radius:10px;padding:10px 14px;font-size:.83rem;margin-bottom:6px">🔒 파일은 <b>브라우저 안에서만</b> 분석되며 서버로 전송·저장되지 않습니다.</div>
-<label class="f">등기부등본 PDF</label>
+<h2>전세사기·깡통전세 정밀진단</h2>
+<p style="font-size:.9rem;color:var(--sub);margin:4px 0 6px">등기부등본 PDF를 올리면 <b>위험등기·전세가율</b>은 물론 <b>HUG·HF·SGI 전세보증보험 가입 가능성</b>, <b>대항력·배당순위</b>, <b>소액임차인 최우선변제</b>까지 정밀 진단하고, <b>부비 AI 종합의견</b>까지 드려요.</p>
+<div style="background:#EAFAF8;border:1px solid #BFE9E6;border-radius:10px;padding:10px 14px;font-size:.82rem;margin-bottom:6px">🔒 파일은 <b>브라우저 안에서만</b> 분석돼요. 서버로 전송·저장되지 않아요. (AI 종합의견 버튼을 누를 때만 익명 요약이 전송돼요)</div>
+
+<label class="f">① 등기부등본 PDF <span style="font-weight:400;color:var(--sub)">— 인터넷등기소(iros.go.kr) '열람'본, 말소사항 포함 권장</span></label>
 <input class="f" type="file" id="dgFile" accept="application/pdf" style="padding:10px">
-<div style="font-size:.8rem;color:var(--sub);margin-top:4px">텍스트 추출이 안 되는 스캔본이면, 등기부 내용을 아래에 붙여넣어도 됩니다.</div>
-<textarea class="f" id="dgText" rows="3" placeholder="(선택) 등기부등본 내용 붙여넣기" style="margin-top:8px;font-family:inherit;resize:vertical"></textarea>
+<textarea class="f" id="dgText" rows="2" placeholder="(스캔본이면) 등기부 내용을 여기에 붙여넣어도 돼요" style="margin-top:8px;resize:vertical"></textarea>
+
+<label class="f">② 주택 유형 <span style="font-weight:400;color:var(--sub)">— 보증보험 시세 산정 방식이 달라요</span></label>
+<div class="seg" id="dgType"><button data-v="apt" class="on">아파트·오피스텔</button><button data-v="villa">빌라·연립·다세대</button><button data-v="house">단독·다가구</button></div>
+
 <div class="row2">
-<div><label class="f">내 전세보증금 (만원)</label><input class="f" id="dgDeposit" type="number" placeholder="예: 30000 (3억)"></div>
-<div><label class="f">주택 매매 시세 (만원, 선택)</label><input class="f" id="dgPrice" type="number" placeholder="예: 40000 (4억)"></div>
+<div><label class="f">③ 내 전세보증금 (만원)</label><input class="f" id="dgDeposit" type="number" placeholder="예: 30000 (3억)" oninput="hintMan('dgDeposit','h1')"><div class="hint" id="h1"></div></div>
+<div><label class="f" id="lblVal">④ 매매 시세 (만원)</label><input class="f" id="dgPrice" type="number" placeholder="예: 40000 (4억)" oninput="hintMan('dgPrice','h2')"><div class="hint" id="h2"></div></div>
 </div>
-<button class="go" onclick="runCheck()">위험도 진단하기</button>
+<div id="gongsiWrap" style="display:none">
+<label class="f">④-2 공시가격 (만원) <span style="font-weight:400;color:var(--sub)">— 빌라·단독은 공시가격×140%로 보증보험 시세를 잡아요</span></label>
+<input class="f" id="dgGongsi" type="number" placeholder="예: 22000 (공시 2.2억)" oninput="hintMan('dgGongsi','h3')"><div class="hint" id="h3"></div>
+</div>
+
+<div class="row2">
+<div><label class="f">⑤ 지역 <span style="font-weight:400;color:var(--sub)">— 최우선변제 기준</span></label>
+<select class="f" id="dgRegion">
+<option value="seoul">서울특별시</option>
+<option value="over">과밀억제권역·세종·용인·화성·김포</option>
+<option value="metro">광역시·안산·광주·파주·이천·평택</option>
+<option value="etc">그 밖의 지역</option>
+</select></div>
+<div><label class="f">⑥ 내 전입신고(예정)일 <span style="font-weight:400;color:var(--sub)">— 대항력 판정용, 선택</span></label>
+<input class="f" id="dgMoveIn" type="date"></div>
+</div>
+
+<button class="go" onclick="runCheck()">🔍 정밀 진단 시작</button>
 <div class="result" id="dgRes"></div>
-<p class="note">본 진단은 키워드·금액 기반 자동 분석으로, 말소된 등기가 포함된 발급본에서는 이미 해소된 권리가 표시될 수 있습니다. "말소사항 포함" 여부를 확인하고, 계약 전 반드시 원문과 공인중개사·법률 전문가의 확인을 거치세요. 진단 결과는 참고용입니다.</p>
+<p class="note">키워드·금액·날짜 기반 자동 분석이라, 말소된 등기가 포함된 발급본에선 이미 해소된 권리가 잡힐 수 있어요. 보증보험 가심사는 공개 기준(HUG 부채비율 90%, 공시가×140% 등)을 적용한 <b>추정</b>이라 실제 심사와 다를 수 있어요. 계약 전 반드시 등기부 원문과 공인중개사·전문가 확인을 거치세요. 참고용입니다.</p>
 </div>
+
 <div class="rel"><h2 class="sec">함께 보면 좋은 콘텐츠</h2><div class="grid">
 <a class="card" href="/deunggibu.html"><div class="ic">📖</div><h3>등기부등본 보는 법</h3><p>표제부·갑구·을구 완벽 해설</p></a>
-<a class="card" href="/jeonse-fraud.html"><div class="ic">🚨</div><h3>전세사기 유형 7가지</h3><p>수법을 알면 피할 수 있습니다</p></a>
+<a class="card" href="/jeonse-fraud.html"><div class="ic">🚨</div><h3>전세사기 유형 7가지</h3><p>수법을 알면 피할 수 있어요</p></a>
 <a class="card" href="/jeonse-contract.html"><div class="ic">📋</div><h3>전세 계약 체크리스트</h3><p>계약 전 확인할 10가지</p></a>
+</div></div>
+
+<div class="faqsec"><h2 class="sec">자주 묻는 질문</h2>
+<details class="faq"><summary>내집스캔 같은 유료 리포트와 뭐가 달라요?</summary><p>훤AI 정밀진단은 <b>무료·즉시</b>이고, 파일이 브라우저 밖으로 나가지 않아 <b>개인정보가 더 안전</b>해요. 유료 서비스가 사람이 검수해 하루 걸려 주는 종합의견을, 훤AI는 <b>부비 AI가 그 자리에서</b> 만들어드려요. 다만 '집주인이 가진 다른 부동산 목록'처럼 소유자 실명 기반 데이터는 등기법·개인정보보호법상 합법적으로 조회가 어려워 제공하지 않아요 — 대신 지금 계약할 그 집의 등기부·시세·보증보험·대항력을 가장 정밀하게 분석해드려요.</p></details>
+<details class="faq"><summary>보증보험 가심사(HUG·HF·SGI)는 정확한가요?</summary><p>공개된 가입 기준(HUG 부채비율 90%, 주택가격=아파트 시세·빌라는 공시가×140%, 보증금 한도 수도권 7억·비수도권 5억 등)을 그대로 적용한 <b>추정</b>이에요. 실제 심사는 임대인 블랙리스트·서류 상태에 따라 달라질 수 있어 참고용이지만, "이 집이 보증보험이 되는 조건인지"를 계약 전에 가늠하는 데 유용해요.</p></details>
+<details class="faq"><summary>대항력·최우선변제가 뭔가요?</summary><p><b>대항력</b>은 전입신고+점유를 근저당 같은 담보권보다 <b>먼저</b> 갖추면 생기는 힘으로, 집이 경매로 넘어가도 낙찰자에게 보증금을 주장할 수 있어요. <b>최우선변제</b>는 보증금이 소액(지역별 기준 이하)이면 다른 채권보다 앞서 일정액을 먼저 돌려받는 제도예요. 이 진단은 전입일과 근저당 설정일을 비교해 대항력 유지 여부를, 보증금·지역으로 최우선변제 해당 여부를 알려드려요.</p></details>
+<details class="faq"><summary>깡통전세 위험은 어떻게 봐요?</summary><p>(선순위 근저당 채권최고액 + 내 보증금) ÷ 시세가 <b>80%를 넘으면</b> 경매 시 보증금 전액 회수가 어려운 깡통전세 위험 구간이에요. 60~80%도 안심 구간을 넘었으니 보증보험이 필수예요. 이 진단이 등기부의 채권최고액을 합산해 자동 계산해줘요.</p></details>
 </div></div>
 
 </div></main>
 <footer><div class="wrap">
 훤AI — 부동산이, 훤해요<br>
-계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>© 2026 영크루 · 
-<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a><br>
-<span style="font-size:.75rem;color:#5D8683">상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074 · 서울특별시 동작구 만양로 75 · tndud.brad@gmail.com</span>
+정밀진단 결과는 참고용이며, 계약 전 등기부 원문·전문가 확인이 필요해요.<br>© 2026 영크루 ·
+<a href="/about.html">소개</a>·<a href="/experts.html">전문가 찾기</a>·<a href="/privacy.html">개인정보처리방침</a>
 </div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';}
 function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+function won(man){return fmt(man*10000)+'원';}
+function readMan(man){man=Math.round(man);if(!man)return '';var eok=Math.floor(man/10000),rest=man%10000,s='';if(eok>0)s+=eok+'억';if(rest>0){var c=Math.floor(rest/1000),b=rest%1000;if(c>0)s+=c+'천';if(b>0)s+=b+'만';}if(!s)s=man+'만';return s+'원';}
+function hintMan(id,h){var v=+document.getElementById(id).value;document.getElementById(h).textContent=v?readMan(v):'';}
+document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});e.target.classList.add('on');if(seg.id==='dgType')onType();});});
+function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
+function onType(){var t=segVal('dgType');document.getElementById('gongsiWrap').style.display=(t==='apt')?'none':'block';document.getElementById('lblVal').innerHTML=(t==='apt')?'④ 매매 시세 (만원)':'④ 매매 시세 (만원, 선택)';}
+
+// 소액임차인 최우선변제 (2026 현행)
+var SMALL={seoul:[16500,5500],over:[14500,4800],metro:[8500,2800],etc:[7500,2500]};
+var REGIONLABEL={seoul:'서울',over:'과밀억제권역 등',metro:'광역시 등',etc:'그 밖'};
+
 async function extractPdf(file){
   var buf=await file.arrayBuffer();
   var pdf=await pdfjsLib.getDocument({data:buf}).promise;
   var text='';
-  for(var p=1;p<=pdf.numPages;p++){
-    var pg=await pdf.getPage(p);
-    var tc=await pg.getTextContent();
-    text+=tc.items.map(function(it){return it.str;}).join(' ')+'\n';
-  }
+  for(var p=1;p<=pdf.numPages;p++){var pg=await pdf.getPage(p);var tc=await pg.getTextContent();text+=tc.items.map(function(it){return it.str;}).join(' ')+'\n';}
   return text;
 }
-function analyze(text, deposit, price){
-  var t=text.replace(/\s+/g,' ');
-  var issues=[], infos=[];
-  function has(re){return re.test(t);}
-  // 고위험 키워드
-  if(has(/신\s*탁/)) issues.push(['🏦 신탁 등기','high','소유자가 신탁회사일 가능성이 큽니다. 위탁자(집주인)와의 계약은 무효가 될 수 있어요. 신탁원부를 발급받아 임대 권한과 신탁사·우선수익자 동의를 반드시 확인하세요.']);
-  if(has(/경매개시결정|임의경매|강제경매/)) issues.push(['⚖️ 경매 관련 등기','high','경매 절차 이력이 있습니다. 현재 유효한 등기인지 원문에서 확인하고, 유효하다면 계약하지 마세요.']);
-  if(has(/압\s*류/)&&!has(/가압류/)) issues.push(['🚨 압류','high','국세·지방세 체납 등으로 인한 압류 기록이 있습니다. 체납 세금은 보증금보다 먼저 배당됩니다.']);
-  if(has(/가압류/)) issues.push(['🚨 가압류','high','채권자가 재산을 묶어둔 상태입니다. 말소되지 않았다면 소유자의 재정 상태가 위험하다는 신호예요.']);
-  if(has(/가처분/)) issues.push(['⚠️ 가처분','high','소유권 분쟁 가능성이 있습니다. 말소 여부와 사유를 확인하세요.']);
-  if(has(/임차권등기/)) issues.push(['🏠 임차권등기명령','high','이전 세입자가 보증금을 돌려받지 못해 등기한 이력입니다. 같은 일이 반복될 위험이 높습니다.']);
-  if(has(/전세권설정/)) infos.push(['📌 전세권 설정','선순위 전세권이 있으면 내 보증금 순위가 밀립니다. 설정 금액과 말소 여부를 확인하세요.']);
-  // 근저당 채권최고액 합산
-  var sum=0, cnt=0, m, re=/채권최고액\s*금?\s*([0-9,]+)\s*원/g;
-  while((m=re.exec(t))!==null){ sum+=parseInt(m[1].replace(/,/g,'')); cnt++; }
-  return {issues:issues, infos:infos, mortSum:sum, mortCnt:cnt};
+function parseDates(str){ // "2021년 3월 15일" or "2021.03.15"
+  var out=[],m;
+  var re1=/(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일/g;
+  while((m=re1.exec(str))!==null){out.push(new Date(+m[1],+m[2]-1,+m[3]));}
+  var re2=/(20\d{2})[.\-](\d{1,2})[.\-](\d{1,2})/g;
+  while((m=re2.exec(str))!==null){out.push(new Date(+m[1],+m[2]-1,+m[3]));}
+  return out;
 }
-function render(r, deposit, price){
-  var depositWon=deposit*10000, priceWon=price?price*10000:0;
-  var riskScore=0;
-  r.issues.forEach(function(){riskScore+=3;});
-  var h='';
-  // 근저당 + 깡통 계산
-  var burden=r.mortSum+depositWon;
-  var ratioTxt='';
-  if(priceWon>0){
-    var ratio=burden/priceWon*100;
-    if(ratio>80)riskScore+=3; else if(ratio>60)riskScore+=1;
-    ratioTxt='<table><tr><td>근저당 채권최고액 합계 ('+r.mortCnt+'건)</td><td>'+fmt(r.mortSum)+'원</td></tr>'
-    +'<tr><td>+ 내 보증금</td><td>'+fmt(depositWon)+'원</td></tr>'
-    +'<tr><td>= 총 선순위 부담 / 시세</td><td><b>'+ratio.toFixed(1)+'%</b></td></tr></table>'
-    +'<div style="font-size:.85rem;margin-top:6px">'+(ratio>80?'🔴 80% 초과 — 집이 경매로 넘어가면 보증금 전액 회수가 어려울 수 있는 <b>깡통전세 위험</b> 구간입니다.':ratio>60?'🟡 60~80% — 안심 구간을 넘었습니다. 보증금 반환보증 가입이 꼭 필요합니다.':'🟢 60% 이하 — 부담 비율은 비교적 안전한 구간입니다.')+'</div>';
-  } else if(r.mortCnt>0){
-    riskScore+=1;
-    ratioTxt='<table><tr><td>근저당 채권최고액 합계 ('+r.mortCnt+'건)</td><td>'+fmt(r.mortSum)+'원</td></tr></table><div style="font-size:.85rem;margin-top:6px">시세를 입력하면 깡통전세 위험 비율까지 계산해드립니다.</div>';
-  } else {
-    ratioTxt='<div style="font-size:.85rem">근저당(채권최고액) 기록이 발견되지 않았습니다.</div>';
+function analyze(text){
+  var t=text.replace(/\s+/g,' ');
+  var flags=[], own={};
+  function has(re){return re.test(t);}
+  if(has(/신\s*탁/)) flags.push(['high','🏦 신탁 등기','소유자가 신탁회사일 수 있어요. 위탁자(집주인)와 그냥 계약하면 무효가 될 수 있으니, 신탁원부로 임대 권한과 신탁사·우선수익자 동의를 반드시 확인하세요.']);
+  if(has(/경매개시결정|임의경매|강제경매/)) flags.push(['high','⚖️ 경매개시 등기','경매 절차 이력이 있어요. 현재 유효하면 계약하지 마세요.']);
+  if(has(/(^|[^가])압\s*류/)&&!has(/가압류/)) flags.push(['high','🚨 압류','세금 체납 등으로 인한 압류예요. 체납 세금은 보증금보다 먼저 배당돼 매우 위험해요.']);
+  if(has(/가압류/)) flags.push(['high','🚨 가압류','채권자가 재산을 묶어둔 상태예요. 소유자 재정이 위험하다는 신호예요.']);
+  if(has(/가처분/)) flags.push(['high','⚠️ 가처분','소유권 분쟁 가능성이 있어요. 말소 여부와 사유를 확인하세요.']);
+  if(has(/임차권등기/)) flags.push(['high','🏠 임차권등기명령','앞 세입자가 보증금을 못 받아 등기한 이력이에요. 같은 일이 반복될 위험이 커요.']);
+  if(has(/가등기/)) flags.push(['mid','📌 가등기','소유권이전청구권 가등기면 나중에 소유자가 바뀔 수 있어요. 담보가등기면 근저당처럼 선순위가 돼요.']);
+  if(has(/전세권설정/)) flags.push(['mid','📌 선순위 전세권','전세권이 앞서 있으면 내 순위가 밀려요. 금액과 말소 여부를 확인하세요.']);
+  if(has(/지상권/)) flags.push(['info','🌳 지상권','토지 이용 관련 권리가 설정돼 있어요. 통상 전세보증금과 직접 관련은 적지만 확인해두세요.']);
+  // 소유자/공동소유/신탁
+  own.joint = /공\s*유\s*자|지분\s*\d+\s*분\s*의\s*\d+|각\s*지분/.test(t);
+  own.trust = /신\s*탁/.test(t);
+  // 최근 소유권이전 (단타 위험)
+  var ownSeg=t.match(/소유권이전[\s\S]{0,40}/g);
+  // 근저당 채권최고액 합
+  var sum=0,cnt=0,m,re=/채권최고액\s*금?\s*([0-9,]+)\s*원/g;
+  while((m=re.exec(t))!==null){sum+=parseInt(m[1].replace(/,/g,''));cnt++;}
+  // 말소기준권리(담보물권) 최선순위일: 근저당권설정/압류/가압류/담보가등기/경매개시 인접 날짜 중 최소
+  var seniorDate=null;
+  var kw=/(근저당권설정|압류|가압류|담보가등기|경매개시결정)/g, km;
+  while((km=kw.exec(t))!==null){
+    var ds=parseDates(t.slice(km.index, km.index+30));
+    if(ds.length){ var d=ds[0]; if(d && d.getFullYear()>=1990 && d<=new Date() && (!seniorDate||d<seniorDate)) seniorDate=d; }
   }
-  var grade,color;
-  if(riskScore>=6){grade='🔴 위험 — 계약 비추천';color='#B91C1C';}
-  else if(riskScore>=3){grade='🟠 주의 — 확인 후 결정';color='#B45309';}
-  else if(riskScore>=1){grade='🟡 보통 — 보증보험 필수';color='#A16207';}
-  else {grade='🟢 특이사항 없음';color='#0E8F8A';}
-  h+='<div>자동 분석 결과</div><div class="big" style="color:'+color+'">'+grade+'</div>';
-  h+='<div style="margin-top:14px;font-weight:600;font-size:.9rem">근저당·보증금 부담 분석</div><div style="background:#fff;border-radius:10px;padding:12px;margin-top:7px">'+ratioTxt+'</div>';
-  if(r.issues.length){
-    h+='<div style="margin-top:14px;font-weight:600;font-size:.9rem">발견된 위험 신호 '+r.issues.length+'건</div>';
-    r.issues.forEach(function(it){h+='<div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:11px 13px;margin-top:7px;font-size:.86rem"><b>'+it[0]+'</b><br>'+it[2]+'</div>';});
-  } else {
-    h+='<div style="margin-top:14px;font-size:.88rem">🔍 신탁·압류·가압류·경매·임차권등기 키워드는 발견되지 않았습니다.</div>';
+  return {flags:flags, mortSum:sum, mortCnt:cnt, seniorDate:seniorDate, own:own, hasMalso:/말소사항\s*포함/.test(t)||/주말/.test(t)};
+}
+function hugAssess(type, priceMan, gongsiMan, seniorMan, depositMan, region){
+  // 주택가격
+  var hp=0, basis='';
+  if(type==='apt'){ if(priceMan>0){hp=priceMan;basis='시세';} }
+  else { if(gongsiMan>0){hp=Math.round(gongsiMan*1.4);basis='공시가격×140%';} else if(priceMan>0){hp=priceMan;basis='시세(공시가 대체·추정)';} }
+  if(!hp) return {ok:null, msg:'시세'+(type!=='apt'?'/공시가격':'')+'를 입력하면 보증보험 가입 가능성을 계산해드려요.'};
+  var cap = region==='seoul'||region==='over' ? 70000 : 50000; // 수도권 7억 / 그 외 5억 (근사)
+  var limit = Math.round(hp*0.9) - seniorMan; // 보증한도
+  var pass = (seniorMan+depositMan) <= hp*0.9;
+  var overCap = depositMan>cap;
+  var grade, cls;
+  if(overCap){grade='한도초과';cls='b-no';}
+  else if(pass){grade='가능';cls='b-ok';}
+  else {grade='불가';cls='b-no';}
+  return {ok:pass&&!overCap, grade:grade, cls:cls, hp:hp, basis:basis, limit:limit, pass:pass, cap:cap, overCap:overCap, ratio:(seniorMan+depositMan)/hp*100};
+}
+function render(a, inp){
+  var deposit=inp.deposit, price=inp.price, gongsi=inp.gongsi, type=inp.type, region=inp.region;
+  var senior=a.mortSum/10000; // 만원
+  var score=100, reasons=[];
+  var html='';
+
+  // 1) 전세가율/부채비율
+  var siseMan = price>0?price:(gongsi>0?Math.round(gongsi*1.4):0);
+  var burden=senior+deposit, ratio=siseMan>0?burden/siseMan*100:0;
+  if(siseMan>0){
+    if(ratio>=90){score-=35;reasons.push('부채비율 90%+');}
+    else if(ratio>=80){score-=25;reasons.push('부채비율 80%+');}
+    else if(ratio>=70){score-=12;}
+    else if(ratio>=60){score-=5;}
   }
-  r.infos.forEach(function(it){h+='<div style="background:#FFF7ED;border:1px solid #FDE6C8;border-radius:10px;padding:11px 13px;margin-top:7px;font-size:.86rem"><b>'+it[0]+'</b><br>'+it[1]+'</div>';});
-  h+='<div style="margin-top:16px;font-weight:600;font-size:.9rem">다음 단계</div><div style="background:#fff;border-radius:10px;padding:12px;margin-top:7px;font-size:.86rem">① 위 항목이 <b>말소되지 않고 유효한지</b> 등기부 원문에서 확인 → ② <b>전세보증금 반환보증</b>(HUG·HF·SGI) 가입 가능 여부 확인 → ③ 잔금 직전 등기부 재발급으로 새 등기 여부 확인 → ④ 전입신고+확정일자 당일 처리. 자세한 방법은 <a href="/jeonse-contract.html" style="color:var(--teal);font-weight:600">전세 계약 체크리스트</a> 참고.</div>';
-  var el=document.getElementById('dgRes');el.innerHTML=h;el.classList.add('show');
-  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  // 2) 위험등기
+  a.flags.forEach(function(f){ if(f[0]==='high')score-=18; else if(f[0]==='mid')score-=8; });
+  // 3) 대항력
+  var daehang=null;
+  if(inp.moveIn){
+    var mv=new Date(inp.moveIn); mv.setDate(mv.getDate()+1); // 익일 0시
+    if(a.seniorDate){ daehang = mv < a.seniorDate; if(!daehang)score-=20; }
+    else { daehang = true; }
+  }
+  // 4) 최우선변제
+  var sm=SMALL[region], smallEligible = deposit<=sm[0];
+  // 소유자
+  if(a.own.trust)score-=10;
+  if(score<0)score=0; if(score>100)score=100;
+  var grade,color,gtxt;
+  if(score>=80){grade='안전';color='#0E8F5B';gtxt='🟢';}
+  else if(score>=60){grade='대체로 양호 · 보증보험 권장';color='#0E8F8A';gtxt='🟢';}
+  else if(score>=40){grade='주의 · 조건 확인 필수';color='#B45309';gtxt='🟠';}
+  else if(score>=20){grade='위험 · 신중히';color='#C0342E';gtxt='🔴';}
+  else {grade='매우 위험 · 계약 비추천';color='#B91C1C';gtxt='🔴';}
+
+  // 스코어카드
+  html+='<div class="scorecard"><div style="font-size:.85rem;color:var(--sub)">계약 안전도 점수</div>'
+   +'<div class="score-num" style="color:'+color+'">'+score+'<span style="font-size:1.1rem">점</span></div>'
+   +'<div class="score-grade" style="color:'+color+'">'+gtxt+' '+grade+'</div>'
+   +'<div class="gauge"><i style="width:'+score+'%;background:linear-gradient(90deg,'+(score>=60?'#33CCC7,#0E8F5B':score>=40?'#F5B24A,#B45309':'#F87171,#B91C1C')+')"></i></div>'
+   +(reasons.length?'<div style="font-size:.8rem;color:var(--sub)">감점 요인: '+reasons.join(', ')+'</div>':'');
+
+  // 전세가율 블록
+  html+='<div class="block"><h4>💧 깡통전세 위험 (부채비율)</h4>';
+  if(siseMan>0){
+    html+='<table><tr><td>선순위 근저당 채권최고액 ('+a.mortCnt+'건)</td><td>'+won(senior)+'</td></tr>'
+     +'<tr><td>+ 내 보증금</td><td>'+won(deposit)+'</td></tr>'
+     +'<tr><td>= 총 부담 ÷ 시세'+(price>0?'':' (공시가×140%)')+'</td><td><b>'+ratio.toFixed(1)+'%</b></td></tr></table>'
+     +'<div class="flag '+(ratio>=80?'f-high':ratio>=60?'f-mid':'f-info')+'">'+(ratio>=80?'🔴 <b>80% 초과 — 깡통전세 위험.</b> 경매 시 보증금 전액 회수가 어려울 수 있어요. 보증보험 없이는 계약하지 마세요.':ratio>=60?'🟡 60~80% — 안심 구간을 넘었어요. 보증금 반환보증 가입이 필수예요.':'🟢 60% 이하 — 부담 비율은 비교적 안전한 구간이에요.')+'</div>';
+  } else { html+='<div style="font-size:.86rem;color:var(--sub)">시세'+(type!=='apt'?'/공시가격':'')+'를 입력하면 전세가율(부채비율)을 계산해드려요.</div>'; }
+  html+='</div>';
+
+  // 보증보험 가심사
+  var hug=hugAssess(type, price, gongsi, senior, deposit, region);
+  html+='<div class="block"><h4>🛡️ 전세보증보험 가입 가능성 (가심사)</h4>';
+  if(hug.ok===null){ html+='<div style="font-size:.86rem;color:var(--sub)">'+hug.msg+'</div>'; }
+  else {
+    var sgi = type==='apt' ? '가능(한도여유)' : (hug.pass?'조건부':'제한');
+    html+='<table><tr><td>보증보험 기준 주택가격 ('+hug.basis+')</td><td>'+won(hug.hp)+'</td></tr>'
+     +'<tr><td>부채비율 (선순위+보증금)/주택가격</td><td><b>'+hug.ratio.toFixed(1)+'%</b> (기준 90%↓)</td></tr>'
+     +'<tr><td>HUG 보증한도 (주택가격×90%−선순위)</td><td>'+won(hug.limit)+'</td></tr></table>'
+     +'<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">'
+     +'<span>HUG <span class="badge '+hug.cls+'">'+hug.grade+'</span></span>'
+     +'<span>HF <span class="badge '+(hug.pass?'b-cond':'b-no')+'">'+(hug.pass?'조건부(전세대출자)':'제한')+'</span></span>'
+     +'<span>SGI <span class="badge '+(type==='apt'?'b-ok':'b-cond')+'">'+(type==='apt'?'가능(한도여유)':'조건부')+'</span></span></div>'
+     +'<div class="flag '+(hug.ok?'f-info':'f-high')+'" style="margin-top:10px">'+(hug.overCap?'⚠️ 보증금이 지역 한도('+won(hug.cap)+')를 넘어 HUG 가입이 어려워요. SGI(아파트는 한도 여유)를 알아보세요.':hug.ok?'✅ 공개 기준상 <b>HUG 보증보험 가입 조건에 부합</b>해요. 잔금+전입+확정일자 후 계약기간 1/2 경과 전에 신청하세요. (임대인 블랙리스트면 거절될 수 있어요)':'⚠️ 부채비율이 90%를 넘거나 한도가 부족해 <b>HUG 가입이 어려운 조건</b>이에요. 선순위 근저당 말소를 특약으로 걸거나 보증금을 낮추는 협상이 필요해요.')+'</div>';
+  }
+  html+='</div>';
+
+  // 대항력·배당
+  html+='<div class="block"><h4>⚖️ 대항력 · 배당순위</h4>';
+  if(inp.moveIn && a.seniorDate){
+    var ds=a.seniorDate.toISOString().slice(0,10);
+    html+='<table><tr><td>등기부상 최선순위 담보권 설정일(추정)</td><td>'+ds+'</td></tr><tr><td>내 대항력 발생일(전입 익일)</td><td>'+new Date(new Date(inp.moveIn).getTime()+86400000).toISOString().slice(0,10)+'</td></tr></table>'
+     +'<div class="flag '+(daehang?'f-info':'f-high')+'">'+(daehang?'🟢 전입이 담보권보다 <b>앞서 대항력 유지</b> — 경매로 넘어가도 낙찰자에게 보증금을 주장할 수 있어요. (확정일자도 당일 받으세요)':'🔴 담보권이 전입보다 <b>앞서 후순위</b> — 경매 시 근저당이 먼저 배당돼 보증금을 다 못 받을 수 있어요. 매우 주의하세요.')+'</div>';
+  } else if(inp.moveIn && !a.seniorDate){
+    html+='<div class="flag f-info">🟢 등기부에서 선순위 담보권(근저당 등) 설정일이 발견되지 않았어요. 전입신고+확정일자를 <b>잔금일 당일</b> 처리하면 대항력·우선변제권을 확보해요.</div>';
+  } else {
+    html+='<div style="font-size:.86rem;color:var(--sub)">전입신고(예정)일을 입력하면, 등기부의 근저당 설정일과 비교해 대항력 유지 여부를 판정해드려요.</div>';
+  }
+  html+='</div>';
+
+  // 최우선변제
+  html+='<div class="block"><h4>🪙 소액임차인 최우선변제</h4>'
+   +'<div style="font-size:.86rem">'+(smallEligible?'🟢 <b>해당돼요.</b> '+REGIONLABEL[region]+' 기준 보증금 '+won(sm[0])+' 이하라, 경매 시 다른 채권보다 앞서 <b>최대 '+won(sm[1])+'</b>까지 먼저 돌려받을 수 있어요(주택가액 1/2 한도).':'⚪ 보증금이 '+REGIONLABEL[region]+' 소액임차인 기준('+won(sm[0])+')을 넘어 최우선변제 대상은 아니에요. 그래서 <b>대항력+확정일자+보증보험</b>이 더 중요해요.')+'</div></div>';
+
+  // 위험등기
+  html+='<div class="block"><h4>🔎 위험 등기 '+(a.flags.length?a.flags.length+'건':'없음')+'</h4>';
+  if(a.flags.length){ a.flags.forEach(function(f){html+='<div class="flag '+(f[0]==='high'?'f-high':f[0]==='mid'?'f-mid':'f-info')+'"><b>'+f[1]+'</b><br>'+f[2]+'</div>';}); }
+  else { html+='<div style="font-size:.86rem;color:var(--sub)">신탁·압류·가압류·가처분·경매·임차권등기·가등기 키워드가 발견되지 않았어요. (말소사항 포함본으로 재확인 권장)</div>'; }
+  if(a.own.joint) html+='<div class="flag f-mid" style="margin-top:8px"><b>👥 공동소유</b><br>소유자가 여러 명이에요. 반드시 <b>소유자 전원</b>과 계약해야 보증보험·효력에 문제가 없어요.</div>';
+  if(a.own.trust) html+='<div class="flag f-high" style="margin-top:8px"><b>🏦 신탁 소유</b><br>등기상 소유자가 신탁사일 수 있어요. 위탁자와의 계약은 무효 위험 — 신탁원부·수익자 동의를 확인하세요.</div>';
+  html+='</div>';
+
+  // 다음 단계
+  html+='<div class="block"><h4>✅ 지금 해야 할 것</h4><div style="font-size:.87rem;line-height:1.9">'
+   +'① 위 위험등기가 <b>말소되지 않고 유효한지</b> 등기부 원문에서 확인<br>'
+   +'② <b>잔금일 당일</b> 전입신고+확정일자 처리 (대항력·우선변제권 확보)<br>'
+   +'③ '+(hug.ok?'HUG 보증보험 신청 (계약기간 1/2 경과 전)':'보증보험 가능 조건으로 협상 — 선순위 근저당 말소 특약')+'<br>'
+   +'④ 잔금 직전 등기부 재발급으로 <b>새 근저당·압류</b> 여부 재확인<br>'
+   +'⑤ 애매하면 <a href="/experts.html" style="color:var(--teal);font-weight:600">전문가 확인</a></div></div>';
+
+  // AI 종합의견
+  html+='<button class="aiBtn" onclick="aiOpinion()">💬 부비 AI 종합의견 받기 (무료·즉시)</button><div class="aiOut" id="aiOut"></div>';
+
+  // 요약 저장 (AI용, 익명)
+  window.__diagSummary='전세 계약 안전도 진단 요약:\n- 안전도 점수 '+score+'점('+grade+')\n- 주택유형 '+({apt:'아파트/오피스텔',villa:'빌라/연립다세대',house:'단독/다가구'}[type])+', 지역 '+REGIONLABEL[region]+'\n- 보증금 '+won(deposit)+', 시세 '+(siseMan?won(siseMan):'미입력')+', 선순위 근저당 채권최고액 '+won(senior)+'('+a.mortCnt+'건)\n- 부채비율(전세가율) '+(siseMan?ratio.toFixed(1)+'%':'미산정')+'\n- 위험등기: '+(a.flags.length?a.flags.map(function(f){return f[1];}).join(', '):'없음')+(a.own.joint?', 공동소유':'')+(a.own.trust?', 신탁소유':'')+'\n- HUG 가심사: '+(hug.ok===null?'미산정':hug.grade+'(부채비율 '+hug.ratio.toFixed(1)+'%)')+'\n- 대항력: '+(daehang===null?'전입일 미입력':daehang?'유지(안전)':'후순위(위험)')+'\n- 소액임차인 최우선변제: '+(smallEligible?'해당(최대 '+won(sm[1])+')':'비해당');
+
+  var el=document.getElementById('dgRes');el.innerHTML=html;el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function aiOpinion(){
+  var out=document.getElementById('aiOut');out.classList.add('show');out.textContent='부비가 종합의견을 작성 중이에요...';
+  var prompt='[전세안전진단] 아래는 훤AI 전세사기 정밀진단 결과야. 세입자에게 권리조사 전문가처럼 따뜻하지만 정확하게, 이 집을 계약해도 될지 종합의견을 6~8문장으로 말해줘. 가장 중요한 위험/체크포인트부터 짚고, 보증보험·전입/확정일자·특약 조언으로 마무리해. 투자권유 금지, 단정적 안전보장 금지.\n\n'+(window.__diagSummary||'');
+  fetch('https://hwon-boobi.tndud-brad.workers.dev/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:prompt}]})})
+   .then(function(r){return r.json();})
+   .then(function(d){ out.textContent=d.reply||'지금은 종합의견을 못 받았어요. 잠시 후 다시 눌러주세요.'; })
+   .catch(function(){ out.textContent='지금은 종합의견을 못 받았어요. 잠시 후 다시 눌러주세요.'; });
 }
 async function runCheck(){
   var deposit=+document.getElementById('dgDeposit').value;
-  var price=+document.getElementById('dgPrice').value||0;
   if(!deposit){alert('전세보증금을 입력해주세요');return;}
   var file=document.getElementById('dgFile').files[0];
   var pasted=document.getElementById('dgText').value.trim();
   var text='';
-  try{
-    if(file){ text=await extractPdf(file); }
-    if(pasted) text+='\n'+pasted;
-  }catch(e){ alert('PDF를 읽지 못했습니다. 스캔본이면 텍스트 붙여넣기를 이용해주세요.'); return; }
-  if(!text.trim()){alert('PDF를 올리거나 등기부 내용을 붙여넣어주세요');return;}
-  if(text.replace(/\s/g,'').length<100){alert('추출된 텍스트가 너무 짧습니다. 스캔본(이미지) PDF일 수 있어요 — 내용을 직접 붙여넣어주세요.');return;}
-  render(analyze(text,deposit,price), deposit, price);
+  try{ if(file){text=await extractPdf(file);} if(pasted)text+='\n'+pasted; }
+  catch(e){ alert('PDF를 읽지 못했어요. 스캔본이면 텍스트를 붙여넣어주세요.'); return; }
+  if(!text.trim()){alert('등기부 PDF를 올리거나 내용을 붙여넣어주세요');return;}
+  if(text.replace(/\s/g,'').length<80){alert('추출된 텍스트가 너무 짧아요. 스캔본(이미지)일 수 있으니 내용을 붙여넣어주세요.');return;}
+  var inp={deposit:deposit, price:+document.getElementById('dgPrice').value||0, gongsi:+document.getElementById('dgGongsi').value||0, type:segVal('dgType'), region:document.getElementById('dgRegion').value, moveIn:document.getElementById('dgMoveIn').value||''};
+  render(analyze(text), inp);
 }
+onType();
 </script>
-
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"전세사기·깡통전세 정밀진단","url":"https://yeongcrew.co.kr/jeonse-safety-check.html","description":"등기부등본 기반 위험등기·전세가율·HUG/HF/SGI 보증보험 가심사·대항력·최우선변제 무료 진단, 부비 AI 종합의견","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"훤AI","url":"https://yeongcrew.co.kr"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"유료 전세 리포트와 뭐가 다른가요?","acceptedAnswer":{"@type":"Answer","text":"훤AI 정밀진단은 무료·즉시이고 파일이 브라우저 밖으로 나가지 않아 개인정보가 안전합니다. 유료 서비스가 사람이 검수해 주는 종합의견을 부비 AI가 그 자리에서 만들어줍니다. 소유자 실명 기반 다른 부동산 목록은 등기법·개인정보보호법상 조회가 어려워 제공하지 않고, 대신 그 집의 등기부·시세·보증보험·대항력을 정밀 분석합니다."}},{"@type":"Question","name":"보증보험 가심사는 정확한가요?","acceptedAnswer":{"@type":"Answer","text":"HUG 부채비율 90%, 주택가격은 아파트는 시세·빌라는 공시가격의 140%, 보증금 한도 수도권 7억·비수도권 5억 등 공개 기준을 적용한 추정입니다. 실제 심사는 임대인 상태에 따라 다를 수 있어 참고용입니다."}},{"@type":"Question","name":"깡통전세 위험은 어떻게 판단하나요?","acceptedAnswer":{"@type":"Answer","text":"(선순위 근저당 채권최고액 + 내 보증금)을 시세로 나눈 값이 80%를 넘으면 깡통전세 위험 구간입니다. 60~80%도 안심 구간을 넘어 보증보험이 필수입니다."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://yeongcrew.co.kr/"},{"@type":"ListItem","position":2,"name":"전세사기 정밀진단","item":"https://yeongcrew.co.kr/jeonse-safety-check.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 <script src="/hwon-ui.js" defer></script>
