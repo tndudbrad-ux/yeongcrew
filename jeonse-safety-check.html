@@ -115,6 +115,7 @@ footer a{color:#CFEEEB;margin:0 8px}
 <div class="hint" id="dgAddrHint" style="min-height:1em"></div>
 <div id="dgCandidates" style="margin-top:4px"></div>
 <div style="font-size:.76rem;color:var(--sub);margin-top:6px">아파트·빌라는 <b>동·호수까지</b> 넣으면 정확해요. 등기부는 자동으로 안전하게 조회돼요.</div>
+<div style="margin-top:8px;background:#FFF7ED;border:1px solid #FDE6C8;border-radius:10px;padding:8px 12px;font-size:.8rem;color:#B45309">🎉 <b>런칭 기념 — 로그인만 하면 무료!</b> <span style="color:#9A6B3F">정식 오픈 시 건당 <s>5,900원</s> → <b>회원 2,900원</b></span></div>
 </div>
 <div style="text-align:center;color:var(--sub);font-size:.8rem;margin:6px 0 2px">— 또는 —</div>
 
@@ -390,10 +391,23 @@ function searchAddr(){
 function fetchRegister(uniqueNo){
   var hint=document.getElementById('dgAddrHint');
   if(!document.getElementById('dgDeposit').value){alert('먼저 아래 ③ 전세보증금을 입력해주세요');return;}
+  // 등기부 열람(과금)은 회원(로그인) 전용 — 런칭 기념 무료
+  if(!window.hwonUser){
+    hint.style.color='#B45309';
+    hint.innerHTML='🔒 등기부 자동조회는 <b>로그인하면 무료</b>예요 (런칭 기념) &nbsp;';
+    var lb=document.createElement('button'); lb.type='button'; lb.textContent='구글로 로그인';
+    lb.style.cssText='margin-top:6px;padding:9px 16px;border:none;border-radius:10px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;cursor:pointer;font-family:inherit';
+    lb.onclick=function(){ if(window.hwonAuth){ hint.textContent='로그인 창을 여는 중...'; window.hwonAuth.signInGoogle().then(function(){ setTimeout(function(){ fetchRegister(uniqueNo); },1400); }).catch(function(){ hint.style.color='#C0342E'; hint.textContent='로그인이 취소됐어요.'; }); } };
+    hint.appendChild(document.createElement('br')); hint.appendChild(lb);
+    return;
+  }
   hint.style.color='var(--teal)'; hint.textContent='📄 등기부 열람 중... (몇 초 걸려요)';
-  fetch(DG_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({inquiryType:'0',uniqueNo:uniqueNo,issueType:'1',registerSummaryYN:'1'})})
+  window.hwonUser.getIdToken().then(function(tok){
+    return fetch(DG_API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},body:JSON.stringify({inquiryType:'0',uniqueNo:uniqueNo,issueType:'1',registerSummaryYN:'1'})});
+  })
    .then(function(r){return r.json();})
    .then(function(d){
+     if(d.error==='login_required'||d.error==='invalid_token'){hint.style.color='#B45309';hint.textContent='로그인이 만료됐어요. 다시 로그인해 주세요.';return;}
      if(!d.result||d.result.code!=='CF-00000'){hint.style.color='#C0342E';hint.textContent='열람 실패: '+(dgdec(d.result&&d.result.message)||'오류');return;}
      var text=flattenReg(d.data);
      if(text.replace(/\s/g,'').length<50){hint.style.color='#C0342E';hint.textContent='등기 내용을 읽지 못했어요. PDF 업로드를 이용해주세요.';return;}
