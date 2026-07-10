@@ -130,8 +130,9 @@ footer a{color:#CFEEEB;margin:0 8px}
 
 <div class="row2">
 <div><label class="f">③ 내 전세보증금 (만원)</label><input class="f" id="dgDeposit" type="number" placeholder="예: 30000 (3억)" oninput="hintMan('dgDeposit','h1')"><div class="hint" id="h1"></div></div>
-<div><label class="f" id="lblVal">④ 매매 시세 (만원)</label><input class="f" id="dgPrice" type="number" placeholder="예: 40000 (4억)" oninput="hintMan('dgPrice','h2')"><div class="hint" id="h2"></div></div>
+<div><label class="f" id="lblVal">④ 매매 시세 (만원) <span style="font-weight:400;color:var(--sub)">— 모르면 비워두세요</span></label><input class="f" id="dgPrice" type="number" placeholder="모르면 비워도 돼요" oninput="hintMan('dgPrice','h2')"><div class="hint" id="h2"></div></div>
 </div>
+<div style="font-size:.78rem;color:var(--sub);margin-top:6px;background:#F7FCFB;border:1px solid var(--line);border-radius:8px;padding:8px 11px">💡 <b>시세를 몰라도 진단돼요.</b> 위험등기·대항력·소액임차인 최우선변제는 시세 없이도 나와요. 시세를 넣으면 <b>깡통전세 전세가율·보증보험 가심사</b>까지 계산해줘요 — <a href="https://new.land.naver.com" target="_blank" rel="noopener" style="color:var(--teal)">네이버부동산</a>·KB시세에서 단지 검색으로 확인할 수 있어요.</div>
 <div id="gongsiWrap" style="display:none">
 <label class="f">④-2 공시가격 (만원) <span style="font-weight:400;color:var(--sub)">— 빌라·단독은 공시가격×140%로 보증보험 시세를 잡아요</span></label>
 <input class="f" id="dgGongsi" type="number" placeholder="예: 22000 (공시 2.2억)" oninput="hintMan('dgGongsi','h3')"><div class="hint" id="h3"></div>
@@ -442,7 +443,7 @@ function fetchRegister(uniqueNo){
     hint.appendChild(document.createElement('br')); hint.appendChild(lb);
     return;
   }
-  hint.style.color='var(--teal)'; hint.textContent='📄 등기부 열람 중... (몇 초 걸려요)';
+  hint.style.color='var(--teal)'; hint.textContent='📄 등기부 열람 중... 대법원에서 실시간 조회 중이라 최대 1분 걸릴 수 있어요 ⏳';
   window.hwonUser.getIdToken().then(function(tok){
     return fetch(DG_API,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},body:JSON.stringify({inquiryType:'0',uniqueNo:uniqueNo,issueType:'1',registerSummaryYN:'1'})});
   })
@@ -457,7 +458,7 @@ function fetchRegister(uniqueNo){
      hint.style.color='#0E8F5B'; hint.textContent='✅ 등기부 자동조회 완료 — 아래에 진단 결과를 표시했어요';
      render(analyze(text), readInputs());
    })
-   .catch(function(){hint.style.color='#C0342E';hint.textContent='열람 중 오류가 났어요. 잠시 후 다시 시도해주세요.';});
+   .catch(function(){hint.style.color='#C0342E';hint.innerHTML='열람이 지연됐어요 (대법원 서버가 느릴 때가 있어요). <b>내 집을 한 번 더 눌러</b> 다시 시도해주세요.';});
 }
 function flattenReg(data){
   var arr=Array.isArray(data)?data:[data]; var out=[];
