@@ -83,6 +83,29 @@ footer a{color:#CFEEEB;margin:0 8px}
 .faq[open] summary::after{content:"−"}
 .faq p{font-size:.88rem;color:var(--sub);padding:0 0 15px;line-height:1.7}
 @media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
+/* ── 단계별 마법사 ── */
+.wizBar{display:flex;gap:6px;margin-bottom:22px}
+.wizBar i{flex:1;height:5px;border-radius:3px;background:#E2F1EF;transition:.3s}
+.wizBar i.on{background:linear-gradient(90deg,#33CCC7,#20A6A2)}
+.wizStep[hidden]{display:none}
+.wizQ{font-size:1.35rem;font-weight:600;letter-spacing:-.025em;line-height:1.4;color:var(--forest)}
+.wizSub{font-size:.87rem;color:var(--sub);margin:6px 0 18px;line-height:1.55}
+.pillG{display:flex;flex-direction:column;gap:10px}
+.pillG button{width:100%;text-align:left;padding:17px 20px;border:1.5px solid var(--line);border-radius:14px;background:#fff;font-size:1rem;font-weight:500;color:var(--forest);cursor:pointer;font-family:inherit;transition:.14s}
+.pillG button:hover{border-color:#8FE9E4;background:#F7FCFB}
+.pillG button.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:700;box-shadow:0 0 0 3px rgba(42,193,188,.12)}
+.wizBig{font-size:1.2rem;padding:15px 16px;text-align:center;font-weight:600}
+.wizNav{display:flex;gap:10px;margin-top:24px}
+.wizNav button{flex:1;padding:15px;border-radius:13px;font-weight:600;font-size:1rem;cursor:pointer;font-family:inherit;border:none;transition:.15s}
+.wizPrev{flex:0 0 33%;background:#EEF6F5;color:var(--sub)}
+.wizPrev:hover{background:#E2F1EF}
+.wizNext{background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;box-shadow:0 6px 16px rgba(42,193,188,.3)}
+.wizNext:hover{transform:translateY(-1px)}
+.moreOpt{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:0 14px;background:#FBFEFE}
+.moreOpt summary{cursor:pointer;font-size:.88rem;font-weight:500;color:var(--teal);padding:13px 0;list-style:none}
+.moreOpt summary::-webkit-details-marker{display:none}
+.moreOpt[open] summary{border-bottom:1px solid var(--line);margin-bottom:8px}
+.moreOpt label.f:first-of-type{margin-top:4px}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css">
 </head>
@@ -102,57 +125,75 @@ footer a{color:#CFEEEB;margin:0 8px}
 <div class="crumb"><a href="/">홈</a> › 전세사기·깡통전세 정밀진단</div>
 <div class="tool-box">
 <h2>전세사기·깡통전세 정밀진단</h2>
-<p style="font-size:.9rem;color:var(--sub);margin:4px 0 6px">등기부등본 PDF를 올리면 <b>위험등기·전세가율</b>은 물론 <b>HUG·HF·SGI 전세보증보험 가입 가능성</b>, <b>대항력·배당순위</b>, <b>소액임차인 최우선변제</b>까지 정밀 진단하고, <b>부비 AI 종합의견</b>까지 드려요.</p>
-<div style="background:#EAFAF8;border:1px solid #BFE9E6;border-radius:10px;padding:10px 14px;font-size:.82rem;margin-bottom:6px">🔒 파일은 <b>브라우저 안에서만</b> 분석돼요. 서버로 전송·저장되지 않아요. (AI 종합의견 버튼을 누를 때만 익명 요약이 전송돼요)</div>
+<p style="font-size:.9rem;color:var(--sub);margin:4px 0 16px">주소만 넣으면 <b>등기부를 자동으로 불러와</b> 위험등기·전세가율·<b>보증보험 가심사</b>·대항력·최우선변제까지 진단해요. <b>부비 AI 종합의견</b>까지.</p>
 
-<label class="f">① 등기부 가져오기 <span style="font-weight:400;color:var(--sub)">— 주소로 자동조회하거나, PDF를 직접 올리세요</span></label>
-<div style="background:#F0FAF8;border:1.5px solid #BFE9E6;border-radius:14px;padding:15px 15px;margin-bottom:8px">
-<div style="font-weight:600;font-size:.92rem;margin-bottom:7px">🔎 주소로 자동조회 <span style="font-size:.7rem;color:var(--teal);background:#E7F8F6;padding:2px 8px;border-radius:999px;font-weight:700">베타</span></div>
-<div style="display:flex;gap:8px">
-<input class="f" id="dgAddr" placeholder="주소 검색을 눌러 건물을 선택하세요" readonly style="flex:1;background:#F7FCFB;cursor:pointer" onclick="openAddr()">
-<button type="button" onclick="openAddr()" style="flex:0 0 auto;padding:0 18px;border-radius:12px;border:none;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;cursor:pointer;font-family:inherit">주소 검색</button>
+<div class="wiz" id="wiz">
+<div class="wizBar"><i class="on"></i><i></i><i></i><i></i></div>
+
+<div class="wizStep" data-s="1">
+<div class="wizQ">어떤 집을 진단할까요?</div>
+<div class="wizSub">보증보험 시세 산정 방식이 유형마다 달라요.</div>
+<div class="pillG" id="dgType">
+<button data-v="apt" class="on">🏢 아파트 · 오피스텔</button>
+<button data-v="villa">🏘️ 빌라 · 연립 · 다세대</button>
+<button data-v="house">🏠 단독 · 다가구</button>
 </div>
-<input class="f" id="dgDetail" placeholder="상세주소 — 동·호수 (예: 101동 1201호 · 501호)" style="margin-top:8px">
-<button type="button" onclick="searchAddr()" style="width:100%;margin-top:8px;padding:12px;border:none;border-radius:12px;background:linear-gradient(180deg,#20A6A2,#178F8A);color:#fff;font-weight:600;font-size:.95rem;cursor:pointer;font-family:inherit">🔎 이 주소로 등기부 찾기</button>
-<div class="hint" id="dgAddrHint" style="min-height:1em"></div>
-<div id="dgCandidates" style="margin-top:4px"></div>
-<div style="font-size:.76rem;color:var(--sub);margin-top:6px">💡 <b>주소 검색</b>으로 건물을 고르고 <b>동·호수</b>를 적으면 내 집 등기부가 자동으로 조회돼요. 못 찾으면 아래 목록에서 층·호로 골라도 돼요.</div>
-<div style="margin-top:8px;background:#FFF7ED;border:1px solid #FDE6C8;border-radius:10px;padding:8px 12px;font-size:.8rem;color:#B45309">🎉 <b>런칭 기념 — 로그인만 하면 무료!</b> <span style="color:#9A6B3F">정식 오픈 시 건당 <s>5,900원</s> → <b>회원 2,900원</b></span></div>
+<div class="wizNav"><button class="wizNext" onclick="wizGo(2)">다음</button></div>
 </div>
-<div style="text-align:center;color:var(--sub);font-size:.8rem;margin:6px 0 2px">— 또는 —</div>
 
-<label class="f">직접 PDF 올리기 <span style="font-weight:400;color:var(--sub)">— 인터넷등기소(iros.go.kr) '열람'본, 말소사항 포함 권장</span></label>
-<input class="f" type="file" id="dgFile" accept="application/pdf" style="padding:10px">
-<textarea class="f" id="dgText" rows="2" placeholder="(스캔본이면) 등기부 내용을 여기에 붙여넣어도 돼요" style="margin-top:8px;resize:vertical"></textarea>
-
-<label class="f">② 주택 유형 <span style="font-weight:400;color:var(--sub)">— 보증보험 시세 산정 방식이 달라요</span></label>
-<div class="seg" id="dgType"><button data-v="apt" class="on">아파트·오피스텔</button><button data-v="villa">빌라·연립·다세대</button><button data-v="house">단독·다가구</button></div>
-
-<div class="row2">
-<div><label class="f">③ 내 전세보증금 (만원)</label><input class="f" id="dgDeposit" type="number" placeholder="예: 30000 (3억)" oninput="hintMan('dgDeposit','h1')"><div class="hint" id="h1"></div></div>
-<div><label class="f" id="lblVal">④ 매매 시세 (만원) <span style="font-weight:400;color:var(--sub)">— 모르면 비워두세요</span></label><input class="f" id="dgPrice" type="number" placeholder="모르면 비워도 돼요" oninput="hintMan('dgPrice','h2')"><div class="hint" id="h2"></div></div>
+<div class="wizStep" data-s="2" hidden>
+<div class="wizQ">어느 지역인가요?</div>
+<div class="wizSub">소액임차인 최우선변제 기준이 지역마다 달라요.</div>
+<div class="pillG" id="dgRegion">
+<button data-v="seoul" class="on">서울특별시</button>
+<button data-v="over">과밀억제권역 · 세종 · 용인 · 화성 · 김포</button>
+<button data-v="metro">광역시 · 안산 · 광주 · 파주 · 이천 · 평택</button>
+<button data-v="etc">그 밖의 지역</button>
 </div>
-<div style="font-size:.78rem;color:var(--sub);margin-top:6px;background:#F7FCFB;border:1px solid var(--line);border-radius:8px;padding:8px 11px">💡 <b>시세를 몰라도 진단돼요.</b> 위험등기·대항력·소액임차인 최우선변제는 시세 없이도 나와요. 시세를 넣으면 <b>깡통전세 전세가율·보증보험 가심사</b>까지 계산해줘요 — <a href="https://new.land.naver.com" target="_blank" rel="noopener" style="color:var(--teal)">네이버부동산</a>·KB시세에서 단지 검색으로 확인할 수 있어요.</div>
+<div class="wizNav"><button class="wizPrev" onclick="wizGo(1)">이전</button><button class="wizNext" onclick="wizGo(3)">다음</button></div>
+</div>
+
+<div class="wizStep" data-s="3" hidden>
+<div class="wizQ">전세보증금이 얼마예요?</div>
+<div class="wizSub">깡통전세 위험도·소액임차인 최우선변제를 계산해요.</div>
+<input class="f wizBig" id="dgDeposit" type="number" inputmode="numeric" placeholder="예: 30000 (3억)" oninput="hintMan('dgDeposit','h1')">
+<div class="hint" id="h1"></div>
+<details class="moreOpt"><summary>➕ 선택 입력 — 시세·공시가·전입일 (더 정밀하게)</summary>
+<label class="f" id="lblVal">매매 시세 (만원) <span style="font-weight:400;color:var(--sub)">— 모르면 비워두세요</span></label>
+<input class="f" id="dgPrice" type="number" placeholder="모르면 비워도 돼요" oninput="hintMan('dgPrice','h2')"><div class="hint" id="h2"></div>
 <div id="gongsiWrap" style="display:none">
-<label class="f">④-2 공시가격 (만원) <span style="font-weight:400;color:var(--sub)">— 빌라·단독은 공시가격×140%로 보증보험 시세를 잡아요</span></label>
+<label class="f">공시가격 (만원) <span style="font-weight:400;color:var(--sub)">— 빌라·단독 보증보험 시세용(공시가×140%)</span></label>
 <input class="f" id="dgGongsi" type="number" placeholder="예: 22000 (공시 2.2억)" oninput="hintMan('dgGongsi','h3')"><div class="hint" id="h3"></div>
 </div>
-
-<div class="row2">
-<div><label class="f">⑤ 지역 <span style="font-weight:400;color:var(--sub)">— 최우선변제 기준</span></label>
-<select class="f" id="dgRegion">
-<option value="seoul">서울특별시</option>
-<option value="over">과밀억제권역·세종·용인·화성·김포</option>
-<option value="metro">광역시·안산·광주·파주·이천·평택</option>
-<option value="etc">그 밖의 지역</option>
-</select></div>
-<div><label class="f">⑥ 내 전입신고(예정)일 <span style="font-weight:400;color:var(--sub)">— 대항력 판정용, 선택</span></label>
-<input class="f" id="dgMoveIn" type="date"></div>
+<label class="f">내 전입신고(예정)일 <span style="font-weight:400;color:var(--sub)">— 대항력 판정용</span></label>
+<input class="f" id="dgMoveIn" type="date">
+<div style="font-size:.76rem;color:var(--sub);margin-top:8px">시세를 넣으면 <b>전세가율·보증보험 가심사</b>까지 나와요. (<a href="https://new.land.naver.com" target="_blank" rel="noopener" style="color:var(--teal)">네이버부동산</a>·KB시세에서 확인)</div>
+</details>
+<div class="wizNav"><button class="wizPrev" onclick="wizGo(2)">이전</button><button class="wizNext" onclick="wizStep3Next()">다음</button></div>
 </div>
 
-<button class="go" onclick="runCheck()">🔍 정밀 진단 시작</button>
+<div class="wizStep" data-s="4" hidden>
+<div class="wizQ">집 주소를 알려주세요</div>
+<div class="wizSub">주소만 넣으면 등기부를 자동으로 불러와요. <b style="color:#B45309">🎉 런칭 기념 무료</b> <span style="color:#9A6B3F">(정식 오픈 시 <s>5,900원</s>→회원 2,900원)</span></div>
+<div style="display:flex;gap:8px">
+<input class="f" id="dgAddr" placeholder="주소 검색을 눌러 선택" readonly style="flex:1;background:#F7FCFB;cursor:pointer" onclick="openAddr()">
+<button type="button" onclick="openAddr()" style="flex:0 0 auto;padding:0 18px;border-radius:12px;border:none;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;cursor:pointer;font-family:inherit">주소 검색</button>
+</div>
+<input class="f" id="dgDetail" placeholder="상세주소 — 동·호수 (예: 101동 1201호)" style="margin-top:8px">
+<button type="button" class="go" style="margin-top:10px" onclick="searchAddr()">🔎 내 집 등기부 찾기</button>
+<div class="hint" id="dgAddrHint" style="min-height:1em"></div>
+<div id="dgCandidates" style="margin-top:4px"></div>
+<details class="moreOpt"><summary>주소가 안 나오면 — PDF 직접 올리기</summary>
+<input class="f" type="file" id="dgFile" accept="application/pdf" style="padding:10px">
+<textarea class="f" id="dgText" rows="2" placeholder="(스캔본이면) 등기부 내용을 붙여넣어도 돼요" style="margin-top:8px;resize:vertical"></textarea>
+<button class="go" style="margin-top:8px" onclick="runCheck()">📄 올린 PDF로 진단</button>
+</details>
+<div class="wizNav"><button class="wizPrev" onclick="wizGo(3)">이전</button></div>
+</div>
+</div>
+
 <div class="result" id="dgRes"></div>
-<p class="note">키워드·금액·날짜 기반 자동 분석이라, 말소된 등기가 포함된 발급본에선 이미 해소된 권리가 잡힐 수 있어요. 보증보험 가심사는 공개 기준(HUG 부채비율 90%, 공시가×140% 등)을 적용한 <b>추정</b>이라 실제 심사와 다를 수 있어요. 계약 전 반드시 등기부 원문과 공인중개사·전문가 확인을 거치세요. 참고용입니다.</p>
+<p class="note">보증보험 가심사는 공개 기준(HUG 부채비율 90%, 공시가×140% 등)을 적용한 <b>추정</b>이라 실제 심사와 다를 수 있어요. 말소된 등기가 포함된 발급본에선 이미 해소된 권리가 잡힐 수 있어요. 계약 전 등기부 원문과 전문가 확인을 거치세요. 참고용입니다.</p>
 </div>
 
 <div class="rel"><h2 class="sec">함께 보면 좋은 콘텐츠</h2><div class="grid">
@@ -184,8 +225,23 @@ function won(man){return fmt(man*10000)+'원';}
 function readMan(man){man=Math.round(man);if(!man)return '';var eok=Math.floor(man/10000),rest=man%10000,s='';if(eok>0)s+=eok+'억';if(rest>0){var c=Math.floor(rest/1000),b=rest%1000;if(c>0)s+=c+'천';if(b>0)s+=b+'만';}if(!s)s=man+'만';return s+'원';}
 function hintMan(id,h){var v=+document.getElementById(id).value;document.getElementById(h).textContent=v?readMan(v):'';}
 document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});e.target.classList.add('on');if(seg.id==='dgType')onType();});});
-function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
-function onType(){var t=segVal('dgType');document.getElementById('gongsiWrap').style.display=(t==='apt')?'none':'block';document.getElementById('lblVal').innerHTML=(t==='apt')?'④ 매매 시세 (만원)':'④ 매매 시세 (만원, 선택)';}
+function segVal(id){var b=document.querySelector('#'+id+' button.on');return b?b.dataset.v:'';}
+function onType(){var t=segVal('dgType');var g=document.getElementById('gongsiWrap');if(g)g.style.display=(t==='apt')?'none':'block';var l=document.getElementById('lblVal');if(l)l.innerHTML=(t==='apt')?'매매 시세 (만원) <span style="font-weight:400;color:var(--sub)">— 모르면 비워두세요</span>':'매매 시세 (만원) <span style="font-weight:400;color:var(--sub)">— 빌라·단독은 공시가격을 넣으세요</span>';}
+/* ── 마법사 pill 선택(자동 다음) + 네비 ── */
+['dgType','dgRegion'].forEach(function(id){
+  var g=document.getElementById(id); if(!g)return;
+  g.addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b)return;
+    g.querySelectorAll('button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
+    if(id==='dgType'){ onType(); setTimeout(function(){wizGo(2);},180); }
+    if(id==='dgRegion'){ setTimeout(function(){wizGo(3);},180); }
+  });
+});
+function wizGo(n){
+  document.querySelectorAll('#wiz .wizStep').forEach(function(s){ s.hidden = (+s.dataset.s !== n); });
+  var bars=document.querySelectorAll('#wiz .wizBar i'); [].forEach.call(bars,function(b,i){ b.classList.toggle('on', i < n); });
+  var w=document.getElementById('wiz'); if(w) w.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function wizStep3Next(){ if(!(+document.getElementById('dgDeposit').value)){ alert('전세보증금을 입력해주세요'); document.getElementById('dgDeposit').focus(); return; } wizGo(4); }
 
 // 소액임차인 최우선변제 (2026 현행)
 var SMALL={seoul:[16500,5500],over:[14500,4800],metro:[8500,2800],etc:[7500,2500]};
@@ -374,7 +430,7 @@ function aiOpinion(){
 /* ===== 주소로 등기부 자동조회 (CODEF) ===== */
 var DG_API='https://hwon-rtms.vercel.app/api/deunggi';
 function dgdec(s){s=String(s||'').replace(/\+/g,' ');try{return decodeURIComponent(s);}catch(e){return s;}}
-function readInputs(){ return {deposit:+document.getElementById('dgDeposit').value, price:+document.getElementById('dgPrice').value||0, gongsi:+document.getElementById('dgGongsi').value||0, type:segVal('dgType'), region:document.getElementById('dgRegion').value, moveIn:document.getElementById('dgMoveIn').value||''}; }
+function readInputs(){ return {deposit:+document.getElementById('dgDeposit').value, price:+document.getElementById('dgPrice').value||0, gongsi:+document.getElementById('dgGongsi').value||0, type:segVal('dgType'), region:segVal('dgRegion'), moveIn:document.getElementById('dgMoveIn').value||''}; }
 function dgRenderCands(f){
   var list=window.__dgList||[]; f=(f||'').replace(/\s/g,'');
   var wrap=document.getElementById('dgCandList'); if(!wrap)return;
@@ -489,7 +545,7 @@ async function runCheck(){
     alert('위에서 "주소 검색"으로 등기부를 불러오거나, 아래에서 PDF를 올려주세요.'); return;
   }
   if(text.replace(/\s/g,'').length<80){alert('추출된 텍스트가 너무 짧아요. 스캔본(이미지)일 수 있으니 내용을 붙여넣어주세요.');return;}
-  var inp={deposit:deposit, price:+document.getElementById('dgPrice').value||0, gongsi:+document.getElementById('dgGongsi').value||0, type:segVal('dgType'), region:document.getElementById('dgRegion').value, moveIn:document.getElementById('dgMoveIn').value||''};
+  var inp={deposit:deposit, price:+document.getElementById('dgPrice').value||0, gongsi:+document.getElementById('dgGongsi').value||0, type:segVal('dgType'), region:segVal('dgRegion'), moveIn:document.getElementById('dgMoveIn').value||''};
   render(analyze(text), inp);
 }
 onType();
