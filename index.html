@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="훤AI">
 <meta property="og:locale" content="ko_KR">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="style.css?v=3">
+<link rel="stylesheet" href="style.css?v=4">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"WebSite","@id":"https://yeongcrew.co.kr/#website","url":"https://yeongcrew.co.kr/","name":"훤AI","alternateName":["HWON","훤에이아이","영크루"],"description":"부동산을 훤하게 알려주는 훤AI — 부동산 계산기, 자가진단, 전문가 연결","inLanguage":"ko-KR","publisher":{"@id":"https://yeongcrew.co.kr/#org"}},
@@ -40,20 +40,53 @@
 </nav>
 </div>
 </header>
-<style>
-.hero{max-width:1160px;margin:20px auto 4px;border-radius:28px;padding:56px 22px 62px;box-shadow:0 18px 50px rgba(13,42,41,.16)}
-@media(max-width:1200px){.hero{margin-left:16px;margin-right:16px}}
-@media(max-width:720px){.hero{border-radius:22px;padding:44px 18px 50px;margin:12px 12px 2px}}
-</style>
-<div class="hero">
-<div class="tag">REAL ESTATE, ILLUMINATED</div>
-<div class="ring-stage" aria-hidden="true"><svg class="ring-draw" viewBox="0 0 76 76" width="76" height="76">
-<defs><linearGradient id="hwGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9FF0EB"/><stop offset="1" stop-color="#2AC1BC"/></linearGradient></defs>
-<circle class="track" cx="38" cy="38" r="26" fill="none" stroke="rgba(42,193,188,.12)" stroke-width="12"/>
-<circle class="arc" cx="38" cy="38" r="26" pathLength="100" fill="none" stroke="url(#hwGrad)" stroke-width="12" stroke-linecap="round"/>
-</svg></div>
+<div class="hwCar" id="hwCar" aria-label="훤AI 서비스 소개" role="region">
+<div class="hwCarView"><div class="hwCarTrack" id="hwCarTrack">
+
+<div class="hwSlide s1">
+<div class="hwSlideRing"></div>
+<div class="hwSlideTag">REAL ESTATE, ILLUMINATED</div>
 <h1>부동산이, <span class="em">훤해요.</span></h1>
-<p>부동산의 깜깜한 곳을 훤히 — 계산기로 바로 확인하고, 가이드로 낱낱이 이해하세요</p>
+<p>부동산의 깜깜한 곳을 훤히 밝혀요.<br>계산기·AI 비서·자가진단을 한곳에서.</p>
+<a class="hwSlideBtn" href="#quick">서비스 둘러보기</a>
+</div>
+
+<div class="hwSlide s2">
+<div class="hwSlideIco">🧮</div>
+<div class="hwSlideTag">계산기 12종</div>
+<h1>세금·대출, <span class="em">숫자로 바로</span></h1>
+<p>취득세·양도세·재산세·종부세부터 DSR·중개보수까지.<br>공시가격만 넣으면 2026년 기준으로 자동 계산.</p>
+<a class="hwSlideBtn" href="#tools">계산기 보러가기</a>
+</div>
+
+<div class="hwSlide s3">
+<div class="hwSlideIco">💬</div>
+<div class="hwSlideTag">AI 비서 부비</div>
+<h1>궁금하면, <span class="em">부비에게</span></h1>
+<p>24시간 부동산 질문에 답하고 실거래가까지 찾아줘요.<br>분양 현장·전매제한도 부비가 훤히 알고 있어요.</p>
+<a class="hwSlideBtn" href="#" onclick="var b=document.getElementById('hwbBtn');if(b){b.click();}return false;">부비에게 질문하기</a>
+</div>
+
+<div class="hwSlide s4">
+<div class="hwSlideIco">🔎</div>
+<div class="hwSlideTag">내 아파트 찾기 · 자가진단</div>
+<h1>내 상황에 <span class="em">딱 맞는 집</span></h1>
+<p>예산·직장·자녀 7문답이면 실거래 데이터로 5곳 추천.<br>계약검진·전세사기·수리책임 진단도 30초면 끝.</p>
+<a class="hwSlideBtn" href="apt-finder.html">아파트 찾으러 가기</a>
+</div>
+
+<div class="hwSlide s5">
+<div class="hwSlideIco">📰</div>
+<div class="hwSlideTag">실시간 뉴스 · 전문가 연결</div>
+<h1>지금 시장을, <span class="em">한눈에</span></h1>
+<p>지금 뜨는 부동산 뉴스와 검증된 전문가 연결까지.<br>깜깜이 없이, 결정에 필요한 정보를 훤하게.</p>
+<a class="hwSlideBtn" href="#news">오늘의 뉴스 보기</a>
+</div>
+
+</div></div>
+<button class="hwCarArw prev" id="hwCarPrev" aria-label="이전">‹</button>
+<button class="hwCarArw next" id="hwCarNext" aria-label="다음">›</button>
+<div class="hwCarDots" id="hwCarDots" aria-hidden="true"></div>
 </div>
 <main><div class="wrap">
 
@@ -84,6 +117,21 @@
 <a class="qt" href="loan-calculator.html"><span class="qi">💰</span><span class="ql">대출·DSR</span></a>
 <a class="qt" href="experts.html"><span class="qi">🤝</span><span class="ql">전문가 찾기</span></a>
 </div>
+</section>
+
+<section id="news" aria-label="부동산 뉴스">
+<h2>지금 많이 보는 부동산 뉴스</h2>
+<div class="newsChips" id="newsChips">
+<button class="newsChip on" data-q="부동산">종합</button>
+<button class="newsChip" data-q="아파트 분양">분양</button>
+<button class="newsChip" data-q="아파트 청약">청약</button>
+<button class="newsChip" data-q="전세 월세">전월세</button>
+<button class="newsChip" data-q="부동산 세금 양도세">세금</button>
+<button class="newsChip" data-q="주택담보대출 금리">대출·금리</button>
+<button class="newsChip" data-q="재개발 재건축">재개발</button>
+</div>
+<div class="newsList" id="newsList"><div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div></div>
+<div class="newsFoot"><span id="newsUpd"></span></div>
 </section>
 
 
@@ -164,6 +212,68 @@
 <p style="font-size:.75rem;color:#5D8683">상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074 · 서울특별시 동작구 만양로 75 · tndud.brad@gmail.com</p>
 </div>
 </footer>
+<script>
+/* ===== 상단 배너 캐러셀 (자동 + 스와이프 + 화살표 + 점) ===== */
+(function(){
+  var car=document.getElementById('hwCar'); if(!car) return;
+  var track=document.getElementById('hwCarTrack');
+  var slides=track.children, n=slides.length, i=0, timer=null, DUR=5200;
+  var dotsWrap=document.getElementById('hwCarDots');
+  for(var k=0;k<n;k++){ var d=document.createElement('button'); d.className='hwCarDot'+(k===0?' on':''); d.setAttribute('aria-label',(k+1)+'번째'); (function(idx){d.onclick=function(){go(idx);reset();};})(k); dotsWrap.appendChild(d); }
+  var dots=dotsWrap.children;
+  function go(x){ i=(x+n)%n; track.style.transform='translateX(-'+(i*100)+'%)'; for(var k=0;k<n;k++){dots[k].classList.toggle('on',k===i);} }
+  function next(){ go(i+1); } function prev(){ go(i-1); }
+  function play(){ stop(); timer=setInterval(next,DUR); } function stop(){ if(timer){clearInterval(timer);timer=null;} }
+  function reset(){ play(); }
+  document.getElementById('hwCarNext').onclick=function(){next();reset();};
+  document.getElementById('hwCarPrev').onclick=function(){prev();reset();};
+  car.addEventListener('mouseenter',stop); car.addEventListener('mouseleave',play);
+  // 스와이프 (터치 + 마우스 드래그)
+  var x0=null,dx=0,drag=false;
+  function down(x){ x0=x;dx=0;drag=true;stop();track.style.transition='none'; }
+  function move(x){ if(!drag)return; dx=x-x0; track.style.transform='translateX(calc(-'+(i*100)+'% + '+dx+'px))'; }
+  function up(){ if(!drag)return; drag=false; track.style.transition=''; if(Math.abs(dx)>50){ dx<0?next():prev(); } else { go(i); } dx=0; play(); }
+  var view=car.querySelector('.hwCarView');
+  view.addEventListener('touchstart',function(e){down(e.touches[0].clientX);},{passive:true});
+  view.addEventListener('touchmove',function(e){move(e.touches[0].clientX);},{passive:true});
+  view.addEventListener('touchend',up);
+  view.addEventListener('mousedown',function(e){down(e.clientX);e.preventDefault();});
+  window.addEventListener('mousemove',function(e){move(e.clientX);});
+  window.addEventListener('mouseup',up);
+  document.addEventListener('visibilitychange',function(){document.hidden?stop():play();});
+  go(0); play();
+})();
+
+/* ===== 실시간 부동산 뉴스 큐레이션 ===== */
+(function(){
+  var list=document.getElementById('newsList'); if(!list) return;
+  var BASE='https://hwon-rtms.vercel.app/api/news';
+  var upd=document.getElementById('newsUpd');
+  function rel(ts){ if(!ts)return''; var s=(Date.now()-ts)/1000; if(s<60)return'방금'; if(s<3600)return Math.floor(s/60)+'분 전'; if(s<86400)return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
+  function esc(t){ return String(t).replace(/[<>&"]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];}); }
+  function render(items){
+    if(!items||!items.length){ list.innerHTML='<div class="newsErr">지금은 뉴스를 불러오지 못했어요. 잠시 후 새로고침해 주세요.</div>'; return; }
+    var h='';
+    items.slice(0,8).forEach(function(it,idx){
+      h+='<a class="newsItem" href="'+esc(it.link)+'" target="_blank" rel="noopener nofollow">'
+        +'<span class="newsRank">'+(idx+1)+'</span>'
+        +'<span class="newsBody"><span class="newsTit">'+esc(it.title)+'</span>'
+        +'<span class="newsMeta">'+(it.source?esc(it.source):'')+(it.pub?' · '+rel(it.pub):'')+'</span></span></a>';
+    });
+    list.innerHTML=h;
+  }
+  function load(q){
+    list.innerHTML='<div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div>';
+    fetch(BASE+'?q='+encodeURIComponent(q)+'&cb='+Math.floor(Date.now()/60000))
+      .then(function(r){return r.json();})
+      .then(function(d){ render(d.items); if(upd)upd.textContent='실시간 · Google News 기반 · '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})+' 기준'; })
+      .catch(function(){ list.innerHTML='<div class="newsErr">지금은 뉴스를 불러오지 못했어요. 잠시 후 새로고침해 주세요.</div>'; });
+  }
+  var chips=document.getElementById('newsChips');
+  if(chips){ chips.addEventListener('click',function(e){ var b=e.target.closest('.newsChip'); if(!b)return; [].forEach.call(chips.children,function(c){c.classList.remove('on');}); b.classList.add('on'); load(b.dataset.q); }); }
+  load('부동산');
+})();
+</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 <script src="/hwon-ui.js" defer></script>
