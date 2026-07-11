@@ -351,6 +351,14 @@ function render(a, inp){
    +'<div class="gauge"><i style="width:'+score+'%;background:linear-gradient(90deg,'+(score>=60?'#33CCC7,#0E8F5B':score>=40?'#F5B24A,#B45309':'#F87171,#B91C1C')+')"></i></div>'
    +(reasons.length?'<div style="font-size:.8rem;color:var(--sub)">감점 요인: '+reasons.join(', ')+'</div>':'');
 
+  // 한 줄 결론 (계약해도 될까?)
+  var verdict = score>=80 ? '✅ 계약해도 괜찮아요. 잔금일에 전입신고+확정일자만 잊지 마세요.'
+    : score>=60 ? '✅ 계약해도 되지만, 전세보증보험은 꼭 가입하세요.'
+    : score>=40 ? '⚠️ 지금 이대로는 위험해요. 아래 조건(근저당 말소·보증보험)을 해결한 뒤 계약하세요.'
+    : score>=20 ? '🚫 신중하세요. 특약·보증보험 없이는 계약을 권하지 않아요.'
+    : '🚫 계약을 권하지 않아요. 이 보증금으로는 다른 집을 알아보시길 추천해요.';
+  html+='<div style="background:'+color+';color:#fff;border-radius:14px;padding:15px 18px;margin-top:14px;font-size:1.05rem;font-weight:700;line-height:1.5">계약해도 될까요?<br><span style="font-weight:600;font-size:1rem">'+verdict+'</span></div>';
+
   // 전세가율 블록
   html+='<div class="block"><h4>💧 깡통전세 위험 (부채비율)</h4>';
   if(siseMan>0){
