@@ -34,3 +34,8 @@ button.go.hwPress{animation:hwPress .3s ease}
 .hwRateCard .ch.up{color:#C2410C}.hwRateCard .ch.down{color:#1D4ED8}.hwRateCard .ch.flat{color:#547471}
 .hwRateCard .as{font-size:.7rem;color:#7DA09C;margin-top:3px}
 .hwRates .nt{font-size:.8rem;color:#547471;margin-top:12px;line-height:1.6}
+
+/* 상단 로고: 부동산 비서 (부·비 강조) — 나머지 브랜드명은 부비 유지 */
+.logo::after{content:"" !important}
+.logo .lgt{font-size:1.22rem;font-weight:600;color:#1B4D48;letter-spacing:-.02em;white-space:nowrap;line-height:1}
+.logo .lgt b{color:#2AC1BC;font-weight:800}
