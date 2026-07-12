@@ -307,4 +307,16 @@
     fetch(BASE+'?q='+encodeURIComponent(q)+'&cb='+Math.floor(Date.now()/60000))
       .then(function(r){return r.json();})
       .then(function(d){ render(d.items); if(upd)upd.textContent='실시간 · Google News 기반 · '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})+' 기준'; })
-      .c
+      .catch(function(){ render([]); });
+  }
+  var chips=document.getElementById('newsChips');
+  if(chips){ chips.addEventListener('click',function(e){ var b=e.target.closest('.newsChip'); if(!b)return; [].forEach.call(chips.children,function(c){c.classList.toggle('on',c===b);}); load(b.getAttribute('data-q')||'부동산'); }); }
+  load('부동산');
+})();
+</script>
+
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+<script src="/hwon-ui.js" defer></script>
+</body>
+</html>
