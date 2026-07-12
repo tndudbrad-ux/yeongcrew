@@ -34,7 +34,7 @@
 ]}
 ]}
 </script>
-<link rel="stylesheet" href="/hwon-ui.css?v=2">
+<link rel="stylesheet" href="/hwon-ui.css?v=3">
 <style>@keyframes ringFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}@media(prefers-reduced-motion:reduce){.hwSlideRing3d{animation:none!important}}
 .logo::before{display:none!important}.logo3d{width:30px;height:30px;object-fit:contain;flex:0 0 30px;margin-right:-2px}</style>
 </head>
@@ -305,15 +305,4 @@
     fetch(BASE+'?q='+encodeURIComponent(q)+'&cb='+Math.floor(Date.now()/60000))
       .then(function(r){return r.json();})
       .then(function(d){ render(d.items); if(upd)upd.textContent='실시간 · Google News 기반 · '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})+' 기준'; })
-      .catch(function(){ list.innerHTML='<div class="newsErr">지금은 뉴스를 불러오지 못했어요. 잠시 후 새로고침해 주세요.</div>'; });
-  }
-  var chips=document.getElementById('newsChips');
-  if(chips){ chips.addEventListener('click',function(e){ var b=e.target.closest('.newsChip'); if(!b)return; [].forEach.call(chips.children,function(c){c.classList.remove('on');}); b.classList.add('on'); load(b.dataset.q); }); }
-  load('부동산');
-})();
-</script>
-<script src="/hwon-bot.js" defer></script>
-<script src="/hwon-auth.js" defer></script>
-<script src="/hwon-ui.js" defer></script>
-</body>
-</html>
+      .c

@@ -39,3 +39,8 @@ button.go.hwPress{animation:hwPress .3s ease}
 .logo::after{content:"" !important}
 .logo .lgt{font-size:1.22rem;font-weight:600;color:#1B4D48;letter-spacing:-.02em;white-space:nowrap;line-height:1}
 .logo .lgt b{color:#2AC1BC;font-weight:800}
+
+/* 로고 3D 링 (전 페이지) */
+.logo::before{display:none!important}
+.logo .ring{display:none!important}
+.logo .logo3d{width:26px;height:26px;object-fit:contain;flex:0 0 26px}
