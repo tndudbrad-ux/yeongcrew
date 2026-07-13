@@ -99,12 +99,10 @@ footer a{color:#B9DCD9;margin:0 8px}
 <h2>🧾 종합소득세 계산기 — 부동산 임대소득 합산</h2>
 <p style="font-size:.9rem;color:var(--sub);margin-bottom:6px">근로·사업 소득에 <b>부동산 임대소득이 합산되면</b> 누진세율 때문에 종합소득세가 확 늘어요. 얼마나 늘어나는지 바로 확인해보세요.</p>
 <label class="f">임대 외 종합소득 과세표준 (만원) <span style="font-weight:400;color:var(--sub)">— 근로·사업 등</span></label>
-<input class="f" id="jOther" type="number" placeholder="예: 5000 (5천만원)" oninput="hint('jOther','jOtherHint')">
-<div class="hint" id="jOtherHint"></div>
+<input class="f" id="jOther" type="number" placeholder="예: 5000 (5천만원)">
 <div style="font-size:.78rem;color:var(--sub);margin-top:2px">💡 근로자는 연말정산 결과의 <b>‘과세표준’</b>, 사업자는 소득금액에서 소득공제를 뺀 값이에요. 모르면 대략 연소득에서 공제 뺀 금액으로 넣어보세요.</div>
 <label class="f">연간 주택임대 총수입 (만원) <span style="font-weight:400;color:var(--sub)">— 월세 × 12</span></label>
-<input class="f" id="jRent" type="number" placeholder="예: 2400 (월 200만원)" oninput="hint('jRent','jRentHint')">
-<div class="hint" id="jRentHint"></div>
+<input class="f" id="jRent" type="number" placeholder="예: 2400 (월 200만원)">
 <label class="f">임대사업자 등록 여부 <span style="font-weight:400;color:var(--sub)">— 필요경비율이 달라요 (등록 60% · 미등록 50%)</span></label>
 <div class="seg" id="jReg"><button data-v="n" class="on">미등록</button><button data-v="y">등록</button></div>
 <button class="go" onclick="calcJT()">종합소득세 계산하기</button>
@@ -211,5 +209,6 @@ function calcJT(){
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://yeongcrew.co.kr/"},{"@type":"ListItem","position":2,"name":"종합소득세 계산기","item":"https://yeongcrew.co.kr/jonghap-income-tax.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
+<script src="/hwon-ui.js" defer></script>
 </body>
 </html>

@@ -109,15 +109,13 @@ h2.sec{font-size:1.2rem;font-weight:500;margin:34px 0 14px}
 <div class="seg" id="own"><button data-v="no" class="on">무주택</button><button data-v="yes">유주택</button></div>
 
 <label class="f">부부 합산 연소득 (만원)</label>
-<input class="f" id="income" type="number" placeholder="예: 6000 (6천만원)" oninput="hint('income','incHint')">
-<div class="hint" id="incHint"></div>
+<input class="f" id="income" type="number" placeholder="예: 6000 (6천만원)">
 
 <label class="f">지역</label>
 <div class="seg" id="region"><button data-v="metro" class="on">수도권</button><button data-v="local">비수도권</button></div>
 
 <label class="f" id="amtLbl">주택 가격 (만원)</label>
-<input class="f" id="amt" type="number" placeholder="예: 40000 (4억)" oninput="hint('amt','amtHint')">
-<div class="hint" id="amtHint"></div>
+<input class="f" id="amt" type="number" placeholder="예: 40000 (4억)">
 
 <button class="go" onclick="matchPolicy()">내 정책 찾기</button>
 </div>
@@ -240,5 +238,6 @@ function matchPolicy(){
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://yeongcrew.co.kr/"},{"@type":"ListItem","position":2,"name":"정책대출·특공 찾기","item":"https://yeongcrew.co.kr/policy-finder.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
+<script src="/hwon-ui.js" defer></script>
 </body>
 </html>

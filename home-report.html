@@ -112,8 +112,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 
 <div id="buyFields">
 <label class="f">매매가 (만원)</label>
-<input class="f" id="price" type="number" placeholder="예: 50000 (5억)" oninput="hint('price','priceHint')">
-<div class="hint" id="priceHint"></div>
+<input class="f" id="price" type="number" placeholder="예: 50000 (5억)">
 <label class="f">보유 주택 수</label>
 <div class="seg" id="homes"><button data-v="1" class="on">이 집이 1주택</button><button data-v="n">다주택</button></div>
 <label class="f">전용면적</label>
@@ -122,14 +121,11 @@ footer a{color:#B9DCD9;margin:0 8px}
 
 <div id="rentFields" style="display:none">
 <label class="f">보증금 (만원)</label>
-<input class="f" id="deposit" type="number" placeholder="예: 20000 (2억)" oninput="hint('deposit','depHint')">
-<div class="hint" id="depHint"></div>
+<input class="f" id="deposit" type="number" placeholder="예: 20000 (2억)">
 <label class="f" id="wolseLbl" style="display:none">월세 (만원)</label>
-<input class="f" id="wolse" type="number" placeholder="예: 60 (60만원)" style="display:none" oninput="hint('wolse','wolHint')">
-<div class="hint" id="wolHint"></div>
+<input class="f" id="wolse" type="number" placeholder="예: 60 (60만원)" style="display:none">
 <label class="f">이 집 시세 / 매매가 (만원) <span style="font-weight:400;color:var(--sub)">— 전세가율 계산용 (모르면 비워두세요)</span></label>
-<input class="f" id="mkt" type="number" placeholder="예: 25000 (2.5억)" oninput="hint('mkt','mktHint')">
-<div class="hint" id="mktHint"></div>
+<input class="f" id="mkt" type="number" placeholder="예: 25000 (2.5억)">
 </div>
 
 <button class="go" onclick="makeReport()">부비 리포트 받기</button>
@@ -266,5 +262,6 @@ function makeReport(){
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://yeongcrew.co.kr/"},{"@type":"ListItem","position":2,"name":"집 종합 리포트","item":"https://yeongcrew.co.kr/home-report.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
+<script src="/hwon-ui.js" defer></script>
 </body>
 </html>
