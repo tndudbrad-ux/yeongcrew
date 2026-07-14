@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-08",
+  "updated": "2026-07-14",
   "items": [
     {"id":"kr","flag":"🇰🇷","name":"한국 기준금리","rate":"2.50%","change":"동결","dir":"flat","asof":"5.28 금통위 · 다음 결정 7.16"},
     {"id":"us","flag":"🇺🇸","name":"미국 기준금리","rate":"3.50~3.75%","change":"동결","dir":"flat","asof":"6월 FOMC · 다음 결정 7월 말"},
