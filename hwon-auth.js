@@ -36,3 +36,16 @@ window.hwonAuth={
  signOut:function(){return ready.then(function(a){return a.signOut();});}
 };
 })();
+
+/* ===== Google Analytics 4 — 부비 방문·유입 측정 (측정 ID G-2KYCGVDL67) ===== */
+(function(){
+  if(window.__gaInit)return; window.__gaInit=1;
+  var s=document.createElement('script'); s.async=true;
+  s.src='https://www.googletagmanager.com/gtag/js?id=G-2KYCGVDL67';
+  document.head.appendChild(s);
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){window.dataLayer.push(arguments);}
+  window.gtag=gtag;
+  gtag('js', new Date());
+  gtag('config', 'G-2KYCGVDL67');
+})();
