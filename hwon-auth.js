@@ -37,6 +37,55 @@ window.hwonAuth={
 };
 })();
 
+/* ===== 부비 칼럼 로그인 게이트 — 회원 전용 이어읽기 (과금 아님) ===== */
+(function(){
+  var m=document.querySelector('meta[property="og:type"]');
+  if(!(m && m.content==='article')) return;           // 칼럼(article)만 대상
+  var decided=false, walled=false;
+  function injectStyle(){
+    if(document.getElementById('boobiGateStyle'))return;
+    var st=document.createElement('style'); st.id='boobiGateStyle';
+    st.textContent=
+     '.boobiGateRest{position:relative;max-height:150px;overflow:hidden}'+
+     '.boobiGateRest::after{content:"";position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(180deg,rgba(240,250,248,0),var(--cream,#F0FAF8) 94%);pointer-events:none}'+
+     '.boobiGateWall{margin:8px 0 22px;padding:26px 22px;border:1px solid #B5E4E1;border-radius:18px;background:linear-gradient(120deg,#EAFAF8,#F4FBFA);text-align:center}'+
+     '.boobiGateWall .lk{font-size:1.7rem}'+
+     '.boobiGateWall h3{font-size:1.12rem;font-weight:800;margin:6px 0 4px;color:#0D2A29}'+
+     '.boobiGateWall p{font-size:.92rem;color:#547471;margin-bottom:16px;line-height:1.6}'+
+     '.boobiGateBtn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:800;font-size:1rem;padding:13px 26px;border:none;border-radius:12px;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.32)}'+
+     '.boobiGateNote{font-size:.8rem;color:#8aa5a2;margin-top:12px}'+
+     'body.boobi-unlocked .boobiGateRest{max-height:none;overflow:visible}'+
+     'body.boobi-unlocked .boobiGateRest::after{display:none}'+
+     'body.boobi-unlocked .boobiGateWall{display:none}';
+    document.head.appendChild(st);
+  }
+  function unlock(){ document.body.classList.add('boobi-unlocked'); }
+  function wall(){
+    if(walled) return;
+    var art=document.querySelector('article'); if(!art) return;
+    var kids=Array.prototype.slice.call(art.children);
+    var h2=0, cut=-1;
+    for(var i=0;i<kids.length;i++){ if(kids[i].tagName==='H2'){h2++; if(h2===2){cut=i;break;}} }
+    if(cut===-1) cut=Math.max(3, Math.floor(kids.length*0.4));
+    if(kids.length-cut < 2) return;                     // 너무 짧으면 게이트 안 함
+    walled=true; injectStyle();
+    var rest=document.createElement('div'); rest.className='boobiGateRest';
+    art.insertBefore(rest, kids[cut]);
+    for(var j=cut;j<kids.length;j++){ rest.appendChild(kids[j]); }
+    var wl=document.createElement('div'); wl.className='boobiGateWall';
+    wl.innerHTML='<div class="lk">🔒</div><h3>로그인하면 이어서 읽을 수 있어요</h3>'+
+      '<p>부비 회원이면 모든 칼럼을 무료로 끝까지 볼 수 있어요.<br>구글 계정으로 3초면 시작돼요.</p>'+
+      '<button class="boobiGateBtn" id="boobiGateBtn">🅶 구글로 로그인하고 계속 읽기</button>'+
+      '<div class="boobiGateNote">지금은 무료예요 · 로그인만 하면 전체 공개</div>';
+    rest.parentNode.insertBefore(wl, rest.nextSibling);
+    document.getElementById('boobiGateBtn').onclick=function(){ if(window.hwonAuth) hwonAuth.signInGoogle(); };
+  }
+  document.addEventListener('hwon-auth',function(e){ decided=true; if(e.detail) unlock(); else wall(); });
+  function boot(){ if(window.hwonUser){decided=true;unlock();} }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+  setTimeout(function(){ if(!decided){ if(window.hwonUser) unlock(); else wall(); } }, 1600);
+})();
+
 /* ===== Google Analytics 4 — 부비 방문·유입 측정 (측정 ID G-2KYCGVDL67) ===== */
 (function(){
   if(window.__gaInit)return; window.__gaInit=1;

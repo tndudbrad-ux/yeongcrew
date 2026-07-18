@@ -309,6 +309,19 @@ function hugAssess(type, priceMan, gongsiMan, seniorMan, depositMan, region){
   return {ok:pass&&!overCap, grade:grade, cls:cls, hp:hp, basis:basis, limit:limit, pass:pass, cap:cap, overCap:overCap, ratio:(seniorMan+depositMan)/hp*100};
 }
 function render(a, inp){
+  if(!window.hwonUser){
+    window.__pendingDiag={a:a,inp:inp};
+    var g=document.getElementById('dgRes'); g.dataset.gated='1';
+    g.innerHTML='<div style="text-align:center;padding:8px 4px">'+
+      '<div style="font-size:1.9rem">🔒</div>'+
+      '<div style="font-size:1.2rem;font-weight:700;color:var(--teal);margin-top:4px">로그인하면 진단 결과를 볼 수 있어요</div>'+
+      '<div style="font-size:.92rem;color:var(--sub);margin:8px 0 16px;line-height:1.6">분석이 끝났어요! 이 집이 안전한지 <b>신호등 결과</b>를 부비 회원이면 <b>무료로</b> 확인할 수 있어요. 구글 계정으로 3초면 시작돼요.</div>'+
+      '<button class="go" style="max-width:340px;margin:0 auto" onclick="(window.hwonAuth&&hwonAuth.signInGoogle())">🅶 구글로 로그인하고 결과 보기</button>'+
+      '<div style="font-size:.8rem;color:var(--sub);margin-top:10px">지금은 무료예요 · 로그인만 하면 결과 공개</div></div>';
+    g.classList.add('show'); g.scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+  }
+  document.getElementById('dgRes').dataset.gated='';
   var deposit=inp.deposit, price=inp.price, gongsi=inp.gongsi, type=inp.type, region=inp.region;
   var senior=a.mortSum/10000; // 만원
   var score=100, reasons=[];
@@ -557,6 +570,9 @@ async function runCheck(){
   render(analyze(text), inp);
 }
 onType();
+document.addEventListener('hwon-auth',function(e){
+  if(e.detail && window.__pendingDiag){ var p=window.__pendingDiag; window.__pendingDiag=null; render(p.a, p.inp); }
+});
 </script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"전세사기·깡통전세 정밀진단","url":"https://yeongcrew.co.kr/jeonse-safety-check.html","description":"등기부등본 기반 위험등기·전세가율·HUG/HF/SGI 보증보험 가심사·대항력·최우선변제 무료 진단, 부비 AI 종합의견","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://yeongcrew.co.kr"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"유료 전세 리포트와 뭐가 다른가요?","acceptedAnswer":{"@type":"Answer","text":"부비 정밀진단은 무료·즉시이고 파일이 브라우저 밖으로 나가지 않아 개인정보가 안전합니다. 유료 서비스가 사람이 검수해 주는 종합의견을 부비 AI가 그 자리에서 만들어줍니다. 소유자 실명 기반 다른 부동산 목록은 등기법·개인정보보호법상 조회가 어려워 제공하지 않고, 대신 그 집의 등기부·시세·보증보험·대항력을 정밀 분석합니다."}},{"@type":"Question","name":"보증보험 가심사는 정확한가요?","acceptedAnswer":{"@type":"Answer","text":"HUG 부채비율 90%, 주택가격은 아파트는 시세·빌라는 공시가격의 140%, 보증금 한도 수도권 7억·비수도권 5억 등 공개 기준을 적용한 추정입니다. 실제 심사는 임대인 상태에 따라 다를 수 있어 참고용입니다."}},{"@type":"Question","name":"깡통전세 위험은 어떻게 판단하나요?","acceptedAnswer":{"@type":"Answer","text":"(선순위 근저당 채권최고액 + 내 보증금)을 시세로 나눈 값이 80%를 넘으면 깡통전세 위험 구간입니다. 60~80%도 안심 구간을 넘어 보증보험이 필수입니다."}}]}</script>

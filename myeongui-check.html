@@ -202,6 +202,17 @@ function calcMyeongui(){
     if((i===9&&+on.dataset.i===2)||(i===10&&+on.dataset.i===2)||(i===8&&+on.dataset.i===2)) hardFlag=true;
   });
   if(answered<MQ.length){alert('아직 답하지 않은 항목이 있어요 ('+answered+'/'+MQ.length+')');return;}
+  if(!window.hwonUser){
+    var g=document.getElementById('mqRes'); g.dataset.gated='1';
+    g.innerHTML='<div style="text-align:center;padding:6px 4px">'+
+      '<div style="font-size:1.8rem">🔒</div>'+
+      '<div class="big" style="font-size:1.18rem;margin-top:4px">로그인하면 결과를 볼 수 있어요</div>'+
+      '<div style="font-size:.92rem;color:var(--sub);margin:8px 0 16px;line-height:1.6">진단이 끝났어요! 부비 회원이면 결과를 <b>무료로</b> 확인할 수 있어요. 구글 계정으로 3초면 시작돼요.</div>'+
+      '<button class="go" style="max-width:340px;margin:0 auto" onclick="(window.hwonAuth&&hwonAuth.signInGoogle())">🅶 구글로 로그인하고 결과 보기</button>'+
+      '<div style="font-size:.8rem;color:var(--sub);margin-top:10px">지금은 무료예요 · 로그인만 하면 결과 공개</div></div>';
+    g.classList.add('show'); g.scrollIntoView({behavior:'smooth',block:'nearest'});
+    return;
+  }
   var grade,desc,color;
   if(hardFlag){grade='⚖️ 전문가 상담 필수';color='#B45309';desc='채무·다주택·자금출처처럼 점수로 판단하면 안 되는 변수가 있습니다. 등기 전에 반드시 세무사 상담을 받으세요.';}
   else if(score>=12){grade='👫 공동명의 유리';color='#0E8F8A';desc='세금 분산 이점이 리스크보다 뚜렷하게 큽니다. 자금 분담 비율대로 지분을 설정하는 것이 안전합니다.';}
@@ -212,9 +223,12 @@ function calcMyeongui(){
   if(reasons.length){h+='<div style="margin-top:14px;font-weight:600;font-size:.9rem">✅ 공동명의에 유리한 요인</div>';reasons.forEach(function(r){h+='<div style="background:#fff;border-radius:10px;padding:10px 12px;margin-top:7px;font-size:.86rem"><b>'+r[0]+'</b> — '+r[1]+'</div>';});}
   if(flags.length){h+='<div style="margin-top:14px;font-weight:600;font-size:.9rem">⚠️ 주의 플래그</div>';flags.forEach(function(r){h+='<div style="background:#FFF7ED;border:1px solid #FDE6C8;border-radius:10px;padding:10px 12px;margin-top:7px;font-size:.86rem"><b>'+r[0]+'</b> — '+r[1]+'</div>';});}
   h+='<div style="font-size:.84rem;color:var(--sub);margin-top:14px">다음 단계: 취득 단계 세금은 <a href="/acquisition-tax.html" style="color:var(--teal);font-weight:600">취득세 계산기</a>에서, 명의별 대출 여력은 <a href="/loan-calculator.html" style="color:var(--teal);font-weight:600">DSR 계산기</a>에서 확인하세요.</div>';
-  var el=document.getElementById('mqRes');el.innerHTML=h;el.classList.add('show');
+  var el=document.getElementById('mqRes');el.innerHTML=h;el.classList.add('show');el.dataset.gated='';
   el.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
+document.addEventListener('hwon-auth',function(e){
+  if(e.detail){ var r=document.getElementById('mqRes'); if(r&&r.dataset.gated==='1'){ calcMyeongui(); } }
+});
 </script>
 
 <script src="/hwon-bot.js" defer></script>
