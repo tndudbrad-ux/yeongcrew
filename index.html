@@ -139,7 +139,8 @@
 .mcLegend{display:flex;flex-wrap:wrap;gap:9px;margin:11px 0 9px;font-size:.7rem;color:#8aa5a2}
 .mcLegend i{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:3px;vertical-align:middle}
 .lg-holi{background:#E5484D}.lg-rate{background:#5B5BD6}.lg-cheong{background:#12854f}.lg-tax{background:#B4690E}
-.mcUp{border-top:1px solid var(--line,#DCEEEC);padding-top:9px;display:flex;flex-direction:column;gap:6px}
+.mcUpHead{font-size:.78rem;font-weight:800;color:#8aa5a2;letter-spacing:-.01em;margin:2px 0 7px}
+.mcUp{border-bottom:1px solid var(--line,#DCEEEC);padding-bottom:12px;margin-bottom:13px;display:flex;flex-direction:column;gap:7px}
 .mcUpItem{display:flex;align-items:center;gap:8px;font-size:.79rem;color:#33514f;line-height:1.35}
 .mcDday{flex:0 0 auto;font-size:.68rem;font-weight:800;padding:2px 7px;border-radius:20px;background:#EAFAF8;color:#127c78}
 .mcUpItem span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -191,12 +192,13 @@
 <h2>이번 달 부동산 캘린더</h2>
 <a class="miniCal" href="/calendar.html" aria-label="부동산 캘린더 전체 보기">
 <div class="mcTop"><span class="mcMonth" id="mcMonth">—</span><span class="mcMore">전체 보기 →</span></div>
+<div class="mcUpHead">이번 달 청약 일정</div>
+<div class="mcUp" id="mcUp"></div>
 <div class="mcDow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
 <div class="mcGrid" id="mcGrid"></div>
 <div class="mcLegend">
 <span><i class="lg-holi"></i>공휴일</span><span><i class="lg-rate"></i>금리</span><span><i class="lg-cheong"></i>청약</span><span><i class="lg-tax"></i>세금</span>
 </div>
-<div class="mcUp" id="mcUp"></div>
 </a>
 </div>
 </div>
@@ -355,15 +357,18 @@
       h+='<div class="'+cls+'"><span>'+d.getDate()+'</span><span class="mcDots">'+(out?'':dots)+'</span></div>';
     }
     grid.innerHTML=h;
-    var up=EV.filter(function(e){return e.date>=ymd(TODAY);})
-            .sort(function(a,b){return a.date<b.date?-1:1;}).slice(0,3);
+    var ymNow=y+'-'+('0'+(mo+1)).slice(-2);
+    var up=EV.filter(function(e){return e.type==='cheongyak' && e.date>=ymd(TODAY) && e.date.indexOf(ymNow)===0;})
+            .sort(function(a,b){return a.date<b.date?-1:1;}).slice(0,4);
+    if(!up.length) up=EV.filter(function(e){return e.date>=ymd(TODAY);})
+            .sort(function(a,b){return a.date<b.date?-1:1;}).slice(0,4);
     var uh='';
     up.forEach(function(e){
       var p=e.date.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
       var n=Math.round((dt-TODAY)/864e5), lab=n===0?'오늘':('D-'+n);
       uh+='<div class="mcUpItem"><b class="mcDday">'+lab+'</b><span>'+esc(e.title)+'</span></div>';
     });
-    document.getElementById('mcUp').innerHTML=uh||'<div class="mcUpItem"><span style="color:#8aa5a2">예정된 일정이 없어요</span></div>';
+    document.getElementById('mcUp').innerHTML=uh||'<div class="mcUpItem"><span style="color:#8aa5a2">이번 달 남은 청약 일정이 없어요</span></div>';
   }
   Promise.all([
     fetch('/calendar-events.json?t='+Date.now()).then(function(r){return r.ok?r.json():{events:[]};}).catch(function(){return {events:[]};}),
