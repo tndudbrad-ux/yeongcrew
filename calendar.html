@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>부동산 캘린더 — 청약일정·금리발표일·공휴일 한눈에 (2026) - 부비</title>
+<meta name="description" content="이번 달 청약 접수·당첨발표 일정, 한국은행 금통위와 미국 FOMC 금리 결정일, 공휴일, 재산세·종부세 납부 마감까지 한 달 달력에 모아 보여드려요. 매일 자동 업데이트.">
+<meta name="keywords" content="부동산 캘린더, 청약 일정, 금통위 일정, FOMC 일정, 기준금리 발표일, 재산세 납부, 종부세 납부, 2026 공휴일, 부비">
+<link rel="canonical" href="https://yeongcrew.co.kr/calendar.html">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="부동산 캘린더 — 청약·금리·공휴일 한눈에 | 부비">
+<meta property="og:description" content="청약 접수·발표, 금통위·FOMC 금리 결정일, 공휴일, 세금 납기까지 한 달 달력에.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yeongcrew.co.kr/calendar.html">
+<meta property="og:site_name" content="부비 - 부동산 비서">
+<meta property="og:image" content="https://yeongcrew.co.kr/icon-512.png">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#F0FAF8;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;
+--cHoli:#E5484D;--cRate:#5B5BD6;--cCheong:#12854f;--cTax:#B4690E}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:940px;margin:0 auto;padding:0 20px}
+header.top{background:rgba(240,250,248,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+main{padding:26px 0 60px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:10px}.crumb a{color:var(--teal)}
+.hero-t h1{font-size:1.45rem;font-weight:700;letter-spacing:-.02em}
+.hero-t p{color:var(--sub);font-size:.93rem;margin-top:5px}
+.navbar{display:flex;align-items:center;justify-content:center;gap:18px;margin:20px 0 12px}
+.navbtn{width:38px;height:38px;border:1px solid var(--line);background:#fff;border-radius:11px;font-size:1.1rem;cursor:pointer;color:var(--teal);font-family:inherit}
+.navbtn:hover{border-color:var(--mint);background:#EAFAF8}
+.mtitle{font-size:1.25rem;font-weight:800;min-width:170px;text-align:center}
+.today-btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 13px;font-size:.82rem;cursor:pointer;color:var(--sub);font-family:inherit}
+.legend{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-bottom:14px;font-size:.8rem;color:var(--sub)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.cal{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.dow{display:grid;grid-template-columns:repeat(7,1fr);background:#EAFAF8;font-size:.82rem;font-weight:700;color:#12312f}
+.dow div{padding:9px 0;text-align:center}
+.dow div:first-child{color:var(--cHoli)}
+.dow div:last-child{color:#3B7EA1}
+.grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.cell{min-height:104px;border-top:1px solid var(--line);border-right:1px solid var(--line);padding:6px 7px;position:relative}
+.cell:nth-child(7n){border-right:none}
+.cell.out{background:#FAFDFD}
+.cell.today{background:#EAFAF8;box-shadow:inset 0 0 0 2px var(--mint)}
+.dnum{font-size:.85rem;font-weight:700;color:#33514f}
+.cell.out .dnum{color:#c3d5d3}
+.dnum.sun,.dnum.holi{color:var(--cHoli)}
+.dnum.sat{color:#3B7EA1}
+.ev{font-size:.7rem;line-height:1.35;margin-top:3px;padding:2px 5px;border-radius:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:default}
+.ev.holiday{background:#FDECEC;color:var(--cHoli)}
+.ev.rate{background:#EEEEFB;color:var(--cRate)}
+.ev.cheongyak{background:#E3F8EF;color:var(--cCheong)}
+.ev.tax{background:#FFF4E5;color:var(--cTax)}
+.more{font-size:.68rem;color:var(--sub);margin-top:2px}
+.list{margin-top:24px}
+.list h2{font-size:1.08rem;font-weight:700;margin-bottom:10px}
+.li{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 15px;margin-bottom:8px;display:flex;gap:13px;align-items:flex-start}
+.li .d{flex:0 0 auto;text-align:center;min-width:44px}
+.li .d b{display:block;font-size:1.15rem;font-weight:800;color:var(--teal);line-height:1.1}
+.li .d span{font-size:.72rem;color:var(--sub)}
+.li .t{font-size:.93rem;font-weight:600}
+.li .s{font-size:.82rem;color:var(--sub);margin-top:2px}
+.tag{display:inline-block;font-size:.68rem;font-weight:800;padding:2px 7px;border-radius:20px;margin-right:6px;vertical-align:middle}
+.tag.holiday{background:#FDECEC;color:var(--cHoli)}
+.tag.rate{background:#EEEEFB;color:var(--cRate)}
+.tag.cheongyak{background:#E3F8EF;color:var(--cCheong)}
+.tag.tax{background:#FFF4E5;color:var(--cTax)}
+.empty{text-align:center;padding:26px;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:13px}
+.note{font-size:.8rem;color:var(--sub);margin-top:16px;line-height:1.7;text-align:center}
+footer{background:var(--forest);color:#7FA5A2;padding:32px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:34px}
+footer a{color:#B9DCD9;margin:0 8px}
+@media(max-width:700px){.cell{min-height:76px;padding:4px}.ev{font-size:.62rem;padding:1px 3px}.dnum{font-size:.76rem}nav.gnb{display:none}}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css?v=3">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><img class="logo3d" src="/boobi-ring-3d.png" alt="" width="26" height="26"><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
+<nav class="gnb"><a href="/cheongyak-board.html">청약공고</a><a href="/column.html">칼럼</a><a href="/policy-finder.html">정책대출</a><a href="/experts.html">전문가</a></nav>
+</div></header>
+
+<main><div class="wrap">
+<div class="crumb"><a href="/">홈</a> › 부동산 캘린더</div>
+<div class="hero-t">
+<h1>📅 부동산 캘린더</h1>
+<p>청약 접수·당첨발표, 한국·미국 금리 결정일, 공휴일, 세금 납부 마감까지 한 달에 모아봤어요.</p>
+</div>
+
+<div class="navbar">
+<button class="navbtn" id="prev" aria-label="이전 달">‹</button>
+<div class="mtitle" id="mtitle">—</div>
+<button class="navbtn" id="next" aria-label="다음 달">›</button>
+<button class="today-btn" id="todayBtn">오늘</button>
+</div>
+
+<div class="legend">
+<span><i style="background:var(--cHoli)"></i>공휴일</span>
+<span><i style="background:var(--cRate)"></i>금리 결정</span>
+<span><i style="background:var(--cCheong)"></i>청약</span>
+<span><i style="background:var(--cTax)"></i>세금</span>
+</div>
+
+<div class="cal">
+<div class="dow"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div>
+<div class="grid" id="grid"></div>
+</div>
+
+<div class="list">
+<h2 id="listTitle">이번 달 일정</h2>
+<div id="listBox"></div>
+</div>
+
+<p class="note">청약 일정은 <a href="/cheongyak-board.html" style="color:var(--teal);font-weight:600">청약·분양 공고</a>에서 매일 자동 수집돼요. 공휴일·금리 결정일은 공식 발표 기준이며, 세금 일정은 통상 법정 납기예요.<br>부동산 대책 발표는 사전 공지가 없는 경우가 많아, 발표되면 이 캘린더에 반영해드려요.</p>
+
+</div></main>
+
+<footer><div class="wrap">
+부비 — 부동산 비서<br>© 2026 영크루 ·
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a>
+</div></footer>
+
+<script>
+(function(){
+  var EVENTS=[];             // {date,type,title,desc}
+  var cur=new Date(); cur.setDate(1);
+  var TODAY=new Date(); TODAY.setHours(0,0,0,0);
+  var TYPE_LABEL={holiday:'공휴일',rate:'금리',cheongyak:'청약',tax:'세금'};
+
+  function ymd(d){var m=('0'+(d.getMonth()+1)).slice(-2),dd=('0'+d.getDate()).slice(-2);return d.getFullYear()+'-'+m+'-'+dd;}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function byDate(){var m={};EVENTS.forEach(function(e){(m[e.date]=m[e.date]||[]).push(e);});return m;}
+
+  function render(){
+    var y=cur.getFullYear(), mo=cur.getMonth();
+    document.getElementById('mtitle').textContent=y+'년 '+(mo+1)+'월';
+    document.getElementById('listTitle').textContent=(mo+1)+'월 일정';
+    var first=new Date(y,mo,1), start=new Date(y,mo,1-first.getDay());
+    var map=byDate(), g=document.getElementById('grid'), h='';
+    for(var i=0;i<42;i++){
+      var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
+      var key=ymd(d), out=(d.getMonth()!==mo), evs=map[key]||[];
+      var isHoli=evs.some(function(e){return e.type==='holiday';});
+      var cls='cell'+(out?' out':'')+(d.getTime()===TODAY.getTime()?' today':'');
+      var ncls='dnum'+(d.getDay()===0?' sun':(d.getDay()===6?' sat':''))+(isHoli?' holi':'');
+      h+='<div class="'+cls+'"><div class="'+ncls+'">'+d.getDate()+'</div>';
+      evs.slice(0,3).forEach(function(e){
+        h+='<div class="ev '+e.type+'" title="'+esc(e.title)+'">'+esc(e.title)+'</div>';
+      });
+      if(evs.length>3) h+='<div class="more">+'+(evs.length-3)+'</div>';
+      h+='</div>';
+      if(i>=34 && new Date(start.getFullYear(),start.getMonth(),start.getDate()+i+1).getMonth()!==mo) { }
+    }
+    g.innerHTML=h;
+
+    var monthEvs=EVENTS.filter(function(e){var p=e.date.split('-');return +p[0]===y && +p[1]===mo+1;})
+      .sort(function(a,b){return a.date<b.date?-1:(a.date>b.date?1:0);});
+    var lb=document.getElementById('listBox');
+    if(!monthEvs.length){ lb.innerHTML='<div class="empty">이 달에는 등록된 일정이 없어요.</div>'; return; }
+    var lh='';
+    monthEvs.forEach(function(e){
+      var p=e.date.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
+      var dw=['일','월','화','수','목','금','토'][dt.getDay()];
+      lh+='<div class="li"><div class="d"><b>'+(+p[2])+'</b><span>'+dw+'</span></div>'+
+          '<div><div class="t"><span class="tag '+e.type+'">'+TYPE_LABEL[e.type]+'</span>'+esc(e.title)+'</div>'+
+          (e.desc?'<div class="s">'+esc(e.desc)+'</div>':'')+'</div></div>';
+    });
+    lb.innerHTML=lh;
+  }
+
+  function addCheongyak(items){
+    (items||[]).forEach(function(it){
+      var nm=it.name||'', short=nm.length>11?nm.slice(0,11)+'…':nm;
+      if(it.rcritStart) EVENTS.push({date:it.rcritStart,type:'cheongyak',title:short+' 접수시작',desc:(it.region||'')+' · '+(it.type||'')+' · '+nm});
+      if(it.rcritEnd && it.rcritEnd!==it.rcritStart) EVENTS.push({date:it.rcritEnd,type:'cheongyak',title:short+' 접수마감',desc:(it.region||'')+' · '+(it.type||'')+' · '+nm});
+      if(it.winnerDate) EVENTS.push({date:it.winnerDate,type:'cheongyak',title:short+' 당첨발표',desc:(it.region||'')+' · '+(it.type||'')+' · '+nm});
+    });
+  }
+
+  document.getElementById('prev').onclick=function(){cur.setMonth(cur.getMonth()-1);render();};
+  document.getElementById('next').onclick=function(){cur.setMonth(cur.getMonth()+1);render();};
+  document.getElementById('todayBtn').onclick=function(){cur=new Date();cur.setDate(1);render();};
+
+  Promise.all([
+    fetch('/calendar-events.json?t='+Date.now()).then(function(r){return r.ok?r.json():{events:[]};}).catch(function(){return {events:[]};}),
+    fetch('/cheongyak-data.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};})
+  ]).then(function(res){
+    EVENTS=(res[0].events||[]).slice();
+    addCheongyak(res[1].items);
+    render();
+    if(window.gtag){try{gtag('event','view_calendar',{events:EVENTS.length});}catch(e){}}
+  });
+  render();
+})();
+</script>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"부비 부동산 캘린더","url":"https://yeongcrew.co.kr/calendar.html","description":"청약 일정, 한국·미국 금리 결정일, 공휴일, 부동산 세금 납기를 월별 달력으로 제공","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://yeongcrew.co.kr"}}</script>
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+</body>
+</html>
