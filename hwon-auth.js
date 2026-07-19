@@ -37,6 +37,48 @@ window.hwonAuth={
 };
 })();
 
+/* ===== 새 회원가입 알림 — 첫 로그인 시 members 기록 + 운영자 메일 ===== */
+(function(){
+  var W3F_KEY='WEB3FORMS_ACCESS_KEY';   // ← web3forms.com에서 발급받은 키로 교체하면 메일 발송 시작
+  function loadFS(){
+    return new Promise(function(res,rej){
+      if(window.firebase&&firebase.firestore){res();return;}
+      var s=document.createElement('script');
+      s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js';
+      s.onload=res;s.onerror=rej;document.head.appendChild(s);
+    });
+  }
+  function notify(d){
+    if(!W3F_KEY||W3F_KEY.indexOf('WEB3FORMS')===0) return;   // 키 미설정이면 조용히 스킵
+    fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({
+        access_key:W3F_KEY,
+        from_name:'부비 가입알림',
+        subject:'[부비] 새 회원가입 🎉 '+(d.name||d.email||''),
+        message:'새 회원이 가입했어요!\n\n이름: '+(d.name||'-')+'\n이메일: '+(d.email||'-')+'\n가입시각: '+d.createdAt+'\n첫 진입 페이지: '+d.firstPage
+      })
+    }).catch(function(){});
+  }
+  document.addEventListener('hwon-auth',function(e){
+    var u=e.detail; if(!u) return;
+    if(window.__memberChecked) return; window.__memberChecked=1;
+    loadFS().then(function(){
+      var ref=firebase.firestore().collection('members').doc(u.uid);
+      return ref.get().then(function(snap){
+        if(snap.exists) return;                                // 기존 회원이면 아무것도 안 함
+        var d={uid:u.uid,email:u.email||'',name:u.displayName||'',
+               createdAt:new Date().toISOString(),firstPage:location.pathname};
+        return ref.set(d).then(function(){
+          if(window.gtag){try{gtag('event','sign_up',{method:'google'});}catch(x){}}
+          notify(d);
+        });
+      });
+    }).catch(function(err){ console.warn('member record fail',err); });
+  });
+})();
+
 /* ===== 부비 칼럼 로그인 게이트 — 회원 전용 이어읽기 (과금 아님) ===== */
 (function(){
   var m=document.querySelector('meta[property="og:type"]');
