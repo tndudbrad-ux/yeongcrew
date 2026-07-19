@@ -144,6 +144,9 @@
 .mcDday{flex:0 0 auto;font-size:.68rem;font-weight:800;padding:2px 7px;border-radius:20px;background:#EAFAF8;color:#127c78}
 .mcUpItem span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .liveCol .newsList{grid-template-columns:1fr!important;display:grid}
+.newsItem.newsHidden{display:none!important}
+.newsMoreBtn{grid-column:1/-1;width:100%;margin-top:8px;padding:11px;border:1px solid var(--line,#DCEEEC);background:#fff;border-radius:12px;font-family:inherit;font-size:.86rem;font-weight:700;color:var(--teal,#20A6A2);cursor:pointer;transition:.15s}
+.newsMoreBtn:hover{background:#EAFAF8;border-color:#B5E4E1}
 .liveCol .newsChips{flex-wrap:wrap}
 @media(max-width:860px){.liveGrid{grid-template-columns:1fr;gap:28px}}
 </style>
@@ -387,14 +390,21 @@
   function esc(t){ return String(t).replace(/[<>&"]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];}); }
   function render(items){
     if(!items||!items.length){ list.innerHTML='<div class="newsErr">지금은 뉴스를 불러오지 못했어요. 잠시 후 새로고침해 주세요.</div>'; return; }
-    var h='';
-    items.slice(0,8).forEach(function(it,idx){
-      h+='<a class="newsItem" href="'+esc(it.link)+'" target="_blank" rel="noopener nofollow">'
+    var TOP=5, all=items.slice(0,10), extra=Math.max(0,all.length-TOP), h='';
+    all.forEach(function(it,idx){
+      h+='<a class="newsItem'+(idx>=TOP?' newsHidden':'')+'" href="'+esc(it.link)+'" target="_blank" rel="noopener nofollow">'
         +'<span class="newsRank">'+(idx+1)+'</span>'
         +'<span class="newsBody"><span class="newsTit">'+esc(it.title)+'</span>'
         +'<span class="newsMeta">'+(it.source?esc(it.source):'')+(it.pub?' · '+rel(it.pub):'')+'</span></span></a>';
     });
+    if(extra>0) h+='<button type="button" class="newsMoreBtn" id="newsMoreBtn">뉴스 더 보기 +'+extra+'</button>';
     list.innerHTML=h;
+    var mb=document.getElementById('newsMoreBtn');
+    if(mb) mb.onclick=function(){
+      [].forEach.call(list.querySelectorAll('.newsHidden'),function(el){el.classList.remove('newsHidden');});
+      mb.remove();
+      if(window.gtag){try{gtag('event','news_more');}catch(e){}}
+    };
   }
   function load(q){
     list.innerHTML='<div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div>';
