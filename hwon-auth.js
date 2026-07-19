@@ -39,7 +39,7 @@ window.hwonAuth={
 
 /* ===== 새 회원가입 알림 — 첫 로그인 시 members 기록 + 운영자 메일 ===== */
 (function(){
-  var W3F_KEY='WEB3FORMS_ACCESS_KEY';   // ← web3forms.com에서 발급받은 키로 교체하면 메일 발송 시작
+  var W3F_KEY='68b3267b-477a-4017-960f-d80077190c01';   // web3forms 공개 액세스 키(클라이언트 임베드용)
   function loadFS(){
     return new Promise(function(res,rej){
       if(window.firebase&&firebase.firestore){res();return;}
