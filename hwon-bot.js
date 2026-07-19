@@ -39,12 +39,15 @@ window.addEventListener('appinstalled',function(){
   var ib=document.getElementById('hwbInstall'); if(ib)ib.remove();
 });
 var css=document.createElement('style');
-css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;z-index:9998;background:linear-gradient(180deg,#33CCC7,#1B918D);box-shadow:0 6px 20px rgba(42,193,188,.5),0 0 30px rgba(42,193,188,.35);display:flex;align-items:center;justify-content:center}'
-+'#hwbBtn .ring{width:26px;height:26px;border-radius:50%;border:6px solid #fff;box-sizing:border-box}'
+css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:62px;height:62px;border-radius:50%;border:none;cursor:pointer;z-index:9998;background:#fff;box-shadow:0 6px 20px rgba(42,193,188,.42),0 0 30px rgba(42,193,188,.22);display:flex;align-items:center;justify-content:center;padding:0;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}'
++'#hwbBtn:hover{transform:translateY(-3px) scale(1.05)}'
++'#hwbBtn .ring{width:46px;height:46px;border:none;border-radius:0;background:url("/boobi-ring-3d.png") center/contain no-repeat;animation:hwbFloat 4.5s ease-in-out infinite}'
++'@keyframes hwbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}'
++'@media(prefers-reduced-motion:reduce){#hwbBtn .ring{animation:none}}'
 +'#hwbPanel{position:fixed;right:16px;bottom:90px;width:min(360px,calc(100vw - 32px));max-height:min(560px,calc(100vh - 120px));background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(13,42,41,.3);z-index:9999;display:none;flex-direction:column;overflow:hidden;font-family:inherit}'
 +'#hwbPanel.open{display:flex}'
 +'#hwbHead{background:linear-gradient(135deg,#0D2A29,#133A37);color:#EAF7F6;padding:14px 18px;display:flex;align-items:center;gap:10px}'
-+'#hwbHead .r{width:18px;height:18px;border-radius:50%;border:4.5px solid #2AC1BC;box-sizing:border-box;box-shadow:0 0 10px rgba(42,193,188,.8)}'
++'#hwbHead .r{width:26px;height:26px;flex:0 0 auto;background:url("/boobi-ring-3d.png") center/contain no-repeat;filter:drop-shadow(0 0 6px rgba(42,193,188,.55))}'
 +'#hwbHead b{font-weight:500;font-size:.98rem}'
 +'#hwbHead small{color:#9FC4C1;font-weight:300;font-size:.72rem;display:block}'
 +'#hwbBody{flex:1;overflow-y:auto;padding:14px;background:#F0FAF8}'
