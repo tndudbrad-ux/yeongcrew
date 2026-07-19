@@ -118,6 +118,32 @@
 .qi{width:46px;height:46px;border-radius:14px;background:linear-gradient(180deg,#EFFBFA,#E2F6F4);display:flex;align-items:center;justify-content:center;font-size:1.35rem;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
 .ql{font-size:.78rem;font-weight:600;color:var(--forest);letter-spacing:-.01em;white-space:nowrap}
 .qt.hot .qi{background:linear-gradient(180deg,#33CCC7,#20A6A2)}
+/* ===== 뉴스 + 미니 캘린더 2단 ===== */
+.liveGrid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.liveCol{min-width:0}
+.miniCal{display:block;background:#fff;border:1px solid var(--line,#DCEEEC);border-radius:16px;padding:16px 16px 14px;transition:.16s}
+.miniCal:hover{border-color:#B5E4E1;box-shadow:0 8px 22px rgba(32,166,162,.09)}
+.mcTop{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mcMonth{font-size:1rem;font-weight:800;color:var(--forest,#0D2A29)}
+.mcMore{font-size:.78rem;font-weight:700;color:var(--teal,#20A6A2)}
+.mcDow{display:grid;grid-template-columns:repeat(7,1fr);font-size:.7rem;color:#8aa5a2;text-align:center;margin-bottom:2px}
+.mcDow span:first-child{color:#E5484D}
+.mcGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px}
+.mcCell{aspect-ratio:1/1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:7px;font-size:.76rem;color:#33514f;position:relative}
+.mcCell.out{color:#c9dbd9}
+.mcCell.sun,.mcCell.holi{color:#E5484D;font-weight:700}
+.mcCell.today{background:#E5F8F6;font-weight:800;color:#127c78;box-shadow:inset 0 0 0 1.5px #2AC1BC}
+.mcDots{display:flex;gap:2px;height:4px;align-items:center}
+.mcDots i{width:4px;height:4px;border-radius:50%;display:block}
+.d-holi{background:#E5484D}.d-rate{background:#5B5BD6}.d-cheong{background:#12854f}.d-tax{background:#B4690E}
+.mcLegend{display:flex;flex-wrap:wrap;gap:9px;margin:11px 0 9px;font-size:.7rem;color:#8aa5a2}
+.mcLegend i{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:3px;vertical-align:middle}
+.lg-holi{background:#E5484D}.lg-rate{background:#5B5BD6}.lg-cheong{background:#12854f}.lg-tax{background:#B4690E}
+.mcUp{border-top:1px solid var(--line,#DCEEEC);padding-top:9px;display:flex;flex-direction:column;gap:6px}
+.mcUpItem{display:flex;align-items:center;gap:8px;font-size:.79rem;color:#33514f;line-height:1.35}
+.mcDday{flex:0 0 auto;font-size:.68rem;font-weight:800;padding:2px 7px;border-radius:20px;background:#EAFAF8;color:#127c78}
+.mcUpItem span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:860px){.liveGrid{grid-template-columns:1fr;gap:28px}}
 </style>
 <div class="quickGrid">
 <a class="qt hot" href="apt-finder.html"><span class="qi">🔎</span><span class="ql">아파트 찾기</span></a>
@@ -137,7 +163,9 @@
 </div>
 </section>
 
-<section id="news" aria-label="부동산 뉴스">
+<section id="news" aria-label="부동산 뉴스 · 캘린더">
+<div class="liveGrid">
+<div class="liveCol">
 <h2>지금 많이 보는 부동산 뉴스</h2>
 <div class="newsChips" id="newsChips">
 <button class="newsChip on" data-q="부동산">종합</button>
@@ -152,6 +180,21 @@
 </div>
 <div class="newsList" id="newsList"><div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div></div>
 <div class="newsFoot"><span id="newsUpd"></span></div>
+</div>
+
+<div class="liveCol">
+<h2>이번 달 부동산 캘린더</h2>
+<a class="miniCal" href="/calendar.html" aria-label="부동산 캘린더 전체 보기">
+<div class="mcTop"><span class="mcMonth" id="mcMonth">—</span><span class="mcMore">전체 보기 →</span></div>
+<div class="mcDow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+<div class="mcGrid" id="mcGrid"></div>
+<div class="mcLegend">
+<span><i class="lg-holi"></i>공휴일</span><span><i class="lg-rate"></i>금리</span><span><i class="lg-cheong"></i>청약</span><span><i class="lg-tax"></i>세금</span>
+</div>
+<div class="mcUp" id="mcUp"></div>
+</a>
+</div>
+</div>
 </section>
 
 
@@ -282,6 +325,55 @@
   window.addEventListener('mouseup',up);
   document.addEventListener('visibilitychange',function(){document.hidden?stop():play();});
   go(0); play();
+})();
+
+/* ===== 홈 미니 캘린더 (청약·금리·공휴일·세금) ===== */
+(function(){
+  var grid=document.getElementById('mcGrid'); if(!grid) return;
+  var EV=[], TODAY=new Date(); TODAY.setHours(0,0,0,0);
+  function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function draw(){
+    var y=TODAY.getFullYear(), mo=TODAY.getMonth();
+    document.getElementById('mcMonth').textContent=y+'년 '+(mo+1)+'월';
+    var map={}; EV.forEach(function(e){(map[e.date]=map[e.date]||[]).push(e);});
+    var first=new Date(y,mo,1), start=new Date(y,mo,1-first.getDay()), h='';
+    var last=new Date(y,mo+1,0), weeks=Math.ceil((first.getDay()+last.getDate())/7);
+    for(var i=0;i<weeks*7;i++){
+      var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
+      var key=ymd(d), evs=map[key]||[], out=(d.getMonth()!==mo);
+      var holi=evs.some(function(e){return e.type==='holiday';});
+      var cls='mcCell'+(out?' out':'')+(d.getDay()===0?' sun':'')+(holi&&!out?' holi':'')+(d.getTime()===TODAY.getTime()?' today':'');
+      var types={}; evs.forEach(function(e){types[e.type]=1;});
+      var dots=Object.keys(types).slice(0,4).map(function(t){
+        return '<i class="d-'+(t==='cheongyak'?'cheong':t)+'"></i>';}).join('');
+      h+='<div class="'+cls+'"><span>'+d.getDate()+'</span><span class="mcDots">'+(out?'':dots)+'</span></div>';
+    }
+    grid.innerHTML=h;
+    var up=EV.filter(function(e){return e.date>=ymd(TODAY);})
+            .sort(function(a,b){return a.date<b.date?-1:1;}).slice(0,3);
+    var uh='';
+    up.forEach(function(e){
+      var p=e.date.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
+      var n=Math.round((dt-TODAY)/864e5), lab=n===0?'오늘':('D-'+n);
+      uh+='<div class="mcUpItem"><b class="mcDday">'+lab+'</b><span>'+esc(e.title)+'</span></div>';
+    });
+    document.getElementById('mcUp').innerHTML=uh||'<div class="mcUpItem"><span style="color:#8aa5a2">예정된 일정이 없어요</span></div>';
+  }
+  Promise.all([
+    fetch('/calendar-events.json?t='+Date.now()).then(function(r){return r.ok?r.json():{events:[]};}).catch(function(){return {events:[]};}),
+    fetch('/cheongyak-data.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};})
+  ]).then(function(res){
+    EV=(res[0].events||[]).slice();
+    (res[1].items||[]).forEach(function(it){
+      var nm=it.name||'', s=nm.length>10?nm.slice(0,10)+'…':nm;
+      if(it.rcritStart) EV.push({date:it.rcritStart,type:'cheongyak',title:s+' 접수시작'});
+      if(it.rcritEnd&&it.rcritEnd!==it.rcritStart) EV.push({date:it.rcritEnd,type:'cheongyak',title:s+' 접수마감'});
+      if(it.winnerDate) EV.push({date:it.winnerDate,type:'cheongyak',title:s+' 당첨발표'});
+    });
+    draw();
+  });
+  draw();
 })();
 
 /* ===== 실시간 부동산 뉴스 큐레이션 ===== */
