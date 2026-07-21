@@ -1,12 +1,12 @@
 {
-  "updated": "2026-07-14",
-  "items": [
-    {"id":"kr","flag":"🇰🇷","name":"한국 기준금리","rate":"2.50%","change":"동결","dir":"flat","asof":"5.28 금통위 · 다음 결정 7.16"},
-    {"id":"us","flag":"🇺🇸","name":"미국 기준금리","rate":"3.50~3.75%","change":"동결","dir":"flat","asof":"6월 FOMC · 다음 결정 7월 말"},
-    {"id":"jp","flag":"🇯🇵","name":"일본 기준금리","rate":"1.00%","change":"+0.25%p","dir":"up","asof":"6.16 인상 · 31년 만 최고"},
-    {"id":"cofix_new","flag":"🏦","name":"코픽스 · 신규취급액","rate":"2.90%","change":"+0.01%p","dir":"up","asof":"5월 기준 · 6.15 공시"},
-    {"id":"cofix_bal","flag":"🏦","name":"코픽스 · 잔액","rate":"2.89%","change":"+0.02%p","dir":"up","asof":"5월 기준"},
-    {"id":"cofix_snew","flag":"🏦","name":"코픽스 · 신잔액","rate":"2.50%","change":"+0.01%p","dir":"up","asof":"5월 기준"}
-  ],
-  "note": "변동금리 주담대는 대부분 '코픽스 + 가산금리'로 정해져요. 코픽스는 매월 15일 전후 공시되며, 이 표는 훤AI가 매주 자동 확인해 갱신합니다."
+"updated": "2026-07-21",
+"items": [
+{"id":"kr","flag":"🇰🇷","name":"한국 기준금리","rate":"2.75%","change":"+0.25%p","dir":"up","asof":"7.16 인상 · 다음 결정 8.27"},
+{"id":"us","flag":"🇺🇸","name":"미국 기준금리","rate":"3.50~3.75%","change":"동결","dir":"flat","asof":"6월 FOMC · 다음 결정 7.29"},
+{"id":"jp","flag":"🇯🇵","name":"일본 기준금리","rate":"1.00%","change":"+0.25%p","dir":"up","asof":"6.16 인상 · 31년 만 최고"},
+{"id":"cofix_new","flag":"🏦","name":"코픽스 · 신규취급액","rate":"3.05%","change":"+0.15%p","dir":"up","asof":"6월 기준 · 7.15 공시"},
+{"id":"cofix_bal","flag":"🏦","name":"코픽스 · 잔액","rate":"2.94%","change":"+0.05%p","dir":"up","asof":"6월 기준"},
+{"id":"cofix_snew","flag":"🏦","name":"코픽스 · 신잔액","rate":"2.54%","change":"+0.04%p","dir":"up","asof":"6월 기준"}
+],
+"note": "변동금리 주담대는 대부분 '코픽스 + 가산금리'로 정해져요. 코픽스는 매월 15일 전후 공시되며, 이 표는 훤AI가 매주 자동 확인해 갱신합니다."
 }
