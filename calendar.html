@@ -193,6 +193,27 @@ footer a{color:#B9DCD9;margin:0 8px}
     });
   }
 
+  // 부드러운 스크롤 (behavior:'smooth' 미지원·차단 환경 대비해 직접 구현)
+  function smoothTo(top){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var startY = window.pageYOffset;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var endY = Math.max(0, Math.min(top, max));
+    var dist = endY - startY;
+    if(reduce || Math.abs(dist) < 2){ window.scrollTo(0, endY); return; }
+    var dur = Math.min(700, Math.max(280, Math.abs(dist) * 0.5));
+    var t0 = null;
+    cancelAnimationFrame(smoothTo._raf);
+    function step(ts){
+      if(t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur);
+      var e = p < .5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2;  // easeInOutCubic
+      window.scrollTo(0, startY + dist * e);
+      if(p < 1) smoothTo._raf = requestAnimationFrame(step);
+    }
+    smoothTo._raf = requestAnimationFrame(step);
+  }
+
   // 날짜 칸 클릭 → 아래 일정 목록의 해당 날짜로 스크롤 + 강조
   function focusDate(key){
     var cells=document.querySelectorAll('#grid .cell.picked');
@@ -202,7 +223,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 
     var target=document.getElementById('li-'+key);
     if(!target) return;
-    target.scrollIntoView({behavior:'smooth',block:'start'});
+    smoothTo(target.getBoundingClientRect().top + window.pageYOffset - 84);
 
     var rows=document.querySelectorAll('#listBox .li.flash');
     for(var j=0;j<rows.length;j++) rows[j].classList.remove('flash');
