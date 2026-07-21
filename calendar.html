@@ -52,6 +52,10 @@ main{padding:26px 0 60px}
 .cell:nth-child(7n){border-right:none}
 .cell.out{background:#FAFDFD}
 .cell.today{background:#EAFAF8;box-shadow:inset 0 0 0 2px var(--mint)}
+.cell.has{cursor:pointer;transition:background .15s}
+.cell.has:hover{background:#F1FBFA}
+.cell.has:active{background:#E4F6F4}
+.cell.picked{box-shadow:inset 0 0 0 2px var(--teal)}
 .dnum{font-size:.85rem;font-weight:700;color:#33514f}
 .cell.out .dnum{color:#c3d5d3}
 .dnum.sun,.dnum.holi{color:var(--cHoli)}
@@ -64,7 +68,8 @@ main{padding:26px 0 60px}
 .more{font-size:.68rem;color:var(--sub);margin-top:2px}
 .list{margin-top:24px}
 .list h2{font-size:1.08rem;font-weight:700;margin-bottom:10px}
-.li{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 15px;margin-bottom:8px;display:flex;gap:13px;align-items:flex-start}
+.li{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 15px;margin-bottom:8px;display:flex;gap:13px;align-items:flex-start;scroll-margin-top:84px;transition:border-color .25s,background .25s,box-shadow .25s}
+.li.flash{border-color:var(--teal);background:#F2FBFA;box-shadow:0 0 0 3px rgba(27,167,156,.16)}
 .li .d{flex:0 0 auto;text-align:center;min-width:44px}
 .li .d b{display:block;font-size:1.15rem;font-weight:800;color:var(--teal);line-height:1.1}
 .li .d span{font-size:.72rem;color:var(--sub)}
@@ -150,9 +155,10 @@ footer a{color:#B9DCD9;margin:0 8px}
       var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
       var key=ymd(d), out=(d.getMonth()!==mo), evs=map[key]||[];
       var isHoli=evs.some(function(e){return e.type==='holiday';});
-      var cls='cell'+(out?' out':'')+(d.getTime()===TODAY.getTime()?' today':'');
+      var cls='cell'+(out?' out':'')+(d.getTime()===TODAY.getTime()?' today':'')+(evs.length?' has':'');
       var ncls='dnum'+(d.getDay()===0?' sun':(d.getDay()===6?' sat':''))+(isHoli?' holi':'');
-      h+='<div class="'+cls+'"><div class="'+ncls+'">'+d.getDate()+'</div>';
+      var atr=' data-date="'+key+'"'+(out?' data-out="1"':'')+(evs.length?' role="button" tabindex="0" aria-label="'+key+' 일정 '+evs.length+'건 보기"':'');
+      h+='<div class="'+cls+'"'+atr+'><div class="'+ncls+'">'+d.getDate()+'</div>';
       evs.slice(0,3).forEach(function(e){
         h+='<div class="ev '+e.type+'" title="'+esc(e.title)+'">'+esc(e.title)+'</div>';
       });
@@ -166,11 +172,12 @@ footer a{color:#B9DCD9;margin:0 8px}
       .sort(function(a,b){return a.date<b.date?-1:(a.date>b.date?1:0);});
     var lb=document.getElementById('listBox');
     if(!monthEvs.length){ lb.innerHTML='<div class="empty">이 달에는 등록된 일정이 없어요.</div>'; return; }
-    var lh='';
+    var lh='', seen={};
     monthEvs.forEach(function(e){
       var p=e.date.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
       var dw=['일','월','화','수','목','금','토'][dt.getDay()];
-      lh+='<div class="li"><div class="d"><b>'+(+p[2])+'</b><span>'+dw+'</span></div>'+
+      var anchor = seen[e.date] ? '' : ' id="li-'+e.date+'"'; seen[e.date]=1;
+      lh+='<div class="li" data-date="'+e.date+'"'+anchor+'><div class="d"><b>'+(+p[2])+'</b><span>'+dw+'</span></div>'+
           '<div><div class="t"><span class="tag '+e.type+'">'+TYPE_LABEL[e.type]+'</span>'+esc(e.title)+'</div>'+
           (e.desc?'<div class="s">'+esc(e.desc)+'</div>':'')+'</div></div>';
     });
@@ -185,6 +192,49 @@ footer a{color:#B9DCD9;margin:0 8px}
       if(it.winnerDate) EVENTS.push({date:it.winnerDate,type:'cheongyak',title:short+' 당첨발표',desc:(it.region||'')+' · '+(it.type||'')+' · '+nm});
     });
   }
+
+  // 날짜 칸 클릭 → 아래 일정 목록의 해당 날짜로 스크롤 + 강조
+  function focusDate(key){
+    var cells=document.querySelectorAll('#grid .cell.picked');
+    for(var i=0;i<cells.length;i++) cells[i].classList.remove('picked');
+    var cell=document.querySelector('#grid .cell[data-date="'+key+'"]');
+    if(cell) cell.classList.add('picked');
+
+    var target=document.getElementById('li-'+key);
+    if(!target) return;
+    target.scrollIntoView({behavior:'smooth',block:'start'});
+
+    var rows=document.querySelectorAll('#listBox .li.flash');
+    for(var j=0;j<rows.length;j++) rows[j].classList.remove('flash');
+    var same=document.querySelectorAll('#listBox .li[data-date="'+key+'"]');
+    for(var k=0;k<same.length;k++) same[k].classList.add('flash');
+    clearTimeout(focusDate._t);
+    focusDate._t=setTimeout(function(){
+      for(var m=0;m<same.length;m++) same[m].classList.remove('flash');
+    },2200);
+  }
+
+  document.getElementById('grid').addEventListener('click',function(ev){
+    var cell=ev.target.closest('.cell.has');
+    if(!cell) return;
+    var key=cell.getAttribute('data-date');
+    if(cell.getAttribute('data-out')){          // 지난달·다음달 칸이면 그 달로 이동 후 스크롤
+      var p=key.split('-');
+      cur=new Date(+p[0],+p[1]-1,1);
+      render();
+      setTimeout(function(){focusDate(key);},60);
+      return;
+    }
+    focusDate(key);
+  });
+
+  document.getElementById('grid').addEventListener('keydown',function(ev){
+    if(ev.key!=='Enter' && ev.key!==' ') return;
+    var cell=ev.target.closest && ev.target.closest('.cell.has');
+    if(!cell) return;
+    ev.preventDefault();
+    cell.click();
+  });
 
   document.getElementById('prev').onclick=function(){cur.setMonth(cur.getMonth()-1);render();};
   document.getElementById('next').onclick=function(){cur.setMonth(cur.getMonth()+1);render();};
