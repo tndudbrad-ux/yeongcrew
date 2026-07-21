@@ -75,6 +75,23 @@ main{padding:26px 0 60px}
 .li .d span{font-size:.72rem;color:var(--sub)}
 .li .t{font-size:.93rem;font-weight:600}
 .li .s{font-size:.82rem;color:var(--sub);margin-top:2px}
+.acts{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.acts.done{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.st{display:inline-block;font-size:.66rem;font-weight:800;padding:3px 8px;border-radius:20px;margin-right:7px}
+.st.open{background:#E3F8EF;color:#1E8E5F}
+.st.soon{background:#EAF3FE;color:#2F6BC4}
+.st.wait{background:#FFF4E5;color:var(--cTax)}
+.st.done{background:#F0F2F2;color:#8A9A99}
+.ask{font-size:.84rem;color:#33514f;font-weight:600}
+.acts.done .ask{color:var(--sub);font-weight:500}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.act{display:inline-block;font-size:.82rem;font-weight:700;padding:8px 14px;border-radius:9px;text-decoration:none;white-space:nowrap}
+.act.ghost{background:#fff;color:var(--teal);border:1.5px solid var(--teal)}
+.act.ghost:hover{background:#EFFAF9}
+.act.go{background:var(--teal);color:#fff;border:1.5px solid var(--teal)}
+.act.go:hover{background:#159086;border-color:#159086}
+.acts.done .act{font-size:.78rem;padding:6px 11px;font-weight:600}
+@media(max-width:520px){.btns{flex-direction:column}.act{text-align:center}}
 .tag{display:inline-block;font-size:.68rem;font-weight:800;padding:2px 7px;border-radius:20px;margin-right:6px;vertical-align:middle}
 .tag.holiday{background:#FDECEC;color:var(--cHoli)}
 .tag.rate{background:#EEEEFB;color:var(--cRate)}
@@ -178,8 +195,9 @@ footer a{color:#B9DCD9;margin:0 8px}
       var dw=['일','월','화','수','목','금','토'][dt.getDay()];
       var anchor = seen[e.date] ? '' : ' id="li-'+e.date+'"'; seen[e.date]=1;
       lh+='<div class="li" data-date="'+e.date+'"'+anchor+'><div class="d"><b>'+(+p[2])+'</b><span>'+dw+'</span></div>'+
-          '<div><div class="t"><span class="tag '+e.type+'">'+TYPE_LABEL[e.type]+'</span>'+esc(e.title)+'</div>'+
-          (e.desc?'<div class="s">'+esc(e.desc)+'</div>':'')+'</div></div>';
+          '<div style="min-width:0;flex:1"><div class="t"><span class="tag '+e.type+'">'+TYPE_LABEL[e.type]+'</span>'+esc(e.title)+'</div>'+
+          (e.desc?'<div class="s">'+esc(e.desc)+'</div>':'')+
+          (e.type==='cheongyak'?actionHTML(e):'')+'</div></div>';
     });
     lb.innerHTML=lh;
   }
@@ -187,10 +205,57 @@ footer a{color:#B9DCD9;margin:0 8px}
   function addCheongyak(items){
     (items||[]).forEach(function(it){
       var nm=it.name||'', short=nm.length>11?nm.slice(0,11)+'…':nm;
-      if(it.rcritStart) EVENTS.push({date:it.rcritStart,type:'cheongyak',title:short+' 접수시작',desc:(it.region||'')+' · '+(it.type||'')+' · '+nm});
-      if(it.rcritEnd && it.rcritEnd!==it.rcritStart) EVENTS.push({date:it.rcritEnd,type:'cheongyak',title:short+' 접수마감',desc:(it.region||'')+' · '+(it.type||'')+' · '+nm});
-      if(it.winnerDate) EVENTS.push({date:it.winnerDate,type:'cheongyak',title:short+' 당첨발표',desc:(it.region||'')+' · '+(it.type||'')+' · '+nm});
+      var meta={fullName:nm,region:it.region||'',htype:it.type||'',url:it.url||'',
+                start:it.rcritStart||'',end:it.rcritEnd||it.rcritStart||'',winner:it.winnerDate||''};
+      function push(date,label,kind){
+        var e={date:date,type:'cheongyak',title:short+' '+label,
+               desc:meta.region+' · '+meta.htype+' · '+nm,kind:kind};
+        for(var k in meta) e[k]=meta[k];
+        EVENTS.push(e);
+      }
+      if(it.rcritStart) push(it.rcritStart,'접수시작','start');
+      if(it.rcritEnd && it.rcritEnd!==it.rcritStart) push(it.rcritEnd,'접수마감','end');
+      if(it.winnerDate) push(it.winnerDate,'당첨발표','winner');
     });
+  }
+
+  // 상태에 따른 액션 블록
+  function actionHTML(e){
+    var st=cheongyakState(e), apply=e.url||'https://www.applyhome.co.kr/';
+    var ask, badge='', btns='';
+    if(st.s==='open'){
+      badge='<span class="st open">접수 중</span>';
+      ask=(st.days<=0?'오늘이 접수 마지막 날이에요.':'접수 마감까지 '+st.days+'일 남았어요.');
+      btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+
+           '<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 신청하기 ↗</a>';
+    } else if(st.s==='soon'){
+      badge='<span class="st soon">접수 예정</span>';
+      ask='청약 넣어볼 만한가요? 접수 시작까지 '+st.days+'일 남았어요.';
+      btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+
+           '<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">공고 자세히 보기 ↗</a>';
+    } else if(st.s==='wait'){
+      badge='<span class="st wait">발표 대기</span>';
+      ask='접수는 마감됐고, 당첨자 발표를 기다리는 중이에요.';
+      btns='<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 확인하기 ↗</a>';
+    } else {
+      return '<div class="acts done">'+
+             '<span class="st done">종료</span>'+
+             '<span class="ask">이 청약은 일정이 종료됐어요.</span>'+
+             '<a class="act ghost" href="/cheongyak-board.html">진행 중인 청약 보기</a></div>';
+    }
+    return '<div class="acts">'+badge+'<span class="ask">'+ask+'</span><div class="btns">'+btns+'</div></div>';
+  }
+
+  // 청약 일정의 현재 상태 판정
+  function cheongyakState(e){
+    function d(s){ if(!s) return null; var p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]).getTime(); }
+    var now=TODAY.getTime(), st=d(e.start), en=d(e.end), wn=d(e.winner);
+    if(en!==null && now<=en){
+      if(st!==null && now<st) return {s:'soon', days:Math.round((st-now)/86400000)};
+      return {s:'open', days:Math.round((en-now)/86400000)};
+    }
+    if(wn!==null && now<=wn) return {s:'wait'};
+    return {s:'done'};
   }
 
   // 부드러운 스크롤 (behavior:'smooth' 미지원·차단 환경 대비해 직접 구현)
