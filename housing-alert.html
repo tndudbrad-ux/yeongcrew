@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>공공임대 맞춤 알림 신청 (청년·행복·국민임대) - 부비</title>
-<meta name="description" content="내 조건(지역·나이·소득·무주택·관심 유형)을 저장해두면, 청년주택·행복주택·국민임대 등 공공임대 공고가 뜰 때 부비가 카카오 알림톡으로 알려드려요. 회원 전용.">
+<title>청약·임대 맞춤 알림 신청 (줍줍·청약·공공임대) - 부비</title>
+<meta name="description" content="내 조건(지역·나이·소득·무주택·관심 유형)을 저장해두면, APT 청약·무순위 줍줍·오피스텔·청년/행복/국민임대 공고가 뜰 때 부비가 알려드려요. 회원 전용.">
 <link rel="canonical" href="https://yeongcrew.co.kr/housing-alert.html">
 <meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
-<meta property="og:title" content="공공임대 맞춤 알림 신청 - 부비">
-<meta property="og:description" content="조건만 저장해두면 청년·행복·국민임대 공고를 카톡으로 알려드려요.">
+<meta property="og:title" content="청약·임대 맞춤 알림 신청 - 부비">
+<meta property="og:description" content="조건만 저장해두면 APT 청약·무순위 줍줍·공공임대 공고를 먼저 알려드려요.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yeongcrew.co.kr/housing-alert.html">
 <meta property="og:site_name" content="부비 - 부동산 비서">
@@ -45,6 +45,7 @@ input.f:focus,select.f:focus{outline:none;border-color:#2AC1BC;box-shadow:0 0 0 
 .consent{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:.88rem;color:#547471;line-height:1.55}
 .consent input{margin-top:3px;flex:0 0 auto;width:18px;height:18px;accent-color:#20A6A2}
 </style>
+<meta name="robots" content="noindex,follow">
 </head>
 <body>
 <header class="site-header"><div class="wrap">
@@ -61,8 +62,8 @@ input.f:focus,select.f:focus{outline:none;border-color:#2AC1BC;box-shadow:0 0 0 
 <div class="crumb"><a href="/">홈</a> › 맞춤 알림</div>
 <div class="hero-t">
 <span class="badge">🔔 회원 전용</span>
-<h1>공공임대 맞춤 알림</h1>
-<p>조건을 한 번 저장해두면, <b>청년주택·행복주택·국민임대</b> 등<br>내 조건에 맞는 공고가 뜰 때 <b>카카오 알림톡</b>으로 알려드려요.</p>
+<h1>청약·임대 맞춤 알림</h1>
+<p>조건을 한 번 저장해두면, <b>APT 청약·무순위 줍줍·공공임대</b> 등<br>내 조건에 맞는 공고가 뜰 때 부비가 <b>먼저 알려드려요.</b></p>
 </div>
 
 <!-- 로그인 게이트 -->
@@ -95,7 +96,7 @@ input.f:focus,select.f:focus{outline:none;border-color:#2AC1BC;box-shadow:0 0 0 
 <label class="f">알림 받을 휴대폰 번호 <span class="opt">(카카오 알림톡 수신용)</span></label>
 <input class="f" id="phone" type="tel" inputmode="numeric" placeholder="010-0000-0000">
 
-<label class="consent"><input type="checkbox" id="consent"><span>공공임대 공고 알림 수신에 동의합니다. 저장한 정보는 알림 발송 목적으로만 사용되며, 언제든 아래에서 해지할 수 있어요.</span></label>
+<label class="consent"><input type="checkbox" id="consent"><span>청약·임대 공고 알림 수신에 동의합니다. 저장한 정보는 알림 발송 목적으로만 사용되며, 언제든 아래에서 해지할 수 있어요.</span></label>
 
 <button class="go" id="saveBtn">알림 신청 저장</button>
 <button class="go ghost" id="delBtn" style="display:none">알림 해지 (저장 삭제)</button>
@@ -107,7 +108,7 @@ input.f:focus,select.f:focus{outline:none;border-color:#2AC1BC;box-shadow:0 0 0 
 <h2 style="font-size:1.05rem;font-weight:800">이렇게 작동해요</h2>
 <ol style="font-size:.92rem;line-height:1.9;padding-left:20px;margin-top:8px;color:#33514f">
 <li>내 조건(지역·유형·나이·소득·무주택)을 저장</li>
-<li>부비가 공공임대 공고를 매일 수집</li>
+<li>부비가 청약·줍줍·임대 공고를 매일 수집</li>
 <li>내 조건에 맞는 공고가 나오면 → <b>카카오 알림톡 발송</b></li>
 <li>알림에서 바로 공고 링크로 이동해 신청</li>
 </ol>
@@ -124,7 +125,7 @@ input.f:focus,select.f:focus{outline:none;border-color:#2AC1BC;box-shadow:0 0 0 
 <script>
 (function(){
   var REGIONS=['서울','경기','인천','부산','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주'];
-  var TYPES=['청년주택','행복주택','국민임대','영구임대','매입임대','전세임대','장기전세','신혼희망타운'];
+  var TYPES=['APT 청약','무순위·줍줍','오피스텔','청년주택','행복주택','국민임대','영구임대','매입임대','전세임대','장기전세','신혼희망타운'];
   var selRegions={}, selTypes={};
   function chip(txt,store,box){var d=document.createElement('div');d.className='chip';d.textContent=txt;d.onclick=function(){var on=d.classList.toggle('on');store[txt]=on;};box.appendChild(d);return d;}
   var rBox=document.getElementById('regions'), tBox=document.getElementById('types');
