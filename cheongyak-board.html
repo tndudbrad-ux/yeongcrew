@@ -53,6 +53,10 @@ main{padding:28px 0 60px}
 .badge.open{background:#E3F8EF;color:#12854f}
 .badge.soon{background:#FFF4E5;color:#B4690E}
 .badge.close{background:#F1F5F4;color:#7b918f}
+.badge.fire{background:linear-gradient(120deg,#FF7A45,#FF4D4F);color:#fff}
+.item.hot{border:2px solid #FF7A45;box-shadow:0 3px 14px rgba(255,122,69,.18)}
+.item.hot h3{color:#C2410C}
+.margin{font-size:.86rem;font-weight:700;color:#C2410C;background:#FFF3EC;border:1px solid #FFD8C2;border-radius:10px;padding:7px 11px;margin:8px 0 6px}
 .reg{font-size:.8rem;color:var(--sub)}
 .item h3{font-size:1.04rem;font-weight:700;letter-spacing:-.01em;margin-bottom:4px}
 .addr{font-size:.85rem;color:var(--sub);margin-bottom:9px}
@@ -160,9 +164,10 @@ footer a{color:#B9DCD9;margin:0 8px}
       if(fS!=='all' && statusOf(it)!==fS) return false;
       return true;
     });
-    // 접수중 → 접수예정 → 마감, 각 그룹은 임박순
+    // 확정차익(hot) 최상단 → 접수중 → 접수예정 → 마감, 각 그룹은 임박순
     var order={open:0,soon:1,close:2};
     items.sort(function(a,b){
+      if(!!b.hot - !!a.hot) return (!!b.hot) - (!!a.hot);
       var oa=order[statusOf(a)], ob=order[statusOf(b)];
       if(oa!==ob)return oa-ob;
       var da=pd(a.rcritStart)||pd(a.noticeDate)||new Date(2100,0,1);
@@ -173,12 +178,15 @@ footer a{color:#B9DCD9;margin:0 8px}
     var h='';
     items.forEach(function(it){
       var st=statusOf(it), lab={open:'접수중',soon:'접수예정',close:'마감'}[st], dd=dday(it);
-      h+='<div class="item">'+
-        '<div class="itop"><span class="badge '+st+'">'+lab+'</span>'+
+      h+='<div class="item'+(it.hot?' hot':'')+'">'+
+        '<div class="itop">'+
+        (it.hot?'<span class="badge fire">🔥 확정차익</span>':'')+
+        '<span class="badge '+st+'">'+lab+'</span>'+
         '<span class="badge">'+(it.type||'기타')+'</span>'+
         (dd?'<span class="reg">· '+dd+'</span>':'')+
         '<span class="reg">· '+(it.region||'')+'</span></div>'+
         '<h3>'+esc(it.name||'(공고명 미상)')+'</h3>'+
+        (it.margin?'<div class="margin">💰 '+esc(it.margin)+(it.note?' · '+esc(it.note):'')+'</div>':'')+
         (it.addr?'<div class="addr">'+esc(it.addr)+'</div>':'')+
         '<div class="dates">'+
           (it.noticeDate?'<span>공고일 <b>'+fmt(it.noticeDate)+'</b></span>':'')+
@@ -207,10 +215,20 @@ footer a{color:#B9DCD9;margin:0 8px}
     el.innerHTML='마지막 업데이트 <b>'+y+'.'+m+'.'+dd+' '+hh+':'+mi+'</b> · 매일 자동 갱신';
   }
 
+  function mergeFeatured(base, feat){
+    var items=(base.items||[]).slice();
+    var ids={}; items.forEach(function(it){ids[it.id]=1;});
+    (feat.items||[]).forEach(function(f){ if(!ids[f.id]) items.unshift(f); });
+    base.items=items; return base;
+  }
+
   buildFilters();
-  fetch('/cheongyak-data.json?t='+Date.now())
-    .then(function(r){ if(!r.ok) throw new Error('no data'); return r.json(); })
-    .then(function(j){ data=j||{items:[]}; showUpd(); stats(); render();
+  Promise.all([
+    fetch('/cheongyak-data.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};}),
+    fetch('/cheongyak-featured.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};})
+  ])
+    .then(function(res){ var base=res[0]||{items:[]}; if((base.items||[]).length===0 && (res[1].items||[]).length===0) throw new Error('no data');
+      data=mergeFeatured(base,res[1]||{items:[]}); showUpd(); stats(); render();
       if(window.gtag){try{gtag('event','view_cheongyak_board',{count:(data.items||[]).length});}catch(e){}} })
     .catch(function(){
       document.getElementById('upd').textContent='곧 공개돼요';
