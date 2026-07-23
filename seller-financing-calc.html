@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>매도인 금융(셀러 파이낸싱) 계산기 — 대여금·이자·근저당·증여세 자동계산 - 부비</title>
+<meta name="description" content="매매가·계약금·중도금·자체대출만 넣으면 매도인에게 빌리는 금액, 월 이자, 총 이자, 근저당 채권최고액, 그리고 가족 간 거래 시 증여세 위험까지 한 번에 계산해드려요. 셀러 파이낸싱 매수·매도 전 필수 계산기.">
+<meta name="keywords" content="셀러 파이낸싱 계산기, 매도인 금융 계산기, 집주인 대출 계산, 잔금 대여 이자, 근저당 채권최고액 계산, 특수관계 저리대여 증여세, 무이자 한도, 부비">
+<link rel="canonical" href="https://yeongcrew.co.kr/seller-financing-calc.html">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="매도인 금융(셀러 파이낸싱) 계산기 - 부비">
+<meta property="og:description" content="대여금·월이자·근저당 채권최고액·증여세 위험까지 한 번에. 매수·매도 전 필수 계산기.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yeongcrew.co.kr/seller-financing-calc.html">
+<meta property="og:site_name" content="부비 - 부동산 비서">
+<meta property="og:image" content="https://yeongcrew.co.kr/icon-512.png">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#F0FAF8;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+header.top{background:rgba(240,250,248,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{max-width:880px;display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500;letter-spacing:-.01em}
+.logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px)}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+main{padding:30px 0 60px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:14px}.crumb a{color:var(--teal)}
+h1{font-size:1.55rem;font-weight:600;letter-spacing:-.03em;line-height:1.35}
+.sub{font-size:.95rem;color:var(--sub);margin:8px 0 22px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 22px;margin-bottom:18px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.row:last-child{border-bottom:none}
+.row label{font-size:.95rem;font-weight:600;flex:1}
+.row .hint{display:block;font-size:.76rem;color:var(--sub);font-weight:400;margin-top:2px}
+.inp{display:flex;align-items:center;gap:6px}
+.inp input{width:130px;text-align:right;font-size:1rem;font-weight:700;color:var(--forest);border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font-family:inherit}
+.inp input:focus{outline:none;border-color:var(--mint)}
+.inp .unit{font-size:.85rem;color:var(--sub);min-width:26px}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:none;background:#fff;color:var(--sub);font-family:inherit;font-size:.86rem;font-weight:700;padding:8px 14px;cursor:pointer}
+.seg button.on{background:var(--teal);color:#fff}
+.out{background:linear-gradient(135deg,#0F3F3B,#1B6B66);color:#fff;border-radius:18px;padding:24px 22px;margin-bottom:18px}
+.out h2{font-size:1.05rem;font-weight:700;color:#bfe9e5;margin-bottom:14px}
+.oline{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.oline:last-child{border-bottom:none}
+.oline .k{font-size:.92rem;color:#d7ece9}
+.oline .v{font-size:1.12rem;font-weight:800}
+.oline.big .v{font-size:1.4rem;color:#8FE9E4}
+.badge{display:inline-block;font-size:.78rem;font-weight:800;padding:4px 11px;border-radius:20px;margin-top:2px}
+.badge.ok{background:#E3F8EF;color:#12854f}
+.badge.warn{background:#FFE1D2;color:#C2410C}
+.gift{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin-bottom:18px}
+.gift h2{font-size:1.05rem;font-weight:700;margin-bottom:6px}
+.gift .msg{font-size:.95rem;margin-top:10px;padding:13px 15px;border-radius:12px}
+.gift .msg.ok{background:#EAFAF8;border:1px solid #BFE9E6;color:#12665f}
+.gift .msg.warn{background:#FFF4E5;border:1px solid #F2E0B5;color:#8a5a12}
+.note{font-size:.82rem;color:var(--sub);line-height:1.7;margin-top:6px}
+.cta{display:block;background:linear-gradient(120deg,#EAFAF8,#F4FBFA);border:1px solid #B5E4E1;border-radius:14px;padding:15px 18px;margin:16px 0;font-size:.94rem}
+.cta b{color:var(--teal)}
+.rel{margin-top:26px}
+.rel h3{font-size:1.02rem;font-weight:600;margin-bottom:10px}
+.rel a{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 16px;margin-bottom:8px;font-size:.92rem}
+.rel a:hover{border-color:var(--mint)}
+footer{background:var(--forest);color:#7FA5A2;padding:32px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:30px}
+footer a{color:#B9DCD9;margin:0 8px}
+@media(max-width:620px){nav.gnb{display:none}.inp input{width:104px}}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css?v=3">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><img class="logo3d" src="/boobi-ring-3d.png" alt=""><span class="ring"></span><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
+<nav class="gnb"><a href="/column.html">칼럼</a><a href="/seller-financing.html">매도인 금융이란?</a><a href="/acquisition-tax.html">취득세 계산기</a><a href="/experts.html">전문가</a></nav>
+</div></header>
+
+<main><div class="wrap">
+<div class="crumb"><a href="/">홈</a> › <a href="/column.html">부비 칼럼</a> › 셀러 파이낸싱 계산기</div>
+<h1>🧮 매도인 금융(셀러 파이낸싱) 계산기</h1>
+<p class="sub">매매가와 계약금·중도금·자체 대출만 넣으면, <b>매도인에게 빌리는 금액·월 이자·근저당 채권최고액</b>과 <b>가족 간 거래 시 증여세 위험</b>까지 한 번에 계산해드려요.</p>
+
+<div class="panel">
+<div class="row">
+  <label>매매가<span class="hint">이 집을 사는 총 금액</span></label>
+  <div class="inp"><input id="price" type="number" value="29" inputmode="decimal"><span class="unit">억</span></div>
+</div>
+<div class="row">
+  <label>계약금 비율<span class="hint">계약 시 지급 (보통 10%)</span></label>
+  <div class="inp"><input id="dp" type="number" value="10" inputmode="decimal"><span class="unit">%</span></div>
+</div>
+<div class="row">
+  <label>중도금 비율<span class="hint">소유권 이전 전 지급 (보통 40%)</span></label>
+  <div class="inp"><input id="mid" type="number" value="40" inputmode="decimal"><span class="unit">%</span></div>
+</div>
+<div class="row">
+  <label>자체 대출·현금<span class="hint">잔금에 충당할 은행대출 등 (매도인 대여 제외)</span></label>
+  <div class="inp"><input id="loan" type="number" value="0" inputmode="decimal"><span class="unit">억</span></div>
+</div>
+<div class="row">
+  <label>매도인 대여 이자율<span class="hint">매도인에게 낼 연이자율</span></label>
+  <div class="inp"><input id="rate" type="number" value="4.6" inputmode="decimal"><span class="unit">%</span></div>
+</div>
+<div class="row">
+  <label>대여 기간<span class="hint">매도인에게 빌린 돈을 갚기까지</span></label>
+  <div class="inp"><input id="months" type="number" value="12" inputmode="numeric"><span class="unit">개월</span></div>
+</div>
+<div class="row">
+  <label>근저당 채권최고액 비율<span class="hint">대여금 대비 (통상 110~130%)</span></label>
+  <div class="inp"><input id="mortRate" type="number" value="120" inputmode="decimal"><span class="unit">%</span></div>
+</div>
+<div class="row">
+  <label>거래 상대<span class="hint">가족·친족이면 증여세 판정이 달라져요</span></label>
+  <div class="seg" id="relSeg">
+    <button data-v="stranger" class="on">남남</button>
+    <button data-v="family">가족·특수관계</button>
+  </div>
+</div>
+</div>
+
+<div class="out">
+<h2>계산 결과</h2>
+<div class="oline"><span class="k">계약금</span><span class="v" id="oDp">-</span></div>
+<div class="oline"><span class="k">중도금</span><span class="v" id="oMid">-</span></div>
+<div class="oline"><span class="k">잔금</span><span class="v" id="oBal">-</span></div>
+<div class="oline big"><span class="k">매도인에게 빌리는 금액</span><span class="v" id="oSF">-</span></div>
+<div class="oline"><span class="k">매수인이 당장 필요한 현금</span><span class="v" id="oCash">-</span></div>
+<div class="oline"><span class="k">월 이자</span><span class="v" id="oMonthly">-</span></div>
+<div class="oline"><span class="k">총 이자 (기간 전체)</span><span class="v" id="oTotal">-</span></div>
+<div class="oline"><span class="k">근저당 채권최고액</span><span class="v" id="oMort">-</span></div>
+</div>
+
+<div class="gift" id="giftBox">
+<h2>💸 증여세 위험 판정</h2>
+<div id="giftMsg"></div>
+<p class="note" id="giftNote"></p>
+</div>
+
+<div class="cta">📄 계산은 끝났고, 실제 계약이 문제예요. <b><a href="/seller-financing-guide.html">대출약정서·채권자/채무자 체크리스트</a></b>에서 차용증 필수 항목과 근저당 설정, 양쪽이 꼭 확인할 것을 정리했어요.</div>
+
+<p class="note">※ 본 계산기는 일반적인 기준의 참고용이에요. 특수관계인 저리·무이자 대여의 증여 판정은 <b>연간 이익 1,000만 원</b> 기준(적정이자율 <b>연 4.6%</b>)을 적용했고, 실제 과세는 대여 목적·상환 실태·다른 증여 합산 등에 따라 달라질 수 있어요. 계약·신고 전 세무사·법무사의 확인을 받으세요.</p>
+
+<div class="rel">
+<h3>함께 보면 좋은 부비 콘텐츠</h3>
+<a href="/seller-financing.html">🏦 매도인 금융이 대체 뭘까 — 구조·요건·오해 총정리</a>
+<a href="/seller-financing-guide.html">📄 대출약정서·채권자/채무자 체크리스트</a>
+<a href="/gift-tax-guide.html">🎁 증여세 아끼는 법 — 10년 공제·저리대여 기준</a>
+<a href="/deunggibu.html">📜 등기부등본 보는 법 — 근저당·갑구·을구</a>
+</div>
+</div></main>
+
+<footer><div class="wrap">
+부비 — 부동산 비서<br>© 2026 영크루 ·
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a>
+</div></footer>
+
+<script>
+(function(){
+  var rel='stranger';
+  var seg=document.getElementById('relSeg');
+  seg.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    rel=b.getAttribute('data-v');
+    [].forEach.call(seg.querySelectorAll('button'),function(x){x.classList.toggle('on',x===b);});
+    calc();
+  });
+  ['price','dp','mid','loan','rate','months','mortRate'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',calc);
+  });
+  function num(id){ var v=parseFloat(document.getElementById(id).value); return isNaN(v)?0:v; }
+  // 억 단위 → 원. 표시용 포맷.
+  function won(eok){ return eok*100000000; }
+  function fmtEok(w){
+    if(w===0) return '0원';
+    var eok=Math.floor(Math.abs(w)/100000000);
+    var man=Math.round((Math.abs(w)%100000000)/10000);
+    var s=(w<0?'-':'');
+    var out=[];
+    if(eok>0) out.push(eok+'억');
+    if(man>0) out.push(man.toLocaleString()+'만');
+    if(!out.length) out.push('0');
+    return s+out.join(' ')+'원';
+  }
+  function fmtWon(w){ return Math.round(w).toLocaleString()+'원'; }
+
+  function calc(){
+    var P=won(num('price'));
+    var dpP=num('dp')/100, midP=num('mid')/100;
+    var loan=won(num('loan'));
+    var rate=num('rate')/100;
+    var months=Math.max(0,num('months'));
+    var mortP=num('mortRate')/100;
+
+    var dp=P*dpP, mid=P*midP;
+    var bal=P-dp-mid; if(bal<0) bal=0;
+    var sf=bal-loan; if(sf<0) sf=0;           // 매도인 대여금
+    var cash=dp+mid+(bal-loan-sf>0?(bal-loan-sf):0); // 당장 필요한 현금(자체대출·대여로 못 메운 잔금 포함)
+    // 잔금 = 자체대출 + 매도인대여 + (부족분) 로 채워짐. 부족분은 현금.
+    var shortfall=bal-loan-sf; if(shortfall<0) shortfall=0;
+    cash=dp+mid+shortfall;
+
+    var monthly=sf*rate/12;
+    var total=monthly*months;
+    var mort=sf*mortP;
+
+    document.getElementById('oDp').textContent=fmtEok(dp);
+    document.getElementById('oMid').textContent=fmtEok(mid);
+    document.getElementById('oBal').textContent=fmtEok(bal);
+    document.getElementById('oSF').textContent=fmtEok(sf);
+    document.getElementById('oCash').textContent=fmtEok(cash);
+    document.getElementById('oMonthly').textContent=fmtWon(monthly);
+    document.getElementById('oTotal').textContent=fmtWon(total);
+    document.getElementById('oMort').textContent=fmtEok(mort);
+
+    // 증여세 판정
+    var box=document.getElementById('giftBox');
+    var msg=document.getElementById('giftMsg');
+    var note=document.getElementById('giftNote');
+    var STD=0.046;         // 적정이자율 연 4.6%
+    var LIMIT=10000000;    // 연 1,000만원 기준
+    if(rel==='stranger'){
+      box.style.display='block';
+      msg.className='msg ok';
+      msg.innerHTML='<b>남남 거래는 증여세 문제가 거의 없어요.</b> 정상적인 이자를 주고받고 근저당을 등기하면 사적 금전대차로 인정돼요.';
+      note.textContent='단, 이자를 전혀 주고받지 않거나 상환 정황이 없으면 세무서가 "빌린 게 아니라 받은 것"으로 볼 수 있어요. 이자·원금 계좌이체 기록을 남기세요.';
+    }else{
+      box.style.display='block';
+      // 무이자 한도(대여금 기준): 연이익 1000만 = 원금 * 4.6% → 원금 2.1739억
+      var freeLimit=LIMIT/STD;
+      // 연간 증여 의제 이익 = 대여금 * (4.6% - 실제이자율), 음수면 0
+      var gap=STD-rate; if(gap<0) gap=0;
+      var yearlyBenefit=sf*gap;
+      if(yearlyBenefit>=LIMIT){
+        msg.className='msg warn';
+        msg.innerHTML='⚠️ <b>증여세 과세 대상이 될 수 있어요.</b><br>덜 받은 이자(연 <b>'+fmtWon(yearlyBenefit)+'</b>)가 기준 1,000만 원을 넘어, 이 차액이 증여로 간주될 수 있어요.';
+        note.innerHTML='해결법: ① 이자율을 <b>연 4.6%</b> 수준으로 올리거나, ② 대여금을 <b>무이자 한도(약 '+fmtEok(freeLimit)+')</b> 이하로 낮추면 이 문제를 피할 수 있어요. 실제 이자를 계좌로 주고받는 것도 중요해요.';
+      }else{
+        msg.className='msg ok';
+        msg.innerHTML='✅ <b>현재 조건은 증여세 과세 기준 아래예요.</b><br>덜 받은 이자(연 '+fmtWon(yearlyBenefit)+')가 기준 1,000만 원 미만이라, 지금 조건에선 증여로 과세되지 않아요.';
+        note.innerHTML='가족 간 무이자는 <b>원금 약 '+fmtEok(freeLimit)+'까지</b> 증여세 문제가 없어요. 다만 계약서·근저당·이자 이체 기록은 갖춰두세요.';
+      }
+    }
+  }
+  calc();
+})();
+</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"매도인 금융(셀러 파이낸싱) 계산기","url":"https://yeongcrew.co.kr/seller-financing-calc.html","description":"매도인 대여금·월이자·근저당 채권최고액·증여세 위험을 계산하는 부동산 금융 계산기","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://yeongcrew.co.kr"}}</script>
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+</body>
+</html>
