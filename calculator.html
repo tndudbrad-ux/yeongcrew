@@ -53,6 +53,13 @@ h2.sec{font-size:1.15rem;font-weight:600;display:flex;align-items:center;gap:7px
 footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:36px}
 footer a{color:#B9DCD9;margin:0 8px}
 @media(max-width:620px){nav.gnb{display:none}}
+.faq{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 16px}
+.faq summary{cursor:pointer;font-weight:600;font-size:.94rem;padding:14px 0;list-style:none;position:relative;color:var(--forest)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:2px;top:11px;font-size:1.25rem;color:var(--teal)}
+.faq details[open] summary::after{content:"\2212"}
+.faq details p{margin:0 0 14px;font-size:.89rem;color:var(--sub);line-height:1.7}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css?v=3">
 </head>
@@ -103,6 +110,15 @@ footer a{color:#B9DCD9;margin:0 8px}
 <span class="go">종합 리포트 보기 →</span>
 </a>
 
+<h2 class="sec" style="margin:34px 0 12px">❓ 부동산 계산기 자주 묻는 질문</h2>
+<div class="faq">
+<details><summary>부동산 계산기, 어떤 종류가 있나요?</summary><p>취득세·양도소득세·재산세·종합부동산세·종합소득세(임대)·증여세·상속세 등 부동산 세금 계산기부터 대출·DSR, 중개보수(복비), 전월세 전환, 임대 수익률 계산기까지 부동산에 필요한 계산기를 한곳에 모았어요.</p></details>
+<details><summary>2026년 최신 세율·요율이 반영되나요?</summary><p>네. 취득세·양도세·재산세·종부세·증여·상속세는 2026년 기준 세율과 공제, 중개보수는 최신 상한요율, 전월세 전환은 법정 전환율로 자동 계산합니다.</p></details>
+<details><summary>무료인가요? 회원가입이 필요한가요?</summary><p>모든 계산기는 무료이고 회원가입 없이 바로 사용할 수 있어요.</p></details>
+<details><summary>모바일에서도 쓸 수 있나요?</summary><p>네. 스마트폰·태블릿·PC 어디서나 브라우저로 바로 계산되고, 홈 화면에 앱으로 설치해서 쓸 수도 있어요.</p></details>
+<details><summary>계산 결과는 얼마나 정확한가요?</summary><p>공개된 세법·요율 기준으로 계산해 실제와 근접하지만, 주택 수·지역·개별 공제 등에 따라 달라질 수 있어 참고용이에요. 큰 거래나 신고 전에는 홈택스·위택스 또는 세무·중개 전문가로 최종 확인하세요.</p></details>
+</div>
+
 <div class="note">세율·공제·요율 기준은 연도·지역·조건에 따라 달라지고 자주 개정돼요. 계산기 결과는 참고용이며, 실제 신고·계약 전에는 홈택스·위택스나 세무·중개 전문가로 최종 확인하세요. 큰 거래라면 <a href="/tax-consult.html" style="color:var(--teal);font-weight:600">세무사 상담 연결</a>도 이용해 보세요.</div>
 
 </div></main>
@@ -127,5 +143,14 @@ footer a{color:#B9DCD9;margin:0 8px}
 ]}}</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"홈","item":"https://yeongcrew.co.kr/"},
+{"@type":"ListItem","position":2,"name":"부동산 계산기","item":"https://yeongcrew.co.kr/calculator.html"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"부동산 계산기, 어떤 종류가 있나요?","acceptedAnswer":{"@type":"Answer","text":"취득세·양도소득세·재산세·종합부동산세·종합소득세(임대)·증여세·상속세 등 부동산 세금 계산기부터 대출·DSR, 중개보수(복비), 전월세 전환, 임대 수익률 계산기까지 한곳에 모았습니다."}},
+{"@type":"Question","name":"2026년 최신 세율·요율이 반영되나요?","acceptedAnswer":{"@type":"Answer","text":"네. 2026년 기준 세율·공제·상한요율·법정 전월세 전환율로 자동 계산합니다."}},
+{"@type":"Question","name":"무료인가요? 회원가입이 필요한가요?","acceptedAnswer":{"@type":"Answer","text":"모든 계산기는 무료이며 회원가입 없이 바로 사용할 수 있습니다."}},
+{"@type":"Question","name":"모바일에서도 쓸 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"스마트폰·태블릿·PC 어디서나 브라우저로 바로 계산되고 앱으로 설치할 수도 있습니다."}},
+{"@type":"Question","name":"계산 결과는 얼마나 정확한가요?","acceptedAnswer":{"@type":"Answer","text":"공개된 세법·요율 기준으로 계산하지만 개별 상황에 따라 달라질 수 있어 참고용이며, 신고 전 홈택스·위택스나 전문가 확인을 권장합니다."}}]}</script>
 </body>
 </html>
