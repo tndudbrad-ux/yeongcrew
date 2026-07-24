@@ -201,7 +201,7 @@ footer a{color:#B9DCD9;margin:0 8px}
       lh+='<div class="li" data-date="'+e.date+'"'+anchor+'><div class="d"><b>'+(+p[2])+'</b><span>'+dw+'</span></div>'+
           '<div style="min-width:0;flex:1"><div class="t"><span class="tag '+e.type+'">'+TYPE_LABEL[e.type]+'</span>'+esc(e.title)+'</div>'+
           (e.desc?'<div class="s">'+esc(e.desc)+'</div>':'')+
-          (e.type==='cheongyak'?actionHTML(e):'')+'</div></div>';
+          (e.type==='cheongyak'?actionHTML(e):(e.type==='tax'?taxActionHTML(e):''))+'</div></div>';
     });
     lb.innerHTML=lh;
   }
@@ -222,6 +222,33 @@ footer a{color:#B9DCD9;margin:0 8px}
       if(it.rcritEnd && it.rcritEnd!==it.rcritStart) push(it.rcritEnd,'접수마감','end');
       if(it.winnerDate) push(it.winnerDate,'당첨발표','winner');
     });
+  }
+
+  // 세금 납부 액션 블록 — 세목별로 홈택스(국세)/위택스(지방세) 정확히 연결
+  function taxActionHTML(e){
+    var title=e.title||'';
+    var isLocal=/재산세|취득세|지방소득세/.test(title);           // 지방세 → 위택스
+    var payName=isLocal?'위택스':'홈택스';
+    var payUrl =isLocal?'https://www.wetax.go.kr':'https://www.hometax.go.kr';
+    var calc=/종합부동산세|종부세/.test(title)?'/jongbuse-calculator.html'
+            :/재산세/.test(title)?'/property-tax.html'
+            :/양도/.test(title)?'/capital-gains-tax.html'
+            :/종합소득/.test(title)?'/jonghap-income-tax.html'
+            :'/tax-calculator.html';
+    function d(s){var q=s.split('-');return new Date(+q[0],+q[1]-1,+q[2]).getTime();}
+    var now=TODAY.getTime(), due=d(e.date), days=Math.round((due-now)/86400000);
+    var pay='<a class="act go" href="'+payUrl+'" target="_blank" rel="noopener">'+payName+'에서 납부하기 ↗</a>';
+    var calcBtn='<a class="act ghost" href="'+calc+'">얼마 나오는지 계산</a>';
+    var hint=isLocal?'<span class="ask" style="display:block;margin-top:6px;font-size:.78rem;color:var(--sub)">재산세는 지방세라 <b>위택스</b>에서 납부해요(서울 물건은 서울시 이택스도 가능).</span>':'';
+    if(now<=due){
+      var badge, ask;
+      if(days<=3){ badge='<span class="st wait">마감 임박</span>'; ask=(days<=0?'오늘이 납부 마지막 날이에요.':'납부 마감까지 '+days+'일 남았어요.'); }
+      else { badge='<span class="st open">납부 기간</span>'; ask='납부 마감까지 '+days+'일 남았어요.'; }
+      return '<div class="acts">'+badge+'<span class="ask">'+ask+'</span><div class="btns">'+calcBtn+pay+'</div>'+hint+'</div>';
+    }
+    return '<div class="acts done"><span class="st done">마감</span>'+
+           '<span class="ask">납부 기간이 지났어요. 미납이라면 가산금이 붙기 전에 '+payName+'에서 확인하세요.</span>'+
+           '<a class="act go" href="'+payUrl+'" target="_blank" rel="noopener">'+payName+'에서 확인·납부 ↗</a></div>';
   }
 
   // 상태에 따른 액션 블록
