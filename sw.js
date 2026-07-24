@@ -1,4 +1,4 @@
-var CACHE='hwon-v20';
+var CACHE='hwon-v21';
 var CORE=['/','/style.css','/hwon-bot.js','/hwon-ui.js','/hwon-ui.css','/icon-192.png'];
 self.addEventListener('install',function(e){
   e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(CORE);}).then(function(){return self.skipWaiting();}));
