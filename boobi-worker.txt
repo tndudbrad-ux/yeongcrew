@@ -351,7 +351,7 @@ async function callClaude(msgs, env){
     method:"POST",
     headers:{ "x-api-key":env.ANTHROPIC_API_KEY, "anthropic-version":"2023-06-01", "content-type":"application/json" },
     body: JSON.stringify({
-      model:"claude-haiku-4-5-20251001",
+      model:"claude-sonnet-5",
       max_tokens: isFinder(msgs)?1500:1200,
       system: SYS + "\n\n[오늘 날짜] " + new Date(Date.now()+9*3600*1000).toISOString().slice(0,10),
       tools: (function(){ var WEB={type:"web_search_20250305",name:"web_search",max_uses:3}; return env.MOLIT_API_KEY ? [WEB].concat(TOOLS) : [WEB]; })(),
