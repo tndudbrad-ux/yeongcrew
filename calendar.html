@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>부동산 캘린더 — 청약일정·금리발표일·공휴일 한눈에 (2026) - 부비</title>
-<meta name="description" content="이번 달 청약 접수·당첨발표 일정, 한국은행 금통위와 미국 FOMC 금리 결정일, 공휴일, 재산세·종부세 납부 마감까지 한 달 달력에 모아 보여드려요. 매일 자동 업데이트.">
-<meta name="keywords" content="부동산 캘린더, 청약 일정, 금통위 일정, FOMC 일정, 기준금리 발표일, 재산세 납부, 종부세 납부, 2026 공휴일, 부비">
+<meta name="description" content="이번 달 청약 접수·당첨발표 일정, 든든전세 등 임대 공고, 한국은행 금통위와 미국 FOMC 금리 결정일, 공휴일, 재산세·종부세 납부 마감까지 한 달 달력에 모아 보여드려요. 매일 자동 업데이트.">
+<meta name="keywords" content="부동산 캘린더, 청약 일정, 든든전세 일정, 임대주택 모집, 금통위 일정, FOMC 일정, 기준금리 발표일, 재산세 납부, 종부세 납부, 2026 공휴일, 부비">
 <link rel="canonical" href="https://yeongcrew.co.kr/calendar.html">
 <meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
-<meta property="og:title" content="부동산 캘린더 — 청약·금리·공휴일 한눈에 | 부비">
-<meta property="og:description" content="청약 접수·발표, 금통위·FOMC 금리 결정일, 공휴일, 세금 납기까지 한 달 달력에.">
+<meta property="og:title" content="부동산 캘린더 — 청약·임대·금리·공휴일 한눈에 | 부비">
+<meta property="og:description" content="청약 접수·발표, 든든전세 등 임대 공고, 금통위·FOMC 금리 결정일, 공휴일, 세금 납기까지 한 달 달력에.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yeongcrew.co.kr/calendar.html">
 <meta property="og:site_name" content="부비 - 부동산 비서">
@@ -21,7 +21,7 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 @import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
 :root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#FFFFFF;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;
---cHoli:#E5484D;--cRate:#5B5BD6;--cCheong:#12854f;--cTax:#B4690E}
+--cHoli:#E5484D;--cRate:#5B5BD6;--cCheong:#12854f;--cTax:#B4690E;--cLease:#0891B2}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.6;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
@@ -65,6 +65,7 @@ main{padding:26px 0 60px}
 .ev.rate{background:#EEEEFB;color:var(--cRate)}
 .ev.cheongyak{background:#E3F8EF;color:var(--cCheong)}
 .ev.tax{background:#FFF4E5;color:var(--cTax)}
+.ev.lease{background:#E0F5FB;color:#0E6E8C}
 .ev.hot{background:linear-gradient(120deg,#FFE1D2,#FFD0C2);color:#C2410C;font-weight:800;box-shadow:0 0 0 1px #FFB599 inset}
 .hotline{background:#FFF3EC;border:1px solid #FFD8C2;border-radius:10px;padding:8px 11px;font-size:.86rem;color:#C2410C;margin-bottom:9px}
 .hotline b{color:#C2410C}
@@ -101,6 +102,7 @@ main{padding:26px 0 60px}
 .tag.rate{background:#EEEEFB;color:var(--cRate)}
 .tag.cheongyak{background:#E3F8EF;color:var(--cCheong)}
 .tag.tax{background:#FFF4E5;color:var(--cTax)}
+.tag.lease{background:#E0F5FB;color:#0E6E8C}
 .empty{text-align:center;padding:26px;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:13px}
 .note{font-size:.8rem;color:var(--sub);margin-top:16px;line-height:1.7;text-align:center}
 footer{background:var(--forest);color:#7FA5A2;padding:32px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:34px}
@@ -112,14 +114,14 @@ footer a{color:#B9DCD9;margin:0 8px}
 <body>
 <header class="top"><div class="wrap">
 <a class="logo" href="/"><img class="logo3d" src="/boobi-ring-3d.png" alt="" width="26" height="26"><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
-<nav class="gnb"><a href="/cheongyak-board.html">청약공고</a><a href="/column.html">칼럼</a><a href="/policy-finder.html">정책대출</a><a href="/experts.html">전문가</a></nav>
+<nav class="gnb"><a href="/cheongyak-board.html">청약공고</a><a href="/rental-board.html">임대공고</a><a href="/column.html">칼럼</a><a href="/policy-finder.html">정책대출</a><a href="/experts.html">전문가</a></nav>
 </div></header>
 
 <main><div class="wrap">
 <div class="crumb"><a href="/">홈</a> › 부동산 캘린더</div>
 <div class="hero-t">
 <h1>📅 부동산 캘린더</h1>
-<p>청약 접수·당첨발표, 한국·미국 금리 결정일, 공휴일, 세금 납부 마감까지 한 달에 모아봤어요.</p>
+<p>청약 접수·당첨발표, 든든전세 등 임대 공고, 한국·미국 금리 결정일, 공휴일, 세금 납부 마감까지 한 달에 모아봤어요.</p>
 </div>
 
 <div class="navbar">
@@ -133,6 +135,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 <span><i style="background:var(--cHoli)"></i>공휴일</span>
 <span><i style="background:var(--cRate)"></i>금리 결정</span>
 <span><i style="background:var(--cCheong)"></i>청약</span>
+<span><i style="background:var(--cLease)"></i>임대</span>
 <span><i style="background:var(--cTax)"></i>세금</span>
 </div>
 
@@ -146,7 +149,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 <div id="listBox"></div>
 </div>
 
-<p class="note">청약 일정은 <a href="/cheongyak-board.html" style="color:var(--teal);font-weight:600">청약·분양 공고</a>에서 매일 자동 수집돼요. 공휴일·금리 결정일은 공식 발표 기준이며, 세금 일정은 통상 법정 납기예요.<br>부동산 대책 발표는 사전 공지가 없는 경우가 많아, 발표되면 이 캘린더에 반영해드려요.</p>
+<p class="note">청약 일정은 <a href="/cheongyak-board.html" style="color:var(--teal);font-weight:600">청약·분양 공고</a>에서, 임대 공고는 <a href="/rental-board.html" style="color:var(--teal);font-weight:600">임대주택 공고 모음</a>에서 확인할 수 있어요. 든든전세 등 주요 임대 공고는 확인되는 대로 반영해요. 공휴일·금리 결정일은 공식 발표 기준이며, 세금 일정은 통상 법정 납기예요.<br>부동산 대책 발표는 사전 공지가 없는 경우가 많아, 발표되면 이 캘린더에 반영해드려요.</p>
 
 </div></main>
 
@@ -157,226 +160,251 @@ footer a{color:#B9DCD9;margin:0 8px}
 
 <script>
 (function(){
-  var EVENTS=[];             // {date,type,title,desc}
-  var cur=new Date(); cur.setDate(1);
-  var TODAY=new Date(); TODAY.setHours(0,0,0,0);
-  var TYPE_LABEL={holiday:'공휴일',rate:'금리',cheongyak:'청약',tax:'세금'};
+var EVENTS=[]; // {date,type,title,desc}
+var cur=new Date(); cur.setDate(1);
+var TODAY=new Date(); TODAY.setHours(0,0,0,0);
+var TYPE_LABEL={holiday:'공휴일',rate:'금리',cheongyak:'청약',lease:'임대',tax:'세금'};
 
-  function ymd(d){var m=('0'+(d.getMonth()+1)).slice(-2),dd=('0'+d.getDate()).slice(-2);return d.getFullYear()+'-'+m+'-'+dd;}
-  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-  function byDate(){var m={};EVENTS.forEach(function(e){(m[e.date]=m[e.date]||[]).push(e);});return m;}
+function ymd(d){var m=('0'+(d.getMonth()+1)).slice(-2),dd=('0'+d.getDate()).slice(-2);return d.getFullYear()+'-'+m+'-'+dd;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function byDate(){var m={};EVENTS.forEach(function(e){(m[e.date]=m[e.date]||[]).push(e);});return m;}
 
-  function render(){
-    var y=cur.getFullYear(), mo=cur.getMonth();
-    document.getElementById('mtitle').textContent=y+'년 '+(mo+1)+'월';
-    document.getElementById('listTitle').textContent=(mo+1)+'월 일정';
-    var first=new Date(y,mo,1), start=new Date(y,mo,1-first.getDay());
-    var map=byDate(), g=document.getElementById('grid'), h='';
-    for(var i=0;i<42;i++){
-      var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
-      var key=ymd(d), out=(d.getMonth()!==mo), evs=map[key]||[];
-      var isHoli=evs.some(function(e){return e.type==='holiday';});
-      var cls='cell'+(out?' out':'')+(d.getTime()===TODAY.getTime()?' today':'')+(evs.length?' has':'');
-      var ncls='dnum'+(d.getDay()===0?' sun':(d.getDay()===6?' sat':''))+(isHoli?' holi':'');
-      var atr=' data-date="'+key+'"'+(out?' data-out="1"':'')+(evs.length?' role="button" tabindex="0" aria-label="'+key+' 일정 '+evs.length+'건 보기"':'');
-      h+='<div class="'+cls+'"'+atr+'><div class="'+ncls+'">'+d.getDate()+'</div>';
-      evs.slice(0,3).forEach(function(e){
-        h+='<div class="ev '+e.type+(e.hot?' hot':'')+'" title="'+esc(e.title)+'">'+esc(e.title)+'</div>';
-      });
-      if(evs.length>3) h+='<div class="more">+'+(evs.length-3)+'</div>';
-      h+='</div>';
-      if(i>=34 && new Date(start.getFullYear(),start.getMonth(),start.getDate()+i+1).getMonth()!==mo) { }
-    }
-    g.innerHTML=h;
+function render(){
+var y=cur.getFullYear(), mo=cur.getMonth();
+document.getElementById('mtitle').textContent=y+'년 '+(mo+1)+'월';
+document.getElementById('listTitle').textContent=(mo+1)+'월 일정';
+var first=new Date(y,mo,1), start=new Date(y,mo,1-first.getDay());
+var map=byDate(), g=document.getElementById('grid'), h='';
+for(var i=0;i<42;i++){
+var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
+var key=ymd(d), out=(d.getMonth()!==mo), evs=map[key]||[];
+var isHoli=evs.some(function(e){return e.type==='holiday';});
+var cls='cell'+(out?' out':'')+(d.getTime()===TODAY.getTime()?' today':'')+(evs.length?' has':'');
+var ncls='dnum'+(d.getDay()===0?' sun':(d.getDay()===6?' sat':''))+(isHoli?' holi':'');
+var atr=' data-date="'+key+'"'+(out?' data-out="1"':'')+(evs.length?' role="button" tabindex="0" aria-label="'+key+' 일정 '+evs.length+'건 보기"':'');
+h+='<div class="'+cls+'"'+atr+'><div class="'+ncls+'">'+d.getDate()+'</div>';
+evs.slice(0,3).forEach(function(e){
+h+='<div class="ev '+e.type+(e.hot?' hot':'')+'" title="'+esc(e.title)+'">'+esc(e.title)+'</div>';
+});
+if(evs.length>3) h+='<div class="more">+'+(evs.length-3)+'</div>';
+h+='</div>';
+if(i>=34 && new Date(start.getFullYear(),start.getMonth(),start.getDate()+i+1).getMonth()!==mo) { }
+}
+g.innerHTML=h;
 
-    var monthEvs=EVENTS.filter(function(e){var p=e.date.split('-');return +p[0]===y && +p[1]===mo+1;})
-      .sort(function(a,b){return a.date<b.date?-1:(a.date>b.date?1:0);});
-    var lb=document.getElementById('listBox');
-    if(!monthEvs.length){ lb.innerHTML='<div class="empty">이 달에는 등록된 일정이 없어요.</div>'; return; }
-    var lh='', seen={};
-    monthEvs.forEach(function(e){
-      var p=e.date.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
-      var dw=['일','월','화','수','목','금','토'][dt.getDay()];
-      var anchor = seen[e.date] ? '' : ' id="li-'+e.date+'"'; seen[e.date]=1;
-      lh+='<div class="li" data-date="'+e.date+'"'+anchor+'><div class="d"><b>'+(+p[2])+'</b><span>'+dw+'</span></div>'+
-          '<div style="min-width:0;flex:1"><div class="t"><span class="tag '+e.type+'">'+TYPE_LABEL[e.type]+'</span>'+esc(e.title)+'</div>'+
-          (e.desc?'<div class="s">'+esc(e.desc)+'</div>':'')+
-          (e.type==='cheongyak'?actionHTML(e):(e.type==='tax'?taxActionHTML(e):''))+'</div></div>';
-    });
-    lb.innerHTML=lh;
-  }
+var monthEvs=EVENTS.filter(function(e){var p=e.date.split('-');return +p[0]===y && +p[1]===mo+1;})
+.sort(function(a,b){return a.date<b.date?-1:(a.date>b.date?1:0);});
+var lb=document.getElementById('listBox');
+if(!monthEvs.length){ lb.innerHTML='<div class="empty">이 달에는 등록된 일정이 없어요.</div>'; return; }
+var lh='', seen={};
+monthEvs.forEach(function(e){
+var p=e.date.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
+var dw=['일','월','화','수','목','금','토'][dt.getDay()];
+var anchor = seen[e.date] ? '' : ' id="li-'+e.date+'"'; seen[e.date]=1;
+lh+='<div class="li" data-date="'+e.date+'"'+anchor+'><div class="d"><b>'+(+p[2])+'</b><span>'+dw+'</span></div>'+
+'<div style="min-width:0;flex:1"><div class="t"><span class="tag '+e.type+'">'+TYPE_LABEL[e.type]+'</span>'+esc(e.title)+'</div>'+
+(e.desc?'<div class="s">'+esc(e.desc)+'</div>':'')+
+(e.type==='cheongyak'?actionHTML(e):(e.type==='tax'?taxActionHTML(e):(e.type==='lease'?leaseActionHTML(e):'')))+'</div></div>';
+});
+lb.innerHTML=lh;
+}
 
-  function addCheongyak(items){
-    (items||[]).forEach(function(it){
-      var nm=it.name||'', short=nm.length>11?nm.slice(0,11)+'…':nm;
-      var meta={fullName:nm,region:it.region||'',htype:it.type||'',url:it.url||'',
-                start:it.rcritStart||'',end:it.rcritEnd||it.rcritStart||'',winner:it.winnerDate||'',
-                hot:!!it.hot,margin:it.margin||'',hnote:it.note||''};
-      function push(date,label,kind){
-        var e={date:date,type:'cheongyak',title:(meta.hot?'🔥':'')+short+' '+label,
-               desc:meta.region+' · '+meta.htype+' · '+nm,kind:kind};
-        for(var k in meta) e[k]=meta[k];
-        EVENTS.push(e);
-      }
-      if(it.rcritStart) push(it.rcritStart,'접수시작','start');
-      if(it.rcritEnd && it.rcritEnd!==it.rcritStart) push(it.rcritEnd,'접수마감','end');
-      if(it.winnerDate) push(it.winnerDate,'당첨발표','winner');
-    });
-  }
+function addCheongyak(items){
+(items||[]).forEach(function(it){
+var nm=it.name||'', short=nm.length>11?nm.slice(0,11)+'…':nm;
+var meta={fullName:nm,region:it.region||'',htype:it.type||'',url:it.url||'',
+start:it.rcritStart||'',end:it.rcritEnd||it.rcritStart||'',winner:it.winnerDate||'',
+hot:!!it.hot,margin:it.margin||'',hnote:it.note||''};
+function push(date,label,kind){
+var e={date:date,type:'cheongyak',title:(meta.hot?'🔥':'')+short+' '+label,
+desc:meta.region+' · '+meta.htype+' · '+nm,kind:kind};
+for(var k in meta) e[k]=meta[k];
+EVENTS.push(e);
+}
+if(it.rcritStart) push(it.rcritStart,'접수시작','start');
+if(it.rcritEnd && it.rcritEnd!==it.rcritStart) push(it.rcritEnd,'접수마감','end');
+if(it.winnerDate) push(it.winnerDate,'당첨발표','winner');
+});
+}
 
-  // 세금 납부 액션 블록 — 세목별로 홈택스(국세)/위택스(지방세) 정확히 연결
-  function taxActionHTML(e){
-    var title=e.title||'';
-    var isLocal=/재산세|취득세|지방소득세/.test(title);           // 지방세 → 위택스
-    var payName=isLocal?'위택스':'홈택스';
-    var payUrl =isLocal?'https://www.wetax.go.kr':'https://www.hometax.go.kr';
-    var calc=/종합부동산세|종부세/.test(title)?'/jongbuse-calculator.html'
-            :/재산세/.test(title)?'/property-tax.html'
-            :/양도/.test(title)?'/capital-gains-tax.html'
-            :/종합소득/.test(title)?'/jonghap-income-tax.html'
-            :'/tax-calculator.html';
-    function d(s){var q=s.split('-');return new Date(+q[0],+q[1]-1,+q[2]).getTime();}
-    var now=TODAY.getTime(), due=d(e.date), days=Math.round((due-now)/86400000);
-    var pay='<a class="act go" href="'+payUrl+'" target="_blank" rel="noopener">'+payName+'에서 납부하기 ↗</a>';
-    var calcBtn='<a class="act ghost" href="'+calc+'">얼마 나오는지 계산</a>';
-    var hint=isLocal?'<span class="ask" style="display:block;margin-top:6px;font-size:.78rem;color:var(--sub)">재산세는 지방세라 <b>위택스</b>에서 납부해요(서울 물건은 서울시 이택스도 가능).</span>':'';
-    if(now<=due){
-      var badge, ask;
-      if(days<=3){ badge='<span class="st wait">마감 임박</span>'; ask=(days<=0?'오늘이 납부 마지막 날이에요.':'납부 마감까지 '+days+'일 남았어요.'); }
-      else { badge='<span class="st open">납부 기간</span>'; ask='납부 마감까지 '+days+'일 남았어요.'; }
-      return '<div class="acts">'+badge+'<span class="ask">'+ask+'</span><div class="btns">'+calcBtn+pay+'</div>'+hint+'</div>';
-    }
-    return '<div class="acts done"><span class="st done">마감</span>'+
-           '<span class="ask">납부 기간이 지났어요. 미납이라면 가산금이 붙기 전에 '+payName+'에서 확인하세요.</span>'+
-           '<a class="act go" href="'+payUrl+'" target="_blank" rel="noopener">'+payName+'에서 확인·납부 ↗</a></div>';
-  }
+// 세금 납부 액션 블록 — 세목별로 홈택스(국세)/위택스(지방세) 정확히 연결
+function taxActionHTML(e){
+var title=e.title||'';
+var isLocal=/재산세|취득세|지방소득세/.test(title); // 지방세 → 위택스
+var payName=isLocal?'위택스':'홈택스';
+var payUrl =isLocal?'https://www.wetax.go.kr':'https://www.hometax.go.kr';
+var calc=/종합부동산세|종부세/.test(title)?'/jongbuse-calculator.html'
+:/재산세/.test(title)?'/property-tax.html'
+:/양도/.test(title)?'/capital-gains-tax.html'
+:/종합소득/.test(title)?'/jonghap-income-tax.html'
+:'/tax-calculator.html';
+function d(s){var q=s.split('-');return new Date(+q[0],+q[1]-1,+q[2]).getTime();}
+var now=TODAY.getTime(), due=d(e.date), days=Math.round((due-now)/86400000);
+var pay='<a class="act go" href="'+payUrl+'" target="_blank" rel="noopener">'+payName+'에서 납부하기 ↗</a>';
+var calcBtn='<a class="act ghost" href="'+calc+'">얼마 나오는지 계산</a>';
+var hint=isLocal?'<span class="ask" style="display:block;margin-top:6px;font-size:.78rem;color:var(--sub)">재산세는 지방세라 <b>위택스</b>에서 납부해요(서울 물건은 서울시 이택스도 가능).</span>':'';
+if(now<=due){
+var badge, ask;
+if(days<=3){ badge='<span class="st wait">마감 임박</span>'; ask=(days<=0?'오늘이 납부 마지막 날이에요.':'납부 마감까지 '+days+'일 남았어요.'); }
+else { badge='<span class="st open">납부 기간</span>'; ask='납부 마감까지 '+days+'일 남았어요.'; }
+return '<div class="acts">'+badge+'<span class="ask">'+ask+'</span><div class="btns">'+calcBtn+pay+'</div>'+hint+'</div>';
+}
+return '<div class="acts done"><span class="st done">마감</span>'+
+'<span class="ask">납부 기간이 지났어요. 미납이라면 가산금이 붙기 전에 '+payName+'에서 확인하세요.</span>'+
+'<a class="act go" href="'+payUrl+'" target="_blank" rel="noopener">'+payName+'에서 확인·납부 ↗</a></div>';
+}
 
-  // 상태에 따른 액션 블록
-  function actionHTML(e){
-    var st=cheongyakState(e), apply=e.url||'https://www.applyhome.co.kr/';
-    var ask, badge='', btns='';
-    var hotline=(e.hot&&e.margin)?'<div class="hotline">🔥 <b>확정차익 줍줍</b> · '+esc(e.margin)+(e.hnote?'<br><span>'+esc(e.hnote)+'</span>':'')+'</div>':'';
-    if(st.s==='open'){
-      badge='<span class="st open">접수 중</span>';
-      ask=(st.days<=0?'오늘이 접수 마지막 날이에요.':'접수 마감까지 '+st.days+'일 남았어요.');
-      btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+
-           '<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 신청하기 ↗</a>';
-    } else if(st.s==='soon'){
-      badge='<span class="st soon">접수 예정</span>';
-      ask='청약 넣어볼 만한가요? 접수 시작까지 '+st.days+'일 남았어요.';
-      btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+
-           '<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">공고 자세히 보기 ↗</a>';
-    } else if(st.s==='wait'){
-      badge='<span class="st wait">발표 대기</span>';
-      ask='접수는 마감됐고, 당첨자 발표를 기다리는 중이에요.';
-      btns='<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 확인하기 ↗</a>';
-    } else {
-      return '<div class="acts done">'+
-             '<span class="st done">종료</span>'+
-             '<span class="ask">이 청약은 일정이 종료됐어요.</span>'+
-             '<a class="act ghost" href="/cheongyak-board.html">진행 중인 청약 보기</a></div>';
-    }
-    return '<div class="acts">'+hotline+badge+'<span class="ask">'+ask+'</span><div class="btns">'+btns+'</div></div>';
-  }
+// 임대(든든전세 등) 액션 블록 — 접수 상태 판정 + HUG 안심전세포털 연결
+function leaseActionHTML(e){
+var apply=e.url||'https://www.khug.or.kr/jeonse/web/s07/s070301.jsp';
+function d(s){ if(!s) return null; var p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]).getTime(); }
+var now=TODAY.getTime(), st=d(e.start), en=d(e.end);
+var portal='<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">HUG 안심전세포털 ↗</a>';
+var moreBtn='<a class="act ghost" href="/rental-board.html">임대 공고 모아보기</a>';
+if(e.kind==='winner'){
+if(now<=d(e.date)){
+return '<div class="acts"><span class="st wait">발표 대기</span><span class="ask">접수는 끝났고 당첨자 발표를 기다리는 중이에요.</span><div class="btns">'+moreBtn+portal+'</div></div>';
+}
+return '<div class="acts done"><span class="st done">발표 완료</span><span class="ask">당첨자 발표가 지났어요. 포털에서 결과를 확인하세요.</span>'+portal+'</div>';
+}
+if(en!==null && now<=en){
+var badge, ask;
+if(st!==null && now<st){ badge='<span class="st soon">접수 예정</span>'; ask='접수 시작까지 '+Math.round((st-now)/86400000)+'일 남았어요.'; }
+else { var days=Math.round((en-now)/86400000);
+badge=(days<=3?'<span class="st wait">마감 임박</span>':'<span class="st open">접수 중</span>');
+ask=(days<=0?'오늘이 접수 마지막 날이에요.':'접수 마감까지 '+days+'일 남았어요.'); }
+var qualBtn='<a class="act ghost" href="/youth-housing.html">청년 주거지원 보기</a>';
+return '<div class="acts">'+badge+'<span class="ask">'+ask+'</span><div class="btns">'+qualBtn+portal+'</div></div>';
+}
+return '<div class="acts done"><span class="st done">마감</span><span class="ask">접수가 마감됐어요. 다음 회차를 노려보세요.</span>'+moreBtn+'</div>';
+}
 
-  // 청약 일정의 현재 상태 판정
-  function cheongyakState(e){
-    function d(s){ if(!s) return null; var p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]).getTime(); }
-    var now=TODAY.getTime(), st=d(e.start), en=d(e.end), wn=d(e.winner);
-    if(en!==null && now<=en){
-      if(st!==null && now<st) return {s:'soon', days:Math.round((st-now)/86400000)};
-      return {s:'open', days:Math.round((en-now)/86400000)};
-    }
-    if(wn!==null && now<=wn) return {s:'wait'};
-    return {s:'done'};
-  }
+// 상태에 따른 액션 블록
+function actionHTML(e){
+var st=cheongyakState(e), apply=e.url||'https://www.applyhome.co.kr/';
+var ask, badge='', btns='';
+var hotline=(e.hot&&e.margin)?'<div class="hotline">🔥 <b>확정차익 줍줍</b> · '+esc(e.margin)+(e.hnote?'<br><span>'+esc(e.hnote)+'</span>':'')+'</div>':'';
+if(st.s==='open'){
+badge='<span class="st open">접수 중</span>';
+ask=(st.days<=0?'오늘이 접수 마지막 날이에요.':'접수 마감까지 '+st.days+'일 남았어요.');
+btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+
+'<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 신청하기 ↗</a>';
+} else if(st.s==='soon'){
+badge='<span class="st soon">접수 예정</span>';
+ask='청약 넣어볼 만한가요? 접수 시작까지 '+st.days+'일 남았어요.';
+btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+
+'<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">공고 자세히 보기 ↗</a>';
+} else if(st.s==='wait'){
+badge='<span class="st wait">발표 대기</span>';
+ask='접수는 마감됐고, 당첨자 발표를 기다리는 중이에요.';
+btns='<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 확인하기 ↗</a>';
+} else {
+return '<div class="acts done">'+
+'<span class="st done">종료</span>'+
+'<span class="ask">이 청약은 일정이 종료됐어요.</span>'+
+'<a class="act ghost" href="/cheongyak-board.html">진행 중인 청약 보기</a></div>';
+}
+return '<div class="acts">'+hotline+badge+'<span class="ask">'+ask+'</span><div class="btns">'+btns+'</div></div>';
+}
 
-  // 부드러운 스크롤 (behavior:'smooth' 미지원·차단 환경 대비해 직접 구현)
-  function smoothTo(top){
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var startY = window.pageYOffset;
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    var endY = Math.max(0, Math.min(top, max));
-    var dist = endY - startY;
-    if(reduce || Math.abs(dist) < 2){ window.scrollTo(0, endY); return; }
-    var dur = Math.min(700, Math.max(280, Math.abs(dist) * 0.5));
-    var t0 = null;
-    cancelAnimationFrame(smoothTo._raf);
-    function step(ts){
-      if(t0 === null) t0 = ts;
-      var p = Math.min(1, (ts - t0) / dur);
-      var e = p < .5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2;  // easeInOutCubic
-      window.scrollTo(0, startY + dist * e);
-      if(p < 1) smoothTo._raf = requestAnimationFrame(step);
-    }
-    smoothTo._raf = requestAnimationFrame(step);
-  }
+// 청약 일정의 현재 상태 판정
+function cheongyakState(e){
+function d(s){ if(!s) return null; var p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]).getTime(); }
+var now=TODAY.getTime(), st=d(e.start), en=d(e.end), wn=d(e.winner);
+if(en!==null && now<=en){
+if(st!==null && now<st) return {s:'soon', days:Math.round((st-now)/86400000)};
+return {s:'open', days:Math.round((en-now)/86400000)};
+}
+if(wn!==null && now<=wn) return {s:'wait'};
+return {s:'done'};
+}
 
-  // 날짜 칸 클릭 → 아래 일정 목록의 해당 날짜로 스크롤 + 강조
-  function focusDate(key){
-    var cells=document.querySelectorAll('#grid .cell.picked');
-    for(var i=0;i<cells.length;i++) cells[i].classList.remove('picked');
-    var cell=document.querySelector('#grid .cell[data-date="'+key+'"]');
-    if(cell) cell.classList.add('picked');
+// 부드러운 스크롤 (behavior:'smooth' 미지원·차단 환경 대비해 직접 구현)
+function smoothTo(top){
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var startY = window.pageYOffset;
+var max = document.documentElement.scrollHeight - window.innerHeight;
+var endY = Math.max(0, Math.min(top, max));
+var dist = endY - startY;
+if(reduce || Math.abs(dist) < 2){ window.scrollTo(0, endY); return; }
+var dur = Math.min(700, Math.max(280, Math.abs(dist) * 0.5));
+var t0 = null;
+cancelAnimationFrame(smoothTo._raf);
+function step(ts){
+if(t0 === null) t0 = ts;
+var p = Math.min(1, (ts - t0) / dur);
+var e = p < .5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2; // easeInOutCubic
+window.scrollTo(0, startY + dist * e);
+if(p < 1) smoothTo._raf = requestAnimationFrame(step);
+}
+smoothTo._raf = requestAnimationFrame(step);
+}
 
-    var target=document.getElementById('li-'+key);
-    if(!target) return;
-    smoothTo(target.getBoundingClientRect().top + window.pageYOffset - 84);
+// 날짜 칸 클릭 → 아래 일정 목록의 해당 날짜로 스크롤 + 강조
+function focusDate(key){
+var cells=document.querySelectorAll('#grid .cell.picked');
+for(var i=0;i<cells.length;i++) cells[i].classList.remove('picked');
+var cell=document.querySelector('#grid .cell[data-date="'+key+'"]');
+if(cell) cell.classList.add('picked');
 
-    var rows=document.querySelectorAll('#listBox .li.flash');
-    for(var j=0;j<rows.length;j++) rows[j].classList.remove('flash');
-    var same=document.querySelectorAll('#listBox .li[data-date="'+key+'"]');
-    for(var k=0;k<same.length;k++) same[k].classList.add('flash');
-    clearTimeout(focusDate._t);
-    focusDate._t=setTimeout(function(){
-      for(var m=0;m<same.length;m++) same[m].classList.remove('flash');
-    },2200);
-  }
+var target=document.getElementById('li-'+key);
+if(!target) return;
+smoothTo(target.getBoundingClientRect().top + window.pageYOffset - 84);
 
-  document.getElementById('grid').addEventListener('click',function(ev){
-    var cell=ev.target.closest('.cell.has');
-    if(!cell) return;
-    var key=cell.getAttribute('data-date');
-    if(cell.getAttribute('data-out')){          // 지난달·다음달 칸이면 그 달로 이동 후 스크롤
-      var p=key.split('-');
-      cur=new Date(+p[0],+p[1]-1,1);
-      render();
-      setTimeout(function(){focusDate(key);},60);
-      return;
-    }
-    focusDate(key);
-  });
+var rows=document.querySelectorAll('#listBox .li.flash');
+for(var j=0;j<rows.length;j++) rows[j].classList.remove('flash');
+var same=document.querySelectorAll('#listBox .li[data-date="'+key+'"]');
+for(var k=0;k<same.length;k++) same[k].classList.add('flash');
+clearTimeout(focusDate._t);
+focusDate._t=setTimeout(function(){
+for(var m=0;m<same.length;m++) same[m].classList.remove('flash');
+},2200);
+}
 
-  document.getElementById('grid').addEventListener('keydown',function(ev){
-    if(ev.key!=='Enter' && ev.key!==' ') return;
-    var cell=ev.target.closest && ev.target.closest('.cell.has');
-    if(!cell) return;
-    ev.preventDefault();
-    cell.click();
-  });
+document.getElementById('grid').addEventListener('click',function(ev){
+var cell=ev.target.closest('.cell.has');
+if(!cell) return;
+var key=cell.getAttribute('data-date');
+if(cell.getAttribute('data-out')){ // 지난달·다음달 칸이면 그 달로 이동 후 스크롤
+var p=key.split('-');
+cur=new Date(+p[0],+p[1]-1,1);
+render();
+setTimeout(function(){focusDate(key);},60);
+return;
+}
+focusDate(key);
+});
 
-  document.getElementById('prev').onclick=function(){cur.setMonth(cur.getMonth()-1);render();};
-  document.getElementById('next').onclick=function(){cur.setMonth(cur.getMonth()+1);render();};
-  document.getElementById('todayBtn').onclick=function(){cur=new Date();cur.setDate(1);render();};
+document.getElementById('grid').addEventListener('keydown',function(ev){
+if(ev.key!=='Enter' && ev.key!==' ') return;
+var cell=ev.target.closest && ev.target.closest('.cell.has');
+if(!cell) return;
+ev.preventDefault();
+cell.click();
+});
 
-  Promise.all([
-    fetch('/calendar-events.json?t='+Date.now()).then(function(r){return r.ok?r.json():{events:[]};}).catch(function(){return {events:[]};}),
-    fetch('/cheongyak-data.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};}),
-    fetch('/cheongyak-featured.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};})
-  ]).then(function(res){
-    EVENTS=(res[0].events||[]).slice();
-    var seen={};(res[1].items||[]).forEach(function(it){seen[it.id]=1;});
-    var feat=(res[2].items||[]).filter(function(f){return !seen[f.id];});
-    addCheongyak(feat);            // 확정차익 선별 줍줍 먼저 (hot 표시)
-    addCheongyak(res[1].items);
-    render();
-    if(window.gtag){try{gtag('event','view_calendar',{events:EVENTS.length});}catch(e){}}
-  });
-  render();
+document.getElementById('prev').onclick=function(){cur.setMonth(cur.getMonth()-1);render();};
+document.getElementById('next').onclick=function(){cur.setMonth(cur.getMonth()+1);render();};
+document.getElementById('todayBtn').onclick=function(){cur=new Date();cur.setDate(1);render();};
+
+Promise.all([
+fetch('/calendar-events.json?t='+Date.now()).then(function(r){return r.ok?r.json():{events:[]};}).catch(function(){return {events:[]};}),
+fetch('/cheongyak-data.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};}),
+fetch('/cheongyak-featured.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};})
+]).then(function(res){
+EVENTS=(res[0].events||[]).slice();
+var seen={};(res[1].items||[]).forEach(function(it){seen[it.id]=1;});
+var feat=(res[2].items||[]).filter(function(f){return !seen[f.id];});
+addCheongyak(feat); // 확정차익 선별 줍줍 먼저 (hot 표시)
+addCheongyak(res[1].items);
+render();
+if(window.gtag){try{gtag('event','view_calendar',{events:EVENTS.length});}catch(e){}}
+});
+render();
 })();
 </script>
 
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"부비 부동산 캘린더","url":"https://yeongcrew.co.kr/calendar.html","description":"청약 일정, 한국·미국 금리 결정일, 공휴일, 부동산 세금 납기를 월별 달력으로 제공","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://yeongcrew.co.kr"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"부비 부동산 캘린더","url":"https://yeongcrew.co.kr/calendar.html","description":"청약 일정, 든든전세 등 임대 공고, 한국·미국 금리 결정일, 공휴일, 부동산 세금 납기를 월별 달력으로 제공","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://yeongcrew.co.kr"}}</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 </body>
