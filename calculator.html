@@ -31,28 +31,30 @@ header.top .wrap{display:flex;align-items:center;justify-content:space-between;h
 .logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px)}
 nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
 nav.gnb a:hover{color:var(--teal)}
-main{padding:34px 0 60px}
-.crumb{font-size:.84rem;color:var(--sub);margin-bottom:12px}.crumb a{color:var(--teal)}
-.hero-t h1{font-size:1.6rem;font-weight:600;letter-spacing:-.03em}
-.hero-t p{color:var(--sub);margin-top:6px;font-size:.95rem}
-.sechead{display:flex;align-items:baseline;justify-content:space-between;margin:30px 0 14px;gap:10px}
-h2.sec{font-size:1.15rem;font-weight:600;display:flex;align-items:center;gap:7px}
-.sechead a.more{font-size:.82rem;color:var(--teal);font-weight:600;white-space:nowrap}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;transition:.16s;display:block}
-.card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(32,166,162,.13);border-color:#B5E4E1}
-.card .k{font-size:.72rem;font-weight:700;color:var(--teal)}
-.card h3{font-size:1.02rem;font-weight:600;margin:5px 0 4px;letter-spacing:-.01em}
-.card p{font-size:.85rem;color:var(--sub)}
-.feature{display:block;background:linear-gradient(120deg,#123f3b,#1B6B66);color:#fff;border-radius:20px;padding:24px 24px;margin:22px 0 8px;position:relative;overflow:hidden}
-.feature .badge{font-size:.74rem;font-weight:700;background:rgba(255,255,255,.2);padding:4px 10px;border-radius:20px}
-.feature h2{font-size:1.28rem;font-weight:700;margin:11px 0 6px;line-height:1.35;color:#fff}
-.feature p{opacity:.92;font-size:.93rem}
-.feature .go{display:inline-block;margin-top:13px;background:#fff;color:#12403C;font-weight:700;padding:9px 16px;border-radius:10px;font-size:.9rem}
-.note{background:#F4FBFA;border:1px solid var(--line);border-radius:14px;padding:15px 17px;font-size:.84rem;color:var(--sub);margin-top:26px}
+main{padding:22px 0 60px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:14px}.crumb a{color:var(--teal)}
+.pgh{font-size:1.32rem;font-weight:600;letter-spacing:-.03em;margin-bottom:2px}
+.lbl{font-size:.82rem;font-weight:600;color:var(--sub);margin:20px 2px 10px}
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px 8px 15px;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center;transition:transform .12s,box-shadow .14s,border-color .14s}
+.tile:hover{border-color:#B5E4E1;box-shadow:0 10px 26px rgba(32,166,162,.13);transform:translateY(-2px)}
+.tile:active{transform:scale(.96)}
+.tile .ic{width:46px;height:46px;border-radius:14px;background:#EAF8F6;display:flex;align-items:center;justify-content:center;font-size:1.42rem}
+.tile .nm{font-size:.96rem;font-weight:600;letter-spacing:-.02em}
+.tile .tg{font-size:.71rem;font-weight:600;color:var(--teal)}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid2 .tile{flex-direction:row;justify-content:flex-start;gap:11px;text-align:left;padding:14px 15px}
+.grid2 .tile .ic{width:40px;height:40px;font-size:1.2rem;flex:0 0 auto}
+.feature{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,#123f3b,#1B6B66);color:#fff;border-radius:18px;padding:16px 18px;margin:22px 0 4px}
+.feature .fic{font-size:1.7rem}
+.feature h2{font-size:1.02rem;font-weight:700;color:#fff;margin-bottom:2px}
+.feature p{opacity:.9;font-size:.82rem;margin:0}
+.feature .fgo{margin-left:auto;font-size:1.3rem;opacity:.9}
+.note{background:#F4FBFA;border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:.82rem;color:var(--sub);margin-top:24px}
+h2.sec{font-size:1.05rem;font-weight:600;margin:30px 0 10px}
 footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:36px}
 footer a{color:#B9DCD9;margin:0 8px}
-@media(max-width:620px){nav.gnb{display:none}}
+@media(max-width:620px){nav.gnb{display:none}.tile .ic{width:44px;height:44px}}
 .faq{display:flex;flex-direction:column;gap:8px;margin-top:6px}
 .faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 16px}
 .faq summary{cursor:pointer;font-weight:600;font-size:.94rem;padding:14px 0;list-style:none;position:relative;color:var(--forest)}
@@ -70,47 +72,35 @@ footer a{color:#B9DCD9;margin:0 8px}
 </div></header>
 
 <main><div class="wrap">
-<div class="crumb"><a href="/">홈</a> › 부동산 계산기</div>
+<div class="crumb"><a href="/">홈</a> › 계산기</div>
+<div class="pgh">🧮 계산기</div>
 
-<div class="hero-t">
-<h1>🧮 부동산 계산기</h1>
-<p>부동산에 필요한 계산을 한곳에 모았어요. 세금부터 대출·DSR, 중개보수, 전월세 전환, 임대 수익률까지 — 숫자만 넣으면 <b>2026년 기준</b>으로 바로 계산해 드려요.</p>
+<div class="lbl">세금</div>
+<div class="tgrid">
+<a class="tile" href="/acquisition-tax.html"><span class="ic">🏠</span><span class="nm">취득세</span><span class="tg">살 때</span></a>
+<a class="tile" href="/capital-gains-tax.html"><span class="ic">💰</span><span class="nm">양도세</span><span class="tg">팔 때</span></a>
+<a class="tile" href="/property-tax.html"><span class="ic">🧾</span><span class="nm">재산세</span><span class="tg">보유</span></a>
+<a class="tile" href="/jongbuse-calculator.html"><span class="ic">🏢</span><span class="nm">종부세</span><span class="tg">보유</span></a>
+<a class="tile" href="/jonghap-income-tax.html"><span class="ic">📊</span><span class="nm">종합소득세</span><span class="tg">임대소득</span></a>
+<a class="tile" href="/gift-tax.html"><span class="ic">🎁</span><span class="nm">증여세</span><span class="tg">물려줄 때</span></a>
+<a class="tile" href="/inheritance-tax.html"><span class="ic">📜</span><span class="nm">상속세</span><span class="tg">물려받을 때</span></a>
 </div>
 
-<div class="sechead">
-<h2 class="sec">💸 세금 계산기</h2>
-<a class="more" href="/tax-calculator.html">세금만 모아보기 →</a>
-</div>
-<div class="grid">
-<a class="card" href="/acquisition-tax.html"><div class="k">살 때 · 취득세</div><h3>취득세 계산기</h3><p>주택 수·조정대상지역·전용면적을 선택하면 2026년 세율로 취득세와 지방교육세·농어촌특별세까지 자동 계산합니다.</p></a>
-<a class="card" href="/capital-gains-tax.html"><div class="k">팔 때 · 양도세</div><h3>양도소득세 계산기</h3><p>1주택 12억 비과세부터 2026년 5월 부활한 다주택 중과까지. 팔기 전에 세금부터 확인하세요.</p></a>
-<a class="card" href="/property-tax.html"><div class="k">보유 · 재산세</div><h3>재산세 계산기</h3><p>공시가격만 넣으면 1주택 공정시장가액 특례(43~45%)·특례세율·도시지역분까지 반영. 7월·9월 분납 안내도.</p></a>
-<a class="card" href="/jongbuse-calculator.html"><div class="k">보유 · 종부세</div><h3>종합부동산세 계산기</h3><p>공시가격만 넣으면 1주택 12억 공제·세액공제·3주택 중과·부부 공동명의 특례 비교까지.</p></a>
-<a class="card" href="/jonghap-income-tax.html"><div class="k">보유 · 임대소득</div><h3>종합소득세 계산기 (임대소득)</h3><p>부동산 임대소득이 합산되면 종소세가 얼마나 늘까? 합산 전·후 세액 비교 + 2천만원 이하 분리과세 비교까지.</p></a>
-<a class="card" href="/gift-tax.html"><div class="k">물려줄 때 · 증여</div><h3>증여세 계산기</h3><p>배우자 6억·자녀 5천만 공제에 혼인·출산 1억 추가공제까지. 10년 합산도 자동.</p></a>
-<a class="card" href="/inheritance-tax.html"><div class="k">물려줄 때 · 상속</div><h3>상속세 계산기</h3><p>일괄공제 5억, 배우자공제 최대 30억, 동거주택 공제까지. 분할 협의 전에 미리.</p></a>
-</div>
-
-<h2 class="sec" style="margin:30px 0 14px">🏦 대출·자금</h2>
-<div class="grid">
-<a class="card" href="/loan-calculator.html"><div class="k">대출 · DSR</div><h3>대출 상환 · DSR 계산기</h3><p>주택담보대출·전세대출의 월 상환액과 총이자를 원리금균등·원금균등·만기일시 방식으로 계산하고, DSR 40% 기준 대출 가능 여부까지 확인합니다.</p></a>
-</div>
-
-<h2 class="sec" style="margin:30px 0 14px">🤝 거래·임대</h2>
-<div class="grid">
-<a class="card" href="/brokerage-calculator.html"><div class="k">중개보수</div><h3>중개보수(복비) 계산기</h3><p>매매·전세·월세별 상한요율을 적용해 중개보수 최대 금액을 계산합니다. 월세 환산보증금과 부가세 포함 금액도 확인됩니다.</p></a>
-<a class="card" href="/jeonse-monthly.html"><div class="k">전월세 전환</div><h3>전월세 전환 계산기</h3><p>법정 전월세전환율(기준금리+2%p)로 전세를 월세로, 월세를 전세로 환산해 적정 금액을 확인합니다.</p></a>
-<a class="card" href="/yield-calculator.html"><div class="k">임대 수익률</div><h3>임대 수익률 계산기</h3><p>오피스텔·상가 월세 투자, 대출 레버리지와 비용까지 반영한 실질 수익률과 월 현금흐름을 계산합니다.</p></a>
+<div class="lbl">그 외 계산기</div>
+<div class="grid2">
+<a class="tile" href="/loan-calculator.html"><span class="ic">🏦</span><span><span class="nm">대출·DSR</span><br><span class="tg">월 상환·한도</span></span></a>
+<a class="tile" href="/brokerage-calculator.html"><span class="ic">🤝</span><span><span class="nm">중개보수</span><br><span class="tg">복비 상한</span></span></a>
+<a class="tile" href="/jeonse-monthly.html"><span class="ic">🔄</span><span><span class="nm">전월세 전환</span><br><span class="tg">전세↔월세</span></span></a>
+<a class="tile" href="/yield-calculator.html"><span class="ic">📈</span><span><span class="nm">임대 수익률</span><br><span class="tg">실질 수익</span></span></a>
 </div>
 
 <a class="feature" href="/home-report.html">
-<span class="badge">✨ 한 번에 보기</span>
-<h2>이 집 사도 될까? 집 종합 리포트</h2>
-<p>주소 하나만 넣으면 취득세·보유세(재산세·종부세)·전세 리스크를 한 장으로 정리하고, 신호등(🟢🟡🔴)으로 결론까지 내드려요.</p>
-<span class="go">종합 리포트 보기 →</span>
+<span class="fic">✨</span>
+<span><h2>집 종합 리포트</h2><p>주소 하나로 세금·전세 리스크를 한 장에</p></span>
+<span class="fgo">→</span>
 </a>
 
-<h2 class="sec" style="margin:34px 0 12px">❓ 부동산 계산기 자주 묻는 질문</h2>
+<h2 class="sec">❓ 자주 묻는 질문</h2>
 <div class="faq">
 <details><summary>부동산 계산기, 어떤 종류가 있나요?</summary><p>취득세·양도소득세·재산세·종합부동산세·종합소득세(임대)·증여세·상속세 등 부동산 세금 계산기부터 대출·DSR, 중개보수(복비), 전월세 전환, 임대 수익률 계산기까지 부동산에 필요한 계산기를 한곳에 모았어요.</p></details>
 <details><summary>2026년 최신 세율·요율이 반영되나요?</summary><p>네. 취득세·양도세·재산세·종부세·증여·상속세는 2026년 기준 세율과 공제, 중개보수는 최신 상한요율, 전월세 전환은 법정 전환율로 자동 계산합니다.</p></details>
