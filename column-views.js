@@ -1,5 +1,5 @@
 /* 부비 칼럼 조회수 — 표시용 기준치(seed) + 시간 자연증가 + 실제 조회수(Firestore) 합산
-   · 글 페이지: 세션당 1회 실제 +1, 상단 메타에 "👁 12,431" 표시
+   · 글 페이지: 세션당 1회 실제 +1, 상단 메타에 "12,431 view" 표시
    · 칼럼 허브(column.html): 모든 카드에 조회수 배지 + 🔥 지금 인기 글 상단 자동 노출
    표시 조회수 = seed(글별 고정 기준치) + 일자별 자연증가 + 실제 누적 조회수 */
 (function(){
@@ -73,7 +73,7 @@
     var b=host.querySelector('.cvBadge');
     if(!b){ if(host.childNodes.length && !host.classList.contains('cvAuto')) host.appendChild(document.createTextNode(' · '));
       b=document.createElement('span'); b.className='cvBadge'; b.style.cssText='color:#20A6A2;font-weight:600'; host.appendChild(b); }
-    b.textContent='👁 '+comma(n);
+    b.textContent=comma(n)+' view';
   }
 
   /* ---------- 칼럼 허브: 전 카드 배지 + 인기 글 상단 노출 ---------- */
@@ -98,7 +98,7 @@
       var b=a.querySelector('.cvCard');
       if(!b){ b=document.createElement('div'); b.className='cvCard';
         b.style.cssText='margin-top:6px;font-size:.76rem;color:#7b918f;font-weight:600'; a.appendChild(b); }
-      b.textContent='👁 '+comma(n)+' 조회';
+      b.textContent=comma(n)+' view';
       var title=(a.querySelector('h3')||a.querySelector('h2'));
       items.push({slug:s, n:n, path:href, title:title?title.textContent.trim():s});
     });
@@ -113,7 +113,7 @@
     var h='<h2 class="sec" style="display:flex;align-items:center;gap:6px">🔥 지금 인기 글</h2><div class="grid">';
     top.forEach(function(it,i){
       var medal=['🥇','🥈','🥉','4위','5위'][i];
-      h+='<a class="card" href="'+it.path+'"><div class="k">'+medal+' · 👁 '+comma(it.n)+'</div><h3>'+esc(it.title)+'</h3><p>지금 많이 보는 글</p></a>';
+      h+='<a class="card" href="'+it.path+'"><div class="k">'+medal+' · '+comma(it.n)+' view</div><h3>'+esc(it.title)+'</h3><p>지금 많이 보는 글</p></a>';
     });
     h+='</div>';
     host.innerHTML=h;
