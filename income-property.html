@@ -63,6 +63,30 @@ h1{font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
 .teaser p{font-size:.86rem;color:var(--sub);margin-top:4px}
 .teaser button{margin-top:12px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:700;font-size:.92rem;padding:11px 22px;border:none;border-radius:11px;cursor:pointer;font-family:inherit}
 .note{background:#F4FBFA;border:1px solid var(--line);border-radius:14px;padding:15px 17px;font-size:.82rem;color:var(--sub);margin-top:20px;line-height:1.7}
+/* ===== 부비픽 3D 오빗 덱 ===== */
+.orbitStage{position:relative;height:330px;perspective:1300px;margin:0 auto;overflow:hidden}
+.orbitRing{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;animation:orbitSpin 20s linear infinite}
+.orbitStage:hover .orbitRing{animation-play-state:paused}
+.oCard{position:absolute;left:-82px;top:-116px;width:164px;height:232px;border-radius:18px;overflow:hidden;box-shadow:0 16px 34px rgba(13,42,41,.24);border:2px solid rgba(255,255,255,.75);backface-visibility:hidden;background:#fff;display:block;color:inherit}
+.oCard .obn{height:98px;display:flex;align-items:flex-end;padding:10px;color:#fff;position:relative}
+.oCard .obn .loc{position:absolute;left:10px;bottom:10px;font-size:.72rem;font-weight:600;background:rgba(0,0,0,.3);padding:2px 9px;border-radius:20px}
+.oCard .obn .emo{position:absolute;right:12px;top:10px;font-size:1.9rem;filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))}
+.oCard .obd{padding:12px 12px 0;text-align:left}
+.oCard h4{font-size:.96rem;font-weight:700;line-height:1.28;letter-spacing:-.01em}
+.oCard .otp{font-size:.74rem;color:var(--teal);font-weight:600;margin-top:4px}
+.oCard .ogo{position:absolute;left:12px;bottom:12px;font-size:.76rem;color:var(--teal);font-weight:600}
+.oCard:nth-child(1){transform:rotateY(0deg)   translateZ(240px)}
+.oCard:nth-child(2){transform:rotateY(120deg) translateZ(240px)}
+.oCard:nth-child(3){transform:rotateY(240deg) translateZ(240px)}
+@keyframes orbitSpin{from{transform:rotateY(0deg)}to{transform:rotateY(-360deg)}}
+.orbitHint{font-size:.78rem;color:var(--sub);text-align:center;margin-top:-4px}
+@media(max-width:560px){
+ .orbitStage{height:300px;perspective:1000px}
+ .oCard:nth-child(1){transform:rotateY(0deg)   translateZ(200px)}
+ .oCard:nth-child(2){transform:rotateY(120deg) translateZ(200px)}
+ .oCard:nth-child(3){transform:rotateY(240deg) translateZ(200px)}
+}
+@media(prefers-reduced-motion:reduce){.orbitRing{animation:none}}
 footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:36px}
 footer a{color:#B9DCD9;margin:0 8px}
 @media(max-width:620px){nav.gnb{display:none}}
@@ -81,39 +105,24 @@ footer a{color:#B9DCD9;margin:0 8px}
 <p class="lead">매달 임대수익을 노리는 하이엔드 레지던스·분양형 호텔을 부비가 골라 소개해요. 관심 가는 곳은 카드를 눌러 각 상품의 공식 사이트에서 자세히 확인하세요.</p>
 
 <div class="sechead">⭐ 부비 픽 — 대표 수익형</div>
-<div class="grid">
-
-<a class="pcard" href="https://newmad.co.kr/" target="_blank" rel="noopener noreferrer">
-<div class="ban b1">🏙️<span class="loc">서울 · 마포</span></div>
-<div class="body">
-<h3>마포 뉴매드</h3>
-<div class="type">하이엔드 오피스텔 · 코리빙</div>
-<p>마포 도심 한복판의 하이엔드 랜드마크. 도심 직주근접 수요를 겨냥한 임대형 상품으로 주목받는 곳이에요.</p>
-<span class="go">공식 사이트 보기 ↗</span>
-</div>
+<div class="orbitStage"><div class="orbitRing">
+<a class="oCard" href="https://newmad.co.kr/" target="_blank" rel="noopener noreferrer">
+<div class="obn b1"><span class="emo">🏙️</span><span class="loc">서울 · 마포</span></div>
+<div class="obd"><h4>마포 뉴매드</h4><div class="otp">하이엔드 오피스텔 · 코리빙</div></div>
+<span class="ogo">공식 사이트 ↗</span>
 </a>
-
-<a class="pcard" href="https://lavieum.com/" target="_blank" rel="noopener noreferrer">
-<div class="ban b2">🌊<span class="loc">서울 · 합정(한강)</span></div>
-<div class="body">
-<h3>라비움 한강</h3>
-<div class="type">한강뷰 도시형 생활주택</div>
-<p>합정역 초역세권, 한강 조망의 하이엔드 주거·임대 상품. 한강 문화권 입지로 임대 수요층이 두터운 편이에요.</p>
-<span class="go">공식 사이트 보기 ↗</span>
-</div>
+<a class="oCard" href="https://lavieum.com/" target="_blank" rel="noopener noreferrer">
+<div class="obn b2"><span class="emo">🌊</span><span class="loc">서울 · 합정</span></div>
+<div class="obd"><h4>라비움 한강</h4><div class="otp">한강뷰 도시형 생활주택</div></div>
+<span class="ogo">공식 사이트 ↗</span>
 </a>
-
-<a class="pcard" href="https://www.inscapeyangyangbyparnas.co.kr/" target="_blank" rel="noopener noreferrer">
-<div class="ban b3">🏖️<span class="loc">강원 · 양양</span></div>
-<div class="body">
-<h3>인스케이프 양양 바이 파르나스</h3>
-<div class="type">5성급 호텔 레지던스</div>
-<p>낙산해변·설악 인근의 5성급 리조트 레지던스. 인터컨티넨탈 파르나스가 운영을 맡아 위탁운영형 수익 모델로 관심받는 곳이에요.</p>
-<span class="go">공식 사이트 보기 ↗</span>
-</div>
+<a class="oCard" href="https://www.inscapeyangyangbyparnas.co.kr/" target="_blank" rel="noopener noreferrer">
+<div class="obn b3"><span class="emo">🏖️</span><span class="loc">강원 · 양양</span></div>
+<div class="obd"><h4>인스케이프 양양<br>바이 파르나스</h4><div class="otp">5성급 호텔 레지던스</div></div>
+<span class="ogo">공식 사이트 ↗</span>
 </a>
-
-</div>
+</div></div>
+<div class="orbitHint">카드에 마우스를 올리면 멈춰요 · 탭하면 공식 사이트로 이동</div>
 
 <div class="sechead">🔒 더 많은 수익형 — 회원 공개 예정</div>
 <div class="grid">
