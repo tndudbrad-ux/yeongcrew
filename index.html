@@ -390,7 +390,7 @@
   var list=document.getElementById('newsList'); if(!list) return;
   var BASE='https://hwon-rtms.vercel.app/api/news';
   var upd=document.getElementById('newsUpd');
-  function rel(ts){ if(!ts)return''; var s=(Date.now()-ts)/1000; if(s<60)return'방금'; if(s<3600)return Math.floor(s/60)+'분 전'; if(s<86400)return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
+  function rel(ts){ if(!ts)return''; var s=(Date.now()-ts)/1000; if(s<60)return'방금'; if(s<3600)return Math.floor(s/60)+'분 전'; if(s<86400)return Math.floor(s/3600)+'시간 전'; var d=Math.floor(s/86400); if(d<7)return d+'일 전'; var t=new Date(ts); return (t.getFullYear()===new Date().getFullYear())? (t.getMonth()+1)+'월 '+t.getDate()+'일' : t.getFullYear()+'.'+(t.getMonth()+1)+'.'+t.getDate(); }
   function esc(t){ return String(t).replace(/[<>&"]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];}); }
   function render(items){
     if(!items||!items.length){ list.innerHTML='<div class="newsErr">지금은 뉴스를 불러오지 못했어요. 잠시 후 새로고침해 주세요.</div>'; return; }
