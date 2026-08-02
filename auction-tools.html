@@ -54,6 +54,13 @@ main{padding:26px 0 60px}
 .dl .meta span{font-size:.8rem;color:var(--sub)}
 .dl a.btn{flex:0 0 auto;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:600;font-size:.85rem;padding:9px 16px;border-radius:10px}
 .note{background:#F4FBFA;border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:.82rem;color:var(--sub);margin-top:18px;line-height:1.7}
+.lockchip{font-size:.76rem;font-weight:700;color:#0F8A6B;background:#DDF6EF;border-radius:20px;padding:3px 10px;vertical-align:middle}
+.dlwall{margin:2px 0 4px;padding:28px 22px;border:1px solid #B5E4E1;border-radius:18px;background:linear-gradient(120deg,#EAFAF8,#F4FBFA);text-align:center}
+.dlwall .lk{font-size:1.9rem}
+.dlwall h3{font-size:1.14rem;font-weight:700;margin:8px 0 5px;color:#0D2A29}
+.dlwall p{font-size:.92rem;color:var(--sub);margin:0 auto 16px;line-height:1.6;max-width:440px}
+.boobiGateBtn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:700;font-size:1rem;padding:13px 26px;border:none;border-radius:12px;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.32)}
+.dlnote{font-size:.8rem;color:#8aa5a2;margin-top:12px}
 footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:36px}
 footer a{color:#B9DCD9;margin:0 8px}
 @media(max-width:620px){nav.gnb{display:none}}
@@ -83,11 +90,21 @@ footer a{color:#B9DCD9;margin:0 8px}
 <a class="tool" href="/auction-contract-check.html"><div class="ic">📝</div><h3>계약 체크리스트</h3><p>매매·임대 계약 전·당일·잔금 확인사항과 꼭 넣어야 할 특약 문구.</p><span class="go">체크리스트 →</span></a>
 </div>
 
-<div class="sechead">📎 명도·조사 서식 다운로드 <span style="font-size:.78rem;font-weight:400;color:var(--sub)">무료</span></div>
+<div class="sechead">📎 명도·조사 서식 다운로드 <span class="lockchip">🔒 회원 전용</span></div>
+
+<div class="dlwall" id="dlWall">
+<div class="lk">🔒</div>
+<h3>로그인하면 서식을 받을 수 있어요</h3>
+<p>내용증명·점유이전금지 가처분·폐문부재 서식을 부비 회원에게 무료로 드려요. 구글 계정으로 3초면 시작돼요.</p>
+<button class="boobiGateBtn" id="dlLoginBtn">🅶 구글로 로그인하고 다운로드</button>
+<div class="dlnote">지금은 무료예요 · 로그인만 하면 전체 공개</div>
+</div>
+
+<div id="dlItems" style="display:none">
 <div class="dl"><div class="dic doc">DOC</div><div class="meta"><b>내용증명 (명도 통보)</b><span>낙찰 후 점유자에게 보내는 명도 협의 내용증명 예시</span></div><a class="btn" href="/form-eviction-notice.docx" download>다운로드</a></div>
 <div class="dl"><div class="dic doc">DOC</div><div class="meta"><b>점유이전금지 가처분 신청서</b><span>명도소송 전 점유 이전을 막는 보전처분 신청서 예시</span></div><a class="btn" href="/form-injunction.docx" download>다운로드</a></div>
 <div class="dl"><div class="dic doc">DOC</div><div class="meta"><b>폐문부재 안내문</b><span>방문 시 부재중일 때 남기는 연락 안내문</span></div><a class="btn" href="/form-absence-notice.docx" download>다운로드</a></div>
-<div class="dl"><div class="dic ppt">PPT</div><div class="meta"><b>빌라 시세·매물 조사 양식</b><span>빌라·다세대 시세와 매물을 정리하는 조사 템플릿</span></div><a class="btn" href="/villa-price-research.pptx" download>다운로드</a></div>
+</div>
 
 <div class="note">서식은 실제 사례를 바탕으로 한 <b>예시 양식</b>이에요. 사건·물건마다 사실관계가 다르므로, 실제 발송·제출 전에는 내용을 물건에 맞게 수정하고 필요 시 법률 전문가의 확인을 받으세요. 명도·소송 절차는 법원·집행관 안내를 우선합니다.</div>
 
@@ -95,6 +112,16 @@ footer a{color:#B9DCD9;margin:0 8px}
 
 <footer><div class="wrap" style="max-width:880px">부비 — 부동산 비서<br>© 2026 영크루 · <a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a></div></footer>
 
+<script>
+(function(){
+var wall=document.getElementById('dlWall'), items=document.getElementById('dlItems');
+function set(u){ if(u){wall.style.display='none';items.style.display='';} else {wall.style.display='';items.style.display='none';} }
+var btn=document.getElementById('dlLoginBtn');
+if(btn) btn.onclick=function(){ if(window.hwonAuth) hwonAuth.signInGoogle(); };
+document.addEventListener('hwon-auth',function(e){ set(e.detail); });
+if(window.hwonUser) set(window.hwonUser);
+})();
+</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 </body>
