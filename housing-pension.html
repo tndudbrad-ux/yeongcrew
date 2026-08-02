@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주택연금(역모기지) 계산기 — 나이·집값별 예상 월 수령액 (2026) | 부비</title>
+<meta name="description" content="집은 있는데 현금이 부족한 시니어를 위한 주택연금(역모기지) 예상 월 수령액 계산기. 부부 중 연소자 나이와 주택 시세만 넣으면 2026년 기준 종신지급 월지급금을 바로 추정해요.">
+<meta name="keywords" content="주택연금 계산기, 역모기지 계산기, 주택연금 수령액, 주택연금 월지급금, 시니어 주거, 노후 현금흐름, 부비">
+<link rel="canonical" href="https://yeongcrew.co.kr/housing-pension.html">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="주택연금(역모기지) 계산기 — 예상 월 수령액 (2026) | 부비">
+<meta property="og:description" content="부부 중 연소자 나이와 주택 시세만 넣으면 2026년 기준 주택연금 예상 월지급금을 바로 계산해요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yeongcrew.co.kr/housing-pension.html">
+<meta property="og:site_name" content="부비 - 부동산 비서">
+<meta property="og:image" content="https://yeongcrew.co.kr/icon-512.png">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#FFFFFF;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+header.top{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500}
+.logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px)}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+main{padding:26px 0 60px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:12px}.crumb a{color:var(--teal)}
+h1{font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
+.lead{color:var(--sub);font-size:.95rem;margin:6px 0 20px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 22px}
+label{display:block;font-size:.9rem;font-weight:600;margin:16px 0 8px}
+label:first-child{margin-top:0}
+.rowv{display:flex;align-items:center;gap:12px}
+input[type=range]{flex:1;accent-color:var(--teal)}
+.val{min-width:78px;text-align:right;font-weight:700;color:var(--teal);font-size:1.05rem}
+input[type=number]{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1.05rem;font-family:inherit;color:var(--forest)}
+input[type=number]:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
+.hint{font-size:.8rem;color:var(--sub);margin-top:6px}
+.result{margin-top:22px;background:linear-gradient(180deg,#EAFAF8,#F0FAF8);border:1.5px solid #BFE9E6;border-radius:16px;padding:22px;text-align:center}
+.result .cap{font-size:.9rem;color:var(--sub)}
+.result .big{font-size:2.1rem;font-weight:700;color:var(--teal);letter-spacing:-.02em;margin:4px 0}
+.result .sub2{font-size:.86rem;color:var(--sub)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.chip{background:#fff;border:1px solid #CBEBE8;border-radius:20px;padding:6px 12px;font-size:.8rem;color:var(--forest)}
+.cta{display:block;text-align:center;margin-top:16px;background:var(--teal);color:#fff;font-weight:600;padding:13px;border-radius:12px;font-size:.95rem}
+.note{background:#F4FBFA;border:1px solid var(--line);border-radius:14px;padding:15px 17px;font-size:.83rem;color:var(--sub);margin-top:20px;line-height:1.7}
+h2.sec{font-size:1.12rem;font-weight:600;margin:30px 0 12px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0 16px;margin-bottom:8px}
+.faq summary{cursor:pointer;font-weight:600;font-size:.93rem;padding:14px 0;list-style:none;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:2px;top:11px;font-size:1.25rem;color:var(--teal)}
+.faq details[open] summary::after{content:"\2212"}
+.faq details p{margin:0 0 14px;font-size:.88rem;color:var(--sub);line-height:1.7}
+.rel{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:8px}
+.rel a{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:.9rem;font-weight:600}
+.rel a span{display:block;font-size:.78rem;color:var(--sub);font-weight:400;margin-top:2px}
+footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:36px}
+footer a{color:#B9DCD9;margin:0 8px}
+@media(max-width:620px){nav.gnb{display:none}}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css?v=3">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><img class="logo3d" src="/boobi-ring-3d.png" alt=""><span class="ring"></span><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
+<nav class="gnb"><a href="/calculator.html">계산기</a><a href="/rental-board.html">임대공고</a><a href="/policy-finder.html">정책대출</a><a href="/experts.html">전문가</a></nav>
+</div></header>
+
+<main><div class="wrap">
+<div class="crumb"><a href="/">홈</a> › <a href="/calculator.html">계산기</a> › 주택연금</div>
+<h1>🏡 주택연금(역모기지) 계산기</h1>
+<p class="lead">집은 있는데 매달 쓸 현금이 부족하다면 — 살던 집 그대로 두고 평생 연금처럼 받는 <b>주택연금</b>. 나이와 집값만 넣으면 예상 월 수령액을 바로 알려드려요.</p>
+
+<div class="box">
+<label>부부 중 <b>나이 적은 분</b> 기준 나이 <span class="hint" style="font-weight:400">(만 나이)</span></label>
+<div class="rowv"><input type="range" id="age" min="55" max="90" value="70" step="1"><span class="val"><span id="agev">70</span>세</span></div>
+
+<label>우리 집 시세 (매매 기준)</label>
+<div class="rowv"><input type="range" id="priceR" min="1" max="12" value="5" step="0.5"><span class="val"><span id="pricev">5.0</span>억</span></div>
+<input type="number" id="priceN" value="5" step="0.1" min="1" max="12" style="margin-top:10px" aria-label="집 시세(억원) 직접 입력">
+<div class="hint">가입 요건: 부부 중 1명 55세 이상, 부부 합산 <b>공시가격 12억 이하</b>. 지급금은 시세 12억까지 반영돼요.</div>
+
+<div class="result">
+<div class="cap">예상 월 수령액 (종신지급·정액형)</div>
+<div class="big"><span id="mon">—</span></div>
+<div class="sub2">연 <span id="yr">—</span> · 예상 누적 수령액(90세까지) <span id="cum">—</span></div>
+<div class="chips" id="chips"></div>
+</div>
+<a class="cta" href="https://www.hf.go.kr/ko/sub03/sub03_01_01_02.do" target="_blank" rel="noopener">HF 공식 계산기로 정확히 확인하기 ↗</a>
+</div>
+
+<div class="note">이 계산은 한국주택금융공사(HF) <b>2026년 3월 종신지급방식 정액형 예시표</b>를 기반으로 한 <b>추정치</b>예요. 실제 금액은 정확한 주택가격 산정·지급방식(종신/확정기간/대출상환/우대형)·부부 여부·주택 유형에 따라 달라지니, 신청 전 <a href="https://www.hf.go.kr" target="_blank" rel="noopener" style="color:var(--teal);font-weight:600">HF 공식 계산기</a>나 상담(1688-8114)으로 최종 확인하세요. 우대형(1.5억 이하·기초연금 수급 등)은 최대 약 20% 더 받을 수 있어요.</div>
+
+<h2 class="sec">알아두면 좋은 것</h2>
+<div class="faq">
+<details><summary>집값이 오르거나 내리면 어떻게 되나요?</summary><p>월 수령액은 가입 시점의 주택가격·나이로 정해지고, 가입 후 집값이 올라도 수령액은 그대로예요(대신 나중에 정산 시 남는 가치는 상속인에게 돌아갑니다). 반대로 집값이 크게 떨어져도 이미 받은 연금을 토해내지 않아요.</p></details>
+<details><summary>죽으면 집은 나라가 가져가나요?</summary><p>아니에요. 사망 후 주택을 처분해 그동안 받은 연금+이자를 정산하고, <b>남는 돈은 상속인에게</b> 갑니다. 반대로 집값보다 받은 연금이 많아도 상속인에게 <b>청구하지 않아요</b>(초과분 부담 없음).</p></details>
+<details><summary>계속 그 집에 살 수 있나요?</summary><p>네. 부부 모두 평생 그 집에 거주하면서 연금을 받는 구조예요. 2026년부터는 실거주 의무도 완화돼(요양원 입소 등 사유) 유연해졌어요.</p></details>
+<details><summary>나이가 많을수록 유리한가요?</summary><p>같은 집값이라도 가입 나이가 5세 높아지면 월 수령액이 대략 20~30% 늘어요. 다만 그만큼 받는 기간은 짧아지니, 현금흐름이 급하지 않다면 시점을 저울질해볼 만해요.</p></details>
+</div>
+
+<h2 class="sec">시니어 주거, 같이 보면 좋은 것</h2>
+<div class="rel">
+<a href="/capital-gains-tax.html">양도세 계산기<span>큰 집 팔고 옮길 때</span></a>
+<a href="/rental-board.html">임대주택 공고<span>고령자 복지주택·실버스테이</span></a>
+<a href="/property-tax.html">재산세 계산기<span>보유세 부담 확인</span></a>
+</div>
+
+</div></main>
+
+<footer><div class="wrap">
+부비 — 부동산 비서<br>© 2026 영크루 ·
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a>
+</div></footer>
+
+<script>
+(function(){
+  var TBL={55:15.7,60:20.5,65:25.3,70:30.6,75:38.0,80:48.0,85:62.0,90:80.0}; // 만원/월 per 1억 (HF 2026.3 정액형 앵커)
+  function perEok(age){
+    if(age<=55) return TBL[55]; if(age>=90) return TBL[90];
+    var lo=Math.floor(age/5)*5, hi=lo+5; if(TBL[lo]==null) lo=55; if(TBL[hi]==null) hi=90;
+    var t=(age-lo)/(hi-lo); return TBL[lo]+(TBL[hi]-TBL[lo])*t;
+  }
+  function won(man){ // 만원 → 보기 좋은 문자열
+    man=Math.round(man);
+    if(man>=10000){ var eok=Math.floor(man/10000), rest=man%10000; return eok+'억'+(rest?(' '+rest.toLocaleString()+'만'):'')+'원'; }
+    return man.toLocaleString()+'만원';
+  }
+  var age=document.getElementById('age'), priceR=document.getElementById('priceR'), priceN=document.getElementById('priceN');
+  function calc(){
+    var a=+age.value, p=Math.min(12,Math.max(1,+priceN.value||0));
+    document.getElementById('agev').textContent=a;
+    document.getElementById('pricev').textContent=p.toFixed(1);
+    var mon=perEok(a)*p; // 만원/월
+    document.getElementById('mon').textContent=won(mon)+' / 월';
+    document.getElementById('yr').textContent=won(mon*12);
+    document.getElementById('cum').textContent=won(mon*12*Math.max(0,90-a));
+    var c=document.getElementById('chips'); c.innerHTML='';
+    [[a-5],[a],[a+5]].forEach(function(x){ var aa=x[0]; if(aa<55||aa>90) return;
+      c.innerHTML+='<span class="chip">'+aa+'세: '+won(perEok(aa)*p)+'/월</span>'; });
+  }
+  age.addEventListener('input',calc);
+  priceR.addEventListener('input',function(){ priceN.value=(+priceR.value).toFixed(1); calc(); });
+  priceN.addEventListener('input',function(){ var v=Math.min(12,Math.max(1,+priceN.value||1)); priceR.value=v; calc(); });
+  calc();
+})();
+</script>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"부비 주택연금(역모기지) 계산기","url":"https://yeongcrew.co.kr/housing-pension.html","description":"나이·집값별 주택연금 예상 월 수령액을 계산하는 무료 계산기","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://yeongcrew.co.kr"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+{"@type":"ListItem","position":1,"name":"홈","item":"https://yeongcrew.co.kr/"},
+{"@type":"ListItem","position":2,"name":"계산기","item":"https://yeongcrew.co.kr/calculator.html"},
+{"@type":"ListItem","position":3,"name":"주택연금 계산기","item":"https://yeongcrew.co.kr/housing-pension.html"}]}</script>
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+</body>
+</html>
