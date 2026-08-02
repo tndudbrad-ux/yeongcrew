@@ -1,5 +1,5 @@
 {
-"updatedAt": "2026-08-01T11:40:00+09:00",
+"updatedAt": "2026-08-02T18:20:00+09:00",
 "note": "공휴일·금리결정일은 공식 발표 기준. 세금 일정은 통상 법정 납기이며 연도별로 하루이틀 달라질 수 있어요. 임대(든든전세 등) 주요 공고는 확인되는 대로 반영해요.",
 "events": [
 {"date":"2026-08-15","type":"holiday","title":"광복절"},
@@ -22,6 +22,10 @@
 
 {"date":"2026-08-07","type":"lease","kind":"end","hot":true,"title":"11차 든든전세 접수마감","desc":"HUG 든든전세주택 수시모집 300호 · 서울 118·인천 116·경기 62·부산 4 · 무주택자 대상","url":"https://www.khug.or.kr/jeonse/web/s07/s070301.jsp","start":"2026-07-24","end":"2026-08-07"},
 {"date":"2026-10-30","type":"lease","kind":"winner","title":"11차 든든전세 당첨발표","desc":"HUG 든든전세주택 11차 당첨자 발표","url":"https://www.khug.or.kr/jeonse/web/s07/s070301.jsp"},
+
+{"date":"2026-08-04","type":"lease","kind":"start","title":"강변 스카이타워 청약 접수 시작","desc":"강변·구의역 역세권 청년안심주택(공공지원 민간임대) · 서울 광진구 강변역로 10 · 홈페이지 접수","url":"https://www.gangbyeonskytower.co.kr/","start":"2026-08-04","end":"2026-08-06"},
+{"date":"2026-08-06","type":"lease","kind":"end","hot":true,"title":"강변 스카이타워 청약 접수마감","desc":"강변·구의역 역세권 청년안심주택 · 서울 광진구 · 청약 8/4~8/6 홈페이지 접수 · 코리빙","url":"https://www.gangbyeonskytower.co.kr/","start":"2026-08-04","end":"2026-08-06"},
+{"date":"2026-08-08","type":"lease","kind":"winner","hot":true,"title":"강변 스카이타워 당첨발표","desc":"강변 스카이타워 청년안심주택 당첨자 발표 15:00 · 서류제출 8/9~8/12 · 계약 8/13~8/19","url":"https://www.gangbyeonskytower.co.kr/"},
 
 {"date":"2026-07-31","type":"tax","title":"재산세 1기분 납부 마감","desc":"주택분 1/2 · 건축물 (납기 7/16~7/31)"},
 {"date":"2026-09-30","type":"tax","title":"재산세 2기분 납부 마감","desc":"주택분 나머지 1/2 · 토지 (납기 9/16~9/30)"},
