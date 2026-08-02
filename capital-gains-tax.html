@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>양도소득세 계산기 (2026년 다주택 중과 부활 반영) - 부비</title>
-<meta name="description" content="2026년 양도소득세를 자동 계산합니다. 1세대1주택 12억 비과세, 장기보유특별공제, 5월 10일 부활한 다주택자 중과세율(+20~30%p), 단기 양도 70·60%까지 전부 반영.">
+<title>양도소득세 계산기 (홈택스 방식·2026 다주택 중과 반영) - 부비</title>
+<meta name="description" content="홈택스 방식으로 양도소득세를 계산해요. 취득일·양도일로 보유기간 자동 산정, 1세대1주택 12억 비과세·일시적 2주택, 장기보유특별공제(표1·표2 최대80%), 2026.5.10 부활한 다주택 중과(+20~30%p), 단기 70·60%까지 반영.">
 <link rel="canonical" href="https://yeongcrew.co.kr/capital-gains-tax.html">
 <meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
-<meta property="og:title" content="양도소득세 계산기 (2026년 다주택 중과 부활 반영) - 부비">
-<meta property="og:description" content="2026년 양도소득세를 자동 계산합니다. 1세대1주택 12억 비과세, 장기보유특별공제, 5월 10일 부활한 다주택자 중과세율(+20~30%p), 단기 양도 70·60%까지 전부 반영.">
+<meta property="og:title" content="양도소득세 계산기 (홈택스 방식·2026 다주택 중과 반영) - 부비">
+<meta property="og:description" content="취득일·양도일로 보유기간 자동, 1세대1주택 비과세·장기보유특별공제·다주택 중과·단기세율까지 홈택스 방식으로 계산.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yeongcrew.co.kr/capital-gains-tax.html">
 <meta property="og:site_name" content="부비 - 부동산 비서">
@@ -32,7 +32,6 @@ nav.gnb a:hover{color:var(--teal)}
 main{padding:40px 0 64px}
 h2.sec{font-size:1.28rem;font-weight:500;letter-spacing:-.02em;margin:40px 0 16px;display:flex;align-items:center;gap:10px}
 h2.sec::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(180deg,#8FE9E4,#20A6A2);box-shadow:0 0 8px var(--glow)}
-h2.sec:first-child{margin-top:0}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;transition:.18s;display:block}
 .card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(32,166,162,.14);border-color:#B5E4E1}
@@ -40,14 +39,13 @@ h2.sec:first-child{margin-top:0}
 .card h3{font-size:1rem;font-weight:500;margin:8px 0 4px;letter-spacing:-.015em}
 .card p{font-size:.85rem;color:var(--sub)}
 .tool-box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 28px;margin-bottom:22px}
-.tool-box h2{font-size:1.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
-.tool-box h2::before{content:"";flex:0 0 12px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, transparent 26%),linear-gradient(180deg,#8FE9E4,#1B918D);-webkit-mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);box-shadow:0 0 9px var(--glow)}
 label.f{display:block;font-size:.87rem;font-weight:500;margin:15px 0 6px;color:var(--forest)}
 input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
 input.f:focus,select.f:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hintline{font-size:.78rem;color:var(--sub);margin-top:5px}
 .seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-.seg button{flex:1;min-width:90px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
+.seg button{flex:1;min-width:86px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
 .seg button.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:600;box-shadow:0 0 10px rgba(42,193,188,.18)}
 button.go{width:100%;margin-top:22px;padding:15px;border:none;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.35);transition:.15s}
 button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(42,193,188,.45)}
@@ -57,25 +55,19 @@ button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(42,193,18
 .result table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
 .result td,.result th{padding:8px 4px;border-bottom:1px solid #CBEBE8;text-align:right}
 .result td:first-child,.result th:first-child{text-align:left;color:var(--sub)}
+.result tr.hl td{font-weight:700;color:var(--forest);border-top:1.5px solid #9FD8D3}
 .note{font-size:.82rem;color:var(--sub);margin-top:14px;font-weight:300}
-article.post{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:36px 32px}
-article.post h1{font-size:1.5rem;font-weight:500;margin-bottom:6px;letter-spacing:-.025em}
-article.post .meta{font-size:.84rem;color:var(--sub);margin-bottom:24px;font-weight:300}
-article.post h2{font-size:1.13rem;font-weight:500;margin:30px 0 10px;color:var(--forest);padding-left:14px;position:relative}
-article.post h2::before{content:"";position:absolute;left:0;top:.4em;width:5px;height:5px;border-radius:50%;background:var(--mint);box-shadow:0 0 7px var(--glow)}
-article.post p{margin-bottom:14px;font-size:.95rem}
-article.post table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:.88rem}
-article.post th{background:var(--forest);color:#DFF5F3;padding:10px 8px;font-weight:500}
-article.post td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center}
-article.post ul{margin:0 0 14px 20px;font-size:.95rem}
-article.post li{margin-bottom:6px}
-.tip{background:#EAFAF8;border:1px solid #BFE9E6;border-radius:12px;padding:14px 16px;font-size:.9rem;margin:14px 0}
-.rel{margin-top:28px}
-.ad-slot{display:none}
 footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
 footer a{color:#B9DCD9;margin:0 8px}
 .crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
 .crumb a{color:var(--teal)}
+.rel{margin-top:28px}
+.faq{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 18px}
+.faq summary{cursor:pointer;font-weight:500;font-size:.95rem;padding:15px 0;list-style:none;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:2px;color:var(--teal);font-size:1.1rem}
+.faq[open] summary::after{content:"\2212"}
+.faq p{font-size:.88rem;color:var(--sub);padding:0 0 15px;line-height:1.7}
 @media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css?v=3">
@@ -83,155 +75,189 @@ footer a{color:#B9DCD9;margin:0 8px}
 <body>
 <header class="top"><div class="wrap">
 <a class="logo" href="/"><img class="logo3d" src="/boobi-ring-3d.png" alt=""><span class="ring"></span><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
-<nav class="gnb">
-<a href="/loan-calculator.html">대출·DSR</a>
-<a href="/acquisition-tax.html">취득세</a>
-<a href="/brokerage-fee.html">중개보수</a>
-<a href="/jeonse-monthly.html">전월세 전환</a>
-<a href="/youth-housing.html">청년 지원</a>
-<a href="/rental-board.html">임대주택</a>
-<a href="/experts.html">전문가 찾기</a>
-<a href="/#guide">가이드</a>
-</nav>
+<nav class="gnb"><a href="/calculator.html">계산기</a><a href="/rental-board.html">청년신혼부부</a><a href="/senior.html">시니어</a><a href="/ai-check.html">AI진단</a><a href="/column.html">칼럼</a></nav>
 </div></header>
 
 <main><div class="wrap">
 
-<div class="crumb"><a href="/">홈</a> › 양도소득세 계산기</div>
+<div class="crumb"><a href="/">홈</a> › <a href="/calculator.html">계산기</a> › 양도소득세</div>
 <div class="tool-box">
-<h1 style="font-size:1.4rem;font-weight:600;letter-spacing:-.025em;margin-bottom:14px;display:flex;align-items:center;gap:10px">💸 양도소득세 계산기 (2026 기준)</h1>
-<div style="background:#FFF7ED;border:1px solid #FDE4C8;border-radius:10px;padding:10px 14px;font-size:.83rem;margin-bottom:6px">⚠️ <b>2026.5.10부터 다주택자 중과 부활</b> — 조정대상지역 2주택 +20%p, 3주택 이상 +30%p, 장기보유특별공제 배제. 이 계산기에 반영돼 있어요.</div>
+<h1 style="font-size:1.4rem;font-weight:600;letter-spacing:-.025em;margin-bottom:14px;display:flex;align-items:center;gap:10px">💸 양도소득세 계산기 <span style="font-size:.8rem;font-weight:500;color:var(--sub)">홈택스 방식 · 2026</span></h1>
+<div style="background:#FFF7ED;border:1px solid #FDE4C8;border-radius:10px;padding:10px 14px;font-size:.83rem;margin-bottom:6px">⚠️ <b>2026.5.10부터 다주택 중과 부활</b> — 조정대상지역 2주택 +20%p, 3주택 이상 +30%p, 장기보유특별공제 배제. 반영돼 있어요.</div>
+
 <label class="f">자산 유형</label>
 <div class="seg" id="gType"><button data-v="house" class="on">주택</button><button data-v="bunyang">분양권</button><button data-v="ipju">조합원입주권</button></div>
+
 <div class="row2">
-<div><label class="f">양도가액 (만원)</label><input class="f" id="gSell" type="number" placeholder="예: 130000 (13억)"></div>
-<div><label class="f">취득가액 (만원)</label><input class="f" id="gBuy" type="number" placeholder="예: 80000 (8억)"></div>
+<div><label class="f">양도가액 (만원)</label><input class="f" id="gSell" type="number" inputmode="numeric" placeholder="예: 130000 (13억)"><div class="hintline" id="gSellH"></div></div>
+<div><label class="f">취득가액 (만원)</label><input class="f" id="gBuy" type="number" inputmode="numeric" placeholder="예: 80000 (8억)"><div class="hintline" id="gBuyH"></div></div>
 </div>
-<label class="f">필요경비 (만원) — 취득세·중개보수·자본적지출 등</label>
-<input class="f" id="gExp" type="number" placeholder="예: 3000 (모르면 0)">
+<label class="f">필요경비 (만원) <span style="font-weight:300;color:var(--sub)">— 취득세·중개보수·자본적지출 등, 모르면 0</span></label>
+<input class="f" id="gExp" type="number" inputmode="numeric" placeholder="예: 3000">
+
 <div class="row2">
-<div><label class="f">보유기간 (년)</label><input class="f" id="gHold" type="number" step="0.1" placeholder="예: 5"></div>
-<div id="gLiveWrap"><label class="f">거주기간 (년)</label><input class="f" id="gLive" type="number" step="0.1" placeholder="예: 3 (없으면 0)"></div>
+<div><label class="f">취득일 (잔금일)</label><input class="f" id="gBuyDate" type="date"></div>
+<div><label class="f">양도일 (잔금일)</label><input class="f" id="gSellDate" type="date"></div>
 </div>
+<div class="hintline" id="gHoldH">취득일·양도일로 보유기간을 자동 계산해요. (모르면 아래에서 보유연수 직접 입력)</div>
+<div class="row2" style="margin-top:6px">
+<div><label class="f">보유기간 (년) <span style="font-weight:300;color:var(--sub)">직접 입력</span></label><input class="f" id="gHold" type="number" step="0.1" inputmode="decimal" placeholder="날짜 넣으면 자동"></div>
+<div id="gLiveWrap"><label class="f">거주기간 (년) <span style="font-weight:300;color:var(--sub)">1주택 장특공용</span></label><input class="f" id="gLive" type="number" step="0.1" inputmode="decimal" placeholder="없으면 0"></div>
+</div>
+
 <div id="gHouseOpts">
-<label class="f">양도 시점 <b>세대 합산</b> 보유 주택 수 (이 주택 포함) <span style="font-weight:300;color:var(--sub)">— 함께 사는 부모·자녀·형제 명의 주택도 포함</span></label>
-<div class="seg" id="gCnt"><button data-v="1" class="on">1주택</button><button data-v="2">2주택</button><button data-v="3">3주택 이상</button></div>
-<label class="f">이 주택이 조정대상지역에 있나요? <span style="font-weight:300;color:var(--sub)">(서울 전역·과천·분당 등 — 2025.10.16 확대)</span></label>
-<div class="seg" id="gAdj"><button data-v="n" class="on">아니요</button><button data-v="y">예</button></div>
+<label class="f">양도 시점 <b>세대 합산</b> 보유 주택 수 (이 주택 포함)</label>
+<div class="seg" id="gCnt"><button data-v="1" class="on">1주택</button><button data-v="temp2">일시적 2주택</button><button data-v="2">2주택</button><button data-v="3">3주택+</button></div>
+<div id="gAdjWrap"><label class="f">이 주택이 조정대상지역? <span style="font-weight:300;color:var(--sub)">(서울 전역·과천·분당 등)</span></label>
+<div class="seg" id="gAdj"><button data-v="n" class="on">아니요</button><button data-v="y">예</button></div></div>
 <div id="gGrace" style="display:none"><label class="f">2026.5.9 이전 매매계약 + 계약금 수령 (중과 경과조치)</label>
 <div class="seg" id="gGraceSeg"><button data-v="n" class="on">아니요</button><button data-v="y">예 (중과 배제)</button></div></div>
 <div id="gOneOpts"><label class="f">1세대 1주택 비과세 요건 충족? <span style="font-weight:300;color:var(--sub)">(2년 보유 + 취득 당시 조정지역이면 2년 거주)</span></label>
-<div class="seg" id="gExempt"><button data-v="y" class="on">충족</button><button data-v="n">미충족</button></div>
-<label class="f">세대 합산 체크 — 같은 집에 사는 가족(부모·자녀·형제) 중 <b>다른 주택 소유자</b>가 있나요?</label>
-<div class="seg" id="gHousehold"><button data-v="n" class="on">없음</button><button data-v="y">있음 (또는 모름)</button></div></div>
+<div class="seg" id="gExempt"><button data-v="y" class="on">충족</button><button data-v="n">미충족</button></div></div>
 </div>
 <button class="go" onclick="calcCGT()">계산하기</button>
 <div class="result" id="gRes"></div>
-<p class="note">2026년 7월 기준 세법(중과 부활 반영). 일시적 2주택, 상속·증여 특례, 감면주택 등 개별 사정은 반영되지 않으니 신고 전 세무사 확인을 권합니다.</p>
+<p class="note">2026년 8월 기준 세법(중과 부활 반영). 홈택스와 동일한 산식(양도차익 → 장기보유특별공제 → 양도소득금액 → 기본공제 → 과세표준 → 세율)을 적용한 <b>참고 추정치</b>예요. 환산취득가액·감면(조특법)·상속 특례·부담부증여 등 개별 사정은 반영되지 않으니, 신고 전 <a href="https://hometax.go.kr" target="_blank" rel="noopener" style="color:var(--teal);font-weight:600">홈택스</a>나 세무사로 최종 확인하세요.</p>
 </div>
 
-<div class="tool-box"><h2 style="font-size:1.12rem">💳 계산 끝! 양도세, 실제로 이렇게 내요</h2><ol style="font-size:.9rem;line-height:1.8;padding-left:22px;margin-top:10px"><li style="margin-bottom:8px"><b>언제까지?</b> 잔금 받은 날이 속한 달의 <b>말일부터 2개월</b>. (7월에 팔았으면 9월 30일까지)</li><li style="margin-bottom:8px"><b>어디서?</b> 국세라서 <a href="https://hometax.go.kr" target="_blank" rel="noopener" style="color:var(--teal);font-weight:600">홈택스(hometax.go.kr)</a>예요. ① 로그인 ② [세금신고] → [양도소득세] → [예정신고] ③ 판 집·산 집 계약서 내용과 필요경비(취득세·중개보수·수리비 영수증) 입력 ④ 세액 확인 후 신고서 제출</li><li style="margin-bottom:8px"><b>납부는:</b> 신고 끝나면 바로 [납부하기] — 계좌이체(수수료 없음), 카드(수수료 약 0.8%), 가상계좌 중 선택. <b>1천만원 넘으면 두 번에 나눠 낼 수 있어요</b>(분납, 2개월).</li><li style="margin-bottom:8px"><b>하나 더!</b> 양도세의 10%인 <b>지방소득세는 위택스에서 따로</b> 내야 해요. 홈택스 신고 끝에 "지방소득세 신고 이동" 버튼을 누르면 연결됩니다. 이거 놓치는 분 정말 많아요!</li></ol><div style="background:#EAFAF8;border:1.5px solid #BFE9E6;border-radius:12px;padding:12px 16px;font-size:.86rem;line-height:1.7;margin-top:8px">💡 1주택 비과세라 낼 세금이 0원이어도, 12억 초과 고가주택이면 신고는 해야 해요. 다주택·감면 적용은 세무사 대행(30~60만원대)이 가산세 리스크보다 쌉니다 → <a href="/experts.html" style="color:var(--teal);font-weight:600">세무사 찾기</a></div></div>
+<div class="tool-box"><h2 style="font-size:1.12rem;font-weight:600;margin-bottom:6px">💳 계산 끝! 양도세, 실제로 이렇게 내요</h2><ol style="font-size:.9rem;line-height:1.8;padding-left:22px;margin-top:10px"><li style="margin-bottom:8px"><b>언제까지?</b> 잔금 받은 날이 속한 달의 <b>말일부터 2개월</b>. (7월에 팔았으면 9월 30일까지)</li><li style="margin-bottom:8px"><b>어디서?</b> 국세라서 <a href="https://hometax.go.kr" target="_blank" rel="noopener" style="color:var(--teal);font-weight:600">홈택스</a> → [세금신고]→[양도소득세]→[예정신고]에서 계약서·필요경비 입력.</li><li style="margin-bottom:8px"><b>납부·분납:</b> 신고 후 [납부하기]. 세액 1천만원 초과면 2개월 <b>분납</b> 가능.</li><li style="margin-bottom:8px"><b>지방소득세(10%)는 위택스에서 따로</b> — 홈택스 신고 끝의 "지방소득세 신고 이동"으로 연결돼요. 놓치는 분 많아요!</li></ol></div>
 
-<div class="rel"><h2 class="sec">함께 보면 좋은 콘텐츠</h2><div class="grid">
-<a class="card" href="/acquisition-tax.html"><div class="ic">🧾</div><h3>취득세 계산기</h3><p>갈아타기 한다면 새 집 취득세도</p></a>
-<a class="card" href="/real-estate-tax.html"><div class="ic">📖</div><h3>부동산 세금 한눈에</h3><p>취득·보유·양도 전체 구조</p></a>
-<a class="card" href="/experts.html"><div class="ic">🧑‍💼</div><h3>세무사 찾기</h3><p>다주택·감면은 전문가 검토</p></a>
+<div class="rel"><h2 class="sec">함께 보면 좋은 것</h2><div class="grid">
+<a class="card" href="/acquisition-tax.html"><div class="ic">🧾</div><h3>취득세 계산기</h3><p>갈아타기 새 집 취득세</p></a>
+<a class="card" href="/downsizing-tax.html"><div class="ic">📦</div><h3>다운사이징 시뮬</h3><p>집 줄일 때 순현금</p></a>
+<a class="card" href="/experts.html"><div class="ic">🧑‍💼</div><h3>세무사 찾기</h3><p>다주택·감면은 전문가</p></a>
 </div></div>
 
 <div class="faqsec"><h2 class="sec">자주 묻는 질문</h2>
-<details class="faq"><summary>다주택자 양도세 중과는 언제부터 다시 적용되나요?</summary><p>2022년 5월부터 이어지던 중과 유예가 2026년 5월 9일로 종료되어, 5월 10일 양도분부터 조정대상지역 주택은 2주택자 +20%p, 3주택 이상 +30%p 중과세율이 적용되고 장기보유특별공제도 배제돼요. 다만 2026년 5월 9일 이전에 매매계약을 체결하고 계약금을 받은 경우 등 경과조치가 있으니 해당되면 세무사와 확인하세요.</p></details>
-<details class="faq"><summary>1주택인데 비과세가 안 될 수도 있나요? (세대 합산)</summary><p>네, 있어요. 양도세 비과세는 '내 명의' 주택 수가 아니라 '세대' 기준으로 판정해요. 같은 집에서 생계를 같이하는 부모·자녀·형제 등이 다른 주택을 보유하면, 내가 1채만 가졌어도 다주택 세대가 되어 비과세가 부인될 수 있습니다. 자녀가 별도 세대로 인정받으려면 만 30세 이상이거나 혼인했거나 중위소득 40% 이상의 독립생계여야 해요. 취학·근무·요양으로 잠시 떨어져 살아도 같은 세대로 보고, 주민등록상 세대분리를 했다고 세법상 세대가 갈리는 것도 아니에요. 사실 판단이라 금액이 크면 반드시 세무사와 확인하세요.</p></details>
-<details class="faq"><summary>1세대 1주택 비과세 요건은 어떻게 되나요?</summary><p>양도가액 12억원 이하이면서 2년 이상 보유하면 비과세예요. 취득 당시 조정대상지역이었다면 보유기간 중 2년 이상 거주 요건이 추가됩니다. 12억원 초과분은 초과 비율만큼만 과세되고, 보유·거주 기간에 따라 최대 80% 장기보유특별공제를 받을 수 있어요.</p></details>
-<details class="faq"><summary>양도세 필요경비로 인정되는 건 뭐가 있나요?</summary><p>취득세, 취득·양도 시 중개보수, 법무사·세무사 수수료, 샷시 설치·발코니 확장·난방 교체 같은 자본적 지출이 인정돼요. 반면 벽지·장판, 싱크대 교체 같은 수익적 지출과 재산세·대출이자는 인정되지 않습니다. 세금계산서·카드전표 등 증빙을 꼭 보관하세요.</p></details>
-<details class="faq"><summary>양도세 신고는 언제까지 해야 하나요?</summary><p>양도일이 속한 달의 말일부터 2개월 이내에 예정신고·납부해야 해요. 예를 들어 7월에 잔금을 받았다면 9월 30일까지예요. 기한을 넘기면 무신고 가산세 20%가 붙습니다. 홈택스에서 셀프 신고도 가능하지만 다주택·감면 적용은 세무사 검토를 권해요.</p></details>
+<details class="faq"><summary>다주택자 양도세 중과는 언제부터 다시 적용되나요?</summary><p>2022년 5월부터 이어지던 중과 유예가 2026년 5월 9일로 종료되어, 5월 10일 양도분부터 조정대상지역 주택은 2주택자 +20%p, 3주택 이상 +30%p 중과세율이 적용되고 장기보유특별공제도 배제돼요. 2026년 5월 9일 이전에 매매계약을 체결하고 계약금을 받은 경우 등 경과조치가 있으니 해당되면 세무사와 확인하세요.</p></details>
+<details class="faq"><summary>보유기간·단기세율은 어떻게 판정하나요?</summary><p>취득일(잔금일)부터 양도일(잔금일)까지로 계산해요. 주택·입주권은 1년 미만 70%, 1년 이상 2년 미만 60%, 2년 이상은 기본세율(6~45%)이에요. 분양권은 1년 미만 70%, 1년 이상 60%로 장기보유특별공제가 없어요.</p></details>
+<details class="faq"><summary>1세대 1주택 비과세 요건은 어떻게 되나요?</summary><p>양도가액 12억원 이하이면서 2년 이상 보유하면 비과세예요. 취득 당시 조정대상지역이었다면 2년 거주 요건이 추가됩니다. 12억 초과분은 초과 비율만큼만 과세되고, 보유·거주 기간에 따라 최대 80% 장기보유특별공제를 받아요. 신규주택 취득 후 종전주택을 기한 내 파는 '일시적 2주택'도 1주택 비과세로 봐요.</p></details>
+<details class="faq"><summary>장기보유특별공제 표1·표2 차이는?</summary><p>표1(일반)은 3년 이상 보유 시 연 2%씩 최대 30%(15년)예요. 표2는 1세대 1주택이 2년 이상 거주한 경우로, 보유 연 4%(최대 40%)+거주 연 4%(최대 40%)로 최대 80%까지 공제돼요. 다주택 중과 대상 주택은 장기보유특별공제가 배제됩니다.</p></details>
+<details class="faq"><summary>양도세 필요경비로 인정되는 건?</summary><p>취득세, 중개보수, 법무사·세무사 수수료, 샷시·발코니 확장·난방 교체 같은 자본적 지출이 인정돼요. 벽지·장판·싱크대 교체 같은 수익적 지출과 재산세·대출이자는 인정되지 않습니다. 증빙을 꼭 보관하세요.</p></details>
 </div>
-<style>.faq{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 18px}.faq summary{cursor:pointer;font-weight:500;font-size:.95rem;padding:15px 0;list-style:none;position:relative}.faq summary::after{content:"+";position:absolute;right:2px;color:var(--teal);font-size:1.1rem}.faq[open] summary::after{content:"−"}.faq p{font-size:.88rem;color:var(--sub);padding:0 0 15px;line-height:1.7}</style>
 
 </div></main>
 <footer><div class="wrap">
 부비 — 부동산 비서<br>
-계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>© 2026 영크루 · 
+계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>© 2026 영크루 ·
 <a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/privacy.html">개인정보처리방침</a><br>
 <span style="font-size:.75rem;color:#5D8683">상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074 · 서울특별시 동작구 만양로 75 · tndud.brad@gmail.com</span>
 </div></footer>
 
 <script>
 function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+function manHint(v){ v=parseFloat(v); if(!isFinite(v)||v<=0) return ''; var eok=Math.floor(v/10000), man=Math.round(v%10000); return (eok>0?eok+'억':'')+(man>0?' '+man.toLocaleString()+'만':'')+'원'; }
 document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});e.target.classList.add('on');refresh();});});
 function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
+['gSell','gBuy'].forEach(function(id){var el=document.getElementById(id);el.addEventListener('input',function(){document.getElementById(id+'H').textContent=manHint(el.value);});});
+['gBuyDate','gSellDate'].forEach(function(id){document.getElementById(id).addEventListener('input',syncHold);});
+function holdYears(){
+var b=document.getElementById('gBuyDate').value, s=document.getElementById('gSellDate').value;
+if(!b||!s) return null;
+var d=(new Date(s)-new Date(b))/86400000; if(d<0) return null;
+return d/365.25;
+}
+function syncHold(){
+var h=holdYears();
+if(h!=null){ document.getElementById('gHold').value=h.toFixed(1); document.getElementById('gHoldH').textContent='보유기간 자동: '+h.toFixed(1)+'년'; }
+}
 function refresh(){
-  var t=segVal('gType');
-  document.getElementById('gHouseOpts').style.display = t==='house'?'block':'none';
-  var cnt=segVal('gCnt'), adj=segVal('gAdj');
-  document.getElementById('gOneOpts').style.display = (t==='house'&&cnt==='1')?'block':'none';
-  document.getElementById('gGrace').style.display = (t==='house'&&cnt!=='1'&&adj==='y')?'block':'none';
+var t=segVal('gType');
+document.getElementById('gHouseOpts').style.display = t==='house'?'block':'none';
+document.getElementById('gLiveWrap').style.opacity = t==='house'?'1':'0.5';
+var cnt=segVal('gCnt'), adj=segVal('gAdj');
+var isOne=(cnt==='1'||cnt==='temp2');
+document.getElementById('gOneOpts').style.display = (t==='house'&&isOne)?'block':'none';
+document.getElementById('gAdjWrap').style.display = (t==='house'&&!isOne)?'block':'none';
+document.getElementById('gGrace').style.display = (t==='house'&&(cnt==='2'||cnt==='3')&&adj==='y')?'block':'none';
 }
-function basicTax(tb){
-  var T=[[1400,6,0],[5000,15,126],[8800,24,576],[15000,35,1544],[30000,38,1994],[50000,40,2594],[100000,42,3594],[Infinity,45,6594]];
-  for(var i=0;i<T.length;i++){ if(tb<=T[i][0]) return {rate:T[i][1], tax: tb*T[i][1]/100 - T[i][2]}; }
-}
-function heavyTax(tb,add){
-  var T=[[1400,6,0],[5000,15,126],[8800,24,576],[15000,35,1544],[30000,38,1994],[50000,40,2594],[100000,42,3594],[Infinity,45,6594]];
-  for(var i=0;i<T.length;i++){ if(tb<=T[i][0]) return {rate:T[i][1]+add, tax: tb*(T[i][1]+add)/100 - T[i][2]}; }
-}
+function basic(tb){var T=[[1400,6,0],[5000,15,126],[8800,24,576],[15000,35,1544],[30000,38,1994],[50000,40,2594],[100000,42,3594],[Infinity,45,6594]];for(var i=0;i<T.length;i++){if(tb<=T[i][0])return{rate:T[i][1],tax:tb*T[i][1]/100-T[i][2]};}}
+function heavy(tb,add){var b=basic(tb);return{rate:b.rate+add,tax:b.tax+tb*add/100};}
 function calcCGT(){
-  var sell=+document.getElementById('gSell').value, buy=+document.getElementById('gBuy').value;
-  if(!sell||!buy){alert('양도가액과 취득가액을 입력해주세요');return;}
-  var exp=+document.getElementById('gExp').value||0;
-  var hold=+document.getElementById('gHold').value||0, live=+document.getElementById('gLive').value||0;
-  var type=segVal('gType'), cnt=type==='house'?+segVal('gCnt'):1, adj=segVal('gAdj')==='y';
-  var grace=segVal('gGraceSeg')==='y', exemptOK=segVal('gExempt')==='y';
-  var household=(document.getElementById('gHousehold')&&segVal('gHousehold')==='y');
-  var gain=sell-buy-exp;
-  var el=document.getElementById('gRes'); el.classList.add('show');
-  if(gain<=0){ el.innerHTML='<div class="big">납부할 양도세 없음</div><div style="font-size:.88rem;margin-top:8px">양도차익이 없거나 손실이에요. 같은 해 다른 자산 양도차익과 통산할 수 있으니 손실도 신고해두면 유리할 수 있어요.</div>'; return; }
-  var notes=[];
-  var oneHouse = type==='house' && cnt===1 && exemptOK;
-  var householdWarn = (type==='house' && cnt===1 && exemptOK && household);
-  var hw = householdWarn ? '<div style="background:#FFF7ED;border:1.5px solid #FDE4C8;border-radius:12px;padding:13px 16px;font-size:.87rem;line-height:1.7;margin-top:12px">⚠️ <b>세대 합산 주의</b> — 내 명의로는 1주택이어도, 같은 집에 사는 가족(부모·자녀·형제)이 다른 주택을 보유하면 <b>다주택 세대로 봐서 비과세가 부인될 수 있어요.</b> 자녀는 만 30세 이상·혼인·독립생계(중위소득 40%↑) 중 하나여야 별도 세대로 인정돼요. <b>주민등록 세대분리 ≠ 세법상 세대</b>. 매도 전 <a href="/experts.html" style="color:var(--teal);font-weight:600">세무사 확인</a> 필수 — 아래는 비과세 인정 가정 참고치예요.</div>' : '';
-  if(oneHouse && sell<=120000){
-    el.innerHTML='<div>1세대 1주택 비과세</div><div class="big">0원</div><div style="font-size:.88rem;margin-top:10px">양도가액 12억 이하 + 요건 충족으로 전액 비과세예요. 🎉 신고 의무도 없어요(고가주택 아님).</div>'
-    +hw+cta(); return;
-  }
-  var taxGain=gain;
-  if(oneHouse && sell>120000){ taxGain = gain*(sell-120000)/sell; notes.push('12억 초과분 안분: 과세대상 양도차익 '+fmt(taxGain*10000)+'원'); }
-  var heavy = type==='house' && cnt>=2 && adj && !grace;
-  var ltd=0, ltdRate=0;
-  if(!heavy && hold>=3){
-    if(oneHouse && live>=2){ ltdRate=Math.min(Math.floor(hold),10)*4+Math.min(Math.floor(live),10)*4; if(ltdRate>80)ltdRate=80; }
-    else if(type!=='bunyang'){ ltdRate=Math.min(Math.floor(hold),15)*2; if(ltdRate>30)ltdRate=30; }
-    ltd=taxGain*ltdRate/100;
-  }
-  if(heavy) notes.push('⚠️ 다주택 중과 적용(2026.5.10~): +'+(cnt>=3?30:20)+'%p, 장기보유특별공제 배제');
-  var tb=taxGain-ltd-250; if(tb<0)tb=0;
-  var r;
-  if(hold<1){ r={rate:70,tax:tb*0.7}; notes.push('보유 1년 미만 단기세율 70%'); }
-  else if(hold<2){ r={rate:60,tax:tb*0.6}; notes.push('보유 1~2년 단기세율 60%'); }
-  else if(type==='bunyang'){ r={rate:60,tax:tb*0.6}; notes.push('분양권은 2년 이상 보유해도 60% 고정'); }
-  else if(heavy){ r=heavyTax(tb, cnt>=3?30:20); }
-  else { r=basicTax(tb); }
-  if(heavy&&hold<2){ var r2=heavyTax(tb,cnt>=3?30:20); if(r2.tax>r.tax){r=r2;notes.push('비교과세: 중과세액이 더 커서 중과 적용');} }
-  var local=r.tax*0.1, total=r.tax+local;
-  var html='<div>총 납부세액 (지방소득세 포함)</div><div class="big">'+fmt(total*10000)+'원</div>'
-  +'<table><tr><td>양도차익</td><td>'+fmt(gain*10000)+'원</td></tr>'
-  +(taxGain!==gain?'<tr><td>과세대상 차익 (12억 안분)</td><td>'+fmt(taxGain*10000)+'원</td></tr>':'')
-  +'<tr><td>장기보유특별공제 ('+ltdRate+'%)</td><td>−'+fmt(ltd*10000)+'원</td></tr>'
-  +'<tr><td>기본공제</td><td>−2,500,000원</td></tr>'
-  +'<tr><td>과세표준</td><td>'+fmt(tb*10000)+'원</td></tr>'
-  +'<tr><td>양도소득세 (세율 '+r.rate+'%)</td><td>'+fmt(r.tax*10000)+'원</td></tr>'
-  +'<tr><td>지방소득세 (10%)</td><td>'+fmt(local*10000)+'원</td></tr></table>';
-  if(notes.length) html+='<div style="font-size:.83rem;color:var(--sub);margin-top:10px">'+notes.join('<br>')+'</div>';
-  html+=hw+cta();
-  el.innerHTML=html;
+var sell=+document.getElementById('gSell').value, buy=+document.getElementById('gBuy').value;
+if(!sell||!buy){alert('양도가액과 취득가액을 입력해주세요');return;}
+var exp=+document.getElementById('gExp').value||0;
+var hy=holdYears(); var hold=(hy!=null?hy:(+document.getElementById('gHold').value||0));
+var live=+document.getElementById('gLive').value||0;
+var type=segVal('gType');
+var cntRaw=type==='house'?segVal('gCnt'):'1';
+var isOne=(cntRaw==='1'||cntRaw==='temp2');
+var cntN=(cntRaw==='3')?3:(cntRaw==='2'?2:1);
+var adj=segVal('gAdj')==='y';
+var grace=segVal('gGraceSeg')==='y';
+var exemptOK=segVal('gExempt')==='y';
+var el=document.getElementById('gRes'); el.classList.add('show');
+var gain=sell-buy-exp;
+if(gain<=0){ el.innerHTML='<div class="big">납부할 양도세 없음</div><div style="font-size:.88rem;margin-top:8px">양도차익이 없거나 손실이에요. 같은 해 다른 양도차익과 통산할 수 있어 손실도 신고해두면 유리할 수 있어요.</div>'; return; }
+var oneHouse = type==='house' && isOne && exemptOK;
+var notes=[];
+if(cntRaw==='temp2') notes.push('일시적 2주택 → 1주택 비과세 특례 적용 가정(종전주택 기한 내 처분 요건 확인 필요)');
+
+/* 비과세: 12억 이하 전액, 초과분 안분 */
+if(oneHouse && sell<=120000){
+el.innerHTML='<div>1세대 1주택 비과세</div><div class="big">0원</div><div style="font-size:.88rem;margin-top:10px">양도가액 12억 이하 + 요건 충족으로 전액 비과세예요. 🎉 (고가주택 아니면 신고 의무도 없어요)</div>'+cta(); return;
 }
-function cta(){
-  return '<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💡 양도세는 <b>양도일이 속한 달 말일부터 2개월 내</b> 신고해야 해요.<br>→ 다주택·감면·일시적2주택이면 <a href="/experts.html" style="color:var(--teal);font-weight:600">세무사 연결</a>로 검토받으세요<br>→ 갈아타기라면 새 집 <a href="/acquisition-tax.html" style="color:var(--teal);font-weight:600">취득세도 계산</a>해보세요</div>';
+var taxGain=gain;
+if(oneHouse && sell>120000){ taxGain=gain*(sell-120000)/sell; notes.push('12억 초과분 안분 과세'); }
+
+/* 다주택 중과 */
+var heavyOn = type==='house' && cntN>=2 && adj && !grace;
+/* 장기보유특별공제 */
+var ltd=0, ltdRate=0, ltdLabel='미적용';
+if(heavyOn){ ltdLabel='중과 대상 → 배제'; }
+else if(type==='bunyang'){ ltdLabel='분양권 → 없음'; }
+else if(hold>=3){
+if(oneHouse && live>=2){ var hRate=Math.min(Math.floor(hold),10)*4, lRate=Math.min(Math.floor(live),10)*4; ltdRate=Math.min(80,hRate+lRate); ltdLabel='표2(1주택) 보유'+hRate+'%+거주'+lRate+'%'; }
+else { ltdRate=Math.min(30,Math.min(Math.floor(hold),15)*2); ltdLabel='표1(일반) 연2%'; }
+ltd=taxGain*ltdRate/100;
+} else { ltdLabel='보유 3년 미만 → 없음'; }
+
+var incomeAmt=taxGain-ltd;              /* 양도소득금액 */
+var tb=incomeAmt-250; if(tb<0)tb=0;     /* 기본공제 250만 → 과세표준 */
+
+/* 세율: 단기 우선, 그 외 기본/중과. 단기+중과는 비교과세(큰 세액) */
+var r, rateLabel;
+var shortR = (hold<1)?70:((hold<2)?60:0);
+if(type==='bunyang') shortR=(hold<1)?70:60;
+if(shortR){
+r={rate:shortR,tax:tb*shortR/100}; rateLabel='단기 '+shortR+'%';
+if(heavyOn){ var hv=heavy(tb,cntN>=3?30:20); if(hv.tax>r.tax){ r=hv; rateLabel='중과(비교과세) '+r.rate.toFixed(0)+'%'; notes.push('단기·중과 비교과세 → 중과 적용'); } else notes.push('단기·중과 비교과세 → 단기 적용'); }
+} else if(heavyOn){
+r=heavy(tb,cntN>=3?30:20); rateLabel='중과 '+r.rate.toFixed(0)+'% (+' + (cntN>=3?30:20) + '%p)';
+notes.push('다주택 중과 적용(2026.5.10~), 장기보유특별공제 배제');
+} else {
+r=basic(tb); rateLabel='기본 '+r.rate+'%';
 }
+var local=r.tax*0.1, total=r.tax+local;
+
+var html='<div>총 결정세액 (지방소득세 포함)</div><div class="big">'+fmt(total*10000)+'원</div>'
++'<table>'
++'<tr><td>양도가액</td><td>'+fmt(sell*10000)+'원</td></tr>'
++'<tr><td>− 취득가액</td><td>'+fmt(buy*10000)+'원</td></tr>'
++'<tr><td>− 필요경비</td><td>'+fmt(exp*10000)+'원</td></tr>'
++'<tr class="hl"><td>= 양도차익</td><td>'+fmt(gain*10000)+'원</td></tr>'
++(taxGain!==gain?'<tr><td>과세대상 차익 (12억 안분)</td><td>'+fmt(taxGain*10000)+'원</td></tr>':'')
++'<tr><td>− 장기보유특별공제 <span style="font-size:.78rem">'+ltdLabel+'</span></td><td>'+fmt(ltd*10000)+'원</td></tr>'
++'<tr><td>= 양도소득금액</td><td>'+fmt(incomeAmt*10000)+'원</td></tr>'
++'<tr><td>− 기본공제</td><td>2,500,000원</td></tr>'
++'<tr class="hl"><td>= 과세표준</td><td>'+fmt(tb*10000)+'원</td></tr>'
++'<tr><td>양도소득세 ('+rateLabel+')</td><td>'+fmt(r.tax*10000)+'원</td></tr>'
++'<tr><td>지방소득세 (10%)</td><td>'+fmt(local*10000)+'원</td></tr>'
++'<tr class="hl"><td>총 결정세액</td><td>'+fmt(total*10000)+'원</td></tr>'
++'</table>'
++'<div style="font-size:.82rem;color:var(--sub);margin-top:8px">보유기간 '+hold.toFixed(1)+'년'+(oneHouse?' · 거주 '+live.toFixed(1)+'년':'')+'</div>';
+if(notes.length) html+='<div style="font-size:.83rem;color:var(--sub);margin-top:6px">· '+notes.join('<br>· ')+'</div>';
+html+=cta();
+el.innerHTML=html;
+if(window.gtag){try{gtag('event','calc_cgt');}catch(e){}}
+}
+function cta(){return '<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💡 <b>양도일 속한 달 말일부터 2개월 내</b> 신고. 다주택·감면·일시적2주택이면 <a href="/experts.html" style="color:var(--teal);font-weight:600">세무사 연결</a>, 갈아타기면 <a href="/acquisition-tax.html" style="color:var(--teal);font-weight:600">취득세도 계산</a>해보세요.</div>';}
 refresh();
 </script>
-\n<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "양도소득세 계산기", "url": "https://yeongcrew.co.kr/capital-gains-tax.html", "description": "2026년 양도소득세 무료 계산기. 1세대1주택 비과세, 장기보유특별공제, 다주택 중과, 단기 양도세율 반영", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "부비", "url": "https://yeongcrew.co.kr"}}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "다주택자 양도세 중과는 언제부터 다시 적용되나요?", "acceptedAnswer": {"@type": "Answer", "text": "2022년 5월부터 이어지던 중과 유예가 2026년 5월 9일로 종료되어, 5월 10일 양도분부터 조정대상지역 주택은 2주택자 +20%p, 3주택 이상 +30%p 중과세율이 적용되고 장기보유특별공제도 배제돼요. 다만 2026년 5월 9일 이전에 매매계약을 체결하고 계약금을 받은 경우 등 경과조치가 있으니 해당되면 세무사와 확인하세요."}}, {"@type": "Question", "name": "1세대 1주택 비과세 요건은 어떻게 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "양도가액 12억원 이하이면서 2년 이상 보유하면 비과세예요. 취득 당시 조정대상지역이었다면 보유기간 중 2년 이상 거주 요건이 추가됩니다. 12억원 초과분은 초과 비율만큼만 과세되고, 보유·거주 기간에 따라 최대 80% 장기보유특별공제를 받을 수 있어요."}}, {"@type": "Question", "name": "양도세 필요경비로 인정되는 건 뭐가 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "취득세, 취득·양도 시 중개보수, 법무사·세무사 수수료, 샷시 설치·발코니 확장·난방 교체 같은 자본적 지출이 인정돼요. 반면 벽지·장판, 싱크대 교체 같은 수익적 지출과 재산세·대출이자는 인정되지 않습니다. 세금계산서·카드전표 등 증빙을 꼭 보관하세요."}}, {"@type": "Question", "name": "양도세 신고는 언제까지 해야 하나요?", "acceptedAnswer": {"@type": "Answer", "text": "양도일이 속한 달의 말일부터 2개월 이내에 예정신고·납부해야 해요. 예를 들어 7월에 잔금을 받았다면 9월 30일까지예요. 기한을 넘기면 무신고 가산세 20%가 붙습니다. 홈택스에서 셀프 신고도 가능하지만 다주택·감면 적용은 세무사 검토를 권해요."}}]}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://yeongcrew.co.kr/"}, {"@type": "ListItem", "position": 2, "name": "양도소득세 계산기", "item": "https://yeongcrew.co.kr/capital-gains-tax.html"}]}</script>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"양도소득세 계산기","url":"https://yeongcrew.co.kr/capital-gains-tax.html","description":"홈택스 방식 2026 양도소득세 무료 계산기. 취득일·양도일 보유기간 자동, 1세대1주택 비과세·일시적2주택, 장기보유특별공제(표1·표2), 다주택 중과, 단기세율 반영","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://yeongcrew.co.kr"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"다주택자 양도세 중과는 언제부터 다시 적용되나요?","acceptedAnswer":{"@type":"Answer","text":"2026년 5월 10일 양도분부터 조정대상지역 주택은 2주택 +20%p, 3주택 이상 +30%p 중과세율이 적용되고 장기보유특별공제도 배제됩니다. 5월 9일 이전 계약+계약금 수령 등 경과조치가 있습니다."}},{"@type":"Question","name":"1세대 1주택 비과세 요건은 어떻게 되나요?","acceptedAnswer":{"@type":"Answer","text":"양도가액 12억 이하이면서 2년 이상 보유(취득 당시 조정지역이면 2년 거주)하면 비과세입니다. 12억 초과분은 초과 비율만큼 과세되며 최대 80% 장기보유특별공제가 적용됩니다. 일시적 2주택도 요건 충족 시 1주택 비과세로 봅니다."}},{"@type":"Question","name":"장기보유특별공제 표1과 표2 차이는?","acceptedAnswer":{"@type":"Answer","text":"표1은 3년 이상 보유 시 연 2%씩 최대 30%, 표2는 1세대1주택이 2년 이상 거주한 경우 보유 연4%+거주 연4%로 최대 80%입니다. 다주택 중과 대상은 배제됩니다."}},{"@type":"Question","name":"양도세 신고는 언제까지 하나요?","acceptedAnswer":{"@type":"Answer","text":"양도일이 속한 달의 말일부터 2개월 이내 예정신고·납부해야 하며, 지방소득세 10%는 위택스에서 별도 신고합니다."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://yeongcrew.co.kr/"},{"@type":"ListItem","position":2,"name":"계산기","item":"https://yeongcrew.co.kr/calculator.html"},{"@type":"ListItem","position":3,"name":"양도소득세 계산기","item":"https://yeongcrew.co.kr/capital-gains-tax.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 <script src="/hwon-ui.js" defer></script>
