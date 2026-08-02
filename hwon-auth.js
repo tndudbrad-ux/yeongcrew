@@ -1,3 +1,13 @@
+/* ===== 공통 스크립트 자동 로딩 — 페이지마다 빠뜨려도 사이트 전체 일관 적용 ===== */
+(function(){
+function has(re){ return [].some.call(document.scripts, function(s){ return re.test(s.src||''); }); }
+function add(src){ var s=document.createElement('script'); s.src=src; s.defer=true; document.head.appendChild(s); }
+if(!has(/hwon-ui\.js/)) add('/hwon-ui.js');                 // 금액 힌트·애니메이션 등 UI 공통
+var art=document.querySelector('meta[property="og:type"][content="article"]')||document.querySelector('article');
+var hub=/column\.html$/.test(location.pathname)||document.getElementById('popularCols');
+if((art||hub) && !has(/column-views\.js/)) add('/column-views.js?v=2'); // 조회수 배지·인기글: 모든 칼럼/글에 자동
+})();
+
 /* 부비 계정 v1 — Firebase Google 로그인 */
 (function(){
 var CFG={apiKey:"AIzaSyCmz6mI6a8zPWQrsv4AKSTCGpxtdrwZ2Ow",authDomain:"hwon-ai.firebaseapp.com",projectId:"hwon-ai",appId:"1:5783272455:web:d5c9215d615894ee7abea2"};
