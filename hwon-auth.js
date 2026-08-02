@@ -20,13 +20,15 @@ var link=null;
 (function(){
 var nav=document.querySelector('header nav, nav.gnb');
 if(!nav) return;
-var items=[['/calculator.html','계산기'],['/rental-board.html','청년·신혼부부'],['/senior.html','시니어'],['/ai-check.html','AI진단'],['/column.html','칼럼']];
+var items=[['/calculator.html','계산기'],['/rental-board.html','청년·신혼부부'],['/senior.html','시니어'],['/invest.html','투자'],['/ai-check.html','AI진단'],['/column.html','칼럼']];
 var here=location.pathname.replace(/^\//,'').replace(/index\.html$/,'');
 nav.innerHTML='';
 items.forEach(function(it){
 var a=document.createElement('a'); a.href=it[0]; a.textContent=it[1];
 var slug=it[0].replace(/^\//,'').replace(/\.html$/,'');
 if(here && (here===slug+'.html' || here.indexOf(slug)===0)) a.className='on';
+/* 경매 등 투자 하위 페이지는 '투자' 탭 활성화 */
+if(slug==='invest' && (here.indexOf('auction')===0)) a.className='on';
 nav.appendChild(a);
 });
 link=document.createElement('a'); link.href='/account.html'; link.id='hwAuthLink'; link.textContent='로그인';
