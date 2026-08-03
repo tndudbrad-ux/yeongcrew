@@ -88,8 +88,19 @@ async function fetchLH(key) {
   } catch (e) { console.log("[LH] 요청 실패:", e.message); return []; }
 }
 
+const DEFAULT_SCHEMA = {
+  id: "고유 id (provider+식별자)",
+  provider: "HUG | LH | SH | GH | BMC | ETC",
+  ltype: "든든전세 | 행복주택 | 청년매입임대 | 전세임대 | 청년안심주택 | 국민임대 | 기타",
+  name: "공고명", region: "지역", units: "공급 호수(숫자, 미상 null)",
+  target: "대상 요약", rcritStart: "접수 시작 YYYY-MM-DD", rcritEnd: "접수 마감 YYYY-MM-DD",
+  winnerDate: "당첨자 발표 YYYY-MM-DD", url: "공식 링크", note: "비고(선택)"
+};
+
 async function main() {
-  const cur = JSON.parse(await readFile(FILE, "utf8"));
+  let cur;
+  try { cur = JSON.parse(await readFile(FILE, "utf8")); }
+  catch { console.log("rental-data.json 없음 → 새로 생성"); cur = { items: [], schema: DEFAULT_SCHEMA }; }
   const manual = (cur.items || []).filter(it => it._src !== "hug-api" && it._src !== "lh-api");
 
   const hug = await fetchHUG(process.env.HUG_SERVICE_KEY);
@@ -104,7 +115,7 @@ async function main() {
     updatedAt: new Date().toISOString(),
     source: "collect-rental.mjs (HUG 든든전세 공식 API + 수동 큐레이션)",
     count: items.length,
-    schema: cur.schema,
+    schema: cur.schema || DEFAULT_SCHEMA,
     items
   };
   await writeFile(FILE, JSON.stringify(out, null, 2) + "\n", "utf8");

@@ -1,0 +1,49 @@
+{
+  "updatedAt": "2026-08-03T02:13:10.539Z",
+  "source": "collect-rental.mjs (HUG 든든전세 공식 API + 수동 큐레이션)",
+  "count": 2,
+  "schema": {
+    "id": "고유 id (provider+식별자)",
+    "provider": "HUG | LH | SH | GH | BMC | ETC",
+    "ltype": "든든전세 | 행복주택 | 청년매입임대 | 전세임대 | 청년안심주택 | 국민임대 | 기타",
+    "name": "공고명",
+    "region": "지역",
+    "units": "공급 호수(숫자, 미상이면 null)",
+    "target": "대상 요약",
+    "rcritStart": "접수 시작 YYYY-MM-DD (미상 null)",
+    "rcritEnd": "접수 마감 YYYY-MM-DD (미상 null)",
+    "winnerDate": "당첨자 발표 YYYY-MM-DD (미상 null)",
+    "url": "공식 공고/포털 링크",
+    "note": "비고(선택)"
+  },
+  "items": [
+    {
+      "id": "BMC-happy-2026",
+      "provider": "BMC",
+      "ltype": "행복주택",
+      "name": "부산 2026년 행복주택 예비입주자 모집",
+      "region": "부산",
+      "units": 892,
+      "target": "대학생·청년·신혼부부·고령자·주거급여수급자",
+      "rcritStart": "2026-07-27",
+      "rcritEnd": "2026-08-03",
+      "winnerDate": "2026-11-20",
+      "url": "https://apply.bmc.busan.kr/smw/smw114010/selectNoticeDetailView.do?bbsNo=2&bbsSn=46",
+      "note": "동래·이기대·일광·아미 등 6개 단지"
+    },
+    {
+      "id": "HUG-donden-11",
+      "provider": "HUG",
+      "ltype": "든든전세",
+      "name": "제11차 HUG 든든전세주택 수시모집",
+      "region": "전국 (서울·인천·경기·부산)",
+      "units": 300,
+      "target": "무주택자 · HUG 매입주택을 전세로 재임대",
+      "rcritStart": "2026-07-24",
+      "rcritEnd": "2026-08-07",
+      "winnerDate": "2026-10-30",
+      "url": "https://www.khug.or.kr/jeonse/web/s07/s070301.jsp",
+      "note": "서울 118·인천 116·경기 62·부산 4호"
+    }
+  ]
+}
