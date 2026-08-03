@@ -165,6 +165,7 @@ function botTyping(){
  var i=0;
  var t=setInterval(function(){
    if(!document.body.contains(e)){clearInterval(t);return;}
+   if(e.dataset.hold==='1')return; /* 재시도 안내 중엔 문구 로테이션 정지 */
    i=Math.min(i+1,msgs.length-1);
    var tx=e.querySelector('.hwbTyTxt');
    if(tx){ tx.style.opacity=0; setTimeout(function(){ tx.textContent=msgs[i]; tx.style.opacity=1; },250); }
@@ -205,28 +206,42 @@ function ctas(raw){
  });
  body.appendChild(c);scrollDown();
 }
-function llmAnswer(t){
- HIST.push({role:'user',content:t});
- if(HIST.length>12)HIST=HIST.slice(-12);
- var ty=botTyping();
+function llmAnswer(t, attempt, ty){
+ attempt=attempt||1;
+ if(attempt===1){
+   HIST.push({role:'user',content:t});
+   if(HIST.length>12)HIST=HIST.slice(-12);
+ }
+ ty=ty||botTyping();
  var ctrl=new AbortController();
- // 실거래 조회(아파트 찾기 등)는 도구 호출로 오래 걸릴 수 있어 넉넉히 45초. 스피너가 도는 동안 사용자는 진행 중임을 알 수 있음.
- var to=setTimeout(function(){ctrl.abort();},45000);
+ // 검색·실거래 도구 호출이 겹치면 45초를 넘기도 해서 70초로 여유. 실패해도 유저에게 미루지 않고 1회 자동 재시도.
+ var to=setTimeout(function(){ctrl.abort();},70000);
  fetch(BOOBI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:HIST}),signal:ctrl.signal})
  .then(function(r){clearTimeout(to);if(!r.ok)throw new Error('bad');return r.json();})
  .then(function(d){
-   ty.remove();
    if(!d.reply)throw new Error('empty');
+   ty.remove();
    HIST.push({role:'assistant',content:d.reply});
    bot(mdLite(d.reply));
    ctas(d.reply);
  })
  .catch(function(){
    clearTimeout(to);
+   if(attempt<2 && document.body.contains(ty)){
+     // 1회 자동 재시도 — 스피너 유지한 채 안내만 바꿈
+     ty.dataset.hold='1';
+     var tx=ty.querySelector('.hwbTyTxt');
+     if(tx){ tx.textContent='응답이 늦어지네요 — 자동으로 다시 시도 중이에요 🔁'; }
+     setTimeout(function(){ delete ty.dataset.hold; llmAnswer(t, attempt+1, ty); },1500);
+     return;
+   }
    ty.remove();
    HIST.pop(); // 실패한 질문은 히스토리에서 제거해 재질문이 깨끗하게 되도록
-   bot('앗, 답을 가져오는 데 시간이 걸렸어요 🙏\n아파트 실거래 조회처럼 무거운 질문은 잠깐 느릴 수 있어요. 한 번만 다시 여쭤봐 주세요!');
-   chips();
+   bot('앗, 지금 답변 서버가 붐비는 것 같아요 🙏\n다시 입력하실 필요 없이 아래 버튼만 눌러주세요. 바로 다시 가져올게요.');
+   var c=el('div','hwbChips',null);
+   var b=el('button','','🔄 다시 물어보기 — "'+(t.length>16?t.slice(0,16)+'…':t)+'"');
+   b.onclick=function(){ c.remove(); llmAnswer(t); };
+   c.appendChild(b); body.appendChild(c); scrollDown();
  });
 }
 var FLOW=null;
