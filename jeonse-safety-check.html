@@ -575,7 +575,7 @@ function fetchRegister(uniqueNo, attempt){
   __dgBusy=true; dgCandLock(true); dgProgStart(attempt);
   hint.textContent='';
   var ctrl=('AbortController' in window)?new AbortController():null;
-  var kill=ctrl?setTimeout(function(){ctrl.abort();},90000):null; /* 90초 타임아웃 */
+  var kill=ctrl?setTimeout(function(){ctrl.abort();},100000):null; /* 100초 타임아웃(서버 자체 타임아웃 90초보다 뒤) */
   function done(){ if(kill)clearTimeout(kill); dgProgStop(); dgCandLock(false); __dgBusy=false; }
   window.hwonUser.getIdToken().then(function(tok){
     var opt={method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+tok},body:JSON.stringify({inquiryType:'0',uniqueNo:uniqueNo,issueType:'1',registerSummaryYN:'1'})};
@@ -584,7 +584,17 @@ function fetchRegister(uniqueNo, attempt){
   })
    .then(function(r){return r.json();})
    .then(function(d){
+     /* 서버가 CF-TIMEOUT(등기소 지연)을 돌려주면 실패 취급 말고 자동 재시도 */
+     if(d.result&&d.result.code==='CF-TIMEOUT'&&attempt<DG_TRY_MAX){
+       if(kill)clearTimeout(kill);
+       clearInterval(__dgTimer); __dgTimer=null;
+       var rm=document.getElementById('dgProgMsg');
+       if(rm)rm.textContent='🔁 등기소 응답이 지연돼요 — 3초 뒤 자동으로 다시 시도할게요 ('+(attempt+1)+'/'+DG_TRY_MAX+')';
+       setTimeout(function(){ fetchRegister(uniqueNo, attempt+1); },3000);
+       return;
+     }
      done();
+     if(d.result&&d.result.code==='CF-TIMEOUT'){ dgFail(uniqueNo); return; }
      if(d.error==='login_required'||d.error==='invalid_token'){hint.style.color='#B45309';hint.textContent='로그인이 만료됐어요. 다시 로그인해 주세요.';return;}
      if(d.result&&d.result.code==='CF-12100'){hint.style.color='#B45309';hint.textContent='이건 토지 등기부라 전세 진단엔 안 맞아요 🙅 위 목록에서 아파트(집합건물)의 내 층·호를 골라주세요.';return;}
      if(!d.result||d.result.code!=='CF-00000'){hint.style.color='#C0342E';hint.textContent='열람 실패: '+(dgdec(d.result&&d.result.message)||('코드 '+(d.result&&d.result.code||d.error||'알수없음')))+' — 잠시 후 다시 시도하거나 PDF 업로드를 이용해주세요.';return;}
