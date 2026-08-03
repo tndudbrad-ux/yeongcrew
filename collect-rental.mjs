@@ -76,16 +76,50 @@ async function fetchHUG(key) {
 }
 
 /* ---------- (선택) LH 분양임대공고문 ---------- */
+function lhRows(data) {
+  if (Array.isArray(data)) {
+    for (const el of data) { if (el && Array.isArray(el.dsList)) return el.dsList; }
+    if (data.length && typeof data[0] === "object" && !("resHeader" in data[0])) return data;
+    return [];
+  }
+  if (data && Array.isArray(data.dsList)) return data.dsList;
+  if (data && data.response && data.response.body) {
+    const it = data.response.body.items;
+    if (Array.isArray(it)) return it;
+    if (it && it.item) return Array.isArray(it.item) ? it.item : [it.item];
+  }
+  return [];
+}
 async function fetchLH(key) {
   if (!key) return [];
-  // TODO: 첫 실전 응답 확인 후 오퍼레이션/필드 확정
   const base = "https://apis.data.go.kr/B552555/lhLeaseNoticeInfo1/lhLeaseNoticeInfo1";
-  const url = `${base}?serviceKey=${encodeURIComponent(key)}&PG_SZ=100&PAGE=1&_type=json`;
-  try {
-    const data = await fetchJSON(url);
-    console.log("[LH] 응답 수신(정규화는 실전 필드 확인 후 확정)");
-    return []; // 실전 필드 확인 전까지 비활성(오작동 방지)
-  } catch (e) { console.log("[LH] 요청 실패:", e.message); return []; }
+  // 키가 이미 URL 인코딩(%2F 등)돼 있으면 그대로, 아니면 인코딩
+  const sk = /%[0-9A-Fa-f]{2}/.test(key) ? key : encodeURIComponent(key);
+  const url = `${base}?serviceKey=${sk}&PG_SZ=100&PAGE=1`;
+  let data;
+  try { data = await fetchJSON(url); }
+  catch (e) { console.log("[LH] 요청 실패:", e.message); return []; }
+  const rows = lhRows(data);
+  if (!rows.length) { console.log("[LH] 표출 공고 없음 또는 응답 구조 상이:", JSON.stringify(data).slice(0,300)); return []; }
+  console.log("[LH] " + rows.length + "건 수신. 첫 행 필드확인:", JSON.stringify(rows[0]).slice(0,500));
+  const out = rows.map((r, i) => {
+    const name = pick(r, ["PAN_NM","공고명","panNm","noticeNm","BLK_NM","PAN_NM_NM"]);
+    const region = pick(r, ["CNP_CD_NM","AREA_NM","지역","cnpCdNm","시도"]) || "전국";
+    const ltype = pick(r, ["AIS_TP_CD_NM","UPP_AIS_TP_NM","임대유형","aisTpNm"]) || "임대";
+    const start = toDate(pick(r, ["SUBSCRPT_RCEPT_BGNDE","RCRIT_PBLANC_DE","접수시작","rceptBgnde","CLSG_BGNDE"]));
+    const end   = toDate(pick(r, ["SUBSCRPT_RCEPT_ENDDE","CLSG_DT","접수마감","rceptEndde","CLSG_ENDDE"]));
+    const win   = toDate(pick(r, ["PRZWNER_PRESNATN_DE","당첨자발표","przwnerPresnatnDe","WINNER_DE"]));
+    const url2  = pick(r, ["DTL_URL","상세URL","dtlUrl","PAN_URL"]) || "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancList.do?mi=1026";
+    const id    = "LH-" + (pick(r, ["PAN_ID","panId","공고번호","PBLANC_NO"]) || ((start||"") + "-" + i));
+    return { id, provider: "LH", ltype,
+      name: name || ("LH 임대공고 " + (i+1)), region, units: toNum(pick(r,["SUPLY_HSHLDCO","공급호수"])),
+      target: "무주택 등 · 자격은 공고문 확인", rcritStart: start, rcritEnd: end, winnerDate: win, url: url2,
+      note: null, _src: "lh-api", _raw: r };
+  })
+  // 안전장치: 이름과 (마감 or 발표) 날짜가 있는 유효 공고만 (매핑 오류 시 화면에 안 뜨게)
+  .filter(it => it.name && (it.rcritEnd || it.winnerDate));
+  console.log("[LH] 유효 공고 " + out.length + "건 채택");
+  return out;
 }
 
 const DEFAULT_SCHEMA = {
