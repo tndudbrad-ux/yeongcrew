@@ -227,6 +227,27 @@ if(it.winnerDate) push(it.winnerDate,'당첨발표','winner');
 });
 }
 
+// 임대공고(rental-data.json) → 임대 이벤트. 캘린더 수동 임대 이벤트와 날짜+종류로 중복 제거.
+function addRental(items){
+var leaseKeys={};
+EVENTS.forEach(function(e){ if(e.type==='lease') leaseKeys[e.date+'|'+(e.kind||'')]=1; });
+(items||[]).forEach(function(it){
+var nm=it.name||'', short=nm.length>13?nm.slice(0,13)+'…':nm;
+var meta={fullName:nm,region:it.region||'',htype:it.ltype||'',url:it.url||'',
+start:it.rcritStart||'',end:it.rcritEnd||it.rcritStart||'',winner:it.winnerDate||'',hot:!!it.hot};
+function push(date,label,kind){
+if(!date) return; var k=date+'|'+kind; if(leaseKeys[k]) return;
+var e={date:date,type:'lease',title:(meta.hot?'🔥':'')+short+' '+label,
+desc:(it.region||'')+' · '+(it.ltype||'')+' · '+nm,kind:kind};
+for(var p in meta) e[p]=meta[p];
+EVENTS.push(e); leaseKeys[k]=1;
+}
+if(it.rcritStart) push(it.rcritStart,'접수시작','start');
+if(it.rcritEnd && it.rcritEnd!==it.rcritStart) push(it.rcritEnd,'접수마감','end');
+if(it.winnerDate) push(it.winnerDate,'당첨발표','winner');
+});
+}
+
 // 세금 납부 액션 블록 — 세목별로 홈택스(국세)/위택스(지방세) 정확히 연결
 function taxActionHTML(e){
 var title=e.title||'';
@@ -259,7 +280,7 @@ function leaseActionHTML(e){
 var apply=e.url||'https://www.khug.or.kr/jeonse/web/s07/s070301.jsp';
 function d(s){ if(!s) return null; var p=s.split('-'); return new Date(+p[0],+p[1]-1,+p[2]).getTime(); }
 var now=TODAY.getTime(), st=d(e.start), en=d(e.end);
-var portal='<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">HUG 안심전세포털 ↗</a>';
+var portal='<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">공고 보러가기 ↗</a>';
 var moreBtn='<a class="act ghost" href="/rental-board.html">임대 공고 모아보기</a>';
 if(e.kind==='winner'){
 if(now<=d(e.date)){
@@ -390,13 +411,15 @@ document.getElementById('todayBtn').onclick=function(){cur=new Date();cur.setDat
 Promise.all([
 fetch('/calendar-events.json?t='+Date.now()).then(function(r){return r.ok?r.json():{events:[]};}).catch(function(){return {events:[]};}),
 fetch('/cheongyak-data.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};}),
-fetch('/cheongyak-featured.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};})
+fetch('/cheongyak-featured.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};}),
+fetch('/rental-data.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};})
 ]).then(function(res){
 EVENTS=(res[0].events||[]).slice();
 var seen={};(res[1].items||[]).forEach(function(it){seen[it.id]=1;});
 var feat=(res[2].items||[]).filter(function(f){return !seen[f.id];});
 addCheongyak(feat); // 확정차익 선별 줍줍 먼저 (hot 표시)
 addCheongyak(res[1].items);
+addRental((res[3]||{}).items); // 임대공고 자동수집(HUG·LH·SH) → 임대 이벤트
 render();
 if(window.gtag){try{gtag('event','view_calendar',{events:EVENTS.length});}catch(e){}}
 });

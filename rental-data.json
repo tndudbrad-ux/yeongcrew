@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-03T02:15:39.109Z",
+  "updatedAt": "2026-08-03T02:13:10.539Z",
   "source": "collect-rental.mjs (HUG 든든전세 공식 API + 수동 큐레이션)",
   "count": 2,
   "schema": {
@@ -17,6 +17,20 @@
     "note": "비고(선택)"
   },
   "items": [
+    {
+      "id": "SH-gangbyeon-skytower",
+      "provider": "SH",
+      "ltype": "청년안심주택",
+      "name": "강변 스카이타워 청년안심주택 (공공지원 민간임대)",
+      "region": "서울 광진구 강변역로 10 (강변·구의역)",
+      "units": null,
+      "target": "청년 · 코리빙형 · 홈페이지 청약접수",
+      "rcritStart": "2026-08-04",
+      "rcritEnd": "2026-08-06",
+      "winnerDate": "2026-08-08",
+      "url": "https://www.gangbyeonskytower.co.kr/",
+      "note": "당첨발표 8/8 15:00 · 서류 8/9~8/12 · 계약 8/13~8/19"
+    },
     {
       "id": "BMC-happy-2026",
       "provider": "BMC",
