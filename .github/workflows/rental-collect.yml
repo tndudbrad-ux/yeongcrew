@@ -1,0 +1,30 @@
+name: rental-collect
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Collect rental notices
+        run: node collect-rental.mjs
+        env:
+          HUG_SERVICE_KEY: ${{ secrets.HUG_SERVICE_KEY }}
+          LH_API_KEY: ${{ secrets.LH_API_KEY }}
+      - name: Commit if changed
+        run: |
+          git config user.name "boobi-bot"
+          git config user.email "boobi-bot@users.noreply.github.com"
+          git add rental-data.json
+          git diff --staged --quiet || (git commit -m "chore: auto update rental-data" && git push)
