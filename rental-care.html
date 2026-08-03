@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>입주 사전점검 체크리스트 + 하자책임 담보기간 (전문가 수준) - 부비</title>
 <meta name="description" content="입주 사전점검, 장소별 상세 체크리스트로 셀프 점검하고 관리사무소에 보낼 하자 리포트를 자동 생성. 라돈·공기질·평활도·구배·열화상 등 전문 계측 항목 기준치와 하자책임 담보기간(2·3·5년)까지 한눈에.">
-<link rel="canonical" href="https://yeongcrew.co.kr/rental-care.html">
+<link rel="canonical" href="https://boobi.ai.kr/rental-care.html">
 <meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
 <meta property="og:title" content="임대주택 입주 하자 점검 체크리스트 - 부비 리빙 - 부비">
 <meta property="og:description" content="임대주택 입주 첫 2주가 보증금을 지킵니다. 현관·주방·욕실·설비까지 30개 항목 하자 점검 체크리스트로 확인하고, 관리사무소에 보낼 하자 리포트를 자동으로 만들어드립니다.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://yeongcrew.co.kr/rental-care.html">
+<meta property="og:url" content="https://boobi.ai.kr/rental-care.html">
 <meta property="og:site_name" content="부비 - 부동산 비서">
 <meta property="og:locale" content="ko_KR">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
@@ -381,7 +381,7 @@ function pdMakePdf(){
   pdItems.forEach(function(it,i){
     b+='<div class="pdBlk" style="padding:22px 40px;border-bottom:1px solid #E5F0EE"><div style="font-size:17px;font-weight:700">#'+(i+1)+'. '+esc(it.loc)+' · '+esc(it.part)+'</div><div style="font-size:15px;margin-top:6px;color:#333">'+esc(it.desc||'(설명 없음)')+'</div>'+(it.img?'<div style="margin-top:12px"><img src="'+it.img+'" style="max-width:100%;max-height:420px;border:1px solid #ddd;border-radius:8px"></div>':'')+'</div>';
   });
-  b+='<div class="pdBlk" style="padding:26px 40px;font-size:13px;color:#5A7B78">작성자 확인: '+esc(name||'________')+' (서명)  ·  '+esc(date)+'<br>본 리포트는 부비(yeongcrew.co.kr) 입주 하자점검 도구로 작성되었습니다.</div>';
+  b+='<div class="pdBlk" style="padding:26px 40px;font-size:13px;color:#5A7B78">작성자 확인: '+esc(name||'________')+' (서명)  ·  '+esc(date)+'<br>본 리포트는 부비(boobi.ai.kr) 입주 하자점검 도구로 작성되었습니다.</div>';
   host.innerHTML=b; document.body.appendChild(host);
   var blks=host.querySelectorAll('.pdBlk');
   var pdf=new window.jspdf.jsPDF('p','mm','a4');
