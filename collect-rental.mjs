@@ -50,7 +50,7 @@ async function fetchJSON(url) {
 
 /* ---------- HUG 든든전세 ---------- */
 async function fetchHUG(key) {
-  if (!key) return [];
+  if (!key) { console.log("[HUG] 키 없음 → 이전 수집분 유지"); return null; } // null = 이전 데이터 유지
   const url = `${HUG_URL}?serviceKey=${encodeURIComponent(key)}&pageNo=1&numOfRows=200`;
   let data;
   try { data = await fetchJSON(url); }
@@ -109,7 +109,7 @@ function isLhRental(it, raw) {
   return upp === "임대주택" || upp === "주거복지";
 }
 async function fetchLH(key) {
-  if (!key) return [];
+  if (!key) { console.log("[LH] 키 없음 → 이전 수집분 유지"); return null; } // null = 이전 데이터 유지
   const base = "https://apis.data.go.kr/B552555/lhLeaseNoticeInfo1/lhLeaseNoticeInfo1";
   // 키가 이미 URL 인코딩(%2F 등)돼 있으면 그대로, 아니면 인코딩
   const sk = /%[0-9A-Fa-f]{2}/.test(key) ? key : encodeURIComponent(key);

@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-08-03T07:05:38.704Z",
+  "updatedAt": "2026-08-03T11:52:07.310Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
-  "count": 60,
+  "count": 62,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -480,6 +480,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "SH-youth-ansim-2026-2",
+      "provider": "SH",
+      "ltype": "청년안심주택",
+      "name": "2026년 2차 청년안심주택(공공임대) 입주자 모집",
+      "region": "서울",
+      "units": 581,
+      "target": "만 19~39세 무주택 청년·신혼부부 · 소득·자산 요건 충족(계층별 상이)",
+      "rcritStart": "2026-08-11",
+      "rcritEnd": "2026-08-13",
+      "winnerDate": "2026-12-11",
+      "url": "https://www.i-sh.co.kr/main/lay2/program/S1T294C295/www/brd/m_241/view.do?seq=307835",
+      "note": "신규 349+재공급 232세대 · 인터넷·모바일 접수만(8/11 10시~8/13 17시) · 서류심사대상자 발표 8/21 · 서류제출 8/31~9/2",
+      "_src": "manual-curated"
+    },
+    {
       "id": "LH-2015122300020424",
       "provider": "LH",
       "ltype": "행복주택",
@@ -912,6 +927,21 @@
       "winnerDate": null,
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/list.do?multi_itm_seq=2",
       "note": "모집 차수·잔여 물량은 SH 공고 게시판에서 확인",
+      "_src": "manual-curated"
+    },
+    {
+      "id": "SH-eland-peer-dmc",
+      "provider": "SH",
+      "ltype": "청년안심주택",
+      "name": "증산역 이랜드 PEER DMC 청년안심주택 (공공지원 민간임대)",
+      "region": "서울 은평구 증산역(6호선) 인근",
+      "units": 271,
+      "target": "만 19~39세 무주택 청년·신혼부부 · 민간임대(소득·지역 제한 없음, 공고 확인)",
+      "rcritStart": null,
+      "rcritEnd": null,
+      "winnerDate": null,
+      "url": "https://elandpeer.com/dmc",
+      "note": "1차 청약 7/11 접수 종료 · 잔여세대·추가모집 일정은 공식 페이지에서 확인",
       "_src": "manual-curated"
     }
   ]
