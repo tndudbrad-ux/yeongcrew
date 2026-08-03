@@ -1,11 +1,14 @@
 /*
  * 부비 임대공고 자동 수집기 (GitHub Actions 크론용, Node 20+)
  * ------------------------------------------------------------
- * 하는 일: HUG 든든전세 공식 오픈API(+추후 LH)에서 임대 공고를 받아
+ * 하는 일: HUG 든든전세·LH 공식 오픈API에서 임대 공고를 받아
  *          rental-data.json 을 갱신한다. 수동으로 넣은 큐레이션 항목은 보존.
+ *          LH는 "임대주택 계열"만 채택(토지·상가·분양·공공분양·취소공고 제외),
+ *          접수 마감(rcritEnd)이 지난 공고는 전 소스 공통으로 제외, _raw 미저장(슬림화).
  * 환경변수(GitHub Secrets):
  *   HUG_SERVICE_KEY : 주택도시보증공사 든든전세 모집공고 서비스키(필수)
  *   LH_API_KEY      : (선택) data.go.kr LH 분양임대공고문 서비스키
+ *   SH_API_KEY      : (준비) 서울열린데이터광장(data.seoul.go.kr) 키 — 아래 fetchSH 참고
  * 실행: node collect-rental.mjs   → rental-data.json 을 제자리 갱신
  * ------------------------------------------------------------
  */
@@ -33,6 +36,10 @@ function toDate(v) {
   return null;
 }
 function toNum(v) { if (v == null) return null; const n = parseInt(String(v).replace(/[^0-9]/g,""),10); return isNaN(n)?null:n; }
+/* KST 기준 오늘 YYYY-MM-DD */
+function todayKST() {
+  return new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+}
 
 async function fetchJSON(url) {
   const res = await fetch(url, { headers: { "User-Agent": UA, "Accept": "application/json" } });
@@ -47,7 +54,7 @@ async function fetchHUG(key) {
   const url = `${HUG_URL}?serviceKey=${encodeURIComponent(key)}&pageNo=1&numOfRows=200`;
   let data;
   try { data = await fetchJSON(url); }
-  catch (e) { console.log("[HUG] 요청 실패:", e.message); return []; }
+  catch (e) { console.log("[HUG] 요청 실패:", e.message); return null; } // null = 실패(이전 데이터 유지)
 
   const rows = Array.isArray(data) ? data : (data.items || data.data || []);
   // 모집 없음 신호: [] 또는 [{ERROR_CODE:"03"...}]
@@ -70,7 +77,7 @@ async function fetchHUG(key) {
       target: "무주택자 · HUG 매입주택을 전세로 재임대",
       rcritStart: start, rcritEnd: end, winnerDate: win, url: url2,
       note: pick(r, ["비고","note","rem"]) || null,
-      _src: "hug-api", _raw: r
+      _src: "hug-api"
     };
   });
 }
@@ -90,6 +97,17 @@ function lhRows(data) {
   }
   return [];
 }
+/* LH 공고 중 "임대주택 계열"만 채택하기 위한 판별.
+ * ltype(AIS_TP_CD_NM) 예: 매입임대/행복주택/영구임대/국민임대/공공임대/통합공공임대/행복주택(신혼희망) → 채택
+ *                        토지/임대상가(추첨)/분양주택/공공분양(신혼희망)/분양ㆍ(구)임대상가(입찰) → 제외 */
+function isLhRental(it, raw) {
+  if (/취소|취하/.test(it.name || "")) return false;                       // 취소·취하 공고 제외
+  if (/운영기관|운영\s*기관|사업자\s*모집|위탁/.test(it.name || "")) return false; // 개인 입주자용이 아닌 공고 제외
+  if (/토지|상가|분양주택|공공분양|매각/.test(it.ltype || "")) return false; // 비주거·분양 제외
+  if (/임대|행복주택|전세|주거복지/.test(it.ltype || "")) return true;       // 임대주택 계열 채택
+  const upp = String((raw && raw.UPP_AIS_TP_NM) || "");                    // 상위유형으로 한 번 더 방어
+  return upp === "임대주택" || upp === "주거복지";
+}
 async function fetchLH(key) {
   if (!key) return [];
   const base = "https://apis.data.go.kr/B552555/lhLeaseNoticeInfo1/lhLeaseNoticeInfo1";
@@ -98,7 +116,7 @@ async function fetchLH(key) {
   const url = `${base}?serviceKey=${sk}&PG_SZ=100&PAGE=1`;
   let data;
   try { data = await fetchJSON(url); }
-  catch (e) { console.log("[LH] 요청 실패:", e.message); return []; }
+  catch (e) { console.log("[LH] 요청 실패:", e.message); return null; } // null = 실패(이전 데이터 유지)
   const rows = lhRows(data);
   if (!rows.length) { console.log("[LH] 표출 공고 없음 또는 응답 구조 상이:", JSON.stringify(data).slice(0,300)); return []; }
   console.log("[LH] " + rows.length + "건 수신. 첫 행 필드확인:", JSON.stringify(rows[0]).slice(0,500));
@@ -111,15 +129,33 @@ async function fetchLH(key) {
     const win   = toDate(pick(r, ["PRZWNER_PRESNATN_DE","당첨자발표","przwnerPresnatnDe","WINNER_DE"]));
     const url2  = pick(r, ["DTL_URL","상세URL","dtlUrl","PAN_URL"]) || "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancList.do?mi=1026";
     const id    = "LH-" + (pick(r, ["PAN_ID","panId","공고번호","PBLANC_NO"]) || ((start||"") + "-" + i));
-    return { id, provider: "LH", ltype,
+    return { it: { id, provider: "LH", ltype,
       name: name || ("LH 임대공고 " + (i+1)), region, units: toNum(pick(r,["SUPLY_HSHLDCO","공급호수"])),
       target: "무주택 등 · 자격은 공고문 확인", rcritStart: start, rcritEnd: end, winnerDate: win, url: url2,
-      note: null, _src: "lh-api", _raw: r };
+      note: null, _src: "lh-api" }, raw: r };
   })
   // 안전장치: 이름과 (마감 or 발표) 날짜가 있는 유효 공고만 (매핑 오류 시 화면에 안 뜨게)
-  .filter(it => it.name && (it.rcritEnd || it.winnerDate));
-  console.log("[LH] 유효 공고 " + out.length + "건 채택");
+  .filter(x => x.it.name && (x.it.rcritEnd || x.it.winnerDate))
+  // 임대주택 계열만 + 접수 마감 지난 공고 제외
+  .filter(x => isLhRental(x.it, x.raw))
+  .filter(x => !x.it.rcritEnd || x.it.rcritEnd >= todayKST())
+  .map(x => x.it);
+  console.log("[LH] 임대주택 유효 공고 " + out.length + "건 채택 (토지·상가·분양·취소·마감 제외)");
   return out;
+}
+
+/* ---------- (준비) SH 서울주택도시공사 ----------
+ * data.go.kr에는 SH 실시간 모집공고 API가 없고, i-sh.co.kr은 서버 환경에 따라 차단(HTTP 000)된다.
+ * 당분간 rental-data.json의 수동 큐레이션(provider:"SH", _src:"manual-*") 항목으로 노출하고,
+ * 서울열린데이터광장(data.seoul.go.kr) 키(SH_API_KEY)를 확보하면 여기서 자동화한다. */
+async function fetchSH(key) {
+  if (!key) return [];
+  try {
+    // TODO: 서울열린데이터광장에서 SH 모집공고 데이터셋 확정 후 구현
+    // 예: http://openapi.seoul.go.kr:8088/{key}/json/{SERVICE}/1/100/
+    console.log("[SH] SH_API_KEY 감지 — 데이터셋 미확정으로 아직 수집하지 않음(수동 큐레이션 유지)");
+    return [];
+  } catch (e) { console.log("[SH] 요청 실패:", e.message); return []; }
 }
 
 const DEFAULT_SCHEMA = {
@@ -135,25 +171,35 @@ async function main() {
   let cur;
   try { cur = JSON.parse(await readFile(FILE, "utf8")); }
   catch { console.log("rental-data.json 없음 → 새로 생성"); cur = { items: [], schema: DEFAULT_SCHEMA }; }
-  const manual = (cur.items || []).filter(it => it._src !== "hug-api" && it._src !== "lh-api");
+  const prev   = cur.items || [];
+  const manual = prev.filter(it => it._src !== "hug-api" && it._src !== "lh-api");
+  const prevHug = prev.filter(it => it._src === "hug-api");
+  const prevLh  = prev.filter(it => it._src === "lh-api");
 
-  const hug = await fetchHUG(process.env.HUG_SERVICE_KEY);
-  const lh  = await fetchLH(process.env.LH_API_KEY);
+  // fetch 실패(null)면 이전 수집분을 유지(어차피 아래 공통 필터로 마감건은 걸러짐)
+  const hug = (await fetchHUG(process.env.HUG_SERVICE_KEY)) ?? prevHug;
+  const lh  = (await fetchLH(process.env.LH_API_KEY)) ?? prevLh;
+  const sh  = (await fetchSH(process.env.SH_API_KEY)) ?? [];
 
   // 자동 수집분 + 수동 큐레이션분 합치고 중복(id) 제거
   const byId = new Map();
-  for (const it of [...manual, ...hug, ...lh]) byId.set(it.id, it);
-  const items = [...byId.values()].sort((a,b) => (a.rcritEnd||"9999").localeCompare(b.rcritEnd||"9999"));
+  for (const it of [...manual, ...hug, ...lh, ...sh]) byId.set(it.id, it);
+  const today = todayKST();
+  const items = [...byId.values()]
+    // 전역 공통: 접수 마감이 지난 공고 제외(마감일 없는 상시 공고는 유지) + _raw 제거(슬림화)
+    .filter(it => !it.rcritEnd || it.rcritEnd >= today)
+    .map(({ _raw, ...it }) => it)
+    .sort((a,b) => (a.rcritEnd||"9999").localeCompare(b.rcritEnd||"9999"));
 
   const out = {
     updatedAt: new Date().toISOString(),
-    source: "collect-rental.mjs (HUG 든든전세 공식 API + 수동 큐레이션)",
+    source: "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
     count: items.length,
     schema: cur.schema || DEFAULT_SCHEMA,
     items
   };
   await writeFile(FILE, JSON.stringify(out, null, 2) + "\n", "utf8");
-  console.log(`완료: 총 ${items.length}건 (자동 ${hug.length+lh.length} / 수동 ${manual.length})`);
+  console.log(`완료: 총 ${items.length}건 (HUG ${hug.length} / LH ${lh.length} / SH ${sh.length} / 수동 ${manual.length})`);
 }
 
 main().catch(e => { console.error("수집 실패:", e); process.exit(1); });
