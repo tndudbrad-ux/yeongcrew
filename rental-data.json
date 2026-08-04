@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-08-03T12:21:28.191Z",
+  "updatedAt": "2026-08-04T01:15:20.621Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
-  "count": 61,
+  "count": 57,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,20 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "BMC-happy-2026",
-      "provider": "BMC",
-      "ltype": "행복주택",
-      "name": "부산 2026년 행복주택 예비입주자 모집",
-      "region": "부산",
-      "units": 892,
-      "target": "대학생·청년·신혼부부·고령자·주거급여수급자",
-      "rcritStart": "2026-07-27",
-      "rcritEnd": "2026-08-03",
-      "winnerDate": "2026-11-20",
-      "url": "https://apply.bmc.busan.kr/smw/smw114010/selectNoticeDetailView.do?bbsNo=2&bbsSn=46",
-      "note": "동래·이기대·일광·아미 등 6개 단지"
-    },
     {
       "id": "SH-gangbyeon-skytower",
       "provider": "SH",
@@ -131,51 +117,6 @@
       "rcritEnd": "2026-08-07",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020456&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020437",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[제주지역본부] 일반 매입임대주택 예비입주자 모집공고(서귀포시)",
-      "region": "제주특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-07",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020437&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020436",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[제주지역본부] 일반 매입임대주택 예비입주자 모집공고(제주시)",
-      "region": "제주특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-07",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020436&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020435",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[제주지역본부] 다자녀 매입임대주택 예비입주자 모집 공고(제주시)",
-      "region": "제주특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-07",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020435&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -570,17 +511,17 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020448",
+      "id": "LH-2015122300020508",
       "provider": "LH",
-      "ltype": "행복주택(신혼희망)",
-      "name": "부천대장 A5·A6블록 신혼희망타운 행복주택 입주자 최초모집",
-      "region": "경기도",
+      "ltype": "공공임대",
+      "name": "전주삼천6단지 50년공공임대주택 예비입주자 모집",
+      "region": "전북특별자치도",
       "units": null,
       "target": "무주택 등 · 자격은 공고문 확인",
       "rcritStart": null,
-      "rcritEnd": "2026-08-13",
+      "rcritEnd": "2026-08-14",
       "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020448&ccrCnntSysDsCd=03&uppAisTpCd=39&aisTpCd=42&mi=1026",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020508&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=08&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
