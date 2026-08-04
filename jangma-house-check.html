@@ -64,27 +64,59 @@ footer a{color:#B9DCD9;margin:0 8px}
 <article>
 <h1>장마철·여름 집 보러 갈 때 꼭 확인할 7가지</h1>
 <div class="meta">부비 칼럼 · 계절 특집 🌧️</div>
-<div class="lead">여름·장마철은 사실 <b>집 보러 다니기 가장 좋은 계절</b>이에요. 비가 많이 오는 만큼, 평소엔 안 보이던 <b>누수·결로·곰팡이·침수</b> 약점이 이때 다 드러나거든요. 겨울·봄에 봤으면 몰랐을 하자를 여름엔 눈으로 확인할 수 있어요. 아래 7가지만 챙기세요.</div>
 
-<h2>1. 천장·벽 모서리의 물 얼룩</h2>
+<style>
+.chk7{border:1px solid #BFE9E6;background:#F3FBFA;border-radius:14px;padding:18px 18px 12px;margin:0 0 24px}
+.chk7 .chkHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.chk7 .chkTit{font-size:1.02rem;font-weight:600;color:var(--forest)}
+.chk7 .chkCnt{font-size:.82rem;font-weight:600;color:var(--teal);background:#EAFAF8;border:1px solid #BFE9E6;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.chk7 ol{list-style:none;margin:0;padding:0}
+.chk7 li{margin:0;border-bottom:1px dashed #D5ECEA}
+.chk7 li:last-child{border-bottom:none}
+.chk7 label{display:flex;align-items:center;gap:9px;padding:8px 2px;cursor:pointer;font-size:.92rem;line-height:1.5}
+.chk7 .num{flex:none;width:20px;height:20px;border-radius:50%;background:var(--teal);color:#fff;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.chk7 input{flex:none;width:17px;height:17px;accent-color:var(--teal);margin:0}
+.chk7 input:checked~span.txt{color:#8AA6A3;text-decoration:line-through}
+.chk7 a{color:inherit;text-decoration:none}
+.chk7 a:hover{color:var(--teal)}
+.chk7 .chkNote{font-size:.78rem;color:var(--sub);margin:9px 2px 2px}
+article h2[id]{scroll-margin-top:80px}
+</style>
+<div class="chk7" id="chk7">
+  <div class="chkHead"><span class="chkTit">🌧️ 한눈에 보는 체크리스트 7</span><span class="chkCnt" id="chkCnt">0/7 확인</span></div>
+  <ol>
+    <li><label><span class="num">1</span><input type="checkbox" data-k="1"><span class="txt"><a href="#j1"><b>천장·벽 모서리 물 얼룩</b> — 누수 이력·덧방 흔적</a></span></label></li>
+    <li><label><span class="num">2</span><input type="checkbox" data-k="2"><span class="txt"><a href="#j2"><b>곰팡이 냄새·검은 반점</b> — 붙박이장 뒤·실리콘 이음새</a></span></label></li>
+    <li><label><span class="num">3</span><input type="checkbox" data-k="3"><span class="txt"><a href="#j3"><b>창틀·새시 결로 흔적</b> — 물 자국·부식·이중창 여부</a></span></label></li>
+    <li><label><span class="num">4</span><input type="checkbox" data-k="4"><span class="txt"><a href="#j4"><b>배수 속도</b> — 화장실·베란다 물 틀어 직접 확인</a></span></label></li>
+    <li><label><span class="num">5</span><input type="checkbox" data-k="5"><span class="txt"><a href="#j5"><b>침수 이력</b> (반지하·1층) — 물때 선·방수턱</a></span></label></li>
+    <li><label><span class="num">6</span><input type="checkbox" data-k="6"><span class="txt"><a href="#j6"><b>옥상·외벽 상태</b> (탑층·빌라) — 방수·균열·백화</a></span></label></li>
+    <li><label><span class="num">7</span><input type="checkbox" data-k="7"><span class="txt"><a href="#j7"><b>비 오는 날 한 번 더</b> 방문하기</a></span></label></li>
+  </ol>
+  <p class="chkNote">체크 상태는 이 브라우저에 저장돼요. 항목을 누르면 아래 상세 설명으로 이동해요.</p>
+</div>
+
+<div class="lead">여름·장마철은 사실 <b>집 보러 다니기 가장 좋은 계절</b>이에요. 비가 많이 오는 만큼, 평소엔 안 보이던 <b>누수·결로·곰팡이·침수</b> 약점이 이때 다 드러나거든요. 겨울·봄에 봤으면 몰랐을 하자를 여름엔 눈으로 확인할 수 있어요. 아래 7가지만 챙기센요.</div>
+
+<h2 id="j1">1. 천장·벽 모서리의 물 얼룩</h2>
 <p>천장과 벽이 만나는 모서리, 창문 위쪽을 보세요. <b>누렇게 번진 얼룩이나 들뜬 벽지</b>가 있으면 과거 누수 이력이에요. 새로 도배했는데 유독 한 곳만 깨끗하다면 오히려 <b>가리려고 덧방</b>한 신호일 수 있어요.</p>
 
-<h2>2. 곰팡이 냄새와 검은 반점</h2>
+<h2 id="j2">2. 곰팡이 냄새와 검은 반점</h2>
 <p>문 열자마자 <b>퀴퀴한 냄새</b>가 나면 환기·습기 문제가 있는 집이에요. 붙박이장 뒤, 신발장 안, 베란다 구석, 화장실 실리콘 이음새의 <b>검은 곰팡이 반점</b>을 꼭 확인하세요. 향초·디퓨저 냄새가 강하면 뭔가를 덮고 있는 건 아닌지 의심해보세요.</p>
 
-<h2>3. 창틀·새시 결로 흔적</h2>
+<h2 id="j3">3. 창틀·새시 결로 흔적</h2>
 <p>창틀 아래 <b>물 고인 자국, 곰팡이, 부식</b>이 있으면 결로가 심한 집이에요. 특히 북향·저층·반지하는 여름 습기와 겨울 결로가 반복돼요. 이중창인지, 창틀 실리콘 상태는 어떤지 봐두세요.</p>
 
-<h2>4. 화장실·베란다 배수 속도</h2>
+<h2 id="j4">4. 화장실·베란다 배수 속도</h2>
 <p>가능하면 <b>물을 틀어 배수구로 잘 빠지는지</b> 확인하세요. 장마철에 배수가 느리면 역류·냄새의 원인이에요. 베란다 배수구가 막혀 있으면 폭우 때 물이 실내로 넘칠 수 있어요.</p>
 
-<h2>5. 반지하·1층이면 침수 이력</h2>
-<p>저지대·반지하·1층이라면 <b>동네가 물에 잠긴 적 있는지</b> 꼭 물어보세요. 건물 외벽 하단의 <b>물때 선(얼룩진 높이)</b>, 계단·현관의 방수턱, 인근 하수구 위치를 살피고, 주민·중개사에게 과거 침수 여부를 직접 확인하세요.</p>
+<h2 id="j5">5. 반지하·1층이면 침수 이력</h2>
+<p>저지대·반지하·1층이라면 <b>동네가 물에 잠긴 적 있는지</b> 꼭 물어보세요. 건물 외벽 하단의 <b>물때 선(얼룹진 높이)</b>, 계단·현관의 방수턱, 인근 하수구 위치를 살피고, 주민·중개사에게 과거 침수 여부를 직접 확인하세요.</p>
 
-<h2>6. 옥상·외벽·주차장 상태 (탑층·빌라)</h2>
+<h2 id="j6">6. 옥상·외벽·주차장 상태 (탑층·빌라)</h2>
 <p>탑층이라면 <b>옥상 방수</b> 상태가 곧 우리 집 천장 상태예요. 빌라는 관리 주체가 없어 방수가 방치된 경우가 많아요. 외벽 균열·백화(하얀 가루)도 누수 신호예요.</p>
 
-<h2>7. 비 오는 날 한 번 더 가보기</h2>
+<h2 id="j7">7. 비 오는 날 한 번 더 가보기</h2>
 <p>진짜 고수의 방법이에요. <b>비가 실제로 오는 날 다시 방문</b>하면 누수·결로·소음·침수 위험이 그대로 보여요. 계약 전 딱 한 번이면 충분해요.</p>
 
 <div class="cta">🛠️ 집이 마음에 든다면, 하자를 <b>사진 찍어 정리</b>해두세요. 부비 <b><a href="/rental-care.html">하자 점검 체크리스트</a></b>로 장소별 47개 항목을 확인하고, 사진을 넣으면 <b>집주인에게 보낼 하자 리포트(PDF)</b>까지 자동으로 만들어드려요.</div>
@@ -109,6 +141,29 @@ footer a{color:#B9DCD9;margin:0 8px}
 </div></footer>
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"장마철·여름 집 보러 갈 때 꼭 확인할 7가지","description":"누수·결로·곰팡이·배수·침수까지, 여름에 집 보러 갈 때 꼭 확인해야 할 7가지 체크리스트","author":{"@type":"Organization","name":"부비"},"publisher":{"@type":"Organization","name":"부비","logo":{"@type":"ImageObject","url":"https://boobi.ai.kr/icon-512.png"}},"mainEntityOfPage":"https://boobi.ai.kr/jangma-house-check.html","inLanguage":"ko-KR"}</script>
+<script>
+(function(){
+  var KEY='boobi_jangma_chk7';
+  var box=document.getElementById('chk7');
+  if(!box) return;
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var inputs=box.querySelectorAll('input[type=checkbox]');
+  var cnt=document.getElementById('chkCnt');
+  function upd(){
+    cnt.textContent=box.querySelectorAll('input:checked').length+'/7 확인';
+  }
+  Array.prototype.forEach.call(inputs,function(i){
+    if(saved[i.getAttribute('data-k')]) i.checked=true;
+    i.addEventListener('change',function(){
+      saved[i.getAttribute('data-k')]=i.checked;
+      try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}
+      upd();
+    });
+  });
+  upd();
+})();
+</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/column-views.js?v=2" defer></script>
 <script src="/hwon-auth.js" defer></script>
