@@ -33,6 +33,47 @@ nav.appendChild(a);
 });
 link=document.createElement('a'); link.href='/account.html'; link.id='hwAuthLink'; link.textContent='로그인';
 nav.appendChild(link);
+
+/* ===== 모바일 햄버거 메뉴 =====
+ * 좁은 화면에선 페이지 CSS가 nav를 숨겨 진입로가 없었음 → 햄버거 버튼 + 드롭다운으로 전 페이지 일괄 해결 */
+var header=nav.closest('header')||document.querySelector('header');
+if(header){
+  var mcss=document.createElement('style');
+  mcss.textContent='#hwMenuBtn{display:none;width:42px;height:42px;border:none;background:none;cursor:pointer;padding:7px;margin-left:auto;flex:0 0 auto}'
+   +'#hwMenuBtn span{display:block;width:22px;height:2.5px;background:#20A6A2;border-radius:2px;margin:4.5px auto;transition:.22s}'
+   +'#hwMenuBtn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}'
+   +'#hwMenuBtn.open span:nth-child(2){opacity:0}'
+   +'#hwMenuBtn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}'
+   +'@media(max-width:700px){#hwMenuBtn{display:block}header nav,nav.gnb{display:none!important}}'
+   +'#hwMobileMenu{display:none;position:fixed;left:0;right:0;background:#fff;border-bottom:1px solid #DCEEEC;box-shadow:0 16px 32px rgba(13,42,41,.14);z-index:97;max-height:calc(100vh - 70px);overflow:auto}'
+   +'#hwMobileMenu.open{display:block}'
+   +'#hwMobileMenu a{display:block;padding:14px 24px;border-top:1px solid #F0F7F6;font-size:.97rem;color:#0D2A29;font-weight:500;text-decoration:none}'
+   +'#hwMobileMenu a:active{background:#F3FBFA}'
+   +'#hwMobileMenu a.on{color:#20A6A2;font-weight:700}';
+  document.head.appendChild(mcss);
+  var mbtn=document.createElement('button'); mbtn.id='hwMenuBtn'; mbtn.type='button'; mbtn.setAttribute('aria-label','메뉴 열기');
+  mbtn.innerHTML='<span></span><span></span><span></span>';
+  (nav.parentElement||header).appendChild(mbtn);
+  var menu=document.createElement('div'); menu.id='hwMobileMenu';
+  items.concat([['/account.html','👤 로그인 · 마이페이지']]).forEach(function(it){
+    var a=document.createElement('a'); a.href=it[0]; a.textContent=it[1];
+    var slug=it[0].replace(/^\//,'').replace(/\.html$/,'');
+    if(here && here.indexOf(slug)===0) a.className='on';
+    menu.appendChild(a);
+  });
+  document.body.appendChild(menu);
+  mbtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    menu.style.top=header.getBoundingClientRect().bottom+'px';
+    menu.classList.toggle('open');
+    mbtn.classList.toggle('open',menu.classList.contains('open'));
+  });
+  document.addEventListener('click',function(e){
+    if(menu.classList.contains('open')&&!menu.contains(e.target)&&!mbtn.contains(e.target)){
+      menu.classList.remove('open'); mbtn.classList.remove('open');
+    }
+  });
+}
 })();
 ready.then(function(auth){
 auth.onAuthStateChanged(function(u){
