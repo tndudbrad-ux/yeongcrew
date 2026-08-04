@@ -31,25 +31,59 @@
 <h1>전세 계약 전 반드시 확인할 10가지 체크리스트</h1>
 <p class="meta">2026-07-05 · 전월세·임대차</p>
 
-<p>전세 보증금은 대부분의 세입자에게 전 재산에 가까운 돈입니다. 계약서에 도장을 찍기 전 아래 10가지만 확인해도 보증금 사고의 상당 부분을 예방할 수 있습니다.</p>
+<style>
+.chk10{border:1px solid #C7EEEA;background:#F3FBFA;border-radius:14px;padding:18px 18px 12px;margin:0 0 26px}
+.chk10 .chkHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.chk10 .chkTit{font-size:1.02rem;font-weight:600;color:var(--forest)}
+.chk10 .chkCnt{font-size:.82rem;font-weight:600;color:var(--teal);background:#E7F8F6;border:1px solid #C7EEEA;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.chk10 ol{list-style:none;margin:0 !important;padding:0}
+.chk10 li{margin:0 !important;border-bottom:1px dashed #D8EEEC}
+.chk10 li:last-child{border-bottom:none}
+.chk10 label{display:flex;align-items:center;gap:9px;padding:8px 2px;cursor:pointer;font-size:.92rem;line-height:1.5}
+.chk10 .num{flex:none;width:20px;height:20px;border-radius:50%;background:var(--teal);color:#fff;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.chk10 input{flex:none;width:17px;height:17px;accent-color:var(--teal);margin:0}
+.chk10 input:checked~span.txt{color:#8AA6A3;text-decoration:line-through}
+.chk10 a{color:inherit;text-decoration:none}
+.chk10 a:hover{color:var(--teal)}
+.chk10 .chkNote{font-size:.78rem;color:var(--sub);margin:10px 2px 2px}
+article.post li[id]{scroll-margin-top:80px}
+</style>
+<div class="chk10" id="chk10">
+  <div class="chkHead"><span class="chkTit">📋 한눈에 보는 체크리스트 10</span><span class="chkCnt" id="chkCnt">0/10 확인</span></div>
+  <ol>
+    <li><label><span class="num">1</span><input type="checkbox" data-k="1"><span class="txt"><a href="#c1"><strong>등기부등본</strong> 계약 당일 직접 열람 — 근저당·가압류·신탁</a></span></label></li>
+    <li><label><span class="num">2</span><input type="checkbox" data-k="2"><span class="txt"><a href="#c2"><strong>선순위 채권</strong> + 내 보증금이 시세 70% 이하인지</a></span></label></li>
+    <li><label><span class="num">3</span><input type="checkbox" data-k="3"><span class="txt"><a href="#c3"><strong>전세가율</strong> 80% 넘는 집(깡통전세)은 회피</a></span></label></li>
+    <li><label><span class="num">4</span><input type="checkbox" data-k="4"><span class="txt"><a href="#c4"><strong>집주인 본인 확인</strong> — 등기부 소유자와 신분증 대조</a></span></label></li>
+    <li><label><span class="num">5</span><input type="checkbox" data-k="5"><span class="txt"><a href="#c5"><strong>체납 세금 확인</strong> — 미납국세 열람·완납 특약</a></span></label></li>
+    <li><label><span class="num">6</span><input type="checkbox" data-k="6"><span class="txt"><a href="#c6"><strong>특약사항 작성</strong> — 권리설정 금지·보증보험 불가 시 무효</a></span></label></li>
+    <li><label><span class="num">7</span><input type="checkbox" data-k="7"><span class="txt"><a href="#c7"><strong>공인중개사</strong> 정상 등록 여부 조회</a></span></label></li>
+    <li><label><span class="num">8</span><input type="checkbox" data-k="8"><span class="txt"><a href="#c8"><strong>계약금 입금</strong>은 소유자 명의 계좌로만</a></span></label></li>
+    <li><label><span class="num">9</span><input type="checkbox" data-k="9"><span class="txt"><a href="#c9"><strong>전입신고 + 확정일자</strong> 잔금 당일 즉시</a></span></label></li>
+    <li><label><span class="num">10</span><input type="checkbox" data-k="10"><span class="txt"><a href="#c10"><strong>반환보증 가입</strong> — HUG·HF·SGI</a></span></label></li>
+  </ol>
+  <p class="chkNote">체크 상태는 이 브라우저에 저장돼요. 항목을 누르면 아래 상세 설명으로 이동합니다.</p>
+</div>
+
+<p>전세 보증금은 대부분의 세입자에게 전 재산에 가까운 돈입니다. 계약서에 도장을 찍기 전 위 10가지만 확인해도 보증금 사고의 상당 부분을 예방할 수 있습니다. 항목별 자세한 확인 방법은 아래에서 이어집니다.</p>
 <h2>계약 전 확인사항</h2>
 <ol>
-<li><strong>등기부등본 직접 열람</strong> — 계약 당일 인터넷등기소에서 직접 발급받아 근저당, 가압류, 압류, 신탁 등기가 있는지 확인합니다. 중개사가 주는 것만 믿지 말고 본인이 직접 확인하세요.</li>
-<li><strong>선순위 채권 규모 계산</strong> — 근저당 채권최고액 + 내 보증금이 집 시세의 70%를 넘으면 위험 신호입니다. 경매로 넘어가면 보증금 일부를 돌려받지 못할 수 있습니다.</li>
-<li><strong>전세가율 확인</strong> — 전세가가 매매가의 80%를 넘는 집(깡통전세 위험)은 피하는 것이 안전합니다. 시세는 국토교통부 실거래가 공개시스템과 복수의 부동산 앱으로 교차 확인하세요.</li>
-<li><strong>집주인 본인 확인</strong> — 등기부상 소유자와 계약 상대방의 신분증을 대조합니다. 대리인과 계약할 경우 위임장과 인감증명서를 반드시 확인하세요.</li>
-<li><strong>체납 세금 확인</strong> — 국세·지방세 체납액은 보증금보다 우선 변제될 수 있습니다. 임대인 동의를 받아 미납국세 열람을 신청하거나, 계약서에 완납 확인 특약을 넣으세요.</li>
+<li id="c1"><strong>등기부등본 직접 열람</strong> — 계약 당일 인터넷등기소에서 직접 발급받아 근저당, 가압류, 압류, 신탁 등기가 있는지 확인합니다. 중개사가 주는 것만 믿지 말고 본인이 직접 확인하세요.</li>
+<li id="c2"><strong>선순위 채권 규모 계산</strong> — 근저당 채권최고액 + 내 보증금이 집 시세의 70%를 넘으면 위험 신호입니다. 경매로 넘어가면 보증금 일부를 돌려받지 못할 수 있습니다.</li>
+<li id="c3"><strong>전세가율 확인</strong> — 전세가가 매매가의 80%를 넘는 집(깡통전세 위험)은 피하는 것이 안전합니다. 시세는 국토교통부 실거래가 공개시스템과 복수의 부동산 앱으로 교차 확인하세요.</li>
+<li id="c4"><strong>집주인 본인 확인</strong> — 등기부상 소유자와 계약 상대방의 신분증을 대조합니다. 대리인과 계약할 경우 위임장과 인감증명서를 반드시 확인하세요.</li>
+<li id="c5"><strong>체납 세금 확인</strong> — 국세·지방세 체납액은 보증금보다 우선 변제될 수 있습니다. 임대인 동의를 받아 미납국세 열람을 신청하거나, 계약서에 완납 확인 특약을 넣으세요.</li>
 </ol>
 <h2>계약 시 확인사항</h2>
 <ol start="6">
-<li><strong>특약사항 작성</strong> — "잔금일 다음 날까지 근저당 등 새로운 권리 설정을 하지 않는다", "전세보증보험 가입이 불가능할 경우 계약을 무효로 하고 계약금을 반환한다" 같은 특약을 넣으면 안전장치가 됩니다.</li>
-<li><strong>공인중개사 정상 등록 여부</strong> — 국가공간정보포털에서 중개사무소 등록 여부를 조회할 수 있습니다.</li>
-<li><strong>계약금 입금 계좌</strong> — 반드시 등기부상 소유자 명의 계좌로 입금합니다.</li>
+<li id="c6"><strong>특약사항 작성</strong> — "잔금일 다음 날까지 근저당 등 새로운 권리 설정을 하지 않는다", "전세보증보험 가입이 불가능할 경우 계약을 무효로 하고 계약금을 반환한다" 같은 특약을 넣으면 안전장치가 됩니다.</li>
+<li id="c7"><strong>공인중개사 정상 등록 여부</strong> — 국가공간정보포털에서 중개사무소 등록 여부를 조회할 수 있습니다.</li>
+<li id="c8"><strong>계약금 입금 계좌</strong> — 반드시 등기부상 소유자 명의 계좌로 입금합니다.</li>
 </ol>
 <h2>계약 후 즉시 할 일</h2>
 <ol start="9">
-<li><strong>전입신고 + 확정일자</strong> — 잔금일에 바로 전입신고를 하고 확정일자를 받아야 대항력과 우선변제권이 생깁니다. 정부24와 인터넷등기소에서 온라인으로도 가능합니다.</li>
-<li><strong>전세보증금 반환보증 가입</strong> — HUG(주택도시보증공사), HF(주택금융공사), SGI서울보증의 반환보증에 가입하면 집주인이 보증금을 돌려주지 못할 때 보증기관이 대신 지급합니다. 보증료가 들지만 가장 확실한 안전장치입니다.</li>
+<li id="c9"><strong>전입신고 + 확정일자</strong> — 잔금일에 바로 전입신고를 하고 확정일자를 받아야 대항력과 우선변제권이 생깁니다. 정부24와 인터넷등기소에서 온라인으로도 가능합니다.</li>
+<li id="c10"><strong>전세보증금 반환보증 가입</strong> — HUG(주택도시보증공사), HF(주택금융공사), SGI서울보증의 반환보증에 가입하면 집주인이 보증금을 돌려주지 못할 때 보증기관이 대신 지급합니다. 보증료가 들지만 가장 확실한 안전장치입니다.</li>
 </ol>
 <h2>이런 매물은 거르세요</h2>
 <ul>
@@ -71,6 +105,29 @@
     <p>© 2026 부비. All rights reserved.</p>
   </div>
 </footer>
+<script>
+(function(){
+  var KEY='boobi_jeonse_chk10';
+  var box=document.getElementById('chk10');
+  if(!box) return;
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var inputs=box.querySelectorAll('input[type=checkbox]');
+  var cnt=document.getElementById('chkCnt');
+  function upd(){
+    cnt.textContent=box.querySelectorAll('input:checked').length+'/10 확인';
+  }
+  Array.prototype.forEach.call(inputs,function(i){
+    if(saved[i.getAttribute('data-k')]) i.checked=true;
+    i.addEventListener('change',function(){
+      saved[i.getAttribute('data-k')]=i.checked;
+      try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}
+      upd();
+    });
+  });
+  upd();
+})();
+</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 <script src="/hwon-ui.js" defer></script>
