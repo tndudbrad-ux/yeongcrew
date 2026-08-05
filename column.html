@@ -40,6 +40,11 @@ main{padding:34px 0 60px}
 .feature h2{font-size:1.4rem;font-weight:700;margin:12px 0 6px;line-height:1.35}
 .feature p{opacity:.92;font-size:.95rem}
 .feature .go{display:inline-block;margin-top:14px;background:#fff;color:#12403C;font-weight:700;padding:9px 16px;border-radius:10px;font-size:.9rem}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.cats::-webkit-scrollbar{display:none}
+.cats button{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--sub);font-size:.88rem;font-weight:600;padding:8px 15px;border-radius:20px;cursor:pointer;font-family:inherit;transition:.15s}
+.cats button:hover{border-color:#B5E4E1;color:var(--teal)}
+.cats button.on{background:var(--teal);border-color:var(--teal);color:#fff}
 h2.sec{font-size:1.15rem;font-weight:600;margin:30px 0 14px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;transition:.16s;display:block}
@@ -65,6 +70,8 @@ footer a{color:#B9DCD9;margin:0 8px}
 <h1>📰 부비 칼럼</h1>
 <p>계절과 상황에 맞는 부동산 이야기. 집 구할 때, 계약할 때, 세금 낼 때 — 필요한 순간의 팁을 모았어요.</p>
 </div>
+
+<div class="cats" id="colCats" aria-label="칼럼 분류"></div>
 
 <a class="feature" href="/tax-reform-2026.html">
 <span class="badge">🔥 새 글 · 세제개편</span>
@@ -142,6 +149,40 @@ footer a{color:#B9DCD9;margin:0 8px}
 <a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/terms.html">이용약관</a>·<a href="/privacy.html">개인정보처리방침</a>
 </div></footer>
 
+<script>
+(function(){
+  var secs=[].slice.call(document.querySelectorAll('h2.sec')).map(function(h){
+    return {h:h, g:h.nextElementSibling, name:h.textContent.trim()};
+  });
+  var extra=[document.querySelector('.feature'),document.getElementById('popularCols')].filter(Boolean);
+  var bar=document.getElementById('colCats');
+  if(!bar||!secs.length)return;
+  function label(n){return n.replace(/^\S+\s/,'')} /* 이모지 떼고 짧게 */
+  function render(active){
+    bar.innerHTML='';
+    var names=['전체'].concat(secs.map(function(s){return s.name}));
+    names.forEach(function(name){
+      var b=document.createElement('button');
+      b.textContent=name==='전체'?'전체':name;
+      if(name===active)b.className='on';
+      b.onclick=function(){apply(name)};
+      bar.appendChild(b);
+    });
+  }
+  function apply(name){
+    var all=name==='전체';
+    extra.forEach(function(el){el.style.display=all?'':'none'});
+    secs.forEach(function(s){
+      var show=all||s.name===name;
+      s.h.style.display=show?'':'none';
+      if(s.g)s.g.style.display=show?'':'none';
+    });
+    render(name);
+    if(!all)window.scrollTo({top:0,behavior:'smooth'});
+  }
+  render('전체');
+})();
+</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"부비 칼럼","url":"https://boobi.ai.kr/column.html","description":"계절별 부동산 팁과 가이드를 모은 부비 칼럼","inLanguage":"ko-KR","isPartOf":{"@type":"WebSite","name":"부비","url":"https://boobi.ai.kr/"}}</script>
 <script src="/column-views.js?v=2" defer></script>
 <script src="/hwon-bot.js" defer></script>
