@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아파트 임장 체크리스트 — 32개 항목 점수화·비교 | 부비</title>
+<meta name="description" content="입지·수요·주차·소음·개발호재까지 32개 항목을 4점 척도로 점수화하고, 여러 아파트를 나란히 비교하는 임장 체크리스트. 자동 저장되고 100점 환산 등급까지 나와요. 영팀장의 임장 툴, 부비에서.">
+<meta name="keywords" content="임장 체크리스트, 아파트 임장, 임장 갈 때 체크리스트, 아파트 비교, 입지 분석, 임장 점수표, 부동산 임장, 영팀장, 부비">
+<link rel="canonical" href="https://boobi.ai.kr/imjang-checklist.html">
+<meta property="og:title" content="아파트 임장 체크리스트 — 32개 항목 점수화·비교 | 부비">
+<meta property="og:description" content="입지·수요·주차·소음·호재까지 32개 항목 점수화, 아파트끼리 비교하고 등급까지. 임장 갈 때 폰으로 켜세요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://boobi.ai.kr/imjang-checklist.html">
+<meta property="og:site_name" content="부비 - 부동산 비서">
+<meta property="og:image" content="https://boobi.ai.kr/icon-512.png">
+<meta property="og:locale" content="ko_KR">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#FFFFFF;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:#F6FBFA;color:var(--forest);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:780px;margin:0 auto;padding:0 0 120px}
+header.top{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:70}
+header.top .inner{max-width:880px;margin:0 auto;padding:0 22px;display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500;letter-spacing:-.01em}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+@media(max-width:620px){nav.gnb{display:none}}
+
+.hero{background:linear-gradient(135deg,#EAFAF8,#FFFFFF);border-bottom:1px solid var(--line);padding:18px 16px 12px;position:sticky;top:62px;z-index:60}
+.hero h1{margin:0 0 4px;font-size:1.08rem;font-weight:600;letter-spacing:-.02em;display:flex;align-items:center;gap:7px}
+.hero h1 img{width:20px;height:20px;object-fit:contain}
+.hero .sub{font-size:.78rem;color:var(--sub);margin-bottom:10px}
+.save-indicator{font-size:.72rem;color:var(--sub);margin-left:auto;font-weight:400}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:8px 14px;background:#fff;border:1px solid var(--line);border-radius:20px;color:var(--sub);font-size:.82rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .15s}
+.tab.active{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:700}
+.tab-add{background:transparent;border-style:dashed;font-weight:400}
+
+.score-card{background:#fff;margin:12px 12px 0;border-radius:14px;padding:14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(32,166,162,.06)}
+.score-box{text-align:center;padding:6px 4px;border-radius:10px;background:#F3FBFA}
+.score-box .label{font-size:.64rem;color:var(--sub);font-weight:500;letter-spacing:.3px}
+.score-box .value{font-size:1.3rem;font-weight:700;color:var(--teal);margin-top:2px}
+.score-box .sub{font-size:.64rem;color:#9BB6B3}
+.grade-S{color:#B7791F !important}
+.grade-A{color:#2F855A !important}
+.grade-B{color:#2B6CB0 !important}
+.grade-C{color:#718096 !important}
+.grade-D{color:#C53030 !important}
+
+.info-panel{background:#fff;margin:12px 12px 0;border-radius:14px;padding:14px;border:1px solid var(--line);box-shadow:0 2px 8px rgba(32,166,162,.06)}
+.info-panel input,.info-panel textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:.9rem;font-family:inherit;margin-bottom:8px;background:#FAFDFC;color:var(--forest)}
+.info-panel input:focus,.info-panel textarea:focus{outline:none;border-color:var(--mint);background:#fff}
+.info-panel .row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.category{background:#fff;margin:12px 12px 0;border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:0 2px 8px rgba(32,166,162,.06)}
+.cat-header{padding:12px 14px;background:linear-gradient(90deg,#2AC1BC,#1B918D);color:#fff;font-weight:700;font-size:.9rem;display:flex;justify-content:space-between;align-items:center}
+.cat-subtotal{font-size:.76rem;font-weight:600;background:rgba(255,255,255,.22);padding:3px 10px;border-radius:12px}
+
+.item{padding:12px 14px;border-bottom:1px solid #EFF7F6}
+.item:last-child{border-bottom:none}
+.item-label{font-size:.9rem;font-weight:600;color:var(--forest);margin-bottom:8px;line-height:1.4}
+
+.criteria-box{background:#F8FCFB;border:1px solid #E3F1EF;border-radius:10px;padding:6px 8px;margin-bottom:10px;font-size:.76rem;line-height:1.4}
+.criteria-row{display:flex;align-items:center;gap:8px;padding:5px 4px;border-radius:6px;transition:background .15s}
+.criteria-row + .criteria-row{border-top:1px dashed #E3F1EF}
+.crit-num{flex:0 0 34px;font-weight:700;font-size:.7rem;text-align:center;padding:2px 0;border-radius:4px;color:#fff}
+.crit-4 .crit-num{background:#34D399}
+.crit-3 .crit-num{background:#60A5FA}
+.crit-2 .crit-num{background:#FBBF24}
+.crit-1 .crit-num{background:#F87171}
+.crit-text{flex:1;color:#4A6360;font-weight:500}
+.criteria-row.crit-active{background:#EAFAF8}
+.criteria-row.crit-active .crit-text{color:#137A76;font-weight:700}
+
+.score-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:8px}
+.score-btn{aspect-ratio:1.2;max-height:56px;min-height:48px;border:2px solid var(--line);border-radius:10px;background:#FAFDFC;font-size:1.1rem;font-weight:700;color:#9BB6B3;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none;font-family:inherit}
+.score-btn:active{transform:scale(.94)}
+.score-btn.selected-1{background:#FEE2E2;border-color:#F87171;color:#C53030}
+.score-btn.selected-2{background:#FEF3C7;border-color:#FBBF24;color:#B45309}
+.score-btn.selected-3{background:#DBEAFE;border-color:#60A5FA;color:#1E40AF}
+.score-btn.selected-4{background:#D1FAE5;border-color:#34D399;color:#047857}
+
+.memo-toggle{display:inline-block;font-size:.78rem;color:var(--teal);cursor:pointer;padding:4px 0;font-weight:500}
+.memo-input{width:100%;min-height:52px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:.84rem;font-family:inherit;margin-top:6px;resize:vertical;background:#FFFDF2;display:none}
+.memo-input.show{display:block}
+
+.summary-view .sum-row{display:grid;grid-template-columns:1.3fr repeat(var(--apt-count,3),1fr);gap:8px;padding:10px 14px;border-bottom:1px solid #EFF7F6;align-items:center;font-size:.84rem}
+.summary-view .sum-row.header{background:#F3FBFA;font-weight:700;font-size:.76rem;color:var(--sub)}
+.summary-view .sum-row.total{background:#EAFAF8;font-weight:700;color:#137A76}
+.summary-view .cell{text-align:center}
+.summary-view .cell.best{color:#047857;font-weight:800}
+
+.action-bar{position:fixed;bottom:0;left:0;right:0;padding:10px 12px;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;gap:8px;z-index:80;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.action-bar button{flex:1;padding:12px 0;border-radius:10px;border:none;font-size:.84rem;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-primary{background:var(--teal);color:#fff}
+.btn-secondary{background:#EAF3F2;color:var(--forest)}
+.btn-danger{background:#FEF2F2;color:#C53030}
+.btn-sm{flex:0 0 auto;padding:12px 14px}
+
+.section-title{padding:16px 16px 4px;font-size:.8rem;font-weight:600;color:var(--sub);letter-spacing:.5px}
+.rel-links{margin:16px 12px 0}
+.rel-links a{display:block;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 15px;margin-bottom:8px;font-size:.88rem}
+.rel-links a:hover{border-color:var(--mint)}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--forest);color:#fff;padding:10px 18px;border-radius:20px;font-size:.84rem;font-weight:500;z-index:200;opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.show{opacity:1}
+
+footer.site{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
+footer.site a{color:#B9DCD9;margin:0 8px}
+
+@media (max-width:360px){.score-btn{font-size:1rem;min-height:44px}.item-label{font-size:.84rem}.criteria-box{font-size:.72rem}}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css?v=3">
+</head>
+<body>
+<header class="top"><div class="inner">
+<a class="logo" href="/"><img class="logo3d" src="/boobi-ring-3d.png" alt=""><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
+<nav class="gnb"><a href="/column.html">칼럼</a><a href="/jeonse-safety-check.html">전세사기 진단</a><a href="/rental-care.html">하자 점검</a><a href="/experts.html">전문가</a></nav>
+</div></header>
+
+<div class="wrap">
+  <div class="hero">
+    <h1><img src="/boobi-ring-3d.png" alt="">아파트 임장 체크리스트 <span class="save-indicator" id="save-ind">자동 저장</span></h1>
+    <div class="sub">입지·수요·주차·소음·호재까지 32개 항목을 점수화하고, 아파트끼리 비교하세요. 이 브라우저에 자동 저장돼요.</div>
+    <div class="tabs" id="tabs"></div>
+  </div>
+
+  <div id="content"></div>
+
+  <div class="section-title">함께 쓰면 좋은 부비 툴</div>
+  <div class="rel-links">
+    <a href="/home-report.html">🏠 집 종합 리포트 — 주소 하나로 세금·리스크 한눈에</a>
+    <a href="/jangma-house-check.html">🌧️ 장마철 집보기 7가지 — 누수·곰팡이·침수 체크</a>
+    <a href="/jeonse-safety-check.html">🔍 전세사기 정밀진단 — 등기부 자동 분석</a>
+    <a href="/rental-care.html">🛠️ 입주 하자 점검 — 하자 리포트 PDF 자동 생성</a>
+  </div>
+</div>
+
+<div class="action-bar">
+  <button class="btn-secondary btn-sm" onclick="exportData()">💾 백업</button>
+  <button class="btn-secondary btn-sm" onclick="document.getElementById('file-input').click()">📂 복원</button>
+  <input type="file" id="file-input" accept=".json" style="display:none" onchange="importData(event)">
+  <button class="btn-primary" onclick="switchView('summary')">📊 비교 요약</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer class="site"><div style="max-width:760px;margin:0 auto;padding:0 22px">
+부비 — 부동산 비서<br>© 2026 영크루 ·
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/terms.html">이용약관</a>·<a href="/privacy.html">개인정보처리방침</a>
+</div></footer>
+
+<script>
+const STORAGE_KEY = 'boobi_imjang_checklist_v2';
+
+const CATEGORIES = [
+  { name: "1. 입지", emoji: "📍", items: [
+    { label: "역과의 도보 거리", criteria: {
+      4: "2분 이내 (초역세권)",
+      3: "5분 이내 (역세권)",
+      2: "10분 이내 (역생활권)",
+      1: "15분 이상 (비역세권)",
+    }},
+    { label: "대로변 접근성", criteria: {
+      4: "단지 바로 앞 왕복 6차선+",
+      3: "도보 1분 이내",
+      2: "도보 3분 이내",
+      1: "대로까지 5분 이상",
+    }},
+    { label: "주변 상권 밀집도 (음식점·카페·대형마트 3종 기준)", criteria: {
+      4: "3종 모두 도보 5분 이내",
+      3: "2종 도보 5분 이내",
+      2: "1종만 도보 5분 이내",
+      1: "모두 5분 초과 또는 없음",
+    }},
+    { label: "학군 수준", criteria: {
+      4: "초·중·고 3개 10분 이내 + 학군지 평판",
+      3: "2개 10분 이내",
+      2: "1개 10분 이내",
+      1: "모두 멀거나 평판 낮음",
+    }},
+  ]},
+  { name: "2. 수요", emoji: "👥", items: [
+    { label: "직장 밀집 (오피스·산업단지)", criteria: {
+      4: "대형 오피스/산단 도보 10분 이내",
+      3: "지하철 2정거장 이내",
+      2: "지하철 4정거장 이내 (통근 30분)",
+      1: "통근 30분 이상",
+    }},
+    { label: "유동인구 수준", criteria: {
+      4: "낮·밤·주말 모두 많음",
+      3: "낮 활발, 밤에도 인파",
+      2: "낮에만 활발",
+      1: "조용, 유동인구 적음",
+    }},
+    { label: "주요 수요층 안정성", criteria: {
+      4: "직장인·가족 다수, 장기 거주",
+      3: "안정적 수요층 존재",
+      2: "유동적 수요 (단기·관광)",
+      1: "특정 계층 의존, 변동성 큼",
+    }},
+  ]},
+  { name: "3. 경쟁 물건", emoji: "⚖️", items: [
+    { label: "주변 신축·구축 경쟁 정도", criteria: {
+      4: "대체재 거의 없음 (희소성)",
+      3: "비슷한 매물 3개 미만",
+      2: "경쟁 매물 3~10개",
+      1: "10개 이상 (공급 과잉)",
+    }},
+    { label: "월세·매매 시세 경쟁력", criteria: {
+      4: "주변 대비 저렴 (-5% 이상)",
+      3: "시세 대비 적정",
+      2: "약간 고평가 (+5% 이내)",
+      1: "고평가 (+10% 이상)",
+    }},
+  ]},
+  { name: "4. 건물 외관 및 관리", emoji: "🏢", items: [
+    { label: "외벽 상태", criteria: {
+      4: "신축/최근 재도색, 티없음",
+      3: "양호, 관리 흔적 뚜렷",
+      2: "일부 때·균열",
+      1: "누수, 깊은 균열, 녹",
+    }},
+    { label: "공용부 청결도 (로비·복도·주차장)", criteria: {
+      4: "매우 깨끗",
+      3: "전반적 깨끗",
+      2: "일부 지저분",
+      1: "쓰레기·먼지 방치",
+    }},
+    { label: "관리 수준 (호갱노노 리뷰 별점)", criteria: {
+      4: "4.0점 이상, 긍정 압도적",
+      3: "3.5~4.0점, 대체로 긍정",
+      2: "3.0~3.5점, 불만 섞임",
+      1: "3.0점 미만",
+    }},
+  ]},
+  { name: "5. 동선", emoji: "🚶", items: [
+    { label: "출입구 위치 편의성", criteria: {
+      4: "역/대로 방향 직결, 최적",
+      3: "편리한 위치",
+      2: "우회·횡단보도 필요",
+      1: "멀고 불편",
+    }},
+    { label: "엘리베이터 대기 (출퇴근 시간)", criteria: {
+      4: "대기 없음 즉시 탑승",
+      3: "대기 1분 이내",
+      2: "대기 1~2분",
+      1: "2분 이상 또는 고장 잦음",
+    }},
+    { label: "차량 진출입 구조", criteria: {
+      4: "양방 출입, 혼잡 X",
+      3: "원활, 막힘 없음",
+      2: "출퇴근 시 병목",
+      1: "상시 혼잡, 사고 위험",
+    }},
+  ]},
+  { name: "6. 향 / 뷰 / 일조", emoji: "☀️", items: [
+    { label: "방향 (향)", criteria: {
+      4: "정남향 (남·남동)",
+      3: "남서·동향",
+      2: "서향",
+      1: "북향·북동·북서",
+    }},
+    { label: "채광 시간 (일조)", criteria: {
+      4: "6시간 이상 (하루 종일)",
+      3: "4~6시간",
+      2: "2~4시간",
+      1: "2시간 미만",
+    }},
+    { label: "조망", criteria: {
+      4: "한강·공원·시티뷰 특급",
+      3: "탁 트임, 개방감",
+      2: "평범, 막힘 없음",
+      1: "앞동에 막힘, 답답",
+    }},
+  ]},
+  { name: "7. 소음 / 냄새 / 환경", emoji: "🔇", items: [
+    { label: "도로 소음", criteria: {
+      4: "낮·밤 모두 조용",
+      3: "낮 보통, 밤 조용",
+      2: "낮 시끄러움, 밤 보통",
+      1: "낮·밤 모두 시끄러움 (대로변)",
+    }},
+    { label: "주변 냄새 (상가·쓰레기)", criteria: {
+      4: "냄새 전혀 없음",
+      3: "가끔 나는 정도",
+      2: "자주 (음식·쓰레기)",
+      1: "지속적이고 심함",
+    }},
+    { label: "공사장·공장", criteria: {
+      4: "주변 없음",
+      3: "먼 곳 소규모",
+      2: "인근 공사 진행",
+      1: "바로 옆 대규모 공사·공장",
+    }},
+  ]},
+  { name: "8. 주차", emoji: "🚗", items: [
+    { label: "세대당 주차 대수", criteria: {
+      4: "1.5대 이상",
+      3: "1.0 ~ 1.5대",
+      2: "0.7 ~ 1.0대",
+      1: "0.7대 미만",
+    }},
+    { label: "실제 주차 현황 (저녁 기준)", criteria: {
+      4: "주말·저녁에도 여유",
+      3: "보통 가능, 가끔 만석",
+      2: "저녁마다 만석",
+      1: "상시 주차난",
+    }},
+    { label: "주차 방식", criteria: {
+      4: "100% 자주식",
+      3: "자주식 주 + 기계식 보조",
+      2: "혼합 (기계식 비중 높음)",
+      1: "100% 기계식",
+    }},
+  ]},
+  { name: "9. 개발 호재", emoji: "🏗️", items: [
+    { label: "공사 중 부지 호재", criteria: {
+      4: "확정 대형 개발 시공 중 (복합·오피스)",
+      3: "중소 개발 시공 중",
+      2: "계획만 있음 (착공 전)",
+      1: "없음",
+    }},
+    { label: "향후 개발 계획", criteria: {
+      4: "지자체 확정 + 시행 중",
+      3: "지자체 확정 (시행 전)",
+      2: "검토 단계",
+      1: "계획 없음",
+    }},
+    { label: "인프라 확장", criteria: {
+      4: "지하철 신설·확장 확정",
+      3: "도로 확장·광역 교통 확정",
+      2: "장기 검토",
+      1: "계획 없음",
+    }},
+  ]},
+  { name: "10. 현장 분위기", emoji: "✨", items: [
+    { label: "주변 상권 활성화", criteria: {
+      4: "공실 거의 없음, 신규 오픈 많음",
+      3: "대부분 영업 중",
+      2: "공실 간헐적",
+      1: "공실 많음, 침체",
+    }},
+    { label: "아파트 내 공실", criteria: {
+      4: "공실 없음",
+      3: "1~2건",
+      2: "3~5건",
+      1: "6건 이상",
+    }},
+    { label: "사람 체류 시간", criteria: {
+      4: "낮·밤 머무름 (벤치·카페·공원 활발)",
+      3: "특정 시간대 활발",
+      2: "이동만, 머물지 않음",
+      1: "거의 없음",
+    }},
+  ]},
+];
+
+const MAX_TOTAL = CATEGORIES.reduce((s, c) => s + c.items.length * 4, 0);
+
+function createApartment(id) {
+  return { id, name: `아파트 ${id}`, address: "", visitDate: "", size: "", price: "",
+    scores: {}, memos: {}, summary: "" };
+}
+
+let state = loadState() || {
+  apartments: [createApartment(1), createApartment(2), createApartment(3)],
+  activeId: 1,
+  view: 'apt',
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (!data.apartments || !Array.isArray(data.apartments) || data.apartments.length === 0) return null;
+    return data;
+  } catch(e) { return null; }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    flashSaveIndicator();
+  } catch(e) {
+    toast('⚠️ 저장 실패 - 브라우저 용량 확인');
+  }
+}
+
+let saveTimer;
+function flashSaveIndicator() {
+  const el = document.getElementById('save-ind');
+  if (!el) return;
+  el.textContent = '✓ 저장됨';
+  el.style.color = '#9FE8B5';
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    el.textContent = '자동 저장';
+    el.style.color = '';
+  }, 1200);
+}
+
+function itemKey(ci, ii) { return `${ci}_${ii}`; }
+function getActive() { return state.apartments.find(a => a.id === state.activeId); }
+
+function calcCategorySubtotal(apt, ci) {
+  let sum = 0;
+  for (let ii = 0; ii < CATEGORIES[ci].items.length; ii++) {
+    sum += apt.scores[itemKey(ci, ii)] || 0;
+  }
+  return sum;
+}
+
+function calcTotal(apt) {
+  let sum = 0;
+  CATEGORIES.forEach((c, ci) => c.items.forEach((_, ii) => { sum += apt.scores[itemKey(ci, ii)] || 0; }));
+  return sum;
+}
+
+function getGrade(pct) {
+  if (pct >= 0.9) return { grade: "S급 🏆", cls: "grade-S" };
+  if (pct >= 0.8) return { grade: "A급 ⭐", cls: "grade-A" };
+  if (pct >= 0.7) return { grade: "B급 👍", cls: "grade-B" };
+  if (pct >= 0.6) return { grade: "C급 😐", cls: "grade-C" };
+  return { grade: "D급 ⚠️", cls: "grade-D" };
+}
+
+function render() {
+  renderTabs();
+  if (state.view === 'summary') renderSummary();
+  else renderApartment();
+}
+
+function renderTabs() {
+  const tabs = document.getElementById('tabs');
+  const parts = state.apartments.map(a => {
+    const active = (state.view === 'apt' && a.id === state.activeId) ? 'active' : '';
+    return `<div class="tab ${active}" onclick="selectApt(${a.id})">${escapeHtml(a.name)}</div>`;
+  });
+  parts.push(`<div class="tab tab-add" onclick="addApartment()">＋ 추가</div>`);
+  parts.push(`<div class="tab ${state.view === 'summary' ? 'active' : ''}" onclick="switchView('summary')">📊 비교</div>`);
+  tabs.innerHTML = parts.join('');
+}
+
+function renderApartment() {
+  const apt = getActive();
+  if (!apt) return;
+  const total = calcTotal(apt);
+  const pct = total / MAX_TOTAL;
+  const g = getGrade(pct);
+
+  let html = `
+    <div class="score-card">
+      <div class="score-box">
+        <div class="label">총점</div>
+        <div class="value">${total}<span class="sub"> / ${MAX_TOTAL}</span></div>
+      </div>
+      <div class="score-box">
+        <div class="label">100점 환산</div>
+        <div class="value">${(pct * 100).toFixed(1)}<span class="sub">점</span></div>
+      </div>
+      <div class="score-box">
+        <div class="label">등급</div>
+        <div class="value ${g.cls}" style="font-size:16px">${g.grade}</div>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <input type="text" placeholder="아파트명" value="${escapeAttr(apt.name)}" oninput="updateField('name', this.value)">
+      <input type="text" placeholder="주소" value="${escapeAttr(apt.address)}" oninput="updateField('address', this.value)">
+      <div class="row">
+        <input type="date" value="${escapeAttr(apt.visitDate)}" oninput="updateField('visitDate', this.value)">
+        <input type="text" placeholder="평형 / 동·호" value="${escapeAttr(apt.size)}" oninput="updateField('size', this.value)">
+      </div>
+      <input type="text" placeholder="호가 / 매매가" value="${escapeAttr(apt.price)}" oninput="updateField('price', this.value)">
+    </div>
+  `;
+
+  CATEGORIES.forEach((cat, ci) => {
+    const sub = calcCategorySubtotal(apt, ci);
+    const max = cat.items.length * 4;
+    html += `
+      <div class="category">
+        <div class="cat-header">
+          <span>${cat.emoji} ${escapeHtml(cat.name)}</span>
+          <span class="cat-subtotal">${sub} / ${max}</span>
+        </div>
+    `;
+    cat.items.forEach((item, ii) => {
+      const key = itemKey(ci, ii);
+      const score = apt.scores[key];
+      const memo = apt.memos[key] || "";
+      const memoId = `memo-${ci}-${ii}`;
+      html += `
+        <div class="item">
+          <div class="item-label">${escapeHtml(item.label)}</div>
+          <div class="criteria-box">
+            ${[4,3,2,1].map(v => `
+              <div class="criteria-row crit-${v} ${score === v ? 'crit-active' : ''}">
+                <span class="crit-num">${v}점</span>
+                <span class="crit-text">${escapeHtml(item.criteria[v])}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="score-row">
+            ${[1,2,3,4].map(v => `
+              <button class="score-btn ${score === v ? 'selected-' + v : ''}" onclick="setScore(${ci}, ${ii}, ${v})">${v}</button>
+            `).join('')}
+          </div>
+          <span class="memo-toggle" onclick="toggleMemo('${memoId}')">${memo ? '📝 메모 보기/수정' : '＋ 메모 추가'}</span>
+          <textarea id="${memoId}" class="memo-input ${memo ? 'show' : ''}" placeholder="현장 특이사항..." oninput="updateMemo(${ci}, ${ii}, this.value)">${escapeHtml(memo)}</textarea>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  });
+
+  html += `
+    <div class="section-title">종합 소견</div>
+    <div class="info-panel">
+      <textarea placeholder="이 아파트에 대한 종합 소견을 남겨보세요..." style="min-height:80px; resize:vertical" oninput="updateField('summary', this.value)">${escapeHtml(apt.summary)}</textarea>
+    </div>
+
+    <div class="section-title">아파트 관리</div>
+    <div class="info-panel">
+      <button class="btn-danger" style="width:100%; padding:12px; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-family:inherit" onclick="deleteApartment()">🗑️ 이 아파트 삭제</button>
+    </div>
+  `;
+
+  document.getElementById('content').innerHTML = html;
+}
+
+function renderSummary() {
+  const apts = state.apartments;
+  const count = apts.length;
+
+  const totals = apts.map(a => calcTotal(a));
+  const maxTotal = Math.max(...totals);
+  const bestIdx = totals.indexOf(maxTotal);
+
+  let html = `
+    <div class="section-title">📊 아파트 비교 요약</div>
+    <div class="category summary-view" style="--apt-count: ${count}">
+      <div class="sum-row header">
+        <div>항목</div>
+        ${apts.map(a => `<div class="cell">${escapeHtml(a.name)}</div>`).join('')}
+      </div>
+      <div class="sum-row">
+        <div>방문일</div>
+        ${apts.map(a => `<div class="cell">${escapeHtml(a.visitDate || '-')}</div>`).join('')}
+      </div>
+      ${CATEGORIES.map((cat, ci) => {
+        const max = cat.items.length * 4;
+        return `
+          <div class="sum-row">
+            <div>${cat.emoji} ${cat.name.replace(/^\d+\.\s*/,'')}<br><small style="color:#999">/${max}점</small></div>
+            ${apts.map(a => `<div class="cell">${calcCategorySubtotal(a, ci)}</div>`).join('')}
+          </div>
+        `;
+      }).join('')}
+      <div class="sum-row total">
+        <div>🏁 총점 / ${MAX_TOTAL}</div>
+        ${apts.map((a, i) => {
+          const t = calcTotal(a);
+          const cls = (t === maxTotal && maxTotal > 0) ? 'best' : '';
+          return `<div class="cell ${cls}">${t}</div>`;
+        }).join('')}
+      </div>
+      <div class="sum-row total">
+        <div>100점 환산</div>
+        ${apts.map(a => `<div class="cell">${((calcTotal(a) / MAX_TOTAL)*100).toFixed(1)}</div>`).join('')}
+      </div>
+      <div class="sum-row total">
+        <div>등급</div>
+        ${apts.map(a => {
+          const g = getGrade(calcTotal(a) / MAX_TOTAL);
+          return `<div class="cell ${g.cls}">${g.grade}</div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    ${maxTotal > 0 ? `
+      <div class="info-panel" style="text-align:center;">
+        <div style="color:#666;font-size:13px;margin-bottom:6px">🏆 최고 점수</div>
+        <div style="font-size:20px;font-weight:800;color:#047857">${escapeHtml(apts[bestIdx].name)}</div>
+        <div style="color:#666;font-size:13px;margin-top:4px">${maxTotal} / ${MAX_TOTAL} (${((maxTotal/MAX_TOTAL)*100).toFixed(1)}점)</div>
+      </div>
+    ` : ''}
+  `;
+
+  document.getElementById('content').innerHTML = html;
+}
+
+function selectApt(id) {
+  state.activeId = id;
+  state.view = 'apt';
+  saveState();
+  render();
+  window.scrollTo(0, 0);
+}
+
+function switchView(v) {
+  state.view = v;
+  saveState();
+  render();
+  window.scrollTo(0, 0);
+}
+
+function addApartment() {
+  const nextId = Math.max(...state.apartments.map(a => a.id)) + 1;
+  state.apartments.push(createApartment(nextId));
+  state.activeId = nextId;
+  state.view = 'apt';
+  saveState();
+  render();
+  window.scrollTo(0, 0);
+  toast(`아파트 ${nextId} 추가됨`);
+}
+
+function deleteApartment() {
+  if (state.apartments.length <= 1) {
+    toast('최소 1개는 남겨야 합니다');
+    return;
+  }
+  if (!confirm(`'${getActive().name}'을(를) 삭제할까요?`)) return;
+  state.apartments = state.apartments.filter(a => a.id !== state.activeId);
+  state.activeId = state.apartments[0].id;
+  saveState();
+  render();
+  toast('삭제됨');
+}
+
+function setScore(ci, ii, v) {
+  const apt = getActive();
+  const key = itemKey(ci, ii);
+  if (apt.scores[key] === v) delete apt.scores[key];
+  else apt.scores[key] = v;
+  saveState();
+  render();
+}
+
+function updateField(field, value) {
+  getActive()[field] = value;
+  saveState();
+  if (field === 'name') renderTabs();
+}
+
+function updateMemo(ci, ii, value) {
+  const apt = getActive();
+  const key = itemKey(ci, ii);
+  if (value) apt.memos[key] = value;
+  else delete apt.memos[key];
+  saveState();
+}
+
+function toggleMemo(id) {
+  document.getElementById(id).classList.toggle('show');
+}
+
+function exportData() {
+  const data = JSON.stringify(state, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const today = new Date().toISOString().split('T')[0];
+  a.href = url;
+  a.download = `임장체크리스트_${today}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('💾 백업 파일 생성됨');
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.apartments || !Array.isArray(data.apartments)) throw new Error('invalid');
+      if (!confirm('현재 데이터를 덮어쓰고 불러올까요?')) return;
+      state = {
+        apartments: data.apartments,
+        activeId: data.activeId || data.apartments[0].id,
+        view: 'apt',
+      };
+      saveState();
+      render();
+      toast('📂 복원 완료');
+    } catch(err) {
+      toast('⚠️ 파일을 읽을 수 없습니다');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+
+render();
+</script>
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+<script src="/hwon-ui.js" defer></script>
+</body>
+</html>
