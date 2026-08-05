@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-08-04T11:22:34.731Z",
+  "updatedAt": "2026-08-05T01:17:41.372Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
-  "count": 59,
+  "count": 58,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -147,21 +147,6 @@
       "rcritEnd": "2026-08-11",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020502&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-0000061108",
-      "provider": "LH",
-      "ltype": "공공임대",
-      "name": "부산 해운대자이2차 10년 공공임대주택 예비입주자 모집공고",
-      "region": "부산광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-11",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=0000061108&ccrCnntSysDsCd=02&uppAisTpCd=06&aisTpCd=08&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -571,21 +556,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020463",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[청년신혼부부매입임대리츠]_부산지역 입주자 모집",
-      "region": "부산광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-20",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020463&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020494",
       "provider": "LH",
       "ltype": "매입임대",
@@ -732,6 +702,21 @@
       "rcritEnd": "2026-08-20",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020478&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020463",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[청년신혼부부매입임대리츠]_부산지역 입주자 모집",
+      "region": "부산광역시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-08-20",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020463&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
