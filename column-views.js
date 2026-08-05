@@ -88,18 +88,23 @@
   }
   function cardSlug(a){ return slug(a.getAttribute('href')); }
   function render(map){
-    var links=[].slice.call(document.querySelectorAll('a.card[href], a.feature[href]'));
+    var links=[].slice.call(document.querySelectorAll('a.card[href], a.feature[href], a.brow[href]'));
     var items=[];
     links.forEach(function(a){
       var href=a.getAttribute('href');
       if(!href||/^(http|#|mailto)/.test(href)) return;
       var s=cardSlug(a); if(!s) return;
       var n=total(s, map[s]);
-      var b=a.querySelector('.cvCard');
-      if(!b){ b=document.createElement('div'); b.className='cvCard';
-        b.style.cssText='margin-top:6px;font-size:.76rem;color:#7b918f;font-weight:600'; a.appendChild(b); }
-      b.textContent=comma(n)+' view';
-      var title=(a.querySelector('h3')||a.querySelector('h2'));
+      if(a.classList.contains('brow')){
+        var bv=a.querySelector('.bv');
+        if(bv) bv.textContent=comma(n);
+      }else{
+        var b=a.querySelector('.cvCard');
+        if(!b){ b=document.createElement('div'); b.className='cvCard';
+          b.style.cssText='margin-top:6px;font-size:.76rem;color:#7b918f;font-weight:600'; a.appendChild(b); }
+        b.textContent=comma(n)+' view';
+      }
+      var title=(a.querySelector('.bt')||a.querySelector('h3')||a.querySelector('h2'));
       items.push({slug:s, n:n, path:href, title:title?title.textContent.trim():s});
     });
     renderPopular(items);
@@ -110,12 +115,12 @@
     var seen={}, uniq=[];
     items.sort(function(a,b){return b.n-a.n;}).forEach(function(it){ if(seen[it.slug])return; seen[it.slug]=1; uniq.push(it); });
     var top=uniq.slice(0,5);
-    var h='<h2 class="sec" style="display:flex;align-items:center;gap:6px">🔥 지금 인기 글</h2><div class="grid">';
+    var h='<h2 class="sec" style="display:flex;align-items:center;gap:6px">🔥 지금 인기 글</h2><ul class="blist">';
     top.forEach(function(it,i){
       var medal=['🥇','🥈','🥉','4위','5위'][i];
-      h+='<a class="card" href="'+it.path+'"><div class="k">'+medal+' · '+comma(it.n)+' view</div><h3>'+esc(it.title)+'</h3><p>지금 많이 보는 글</p></a>';
+      h+='<li><a class="brow" href="'+it.path+'"><span class="bk">'+medal+'</span><span class="bt">'+esc(it.title)+'</span><span class="bv">'+comma(it.n)+'</span></a></li>';
     });
-    h+='</div>';
+    h+='</ul>';
     host.innerHTML=h;
   }
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
