@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-08-06T11:22:22.180Z",
+  "updatedAt": "2026-08-07T01:57:35.556Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
-  "count": 66,
+  "count": 62,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,35 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "SH-gangbyeon-skytower",
-      "provider": "SH",
-      "ltype": "청년안심주택",
-      "name": "강변 스카이타워 청년안심주택 (공공지원 민간임대)",
-      "region": "서울 광진구 강변역로 10 (강변·구의역)",
-      "units": null,
-      "target": "청년 · 코리빙형 · 홈페이지 청약접수",
-      "rcritStart": "2026-08-04",
-      "rcritEnd": "2026-08-06",
-      "winnerDate": "2026-08-08",
-      "url": "https://www.gangbyeonskytower.co.kr/",
-      "note": "당첨발표 8/8 15:00 · 서류 8/9~8/12 · 계약 8/13~8/19"
-    },
-    {
-      "id": "LH-2015122300020488",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[정정공고][인천지역본부] 일반 매입임대주택 입주자 모집 공고(인천,부천)",
-      "region": "인천광역시 외",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-06",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020488&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "HUG-donden-11",
       "provider": "HUG",
@@ -72,21 +43,6 @@
       "rcritEnd": "2026-08-07",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020530&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020438",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[경기북부] 2026년 2차 김포시 분양전환형 든든전세주택 입주자 모집공고(기존임차인)",
-      "region": "경기도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-10",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020438&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -447,21 +403,6 @@
       "rcritEnd": "2026-08-14",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020465&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020462",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[경기남부][온라인 접수 불가, 행정복지센터 접수] 고령자 매입임대주택 예비입주자 모집 공고",
-      "region": "전국",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-14",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020462&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
