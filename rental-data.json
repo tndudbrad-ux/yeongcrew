@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-08-07T09:59:47.063Z",
+  "updatedAt": "2026-08-08T00:40:19.969Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
-  "count": 60,
+  "count": 58,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,35 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "HUG-donden-11",
-      "provider": "HUG",
-      "ltype": "든든전세",
-      "name": "제11차 HUG 든든전세주택 수시모집",
-      "region": "전국 (서울·인천·경기·부산)",
-      "units": 300,
-      "target": "무주택자 · HUG 매입주택을 전세로 재임대",
-      "rcritStart": "2026-07-24",
-      "rcritEnd": "2026-08-07",
-      "winnerDate": "2026-10-30",
-      "url": "https://www.khug.or.kr/jeonse/web/s07/s070301.jsp",
-      "note": "서울 118·인천 116·경기 62·부산 4호"
-    },
-    {
-      "id": "LH-2015122300020530",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "[정정공고]전주시, 완주군 국민임대주택 예비입주자 모집 공고('26.07.15.)",
-      "region": "전북특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-07",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020530&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "LH-2015122300020516",
       "provider": "LH",
