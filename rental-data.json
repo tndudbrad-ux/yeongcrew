@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-08T00:40:19.969Z",
+  "updatedAt": "2026-08-08T09:35:54.488Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
   "count": 58,
   "schema": {
@@ -483,36 +483,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020494",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[청년신혼부부매입임대리츠]_강원지역 입주자 모집",
-      "region": "강원특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-20",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020494&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020493",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[청년신혼부부매입임대리츠]_경남지역 입주자 모집",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-20",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020493&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020491",
       "provider": "LH",
       "ltype": "매입임대",
@@ -629,6 +599,36 @@
       "rcritEnd": "2026-08-20",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020478&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020494",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[청년신혼부부매입임대리츠]_강원지역 입주자 모집",
+      "region": "강원특별자치도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-08-20",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020494&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020493",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[청년신혼부부매입임대리츠]_경남지역 입주자 모집",
+      "region": "경상남도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-08-20",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020493&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
