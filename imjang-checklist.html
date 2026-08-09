@@ -365,7 +365,7 @@ const CATEGORIES = [
 const MAX_TOTAL = CATEGORIES.reduce((s, c) => s + c.items.length * 4, 0);
 
 function createApartment(id) {
-  return { id, name: `아파트 ${id}`, address: "", visitDate: "", size: "", price: "",
+  return { id, name: `아파트 ${id}`, dong: "", ho: "", address: "", visitDate: "", size: "", price: "",
     scores: {}, memos: {}, summary: "" };
 }
 
@@ -407,6 +407,7 @@ function flashSaveIndicator() {
   }, 1200);
 }
 
+function tabLabel(a) { return (a.name || '이름 없음') + (a.dong ? ' · ' + a.dong : ''); }
 function itemKey(ci, ii) { return `${ci}_${ii}`; }
 function getActive() { return state.apartments.find(a => a.id === state.activeId); }
 
@@ -442,7 +443,7 @@ function renderTabs() {
   const tabs = document.getElementById('tabs');
   const parts = state.apartments.map(a => {
     const active = (state.view === 'apt' && a.id === state.activeId) ? 'active' : '';
-    return `<div class="tab ${active}" onclick="selectApt(${a.id})">${escapeHtml(a.name)}</div>`;
+    return `<div class="tab ${active}" onclick="selectApt(${a.id})">${escapeHtml(tabLabel(a))}</div>`;
   });
   parts.push(`<div class="tab tab-add" onclick="addApartment()">＋ 추가</div>`);
   parts.push(`<div class="tab ${state.view === 'summary' ? 'active' : ''}" onclick="switchView('summary')">📊 비교</div>`);
@@ -473,11 +474,16 @@ function renderApartment() {
     </div>
 
     <div class="info-panel">
-      <input type="text" placeholder="아파트명" value="${escapeAttr(apt.name)}" oninput="updateField('name', this.value)">
+      <input type="text" placeholder="아파트 이름 입력 (예: 래미안 ○○) — 탭에 바로 반영" value="${escapeAttr(apt.name)}" onfocus="this.select()" oninput="updateField('name', this.value)" style="font-weight:600">
+      <div class="row">
+        <input type="text" placeholder="동 (선택 · 예: 103동)" value="${escapeAttr(apt.dong || '')}" oninput="updateField('dong', this.value)">
+        <input type="text" placeholder="호수 (선택 · 예: 1204호)" value="${escapeAttr(apt.ho || '')}" oninput="updateField('ho', this.value)">
+      </div>
+      <div style="font-size:.72rem;color:var(--sub);margin:-2px 2px 8px">💡 대단지는 동마다 역·학교 거리가 달라요 — 같은 단지도 동별로 따로 평가해보세요</div>
       <input type="text" placeholder="주소" value="${escapeAttr(apt.address)}" oninput="updateField('address', this.value)">
       <div class="row">
         <input type="date" value="${escapeAttr(apt.visitDate)}" oninput="updateField('visitDate', this.value)">
-        <input type="text" placeholder="평형 / 동·호" value="${escapeAttr(apt.size)}" oninput="updateField('size', this.value)">
+        <input type="text" placeholder="평형 (예: 84㎡ / 34평)" value="${escapeAttr(apt.size)}" oninput="updateField('size', this.value)">
       </div>
       <input type="text" placeholder="호가 / 매매가" value="${escapeAttr(apt.price)}" oninput="updateField('price', this.value)">
     </div>
@@ -550,7 +556,7 @@ function renderSummary() {
     <div class="category summary-view" style="--apt-count: ${count}">
       <div class="sum-row header">
         <div>항목</div>
-        ${apts.map(a => `<div class="cell">${escapeHtml(a.name)}</div>`).join('')}
+        ${apts.map(a => `<div class="cell">${escapeHtml(tabLabel(a))}${a.ho ? '<br><small style="color:#999">' + escapeHtml(a.ho) + '</small>' : ''}</div>`).join('')}
       </div>
       <div class="sum-row">
         <div>방문일</div>
@@ -589,7 +595,7 @@ function renderSummary() {
     ${maxTotal > 0 ? `
       <div class="info-panel" style="text-align:center;">
         <div style="color:#666;font-size:13px;margin-bottom:6px">🏆 최고 점수</div>
-        <div style="font-size:20px;font-weight:800;color:#047857">${escapeHtml(apts[bestIdx].name)}</div>
+        <div style="font-size:20px;font-weight:800;color:#047857">${escapeHtml(tabLabel(apts[bestIdx]))}</div>
         <div style="color:#666;font-size:13px;margin-top:4px">${maxTotal} / ${MAX_TOTAL} (${((maxTotal/MAX_TOTAL)*100).toFixed(1)}점)</div>
       </div>
     ` : ''}
@@ -649,7 +655,7 @@ function setScore(ci, ii, v) {
 function updateField(field, value) {
   getActive()[field] = value;
   saveState();
-  if (field === 'name') renderTabs();
+  if (field === 'name' || field === 'dong') renderTabs();
 }
 
 function updateMemo(ci, ii, value) {
