@@ -209,6 +209,7 @@ lh+='<div class="li" data-date="'+e.date+'"'+anchor+'><div class="d"><b>'+(+p[2]
 lb.innerHTML=lh;
 }
 
+var cySeen={};
 function addCheongyak(items){
 (items||[]).forEach(function(it){
 var nm=it.name||'', short=nm.length>11?nm.slice(0,11)+'…':nm;
@@ -216,6 +217,7 @@ var meta={fullName:nm,region:it.region||'',htype:it.type||'',url:it.url||'',
 start:it.rcritStart||'',end:it.rcritEnd||it.rcritStart||'',winner:it.winnerDate||'',
 hot:!!it.hot,margin:it.margin||'',hnote:it.note||''};
 function push(date,label,kind){
+var nk=date+'|'+kind+'|'+nm.replace(/\([^)]*\)/g,'').replace(/\s/g,'').slice(0,12); if(cySeen[nk]) return; cySeen[nk]=1;
 var e={date:date,type:'cheongyak',title:(meta.hot?'🔥':'')+short+' '+label,
 desc:meta.region+' · '+meta.htype+' · '+nm,kind:kind};
 for(var k in meta) e[k]=meta[k];
