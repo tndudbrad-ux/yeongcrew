@@ -63,6 +63,8 @@ main{padding:28px 0 60px}
 .dates{display:flex;flex-wrap:wrap;gap:14px;font-size:.85rem;color:#33514f}
 .dates b{color:var(--forest);font-weight:700}
 .golink{display:inline-block;margin-top:11px;padding:7px 13px;border-radius:10px;background:#E5F8F6;color:var(--teal);font-weight:700;font-size:.83rem}
+.sharebtn{display:inline-block;margin-top:11px;margin-left:8px;padding:7px 13px;border-radius:10px;background:var(--teal);color:#fff;font-weight:700;font-size:.83rem;border:none;cursor:pointer;font-family:inherit;line-height:inherit}
+.sharebtn:active{background:#159086}
 .empty{text-align:center;padding:44px 20px;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:16px}
 .alertcta{display:block;background:linear-gradient(120deg,#123f3b,#1B6B66);color:#fff;border-radius:18px;padding:24px;margin:22px 0;text-align:center}
 .alertcta h2{font-size:1.2rem;font-weight:700;margin-bottom:6px;color:#fff}
@@ -176,8 +178,11 @@ footer a{color:#B9DCD9;margin:0 8px}
     });
     if(!items.length){ list.innerHTML='<div class="empty">조건에 맞는 공고가 없어요.<br>지역·유형 필터를 넓혀보세요.</div>'; return; }
     var h='';
+    window.__cyShare=window.__cyShare||{};
     items.forEach(function(it){
       var st=statusOf(it), lab={open:'접수중',soon:'접수예정',close:'마감'}[st], dd=dday(it);
+      var sid=it.id||('cy-'+String(it.name||'').replace(/[^가-힣a-zA-Z0-9]/g,'').slice(0,24));
+      window.__cyShare[sid]=it;
       h+='<div class="item'+(it.hot?' hot':'')+'">'+
         '<div class="itop">'+
         (it.hot?'<span class="badge fire">🔥 확정차익</span>':'')+
@@ -194,6 +199,7 @@ footer a{color:#B9DCD9;margin:0 8px}
           (it.winnerDate?'<span>발표 <b>'+fmt(it.winnerDate)+'</b></span>':'')+
         '</div>'+
         (it.url?'<a class="golink" href="'+esc(it.url)+'" target="_blank" rel="noopener">공고문 보기 ↗</a>':'')+
+        (st!=='close'?'<button type="button" class="sharebtn" data-bshare="'+esc(sid)+'">📤 스토리 공유</button>':'')+
       '</div>';
     });
     list.innerHTML=h;
@@ -222,6 +228,13 @@ footer a{color:#B9DCD9;margin:0 8px}
     base.items=items; return base;
   }
 
+  // 📤 스토리 공유 버튼 → 공유 카드 모달 (boobi-share.js)
+  document.getElementById('list').addEventListener('click',function(ev){
+    var b=ev.target.closest?ev.target.closest('[data-bshare]'):null; if(!b) return;
+    var it=(window.__cyShare||{})[b.getAttribute('data-bshare')];
+    if(it && window.BoobiShare) BoobiShare.open(it);
+  });
+
   buildFilters();
   Promise.all([
     fetch('/cheongyak-data.json?t='+Date.now()).then(function(r){return r.ok?r.json():{items:[]};}).catch(function(){return {items:[]};}),
@@ -238,6 +251,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 </script>
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"청약·분양 실시간 공고","url":"https://boobi.ai.kr/cheongyak-board.html","description":"APT 청약·무순위·오피스텔·민간임대·행복주택·청년주택·국민임대 모집공고를 매일 자동 갱신","inLanguage":"ko-KR","isPartOf":{"@type":"WebSite","name":"부비","url":"https://boobi.ai.kr/"}}</script>
+<script src="/boobi-share.js" defer></script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 </body>
