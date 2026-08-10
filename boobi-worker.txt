@@ -346,20 +346,32 @@ function parseBudget(msgs){
   }catch(e){}
   return 0;
 }
-async function callClaude(msgs, env){
+async function callClaude(msgs, env, noTools){
+  const payload = {
+    model:"claude-sonnet-5",
+    max_tokens: isFinder(msgs)?1500:1200,
+    system: SYS + "\n\n[오늘 날짜] " + new Date(Date.now()+9*3600*1000).toISOString().slice(0,10),
+    messages: msgs
+  };
+  if(!noTools){
+    const WEB={type:"web_search_20250305",name:"web_search",max_uses:3};
+    payload.tools = env.MOLIT_API_KEY ? [WEB].concat(TOOLS) : [WEB];
+  }
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method:"POST",
     headers:{ "x-api-key":env.ANTHROPIC_API_KEY, "anthropic-version":"2023-06-01", "content-type":"application/json" },
-    body: JSON.stringify({
-      model:"claude-sonnet-5",
-      max_tokens: isFinder(msgs)?1500:1200,
-      system: SYS + "\n\n[오늘 날짜] " + new Date(Date.now()+9*3600*1000).toISOString().slice(0,10),
-      tools: (function(){ var WEB={type:"web_search_20250305",name:"web_search",max_uses:3}; return env.MOLIT_API_KEY ? [WEB].concat(TOOLS) : [WEB]; })(),
-      messages: msgs
-    })
+    body: JSON.stringify(payload)
   });
-  if(!r.ok){ const t=await r.text(); throw new Error("upstream:"+t.slice(0,200)); }
+  if(!r.ok){ const t=await r.text(); const err=new Error("upstream:"+r.status+":"+t.slice(0,300)); err.status=r.status; throw err; }
   return r.json();
+}
+// 도구(web_search 등) 권한 문제로 403/400이 오면 도구 없이 1회 폴백 재시도
+async function callClaudeSafe(msgs, env, state){
+  try { return await callClaude(msgs, env, state.noTools); }
+  catch(e){
+    if(!state.noTools && (e.status===403 || e.status===400)){ state.noTools=true; return callClaude(msgs, env, true); }
+    throw e;
+  }
 }
 
 export default {
@@ -381,7 +393,8 @@ export default {
         content: String(m.content || "").slice(0, 2000)
       }));
       if (!msgs.length) return new Response(JSON.stringify({ error: "empty" }), { status: 400, headers: cors(origin) });
-      let data = await callClaude(msgs, env);
+      const st = { noTools:false };
+      let data = await callClaudeSafe(msgs, env, st);
       let hops = 0;
       const maxHops = isFinder(msgs) ? 5 : 3;
       while ((data.stop_reason === "tool_use" || data.stop_reason === "pause_turn") && hops < maxHops) {
@@ -399,7 +412,7 @@ export default {
           }
           msgs.push({ role:"user", content: results });
         }
-        data = await callClaude(msgs, env);
+        data = await callClaudeSafe(msgs, env, st);
       }
       const reply = (data.content || []).filter(c => c.type === "text").map(c => c.text).join("\n");
       return new Response(JSON.stringify({ reply }), { headers: cors(origin) });
