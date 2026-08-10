@@ -95,6 +95,7 @@ main{padding:26px 0 60px}
 .act.ghost:hover{background:#EFFAF9}
 .act.go{background:var(--teal);color:#fff;border:1.5px solid var(--teal)}
 .act.go:hover{background:#159086;border-color:#159086}
+button.act{cursor:pointer;font-family:inherit;line-height:inherit}
 .acts.done .act{font-size:.78rem;padding:6px 11px;font-weight:600}
 @media(max-width:520px){.btns{flex-direction:column}.act{text-align:center}}
 .tag{display:inline-block;font-size:.68rem;font-weight:800;padding:2px 7px;border-radius:20px;margin-right:6px;vertical-align:middle}
@@ -213,9 +214,11 @@ var cySeen={};
 function addCheongyak(items){
 (items||[]).forEach(function(it){
 var nm=it.name||'', short=nm.length>11?nm.slice(0,11)+'…':nm;
+var sid=it.id||('cy-'+nm.replace(/[^가-힣a-zA-Z0-9]/g,'').slice(0,24));
+(window.__cyShare=window.__cyShare||{})[sid]=it; // 공유 카드용 원본 데이터
 var meta={fullName:nm,region:it.region||'',htype:it.type||'',url:it.url||'',
 start:it.rcritStart||'',end:it.rcritEnd||it.rcritStart||'',winner:it.winnerDate||'',
-hot:!!it.hot,margin:it.margin||'',hnote:it.note||''};
+hot:!!it.hot,margin:it.margin||'',hnote:it.note||'',sid:sid};
 function push(date,label,kind){
 var nk=date+'|'+kind+'|'+nm.replace(/\([^)]*\)/g,'').replace(/\s/g,'').slice(0,12); if(cySeen[nk]) return; cySeen[nk]=1;
 var e={date:date,type:'cheongyak',title:(meta.hot?'🔥':'')+short+' '+label,
@@ -306,21 +309,22 @@ return '<div class="acts done"><span class="st done">마감</span><span class="a
 function actionHTML(e){
 var st=cheongyakState(e), apply=e.url||'https://www.applyhome.co.kr/';
 var ask, badge='', btns='';
+var shareBtn=e.sid?'<button type="button" class="act ghost" data-bshare="'+esc(e.sid)+'">📤 스토리 공유</button>':'';
 var hotline=(e.hot&&e.margin)?'<div class="hotline">🔥 <b>확정차익 줍줍</b> · '+esc(e.margin)+(e.hnote?'<br><span>'+esc(e.hnote)+'</span>':'')+'</div>':'';
 if(st.s==='open'){
 badge='<span class="st open">접수 중</span>';
 ask=(st.days<=0?'오늘이 접수 마지막 날이에요.':'접수 마감까지 '+st.days+'일 남았어요.');
-btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+
+btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+shareBtn+
 '<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 신청하기 ↗</a>';
 } else if(st.s==='soon'){
 badge='<span class="st soon">접수 예정</span>';
 ask='청약 넣어볼 만한가요? 접수 시작까지 '+st.days+'일 남았어요.';
-btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+
+btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+shareBtn+
 '<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">공고 자세히 보기 ↗</a>';
 } else if(st.s==='wait'){
 badge='<span class="st wait">발표 대기</span>';
 ask='접수는 마감됐고, 당첨자 발표를 기다리는 중이에요.';
-btns='<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 확인하기 ↗</a>';
+btns=shareBtn+'<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 확인하기 ↗</a>';
 } else {
 return '<div class="acts done">'+
 '<span class="st done">종료</span>'+
@@ -406,6 +410,13 @@ ev.preventDefault();
 cell.click();
 });
 
+// 📤 스토리 공유 버튼 → 공유 카드 모달 (boobi-share.js)
+document.getElementById('listBox').addEventListener('click',function(ev){
+var b=ev.target.closest?ev.target.closest('[data-bshare]'):null; if(!b) return;
+var it=(window.__cyShare||{})[b.getAttribute('data-bshare')];
+if(it && window.BoobiShare) BoobiShare.open(it);
+});
+
 document.getElementById('prev').onclick=function(){cur.setMonth(cur.getMonth()-1);render();};
 document.getElementById('next').onclick=function(){cur.setMonth(cur.getMonth()+1);render();};
 document.getElementById('todayBtn').onclick=function(){cur=new Date();cur.setDate(1);render();};
@@ -430,6 +441,7 @@ render();
 </script>
 
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"부비 부동산 캘린더","url":"https://boobi.ai.kr/calendar.html","description":"청약 일정, 든든전세 등 임대 공고, 한국·미국 금리 결정일, 공휴일, 부동산 세금 납기를 월별 달력으로 제공","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://boobi.ai.kr"}}</script>
+<script src="/boobi-share.js" defer></script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 </body>
