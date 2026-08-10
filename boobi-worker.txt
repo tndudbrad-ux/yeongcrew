@@ -365,13 +365,23 @@ async function callClaude(msgs, env, noTools){
   if(!r.ok){ const t=await r.text(); const err=new Error("upstream:"+r.status+":"+t.slice(0,300)); err.status=r.status; throw err; }
   return r.json();
 }
-// 도구(web_search 등) 권한 문제로 403/400이 오면 도구 없이 1회 폴백 재시도
+// 업스트림 오류 대응: 간헐 403(Request not allowed)·429·5xx는 짧게 쉬었다 자동 재시도.
+// 403이 연속되면 도구(web_search) 권한 문제일 수 있어 도구 없이도 폴백 재시도한다.
+function zzz(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
 async function callClaudeSafe(msgs, env, state){
-  try { return await callClaude(msgs, env, state.noTools); }
-  catch(e){
-    if(!state.noTools && (e.status===403 || e.status===400)){ state.noTools=true; return callClaude(msgs, env, true); }
-    throw e;
+  var lastErr = null;
+  for (var i = 0; i < 4; i++) {
+    try { return await callClaude(msgs, env, state.noTools); }
+    catch(e){
+      lastErr = e;
+      var st = e.status || 0;
+      if (st === 403) { if (i >= 1 && !state.noTools) state.noTools = true; await zzz(600 + 700*i); continue; }
+      if (st === 429 || st >= 500) { await zzz(600 + 700*i); continue; }
+      if (!state.noTools && st === 400) { state.noTools = true; continue; }
+      throw e;
+    }
   }
+  throw lastErr;
 }
 
 export default {
