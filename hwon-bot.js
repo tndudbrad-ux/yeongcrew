@@ -237,9 +237,10 @@ function llmAnswer(t, attempt, ty){
    }
    ty.remove();
    HIST.pop(); // 실패한 질문은 히스토리에서 제거해 재질문이 깨끗하게 되도록
-   bot('앗, 지금 답변 서버가 붐비는 것 같아요 🙏\n다시 입력하실 필요 없이 아래 버튼만 눌러주세요. 바로 다시 가져올게요.');
+   bot('앗, AI 답변 서버 연결이 잠시 원활하지 않네요 🙏\n기다리시게 하지 않을게요 — 부비가 바로 아는 내용부터 안내해드릴게요!');
+   ruleAnswer(t);
    var c=el('div','hwbChips',null);
-   var b=el('button','','🔄 다시 물어보기 — "'+(t.length>16?t.slice(0,16)+'…':t)+'"');
+   var b=el('button','','🤖 AI 상세 답변 다시 받기 — "'+(t.length>14?t.slice(0,14)+'…':t)+'"');
    b.onclick=function(){ c.remove(); llmAnswer(t); };
    c.appendChild(b); body.appendChild(c); scrollDown();
  });
