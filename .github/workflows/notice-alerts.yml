@@ -1,0 +1,45 @@
+name: notice-alerts
+
+on:
+  schedule:
+    - cron: "0 9 * * *"   # KST 18:00 — 청약 시작 '전날 저녁' 알림
+    - cron: "0 23 * * *"  # KST 08:00 — 청약 시작 '당일 아침' 알림
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "1이면 발송 없이 대상만 출력"
+        required: false
+        default: "1"
+      force_slot:
+        description: "morning 또는 evening (비우면 시간으로 자동 판단)"
+        required: false
+        default: ""
+      force_date:
+        description: "YYYY-MM-DD (테스트용 대상 날짜 강제)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Send notice alerts
+        run: node send-notice-alerts.mjs
+        env:
+          FIREBASE_SA_JSON: ${{ secrets.FIREBASE_SA_JSON }}
+          SOLAPI_API_KEY: ${{ secrets.SOLAPI_API_KEY }}
+          SOLAPI_API_SECRET: ${{ secrets.SOLAPI_API_SECRET }}
+          SENDER_PHONE: ${{ secrets.SENDER_PHONE }}
+          KAKAO_PF_ID: ${{ secrets.KAKAO_PF_ID }}
+          ALIMTALK_TEMPLATE_ID: ${{ secrets.ALIMTALK_TEMPLATE_ID }}
+          SEND_MODE: ${{ secrets.SEND_MODE }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          FORCE_SLOT: ${{ github.event.inputs.force_slot }}
+          FORCE_DATE: ${{ github.event.inputs.force_date }}
