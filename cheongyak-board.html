@@ -200,6 +200,7 @@ footer a{color:#B9DCD9;margin:0 8px}
         '</div>'+
         (it.url?'<a class="golink" href="'+esc(it.url)+'" target="_blank" rel="noopener">공고문 보기 ↗</a>':'')+
         (st!=='close'?'<button type="button" class="sharebtn" data-bshare="'+esc(sid)+'">📤 스토리 공유</button>':'')+
+        (st==='soon'&&it.rcritStart?'<button type="button" class="nalert-btn" data-nid="'+esc(sid)+'" data-nname="'+esc(it.name||'')+'" data-nstart="'+esc(it.rcritStart)+'" data-nend="'+esc(it.rcritEnd||'')+'" data-nurl="'+esc(it.url||'')+'" data-nsrc="cheongyak">🔔 청약일 알림받기</button>':'')+
       '</div>';
     });
     list.innerHTML=h;
@@ -254,5 +255,6 @@ footer a{color:#B9DCD9;margin:0 8px}
 <script src="/boobi-share.js" defer></script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
+<script src="/boobi-notice-alert.js?v=1" defer></script>
 </body>
 </html>
