@@ -1,0 +1,30 @@
+name: cheongyak-extra
+
+on:
+  schedule:
+    - cron: "0 22 * * *"  # KST 07:00 — 새벽 자동 갱신 이후 병합
+    - cron: "0 13 * * *"  # KST 22:00 — 저녁 자동 갱신 이후 병합
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Merge remainder/resale notices
+        run: node collect-cheongyak-extra.mjs
+        env:
+          CHEONGYAK_API_KEY: ${{ secrets.CHEONGYAK_API_KEY }}
+      - name: Commit if changed
+        run: |
+          git config user.name "boobi-bot"
+          git config user.email "boobi-bot@users.noreply.github.com"
+          git pull --rebase origin main || true
+          git add cheongyak-data.json
+          git diff --staged --quiet || (git commit -m "chore: 무순위·재공급 공고 병합 (cheongyak-extra)" && git push)
