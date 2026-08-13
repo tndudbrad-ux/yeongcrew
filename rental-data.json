@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-08-12T10:02:04.595Z",
+  "updatedAt": "2026-08-13T00:53:09.794Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
-  "count": 56,
+  "count": 52,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,66 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "LH-2015122300020543",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "[정정공고]물금2 천년나무(17형) 행복주택 선착순 동호지정 모집(입주자격완화,선계약 후검증)",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-12",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020543&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020426",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "경북북부권(안동,영주) 다가구 등 매입임대주택 입주자 모집",
-      "region": "경상북도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-12",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020426&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020501",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "[정정공고]물금2 천년나무(17형) 행복주택 잔여물량(37호)선착순 동호지정 모집(입주자격완화,선계약 후검증)",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-12",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020501&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020459",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "[정정공고]물금2 천년나무(17형) 행복주택 잔여물량(49호)선착순 동호지정 모집(입주자격완화,선계약 후검증)",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-12",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020459&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "SH-youth-ansim-2026-2",
       "provider": "SH",
