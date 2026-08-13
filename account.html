@@ -117,6 +117,19 @@ footer a{color:#B9DCD9;margin:0 8px}
 <img id="acPhoto" src="" alt="" referrerpolicy="no-referrer" style="width:56px;height:56px;border-radius:50%;border:2px solid var(--mint);background:var(--cream)">
 <div><div id="acName" style="font-weight:600;font-size:1.1rem"></div><div id="acEmail" style="font-size:.86rem;color:var(--sub)"></div></div>
 </div>
+<!-- 가입 기대 설문: members/{uid}.expectations 없을 때만 노출 -->
+<div id="acSurvey" style="display:none;background:linear-gradient(180deg,#EAFAF8,#F5FCFB);border:1.5px solid #BFE9E6;border-radius:14px;padding:20px 18px;margin-bottom:16px">
+<div style="font-weight:700;font-size:1rem">🙌 반가워요! 부비에서 어떤 걸 기대하세요?</div>
+<p style="font-size:.85rem;color:var(--sub);margin:4px 0 12px">해당하는 걸 모두 골라주세요. 부비가 그 순서대로 발전할게요.</p>
+<div id="acSvChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+<input id="acSvEtc" type="text" placeholder="기타 — 이런 게 있었으면 좋겠어요 (선택)" style="width:100%;margin-top:12px;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;font-size:.92rem;font-family:inherit;color:var(--forest);background:#fff">
+<div style="display:flex;gap:8px;margin-top:14px">
+<button id="acSvSave" style="flex:1;padding:12px;border:none;border-radius:11px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit">저장하기</button>
+<button id="acSvSkip" style="padding:12px 16px;border:1.5px solid var(--line);border-radius:11px;background:#fff;color:var(--sub);font-size:.88rem;cursor:pointer;font-family:inherit">다음에</button>
+</div>
+<div id="acSvMsg" style="display:none;margin-top:10px;font-size:.86rem;color:#15925F">✅ 고마워요! 답변이 저장됐어요.</div>
+</div>
+
 <div style="background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:16px;font-size:.88rem;margin-bottom:16px">
 🔆 <b>진단 결과 저장</b> 기능이 곧 열립니다. 지금 하신 진단(혼인신고·명의·전세사기)은 오픈과 함께 이 화면에 모입니다.
 </div>
@@ -160,6 +173,56 @@ function acGoogle(){
  });
 }
 function acSignOut(){ window.hwonAuth.signOut(); }
+
+/* ===== 가입 기대 설문 (members/{uid}.expectations) ===== */
+(function(){
+var OPTS=['🔔 청약·공고 알림','🏠 임대주택 공고 모아보기','🧮 대출·세금 계산기','🤖 AI 부동산 상담','🔍 전세사기·계약 안전 체크','📈 시세·실거래가 확인','🎯 내 조건에 맞는 집 찾기','📚 부동산 공부·칼럼'];
+var sel={}, db=null, uid=null;
+function loadFS(){return new Promise(function(res,rej){ if(window.firebase&&firebase.firestore){res();return;}
+ var s=document.createElement('script'); s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js';
+ s.onload=res; s.onerror=rej; document.head.appendChild(s); });}
+var box=document.getElementById('acSurvey'), chips=document.getElementById('acSvChips');
+OPTS.forEach(function(t){
+ var d=document.createElement('div'); d.textContent=t;
+ d.style.cssText='padding:9px 13px;border:1.5px solid var(--line);border-radius:999px;background:#fff;font-size:.87rem;cursor:pointer;color:var(--sub);user-select:none;transition:.13s';
+ d.onclick=function(){ var on=!sel[t]; sel[t]=on;
+  d.style.borderColor=on?'var(--mint)':'var(--line)'; d.style.background=on?'#E5F8F6':'#fff';
+  d.style.color=on?'#127c78':'var(--sub)'; d.style.fontWeight=on?'700':'400'; };
+ chips.appendChild(d);
+});
+document.addEventListener('hwon-auth',function(e){
+ if(!e.detail){box.style.display='none';return;}
+ uid=e.detail.uid;
+ if(localStorage.getItem('bbSvDone_'+uid)){box.style.display='none';return;}
+ loadFS().then(function(){ db=firebase.firestore();
+  return db.collection('members').doc(uid).get();
+ }).then(function(snap){
+  if(snap&&snap.exists&&snap.data().expectations){ localStorage.setItem('bbSvDone_'+uid,'1'); return; }
+  box.style.display='block';
+ }).catch(function(){ box.style.display='block'; });
+});
+document.getElementById('acSvSave').onclick=function(){
+ var picked=Object.keys(sel).filter(function(k){return sel[k];}).map(function(k){return k.replace(/^[^ ]+ /,'');});
+ var etc=(document.getElementById('acSvEtc').value||'').trim().slice(0,200);
+ if(!picked.length&&!etc){ alert('하나 이상 골라주시거나 기타 의견을 적어주세요!'); return; }
+ if(!db||!uid){ alert('로그인 상태를 확인 중이에요. 잠시 후 다시 시도해주세요.'); return; }
+ var btn=this; btn.disabled=true;
+ db.collection('members').doc(uid).set({
+  expectations:picked, expectationsNote:etc||null,
+  expectationsAt:new Date().toISOString(),
+  email:(window.hwonUser&&window.hwonUser.email)||null
+ },{merge:true}).then(function(){
+  localStorage.setItem('bbSvDone_'+uid,'1');
+  document.getElementById('acSvMsg').style.display='block';
+  if(window.gtag){try{gtag('event','signup_survey',{picks:picked.join(',')});}catch(e){}}
+  setTimeout(function(){ box.style.display='none'; },1600);
+ }).catch(function(e){ btn.disabled=false; alert('저장 중 오류가 났어요. ('+(e.code||e.message)+')'); });
+};
+document.getElementById('acSvSkip').onclick=function(){
+ if(uid) localStorage.setItem('bbSvDone_'+uid,'1');
+ box.style.display='none';
+};
+})();
 </script>
 
 <script src="/hwon-bot.js" defer></script>
