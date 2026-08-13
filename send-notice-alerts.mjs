@@ -122,8 +122,19 @@ async function sendMessages(messages) {
 /* ---------- 메인 ---------- */
 const token = await googleToken();
 const subs = await fetchSubs(token);
-const targets = subs.filter(s => s.rcritStart === targetDate && !s[flagField] && s.phone);
+let targets = subs.filter(s => s.rcritStart === targetDate && !s[flagField] && s.phone);
 console.log(`구독 ${subs.length}건 중 발송 대상 ${targets.length}건`);
+
+/* ---------- 남용 방지 캡 (스팸 계정이 타인 번호를 대량 등록하는 시나리오 차단) ---------- */
+const PER_UID_MAX = 10, PER_PHONE_MAX = 3, RUN_MAX = 300;
+const uidCnt = {}, phoneCnt = {};
+const before = targets.length;
+targets = targets.filter(s => {
+  uidCnt[s.uid] = (uidCnt[s.uid] || 0) + 1;
+  phoneCnt[s.phone] = (phoneCnt[s.phone] || 0) + 1;
+  return uidCnt[s.uid] <= PER_UID_MAX && phoneCnt[s.phone] <= PER_PHONE_MAX;
+}).slice(0, RUN_MAX);
+if (targets.length < before) console.warn(`⚠️ 남용 방지 캡으로 ${before - targets.length}건 제외 (uid당 ${PER_UID_MAX}·번호당 ${PER_PHONE_MAX}·회당 ${RUN_MAX}) — 급증 시 Firestore noticeAlerts 점검 필요`);
 if (!targets.length) { console.log('발송할 알림이 없어요.'); process.exit(0); }
 
 for (const t of targets) console.log(` → ${t.phone.slice(0, 3)}****${t.phone.slice(-2)} | ${t.name} | ${t.rcritStart}`);
