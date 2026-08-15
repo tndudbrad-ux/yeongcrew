@@ -53,6 +53,14 @@ td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 .rel{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
 .rel a{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:.9rem;font-weight:600}
 .rel a span{display:block;font-size:.78rem;color:var(--sub);font-weight:400;margin-top:2px}
+.apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0 20px}
+.appc{border:1px solid var(--line);border-radius:16px;padding:16px 12px;background:#fff;text-align:center}
+.appc .ai{width:46px;height:46px;margin:0 auto 9px;display:block;filter:drop-shadow(0 4px 10px rgba(13,42,41,.13))}
+.appc b{display:block;font-size:1rem;font-weight:600;letter-spacing:-.01em}
+.appc em{display:block;font-style:normal;font-size:.74rem;font-weight:700;color:var(--teal);margin-top:4px}
+.appc span{display:block;font-size:.8rem;color:var(--sub);margin-top:5px;line-height:1.5}
+.ico{display:inline-block;width:19px;height:19px;vertical-align:-4px;margin-right:5px}
+article.post h2 .ico{width:23px;height:23px;vertical-align:-5px;margin-right:7px}
 footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:40px}
 footer a{color:#B9DCD9;margin:0 8px}
 @media(max-width:620px){nav.gnb{display:none}}
@@ -83,15 +91,20 @@ footer a{color:#B9DCD9;margin:0 8px}
 • 아래 <b>6가지 체크리스트 중 3개 이상</b>이 빨간불이면, 가격이 매력적이어도 다시 생각해 보세요.</div>
 
 <h2>왜 앱 세 개를 겹쳐야 하나요</h2>
+<div class="apps">
+<div class="appc"><svg class="ai" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#2F6BED"/><path d="M9.5 27.5l7-7 5 5 9.5-10.5" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30.5" cy="14.5" r="2.8" fill="#fff"/></svg><b>아실</b><em>현재</em><span>매물이 쌓이고<br>있는가</span></div>
+<div class="appc"><svg class="ai" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#FF7A2F"/><path d="M20 8.5c-4.5 0-8.2 3.6-8.2 8.1 0 5.8 8.2 14.6 8.2 14.6s8.2-8.8 8.2-14.6c0-4.5-3.7-8.1-8.2-8.1z" fill="#fff"/><circle cx="20" cy="16.6" r="3.3" fill="#FF7A2F"/></svg><b>호갱노노</b><em>수요</em><span>보는 사람이<br>있는가</span></div>
+<div class="appc"><svg class="ai" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0FAF88"/><rect x="9.5" y="21" width="5.4" height="9.5" rx="1.7" fill="#fff"/><rect x="17.3" y="15" width="5.4" height="15.5" rx="1.7" fill="#fff"/><rect x="25.1" y="9.5" width="5.4" height="21" rx="1.7" fill="#fff" opacity=".92"/></svg><b>부동산지인</b><em>미래</em><span>경쟁 물량이<br>쏟아지는가</span></div>
+</div>
 <p>부동산 앱은 많지만 <b>보여주는 시간대가 서로 달라요.</b> 실거래가는 이미 지나간 과거, 매물 수는 지금 벌어지는 현재, 입주물량은 아직 오지 않은 미래예요. 하나만 보면 반드시 한쪽 눈을 감게 됩니다.</p>
 <table>
 <tr><th>앱</th><th>대답해 주는 질문</th><th>시점</th><th>핵심 메뉴</th></tr>
-<tr><td><b>아실</b></td><td>파는 사람이 늘고 있나?</td><td>현재</td><td>매물증감 · 3개월 실거래</td></tr>
-<tr><td><b>호갱노노</b></td><td>사려는 사람이 있나?</td><td>수요</td><td>실시간 방문자 · 가격변동 알림</td></tr>
-<tr><td><b>부동산지인</b></td><td>공급이 쏟아지나?</td><td>2~3년 뒤</td><td>수요/입주 · 미분양 · 시장강도</td></tr>
+<tr><td><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#2F6BED"/><path d="M9.5 27.5l7-7 5 5 9.5-10.5" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30.5" cy="14.5" r="2.8" fill="#fff"/></svg><b>아실</b></td><td>파는 사람이 늘고 있나?</td><td>현재</td><td>매물증감 · 3개월 실거래</td></tr>
+<tr><td><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#FF7A2F"/><path d="M20 8.5c-4.5 0-8.2 3.6-8.2 8.1 0 5.8 8.2 14.6 8.2 14.6s8.2-8.8 8.2-14.6c0-4.5-3.7-8.1-8.2-8.1z" fill="#fff"/><circle cx="20" cy="16.6" r="3.3" fill="#FF7A2F"/></svg><b>호갱노노</b></td><td>사려는 사람이 있나?</td><td>수요</td><td>실시간 방문자 · 가격변동 알림</td></tr>
+<tr><td><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0FAF88"/><rect x="9.5" y="21" width="5.4" height="9.5" rx="1.7" fill="#fff"/><rect x="17.3" y="15" width="5.4" height="15.5" rx="1.7" fill="#fff"/><rect x="25.1" y="9.5" width="5.4" height="21" rx="1.7" fill="#fff" opacity=".92"/></svg><b>부동산지인</b></td><td>공급이 쏟아지나?</td><td>2~3년 뒤</td><td>수요/입주 · 미분양 · 시장강도</td></tr>
 </table>
 
-<h2>1단계 | 아실 '매물증감'으로 적체를 확인해요</h2>
+<h2><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#2F6BED"/><path d="M9.5 27.5l7-7 5 5 9.5-10.5" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30.5" cy="14.5" r="2.8" fill="#fff"/></svg>1단계 | 아실 '매물증감'으로 적체를 확인해요</h2>
 <p>아실 앱에서 단지를 검색하면 <b>'매물증감'</b> 항목이 있어요. 그 단지에 나와 있는 매물 개수가 시간에 따라 어떻게 변했는지를 선 그래프로 보여줍니다. 읽는 법은 단순해요.</p>
 <ul>
 <li><b>선이 우상향</b> → 새로 나오는 매물은 있는데 팔리는 건 없다는 뜻이에요. 매물이 계속 <b>적체</b>되고 있는 상태예요.</li>
@@ -103,7 +116,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 ② <b>세대수 대비 비율로 환산하세요.</b> 매물 50개는 300세대 단지에서는 비상 신호지만, 3,000세대 단지에서는 평범한 숫자예요. <b>전체 세대의 5%를 넘게</b> 매물로 나와 있다면 한 번쯤 의심해 볼 구간이에요.
 </div>
 
-<h2>2단계 | 최근 3개월 실거래를 겹쳐 봐요</h2>
+<h2><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#2F6BED"/><path d="M9.5 27.5l7-7 5 5 9.5-10.5" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30.5" cy="14.5" r="2.8" fill="#fff"/></svg>2단계 | 최근 3개월 실거래를 겹쳐 봐요</h2>
 <p>매물증감만으로는 <b>절반짜리 진단</b>이에요. 매물이 쌓이는 이유는 두 가지인데, 이 그래프만으로는 구분이 안 되거든요. <b>팔 사람이 갑자기 많아진 것</b>일 수도 있고, <b>살 사람이 아예 없는 것</b>일 수도 있어요. 이걸 갈라 주는 게 <b>실거래량</b>이에요.</p>
 <p>같은 아실 화면에서 최근 3개월 실거래를 확인하고 이렇게 해석하시면 돼요.</p>
 <ul>
@@ -114,7 +127,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 <p>정리하면 <b>매물증감 우상향 + 3개월 실거래 0건</b>이 최악의 조합이에요. 이 두 개가 겹치는 단지는 조건이 아무리 좋아 보여도 일단 후보에서 빼는 게 맞아요.</p>
 <div class="tip">💡 <b>신고가 하나에 흔들리지 마세요</b><br>계약은 신고되지만 나중에 <b>해제</b>되는 경우가 있어요. 잔금·등기까지 가야 그 가격이 확정돼요. <a href="https://rt.molit.go.kr" target="_blank" rel="noopener" style="color:var(--teal)">국토교통부 실거래가 공개시스템</a>에서는 거래별 <b>등기일자</b>와 <b>해제 여부</b>가 함께 표시되니, 유독 한 건만 튀는 신고가라면 이것부터 확인하세요.</div>
 
-<h2>3단계 | 호갱노노로 '수요가 있는지'를 봐요</h2>
+<h2><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#FF7A2F"/><path d="M20 8.5c-4.5 0-8.2 3.6-8.2 8.1 0 5.8 8.2 14.6 8.2 14.6s8.2-8.8 8.2-14.6c0-4.5-3.7-8.1-8.2-8.1z" fill="#fff"/><circle cx="20" cy="16.6" r="3.3" fill="#FF7A2F"/></svg>3단계 | 호갱노노로 '수요가 있는지'를 봐요</h2>
 <p>앞의 두 개가 <b>결과</b>라면, 호갱노노는 <b>원인</b>을 보여줘요. 호갱노노에는 지금 그 단지 페이지를 보고 있는 사람 수가 실시간으로 표시돼요. 관심도를 숫자로 확인할 수 있는 거의 유일한 지표예요.</p>
 <ul>
 <li><b>매물은 쌓이는데 보는 사람도 없다</b> → 수요 자체가 없는 단지예요. 가격을 내려도 반응이 느려요.</li>
@@ -130,7 +143,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 • <b>매물 적음 + 방문자 없음</b> → 거래가 잠긴 곳. 들어가면 나오기 어려워요.
 </div>
 
-<h2>4단계 | 부동산지인으로 3년 뒤를 봐요</h2>
+<h2><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0FAF88"/><rect x="9.5" y="21" width="5.4" height="9.5" rx="1.7" fill="#fff"/><rect x="17.3" y="15" width="5.4" height="15.5" rx="1.7" fill="#fff"/><rect x="25.1" y="9.5" width="5.4" height="21" rx="1.7" fill="#fff" opacity=".92"/></svg>4단계 | 부동산지인으로 3년 뒤를 봐요</h2>
 <p>마지막이 가장 많이 놓치는 부분이에요. 내가 3년 뒤 집을 내놓을 때 <b>경쟁 상대는 옆 동 같은 평형이 아니라, 그때 입주하는 새 아파트</b>거든요. 같은 값이면 사람들은 신축을 삽니다.</p>
 <p>부동산지인의 <b>'지역분석 → 수요/입주'</b>에서 해당 지역의 연도별 입주 물량과 적정 수요선을 비교할 수 있어요.</p>
 <ul>
@@ -155,12 +168,12 @@ footer a{color:#B9DCD9;margin:0 8px}
 <p>후보 단지마다 이 여섯 칸을 채워 보세요. 3분이면 끝나요.</p>
 <table>
 <tr><th>확인 항목</th><th>어디서</th><th>위험 신호</th></tr>
-<tr><td>매물 적체</td><td>아실 매물증감</td><td>3~6개월 선이 <b>우상향</b></td></tr>
-<tr><td>매물 비율</td><td>아실 + 세대수</td><td>전체 세대의 <b>5% 초과</b></td></tr>
-<tr><td>거래 실적</td><td>아실 3개월 실거래</td><td>대단지인데 <b>0건</b></td></tr>
-<tr><td>가격 방향</td><td>아실 실거래가</td><td>거래마다 <b>신저가</b></td></tr>
-<tr><td>수요</td><td>호갱노노 방문자 수</td><td><b>하위권 고정</b></td></tr>
-<tr><td>미래 공급</td><td>부동산지인 수요/입주</td><td>2~3년 내 <b>공급 과잉</b></td></tr>
+<tr><td>매물 적체</td><td><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#2F6BED"/><path d="M9.5 27.5l7-7 5 5 9.5-10.5" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30.5" cy="14.5" r="2.8" fill="#fff"/></svg>아실 매물증감</td><td>3~6개월 선이 <b>우상향</b></td></tr>
+<tr><td>매물 비율</td><td><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#2F6BED"/><path d="M9.5 27.5l7-7 5 5 9.5-10.5" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30.5" cy="14.5" r="2.8" fill="#fff"/></svg>아실 + 세대수</td><td>전체 세대의 <b>5% 초과</b></td></tr>
+<tr><td>거래 실적</td><td><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#2F6BED"/><path d="M9.5 27.5l7-7 5 5 9.5-10.5" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30.5" cy="14.5" r="2.8" fill="#fff"/></svg>아실 3개월 실거래</td><td>대단지인데 <b>0건</b></td></tr>
+<tr><td>가격 방향</td><td><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#2F6BED"/><path d="M9.5 27.5l7-7 5 5 9.5-10.5" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="30.5" cy="14.5" r="2.8" fill="#fff"/></svg>아실 실거래가</td><td>거래마다 <b>신저가</b></td></tr>
+<tr><td>수요</td><td><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#FF7A2F"/><path d="M20 8.5c-4.5 0-8.2 3.6-8.2 8.1 0 5.8 8.2 14.6 8.2 14.6s8.2-8.8 8.2-14.6c0-4.5-3.7-8.1-8.2-8.1z" fill="#fff"/><circle cx="20" cy="16.6" r="3.3" fill="#FF7A2F"/></svg>호갱노노 방문자 수</td><td><b>하위권 고정</b></td></tr>
+<tr><td>미래 공급</td><td><svg class="ico" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#0FAF88"/><rect x="9.5" y="21" width="5.4" height="9.5" rx="1.7" fill="#fff"/><rect x="17.3" y="15" width="5.4" height="15.5" rx="1.7" fill="#fff"/><rect x="25.1" y="9.5" width="5.4" height="21" rx="1.7" fill="#fff" opacity=".92"/></svg>부동산지인 수요/입주</td><td>2~3년 내 <b>공급 과잉</b></td></tr>
 </table>
 <p>여섯 개 중 <b>셋 이상이 빨간불</b>이면, 가격이 아무리 매력적이어도 다시 생각해 보시길 권해요. 싸게 사는 것보다 중요한 건 <b>나갈 때 나가는 것</b>이거든요.</p>
 
