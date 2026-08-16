@@ -287,9 +287,12 @@ function readMan(v){ v=Math.round(v); var eok=Math.floor(v/10000), man=v%10000, 
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
 function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
-function aptActions(name){
+function aptActions(name, dong){
+  // 국토부 공식 명칭과 네이버 표기명이 다른 단지가 있어(예: 하남힐즈파크푸르지오1단지 ↔ 미사힐즈파크푸르지오)
+  // 정확 일치만 찾는 네이버부동산 검색 대신, 유사 명칭도 잡아주는 네이버 통합검색에 '동 + 단지명'으로 보낸다
+  var q=(dong?dong+' ':'')+name.replace(/\s*제?\d+단지$/,'').trim();
   return '<div class="aptActs">'
-   +'<a class="aA naver" target="_blank" rel="noopener" href="https://m.land.naver.com/search/result/'+encodeURIComponent(name)+'" data-apt="'+escAttr(name)+'">🏠 네이버 매물 보기</a>'
+   +'<a class="aA naver" target="_blank" rel="noopener" href="https://search.naver.com/search.naver?query='+encodeURIComponent(q+' 아파트')+'" data-apt="'+escAttr(name)+'">🏠 네이버에서 보기</a>'
    +'<button type="button" class="aA ask" data-apt="'+escAttr(name)+'">💬 부비에게 물어보기</button>'
    +'</div>';
 }
@@ -304,8 +307,8 @@ function md(s){
   if(blocks.length>=4){
     return blocks.map(function(b,i){
       if(i===0) return conv(b);
-      var m=b.match(/^\*\*\d+\.\s*([^(\n*]+)/);
-      if(m){ var name=m[1].trim(); return '<div class="apt">'+conv(b)+aptActions(name)+'</div>'; }
+      var m=b.match(/^\*\*\d+\.\s*([^(\n*]+)(?:\(([^,)\n]+))?/);
+      if(m){ var name=m[1].trim(); var dong=(m[2]||'').trim(); return '<div class="apt">'+conv(b)+aptActions(name, dong)+'</div>'; }
       return '<div class="apt sum">'+conv(b)+'</div>';
     }).join('');
   }
