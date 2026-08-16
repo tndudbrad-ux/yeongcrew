@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 아파트 찾기 — 예산·라이프스타일 맞춤 추천 | 부비</title>
+<meta name="description" content="현금·소득·직장·자녀·연식 조건을 입력하면 국토부 실거래 데이터로 예산에 맞는 아파트 5곳을 추천해드립니다. 내집마련, 훤히.">
+<link rel="canonical" href="https://boobi.ai.kr/apt-finder.html">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="내 아파트 찾기 — 예산·라이프스타일 맞춤 추천 | 부비">
+<meta property="og:description" content="현금·소득·직장·자녀·연식 조건을 입력하면 국토부 실거래 데이터로 예산에 맞는 아파트 5곳을 추천해드립니다. 내집마련, 훤히.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://boobi.ai.kr/apt-finder.html">
+<meta property="og:site_name" content="부비 - 부동산 비서">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--cream:#FFFFFF;--forest:#0D2A29;--sub:#547471;--line:#DCEEEC;--card:#fff;--glow:rgba(42,193,188,.35)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+header.top{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500;letter-spacing:-.01em}
+.logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);box-shadow:0 2px 8px rgba(42,193,188,.35)}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+main{padding:40px 0 64px}
+h2.sec{font-size:1.28rem;font-weight:500;letter-spacing:-.02em;margin:40px 0 16px;display:flex;align-items:center;gap:10px}
+h2.sec::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(180deg,#8FE9E4,#20A6A2);box-shadow:0 0 8px var(--glow)}
+h2.sec:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;transition:.18s;display:block}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(32,166,162,.14);border-color:#B5E4E1}
+.card .ic{font-size:1.4rem}
+.card h3{font-size:1rem;font-weight:500;margin:8px 0 4px;letter-spacing:-.015em}
+.card p{font-size:.85rem;color:var(--sub)}
+.tool-box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 28px;margin-bottom:22px}
+.tool-box h2{font-size:1.2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.tool-box h2::before{content:"";flex:0 0 12px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, transparent 26%),linear-gradient(180deg,#8FE9E4,#1B918D);-webkit-mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);box-shadow:0 0 9px var(--glow)}
+label.f{display:block;font-size:.87rem;font-weight:500;margin:15px 0 6px;color:var(--forest)}
+input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
+input.f:focus,select.f:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.seg button{flex:1;min-width:90px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
+.seg button.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:600;box-shadow:0 0 10px rgba(42,193,188,.18)}
+button.go{width:100%;margin-top:22px;padding:15px;border:none;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.35);transition:.15s}
+button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(42,193,188,.45)}
+.result{display:none;margin-top:22px;background:linear-gradient(180deg,#EAFAF8,#F0FAF8);border:1.5px solid #BFE9E6;border-radius:16px;padding:22px}
+.result.show{display:block}
+.result .big{font-size:1.55rem;font-weight:600;color:var(--teal);letter-spacing:-.02em}
+.result table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem}
+.result td,.result th{padding:8px 4px;border-bottom:1px solid #CBEBE8;text-align:right}
+.result td:first-child,.result th:first-child{text-align:left;color:var(--sub)}
+.note{font-size:.82rem;color:var(--sub);margin-top:14px;font-weight:300}
+article.post{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:36px 32px}
+article.post h1{font-size:1.5rem;font-weight:500;margin-bottom:6px;letter-spacing:-.025em}
+article.post .meta{font-size:.84rem;color:var(--sub);margin-bottom:24px;font-weight:300}
+article.post h2{font-size:1.13rem;font-weight:500;margin:30px 0 10px;color:var(--forest);padding-left:14px;position:relative}
+article.post h2::before{content:"";position:absolute;left:0;top:.4em;width:5px;height:5px;border-radius:50%;background:var(--mint);box-shadow:0 0 7px var(--glow)}
+article.post p{margin-bottom:14px;font-size:.95rem}
+article.post table{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:.88rem}
+article.post th{background:var(--forest);color:#DFF5F3;padding:10px 8px;font-weight:500}
+article.post td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:center}
+article.post ul{margin:0 0 14px 20px;font-size:.95rem}
+article.post li{margin-bottom:6px}
+.tip{background:#EAFAF8;border:1px solid #BFE9E6;border-radius:12px;padding:14px 16px;font-size:.9rem;margin:14px 0}
+.rel{margin-top:28px}
+.ad-slot{display:none}
+footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
+footer a{color:#B9DCD9;margin:0 8px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
+.crumb a{color:var(--teal)}
+@media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
+.cRow{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.cSub{margin-top:9px;padding:12px;background:#F4FBFA;border:1px solid var(--line);border-radius:12px;max-height:230px;overflow-y:auto}
+.cChip{border:1.5px solid var(--line);background:#fff;color:var(--sub);border-radius:18px;padding:7px 13px;font-size:.85rem;cursor:pointer;font-family:inherit;transition:.13s}
+.cChip:hover{border-color:var(--mint);color:var(--teal)}
+.cChip.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:600}
+.cChip.ghost{border-style:dashed}
+.cChip.hub{background:#FFF9E9;border-color:#F2E3B3;color:#8A6D1A}
+.cChip.hub:hover{border-color:#E4C868}
+.cSel{margin-top:8px;font-size:.9rem;background:#E5F8F6;border:1.5px solid #BFE9E6;border-radius:12px;padding:10px 14px}
+.cX{color:var(--teal);font-size:.8rem;cursor:pointer;margin-left:8px;text-decoration:underline}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css?v=3">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><img class="logo3d" src="/boobi-ring-3d.png" alt=""><span class="ring"></span><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
+<nav class="gnb">
+<a href="/loan-calculator.html">대출·DSR</a>
+<a href="/acquisition-tax.html">취득세</a>
+<a href="/brokerage-fee.html">중개보수</a>
+<a href="/jeonse-monthly.html">전월세 전환</a>
+<a href="/youth-housing.html">청년 지원</a>
+<a href="/rental-board.html">임대주택</a>
+<a href="/experts.html">전문가 찾기</a>
+<a href="/#guide">가이드</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+
+<div class="crumb"><a href="/">홈</a> › 내 아파트 찾기</div>
+<div class="tool-box">
+<h2>🔎 내 아파트 찾기 <span style="font-weight:300;font-size:.85rem;color:var(--sub)">내집마련, 훤히</span></h2>
+<p style="font-size:.88rem;color:var(--sub);margin-bottom:4px">7개 질문에 답하면, 부비가 <b>국토부 실거래 데이터</b>를 조회해서 조건에 맞는 아파트 5곳을 추려드려요.</p>
+
+<label class="f">① 현금 가용액 (만원) — 예금·주식 등 동원 가능한 자기자본</label>
+<input class="f" id="fCash" type="number" placeholder="예: 30000 (3억)">
+<div class="row2">
+<div><label class="f">② 연소득 (만원, 세전)</label><input class="f" id="fIncome" type="number" placeholder="예: 7000"></div>
+<div><label class="f">기존 대출 연 상환액 (만원)</label><input class="f" id="fDebt" type="number" placeholder="없으면 0"></div>
+</div>
+<label class="f">③ 직장 위치 <span style="font-weight:300;color:var(--sub)">— 지역을 먼저 고르면 시군구·주요 업무지구가 이어서 나와요</span></label>
+<div id="workCasc"></div>
+<input type="hidden" id="fWork">
+<label class="f">④ 희망 지역 <span style="font-weight:300;color:var(--sub)">— 광역시·도 → 시군구 순으로 선택</span></label>
+<div id="areaCasc"></div>
+<input type="hidden" id="fArea">
+<p style="font-size:.78rem;color:var(--sub);margin-top:4px">💡 '광주'는 <b>전남광주(옛 광주광역시)</b>와 <b>경기 광주시</b>가 따로 있어요 — 광역 단위를 먼저 고르니 헷갈릴 일이 없어요.</p>
+<label class="f">지역 규제 여부 <span style="font-weight:300;color:var(--sub)">— 모르면 '자동'으로 두세요, 희망 지역으로 판별해드려요</span></label>
+<div class="seg" id="fReg"><button data-v="auto" class="on">🧭 자동 판별</button><button data-v="y">규제지역</button><button data-v="n">비규제</button></div>
+<label class="f">대출받을 금융권 <span style="font-weight:300;color:var(--sub)">— DSR 한도가 달라져요</span></label>
+<div class="seg" id="fBank"><button data-v="b1" class="on">1금융권 (DSR 40%)</button><button data-v="b2">2금융권 (DSR 50%)</button></div>
+<label class="f">주택 구입 우대 조건 <span style="font-weight:300;color:var(--sub)">— 규제지역 LTV 한도가 달라져요</span></label>
+<div class="seg" id="fLtv"><button data-v="none" class="on">해당 없음</button><button data-v="first">🌱 생애최초</button><button data-v="seomin">서민 실수요자</button></div>
+<label class="f">월 저축 가능액 (만원, 선택) <span style="font-weight:300;color:var(--sub)">— 입력하면 1·3·5년 후 예산도 알려드려요</span></label>
+<input class="f" id="fSave" type="number" placeholder="예: 150">
+<label class="f">⑤ 나이대</label>
+<div class="seg" id="fAge"><button data-v="20대" >20대</button><button data-v="30대" class="on">30대</button><button data-v="40대">40대</button><button data-v="50대 이상">50대+</button></div>
+<label class="f">⑥ 자녀</label>
+<div class="seg" id="fKids"><button data-v="없음" class="on">없음</button><button data-v="영유아">영유아·예정</button><button data-v="초등학생">초등</button><button data-v="중고등학생">중·고등</button></div>
+<label class="f">⑦ 연식 선호</label>
+<div class="seg" id="fYear"><button data-v="10년 이내 신축·준신축" class="on">신축·준신축</button><button data-v="연식 무관">연식 무관</button><button data-v="재건축 기대 구축도 좋음">재건축 노림</button></div>
+<label class="f">희망 전용면적</label>
+<div class="seg" id="fSize"><button data-v="전용 59㎡ 이하">~59㎡</button><button data-v="전용 59~84㎡" class="on">59~84㎡</button><button data-v="전용 84㎡ 이상">84㎡~</button></div>
+<button class="go" id="fGo" onclick="findApt()">내 아파트 5곳 찾기</button>
+<div id="fBudget" style="display:none;background:#EAFAF8;border:1.5px solid #BFE9E6;border-radius:14px;padding:16px 18px;margin-top:18px;font-size:.92rem"></div>
+<div id="fLoading" style="display:none;text-align:center;padding:28px 0">
+<div style="width:34px;height:34px;border-radius:50%;border:7px solid #DCEEEC;border-top-color:#2AC1BC;margin:0 auto 12px;animation:fSpin 1s linear infinite"></div>
+<div style="font-size:.9rem;color:var(--sub)" id="fLoadMsg">부비가 실거래 데이터를 뒤지는 중...</div>
+</div>
+<div class="result" id="fRes" style="white-space:normal"></div>
+<p class="note">추천은 국토부 실거래가 공개 데이터와 AI 분석 기반의 참고 정보이며, 투자 권유가 아닙니다. 대출 한도는 선택한 금융권의 DSR(1금융 40%/2금융 50%)·스트레스 금리(+1.5%p)·LTV 우대(생애최초 70%/서민실수요자 60%/일반 40%)·규제지역 가격 차등 상한(15억↓ 6억/15~25억 4억/25억↑ 2억)을 반영한 30년 원리금균등 가정 추정치로, 실제 은행 심사 결과와 다를 수 있어요.</p>
+</div>
+
+<div class="rel"><h2 class="sec">추천받은 다음엔</h2><div class="grid">
+<a class="card" href="/loan-calculator.html"><div class="ic">💰</div><h3>대출·DSR 계산기</h3><p>내 실제 한도 정밀 확인</p></a>
+<a class="card" href="/moving-guide.html"><div class="ic">📦</div><h3>매매 로드맵</h3><p>계약 전 체크리스트</p></a>
+<a class="card" href="/acquisition-tax.html"><div class="ic">🧾</div><h3>취득세 계산기</h3><p>사기 전 세금 확인</p></a>
+</div></div>
+<style>@keyframes fSpin{to{transform:rotate(360deg)}}
+#fRes h3,#fRes b{color:var(--forest)} #fRes a{color:var(--teal);font-weight:600}
+#fRes .apt{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;font-size:.9rem;line-height:1.65}
+#fRes .apt.sum{background:#FFF9E9;border-color:#F2E3B3}
+#fRes .aptActs{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+#fRes .aA{flex:1;min-width:132px;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;border-radius:10px;font-size:.83rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
+#fRes .aA.naver{background:#E5F8F6;color:#20A6A2;border:1.5px solid #BFE9E6;text-decoration:none}
+#fRes .aA.naver:hover{background:#D2F2EF}
+#fRes .aA.ask{background:#2AC1BC;color:#fff;border:none;box-shadow:0 3px 10px rgba(42,193,188,.3)}
+#fRes .aA.ask:hover{background:#20A6A2}</style>
+</div></main>
+<footer><div class="wrap">
+부비 — 부동산 비서<br>
+계산 결과는 참고용이며, 실제 세액·보수·한도는 관계 기관 확인이 필요합니다.<br>© 2026 영크루 · 
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/terms.html">이용약관</a>·<a href="/privacy.html">개인정보처리방침</a><br>
+<span style="font-size:.75rem;color:#5D8683">상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074 · 서울특별시 동작구 만양로 75 · tndud.brad@gmail.com</span>
+</div></footer>
+
+<script>
+var BOOBI_API='https://hwon-boobi.tndud-brad.workers.dev/chat';
+var REGIONS=["서울 종로구","서울 중구","서울 용산구","서울 성동구","서울 광진구","서울 동대문구","서울 중랑구","서울 성북구","서울 강북구","서울 도봉구","서울 노원구","서울 은평구","서울 서대문구","서울 마포구","서울 양천구","서울 강서구","서울 구로구","서울 금천구","서울 영등포구","서울 동작구","서울 관악구","서울 서초구","서울 강남구","서울 송파구","서울 강동구","경기 수원시 장안구","경기 수원시 권선구","경기 수원시 팔달구","경기 수원시 영통구","경기 성남시 수정구","경기 성남시 중원구","경기 성남시 분당구","경기 의정부시","경기 안양시 만안구","경기 안양시 동안구","경기 부천시","경기 광명시","경기 평택시","경기 동두천시","경기 안산시 상록구","경기 안산시 단원구","경기 고양시 덕양구","경기 고양시 일산동구","경기 고양시 일산서구","경기 과천시","경기 구리시","경기 남양주시","경기 오산시","경기 시흥시","경기 군포시","경기 의왕시","경기 하남시","경기 용인시 처인구","경기 용인시 기흥구","경기 용인시 수지구","경기 파주시","경기 이천시","경기 안성시","경기 김포시","경기 화성시","경기 광주시","경기 양주시","경기 포천시","경기 여주시","경기 연천군","경기 가평군","경기 양평군","인천 중구","인천 동구","인천 미추홀구","인천 연수구","인천 남동구","인천 부평구","인천 계양구","인천 서구","인천 강화군","인천 옹진군","부산 중구","부산 서구","부산 동구","부산 영도구","부산 부산진구","부산 동래구","부산 남구","부산 북구","부산 해운대구","부산 사하구","부산 금정구","부산 강서구","부산 연제구","부산 수영구","부산 사상구","부산 기장군","대구 중구","대구 동구","대구 서구","대구 남구","대구 북구","대구 수성구","대구 달서구","대구 달성군","대구 군위군","울산 중구","울산 남구","울산 동구","울산 북구","울산 울주군","대전 동구","대전 중구","대전 서구","대전 유성구","대전 대덕구","세종 세종시","전남광주 목포시","전남광주 여수시","전남광주 순천시","전남광주 나주시","전남광주 광양시","전남광주 동구","전남광주 서구","전남광주 남구","전남광주 북구","전남광주 광산구","전남광주 담양군","전남광주 곡성군","전남광주 구례군","전남광주 고흥군","전남광주 보성군","전남광주 화순군","전남광주 장흥군","전남광주 강진군","전남광주 해남군","전남광주 영암군","전남광주 무안군","전남광주 함평군","전남광주 영광군","전남광주 장성군","전남광주 완도군","전남광주 진도군","전남광주 신안군","강원 춘천시","강원 원주시","강원 강릉시","강원 동해시","강원 태백시","강원 속초시","강원 삼척시","강원 홍천군","강원 횡성군","강원 영월군","강원 평창군","강원 정선군","강원 철원군","강원 화천군","강원 양구군","강원 인제군","강원 고성군","강원 양양군","충북 청주시 상당구","충북 청주시 서원구","충북 청주시 흥덕구","충북 청주시 청원구","충북 충주시","충북 제천시","충북 보은군","충북 옥천군","충북 영동군","충북 증평군","충북 진천군","충북 괴산군","충북 음성군","충북 단양군","충남 천안시 동남구","충남 천안시 서북구","충남 공주시","충남 보령시","충남 아산시","충남 서산시","충남 논산시","충남 계룡시","충남 당진시","충남 금산군","충남 부여군","충남 서천군","충남 청양군","충남 홍성군","충남 예산군","충남 태안군","전북 전주시 완산구","전북 전주시 덕진구","전북 군산시","전북 익산시","전북 정읍시","전북 남원시","전북 김제시","전북 완주군","전북 진안군","전북 무주군","전북 장수군","전북 임실군","전북 순창군","전북 고창군","전북 부안군","경북 포항시 남구","경북 포항시 북구","경북 경주시","경북 김천시","경북 안동시","경북 구미시","경북 영주시","경북 영천시","경북 상주시","경북 문경시","경북 경산시","경북 의성군","경북 청송군","경북 영양군","경북 영덕군","경북 청도군","경북 고령군","경북 성주군","경북 칠곡군","경북 예천군","경북 봉화군","경북 울진군","경북 울릉군","경남 창원시 의창구","경남 창원시 성산구","경남 창원시 마산합포구","경남 창원시 마산회원구","경남 창원시 진해구","경남 진주시","경남 통영시","경남 사천시","경남 김해시","경남 밀양시","경남 거제시","경남 양산시","경남 의령군","경남 함안군","경남 창녕군","경남 고성군","경남 남해군","경남 하동군","경남 산청군","경남 함양군","경남 거창군","경남 합천군","제주 제주시","제주 서귀포시"];
+var WORKS=["강남역·테헤란로 (서울 강남)", "역삼·선릉 (서울 강남)", "삼성역·코엑스 (서울 강남)", "서초·교대 (서울 서초)", "양재·우면 R&D (서울 서초)", "여의도 금융가 (서울 영등포)", "광화문·시청 (서울 종로·중구)", "을지로·명동 (서울 중구)", "종로·종각 (서울 종로)", "서울역 (서울 중구·용산)", "용산·한강로 (서울 용산)", "구로디지털단지 (서울 구로)", "가산디지털단지 (서울 금천)", "마곡지구 (서울 강서)", "상암 DMC (서울 마포)", "공덕·마포 (서울 마포)", "성수·서울숲 (서울 성동)", "잠실·송파 (서울 송파)", "문정 법조타운 (서울 송파)", "목동 (서울 양천)", "노원·창동 (서울 노원)", "판교테크노밸리 (경기 성남)", "분당 정자·서현 (경기 성남)", "광교테크노밸리 (경기 수원)", "수원 삼성디지털시티 (경기 수원 영통)", "기흥·화성 삼성반도체 (경기 용인·화성)", "동탄테크노밸리 (경기 화성)", "평택 고덕 삼성 (경기 평택)", "이천 SK하이닉스 (경기 이천)", "안양·평촌 (경기 안양)", "부천 (경기 부천)", "일산·킨텍스 (경기 고양)", "의정부 (경기 의정부)", "안산 반월·시화공단 (경기 안산·시흥)", "송도국제도시 (인천 연수)", "인천공항·영종 (인천 중구)", "부평·주안공단 (인천 부평)", "대전 대덕연구단지 (대전 유성)", "대전 둔산 (대전 서구)", "세종 정부청사 (세종)", "청주 오창·오송 (충북 청주)", "천안·아산 탕정 삼성 (충남 아산)", "당진 현대제철 (충남 당진)", "광주 상무지구 (전남광주 서구)", "광주 첨단지구 (전남광주 광산)", "광주 기아공장 (전남광주 서구·광산)", "여수국가산단 (전남광주 여수)", "광양제철소 (전남광주 광양)", "나주 혁신도시 (전남광주 나주)", "목포 (전남광주 목포)", "순천 (전남광주 순천)", "전주 (전북 전주)", "군산산단 (전북 군산)", "익산 (전북 익산)", "대구 동성로·중구 (대구 중구)", "대구 수성알파시티 (대구 수성)", "대구 성서산단 (대구 달서)", "구미국가산단 (경북 구미)", "포항 포스코 (경북 포항)", "경산 (경북 경산)", "서면 (부산 부산진)", "부산 센텀시티 (부산 해운대)", "부산 문현금융단지 (부산 남구)", "부산 강서 녹산산단 (부산 강서)", "울산 현대차·염포 (울산 북구)", "울산 석유화학단지 (울산 남구·울주)", "울산 현대중공업 (울산 동구)", "창원국가산단 (경남 창원)", "김해 (경남 김해)", "거제 조선소 (경남 거제)", "양산 (경남 양산)", "진주 혁신도시 (경남 진주)", "춘천 (강원 춘천)", "원주 혁신·기업도시 (강원 원주)", "강릉 (강원 강릉)", "제주시 (제주)", "서귀포 혁신도시 (제주 서귀포)"];
+
+/* 순차 선택(광역 → 시군구) 캐스케이드 — 자동완성 대체 */
+var BY_SIDO={};
+REGIONS.forEach(function(r){ var i=r.indexOf(' '); var s=r.slice(0,i); (BY_SIDO[s]=BY_SIDO[s]||[]).push(r.slice(i+1)); });
+var HUB_BY_SIDO={};
+WORKS.forEach(function(w){ var m=w.match(/\(([^ )]+)[^)]*\)$/); if(!m)return; var s=m[1]; (HUB_BY_SIDO[s]=HUB_BY_SIDO[s]||[]).push({name:w.replace(/\s*\([^)]*\)$/,''), full:w}); });
+var SIDOS=['서울','경기','인천','부산','대구','대전','울산','세종','전남광주','강원','충북','충남','전북','경북','경남','제주'];
+function buildCascade(mountId, hiddenId, opts){
+  var mount=document.getElementById(mountId), hid=document.getElementById(hiddenId);
+  if(!mount||!hid)return;
+  function chip(txt, cls){ var b=document.createElement('button'); b.type='button'; b.className='cChip'+(cls?' '+cls:''); b.textContent=txt; return b; }
+  var rowS=document.createElement('div'); rowS.className='cRow';
+  var sub=document.createElement('div'); sub.className='cRow cSub'; sub.style.display='none';
+  var selBox=document.createElement('div'); selBox.className='cSel'; selBox.style.display='none';
+  var custom=null;
+  function reset(){
+    hid.value=''; selBox.style.display='none';
+    rowS.style.display='flex'; sub.style.display='none';
+    rowS.querySelectorAll('.cChip').forEach(function(x){x.classList.remove('on');});
+    if(custom){ custom.style.display='block'; custom.value=''; }
+  }
+  function setVal(v, label){
+    hid.value=v;
+    selBox.innerHTML='📍 <b>'+String(label||v||'선택 안 함').replace(/</g,'&lt;')+'</b><span class="cX">바꾸기</span>';
+    selBox.style.display='block';
+    rowS.style.display='none'; sub.style.display='none';
+    if(custom) custom.style.display='none';
+    selBox.querySelector('.cX').onclick=reset;
+  }
+  SIDOS.forEach(function(s){
+    var b=chip(s);
+    b.onclick=function(){
+      rowS.querySelectorAll('.cChip').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      sub.innerHTML='';
+      if(opts.hubs && HUB_BY_SIDO[s]){
+        HUB_BY_SIDO[s].forEach(function(hb){
+          var c=chip('⭐ '+hb.name,'hub');
+          c.onclick=function(){ setVal(hb.full, hb.full); };
+          sub.appendChild(c);
+        });
+      }
+      (BY_SIDO[s]||[]).forEach(function(g){
+        var c=chip(g);
+        c.onclick=function(){ setVal(s+' '+g, s+' '+g); };
+        sub.appendChild(c);
+      });
+      sub.style.display='flex';
+    };
+    rowS.appendChild(b);
+  });
+  if(opts.skip){
+    var sk=chip(opts.skip,'ghost');
+    sk.onclick=function(){ setVal('', opts.skip); };
+    rowS.appendChild(sk);
+  }
+  mount.appendChild(rowS); mount.appendChild(sub); mount.appendChild(selBox);
+  if(opts.custom){
+    custom=document.createElement('input');
+    custom.type='text'; custom.className='f'; custom.placeholder=opts.custom;
+    custom.style.marginTop='9px'; custom.style.fontSize='.9rem';
+    custom.addEventListener('input', function(){ hid.value=custom.value.trim(); });
+    mount.appendChild(custom);
+  }
+}
+buildCascade('workCasc','fWork',{hubs:true, custom:'또는 직접 입력 — 예: 강남역, OO회사 본사'});
+buildCascade('areaCasc','fArea',{skip:'🧭 미정 — 직장 기준으로 추천받기'});
+(function(){
+  var q=new URLSearchParams(location.search);
+  ['cash','income'].forEach(function(k){
+    var v=q.get(k);
+    if(v&&+v>0){ var el=document.getElementById(k==='cash'?'fCash':'fIncome'); if(el){ el.value=Math.round(+v); el.dispatchEvent(new Event('input',{bubbles:true})); } }
+  });
+})();
+function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
+document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});e.target.classList.add('on');});});
+function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
+/* 대출 계산 v2 — 금융권별 DSR(1금융 40%/2금융 50%) + 스트레스 금리(+1.5%p) + LTV 우대(생애최초 70/서민 60/일반 40) + 규제지역 가격 차등 상한(15억↓6억/15~25억 4억/25억↑2억) 중 최솟값 */
+function annuityLoan(payMonth, rate){ var r=rate/12, n=360; return payMonth*((Math.pow(1+r,n)-1)/(r*Math.pow(1+r,n))); }
+function monthlyPay(loan, rate){ var r=rate/12, n=360; return loan*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1); }
+function bandCap(P){ return P<=150000?60000:(P<=250000?40000:20000); }
+function calcBudget(cash,income,debt,reg,bank,ltvKind){
+  var dsrRate = bank==='b2'?0.5:0.4;
+  var baseRate = bank==='b2'?0.047:0.041;
+  var stressRate = baseRate+0.015; // 한도 판정은 스트레스 금리, 실제 상환액은 기본금리
+  var dsr = annuityLoan(Math.max(0, income*dsrRate - debt)/12, stressRate);
+  var ltv = reg ? (ltvKind==='first'?0.7 : ltvKind==='seomin'?0.6 : 0.4) : 0.7;
+  var P = cash + dsr;
+  for(var i=0;i<40;i++){
+    var loan = Math.min(dsr, ltv*P, reg?bandCap(P):Infinity);
+    var nP = cash + Math.max(0,loan);
+    if(Math.abs(nP-P)<1){ P=nP; break; }
+    P=nP;
+  }
+  var loanF = Math.max(0, Math.min(dsr, ltv*P, reg?bandCap(P):Infinity));
+  var bind = (loanF>=dsr-1) ? 'DSR '+(dsrRate*100)+'%' : (reg && loanF>=bandCap(P)-1 && bandCap(P)<ltv*P) ? '가격구간 대출상한' : 'LTV '+Math.round(ltv*100)+'%';
+  return {P:P, loan:loanF, dsr:dsr, ltv:ltv, bind:bind, pay:monthlyPay(loanF, baseRate), baseRate:baseRate, dsrRate:dsrRate};
+}
+function isRegulated(txt){
+  if(!txt) return true;
+  var t=txt.replace(/\s/g,'');
+  if(/만안|기흥|처인|권선/.test(t)) return false;
+  if(/서울|과천|광명|분당|수정|중원|영통|장안|팔달|동안구|수지|의왕|하남|성남|수원|안양|용인/.test(t)) return true;
+  return false;
+}
+function readMan(v){ v=Math.round(v); var eok=Math.floor(v/10000), man=v%10000, s=''; if(eok>0){s=eok.toLocaleString('ko-KR')+'억'; if(man>=1000)s+=' '+Math.round(man/1000)+'천';}else{s=man.toLocaleString('ko-KR')+'만원';} return s; }
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
+function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
+function aptActions(name){
+  return '<div class="aptActs">'
+   +'<a class="aA naver" target="_blank" rel="noopener" href="https://m.land.naver.com/search/result/'+encodeURIComponent(name)+'" data-apt="'+escAttr(name)+'">🏠 네이버 매물 보기</a>'
+   +'<button type="button" class="aA ask" data-apt="'+escAttr(name)+'">💬 부비에게 물어보기</button>'
+   +'</div>';
+}
+function md(s){
+  function conv(x){
+    x=esc(x);
+    x=x.replace(/\[([^\]]+)\]\((\/[^)\s]+|https?:[^)\s]+)\)/g,'<a href="$2">$1</a>');
+    x=x.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+    return x.replace(/\n/g,'<br>');
+  }
+  var blocks=s.split(/\n(?=\*\*(?:\d\.|부비))/);
+  if(blocks.length>=4){
+    return blocks.map(function(b,i){
+      if(i===0) return conv(b);
+      var m=b.match(/^\*\*\d+\.\s*([^(\n*]+)/);
+      if(m){ var name=m[1].trim(); return '<div class="apt">'+conv(b)+aptActions(name)+'</div>'; }
+      return '<div class="apt sum">'+conv(b)+'</div>';
+    }).join('');
+  }
+  return conv(s);
+}
+var MSGS=['부비가 실거래 데이터를 뒤지는 중...','예산에 맞는 단지를 추리는 중...','학군·직주근접을 따져보는 중...','추천 이유를 정리하는 중...'];
+function findApt(){
+  var cash=+document.getElementById('fCash').value, income=+document.getElementById('fIncome').value;
+  if(!cash&&cash!==0||!income){alert('현금 가용액과 연소득을 입력해주세요');return;}
+  var debt=+document.getElementById('fDebt').value||0;
+  var work=document.getElementById('fWork').value.trim()||'미입력';
+  var area=document.getElementById('fArea').value.trim();
+  var regSel=segVal('fReg');
+  var regArea=(document.getElementById('fArea').value.trim()||document.getElementById('fWork').value.trim());
+  var reg = regSel==='auto' ? isRegulated(regArea) : regSel==='y';
+  var bank=segVal('fBank'), ltvKind=segVal('fLtv');
+  var save=+document.getElementById('fSave').value||0;
+  var mb=calcBudget(cash,income,debt,reg,bank,ltvKind);
+  var budget=mb.P, loan=mb.loan;
+  var bEl=document.getElementById('fBudget');
+  bEl.style.display='block';
+  var regLabel = (reg?'🔒 '+(regSel==='auto'?'규제지역으로 판별':'규제지역'):'🔓 비규제지역')
+    +' · '+(bank==='b2'?'2금융권':'1금융권')+' DSR '+(mb.dsrRate*100)+'% · LTV '+Math.round(mb.ltv*100)+'%'
+    +(ltvKind==='first'?' (생애최초 우대)':ltvKind==='seomin'?' (서민실수요자 우대)':'')
+    +' · 한도를 결정한 건 <b>'+mb.bind+'</b>';
+  var futHtml='', futPlain='';
+  if(save>0){
+    var futs=[1,3,5].map(function(y){ return {y:y, P:calcBudget(cash+save*12*y,income,debt,reg,bank,ltvKind).P}; });
+    futHtml='<div style="margin-top:9px;font-size:.86rem">📈 월 '+save+'만원씩 모으면 예산이: '+futs.map(function(f){return '<b>'+f.y+'년 후 '+readMan(f.P)+'</b>';}).join(' → ')+'</div>';
+    futPlain=futs.map(function(f){return f.y+'년 후 약 '+readMan(f.P);}).join(', ');
+  }
+  bEl.innerHTML='💰 추정 예산: <b style="font-size:1.15rem;color:var(--teal)">'+readMan(budget)+'</b>'
+    +'<span style="color:var(--sub);font-size:.84rem"> = 현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+'</span>'
+    +'<div style="color:var(--sub);font-size:.84rem;margin-top:5px">'+regLabel+'</div>'
+    +'<div style="font-size:.86rem;margin-top:5px">🏦 대출 '+readMan(loan)+' 시 월 상환액 약 <b>'+fmt(mb.pay)+'만원</b> <span style="color:var(--sub)">(금리 '+(mb.baseRate*100).toFixed(1)+'%·30년 · 한도 판정엔 스트레스 +1.5%p 적용)</span></div>'
+    +futHtml
+    +'<div style="color:var(--sub);font-size:.8rem;margin-top:8px">부비가 실거래를 뒤지는 30초~1분 동안, 위 예산 구성을 먼저 확인해보세요.</div>';
+  var profile='[아파트찾기] 내 조건에 맞는 아파트 5곳을 추천해줘.\n'
+   +'- 총 예산: 약 '+readMan(budget)+' (현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+', '+(reg?'규제지역':'비규제지역')+' · '+(bank==='b2'?'2금융권 DSR 50%':'1금융권 DSR 40%')+' · LTV '+Math.round(mb.ltv*100)+'%'+(ltvKind==='first'?'(생애최초)':ltvKind==='seomin'?'(서민실수요자)':'')+' · 스트레스 금리 반영)\n'
+   +'- 직장: '+work+'\n'
+   +'- 희망 지역: '+(area||('직장('+work+') 출퇴근 30~40분권에서 골라줘'))+'\n'
+   +'- 나이: '+segVal('fAge')+', 자녀: '+segVal('fKids')+'\n'
+   +'- 연식: '+segVal('fYear')+', 면적: '+segVal('fSize')
+   +(save>0? '\n- 월 저축 '+save+'만원 기준 미래 예산: '+futPlain+'. 만약 예산이 부족해 희망 지역 대신 다른 지역을 추천하게 되면, 답변 마지막에 이 미래 예산으로 희망 지역 진입이 언제쯤 가능해질지 한 줄로 알려줘.':'');
+  var load=document.getElementById('fLoading'), res=document.getElementById('fRes'), btn=document.getElementById('fGo');
+  ga('apt_finder_run',{budget_man:Math.round(budget), region:(area||work), kids:segVal('fKids'), age:segVal('fAge'), size:segVal('fSize'), bank:bank, ltv:ltvKind, save_man:save});
+  res.classList.remove('show'); res.innerHTML='';
+  load.style.display='block'; btn.disabled=true; btn.style.opacity=.6;
+  var mi=0; var tick=setInterval(function(){ mi=(mi+1)%MSGS.length; var lm=document.getElementById('fLoadMsg'); if(lm)lm.textContent=MSGS[mi]; },4000);
+  var TIP='<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💬 단지 카드의 <b>부비에게 물어보기</b>를 누르면 추천 맥락을 기억한 채로 이어서 상담해드려요!</div>';
+  function finishUI(){ clearInterval(tick); load.style.display='none'; btn.disabled=false; btn.style.opacity=1; }
+  function success(reply){
+    finishUI();
+    ga('apt_finder_result',{ok:1});
+    if(window.BOOBI&&window.BOOBI.seed){ window.BOOBI.seed(profile, reply); }
+    res.innerHTML=md(reply)+TIP;
+    res.classList.add('show');
+  }
+  function totalFail(){
+    finishUI();
+    ga('apt_finder_result',{ok:0});
+    res.innerHTML='일시적으로 추천을 불러오지 못했어요. 잠시 후 다시 시도해주세요. 급하시면 오른쪽 아래 부비에게 직접 물어봐도 돼요!';
+    res.classList.add('show');
+  }
+  function legacyFetch(){ // 스트리밍 실패 시 기존(한 번에 받기) 방식 폴백
+    var c2=new AbortController();
+    var t2=setTimeout(function(){c2.abort();},75000);
+    fetch(BOOBI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:profile}]}),signal:c2.signal})
+    .then(function(r){clearTimeout(t2);if(!r.ok)throw new Error('bad');return r.json();})
+    .then(function(d){ if(!d.reply)throw new Error('empty'); success(d.reply); res.scrollIntoView({behavior:'smooth',block:'start'}); })
+    .catch(function(){ clearTimeout(t2); totalFail(); });
+  }
+  var acc='', started=false;
+  var ctrl=new AbortController();
+  var to=setTimeout(function(){ctrl.abort();},90000);
+  fetch(BOOBI_API.replace('/chat','/chat-stream'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:profile}]}),signal:ctrl.signal})
+  .then(function(r){
+    if(!r.ok||!r.body) throw new Error('bad');
+    var reader=r.body.getReader(), dec=new TextDecoder(), buf='', failed=null;
+    function handleLine(ln){
+      if(!ln)return;
+      var o; try{o=JSON.parse(ln);}catch(e){return;}
+      if(o.t!==undefined){
+        acc+=o.t;
+        if(!started){ started=true; load.style.display='none'; res.classList.add('show'); res.scrollIntoView({behavior:'smooth',block:'start'}); }
+        res.innerHTML=md(acc);
+      } else if(o.s){ var lm=document.getElementById('fLoadMsg'); if(lm&&!started) lm.textContent=o.s; }
+      else if(o.error){ failed=o.error; }
+    }
+    function pump(){
+      return reader.read().then(function(x){
+        if(x.done){
+          if(buf)handleLine(buf.trim());
+          clearTimeout(to);
+          if(!acc) throw new Error(failed||'empty');
+          success(acc);
+          return;
+        }
+        buf+=dec.decode(x.value,{stream:true});
+        var ls=buf.split('\n'); buf=ls.pop();
+        for(var i=0;i<ls.length;i++) handleLine(ls[i]);
+        return pump();
+      });
+    }
+    return pump();
+  })
+  .catch(function(){ clearTimeout(to); legacyFetch(); });
+}
+document.getElementById('fRes').addEventListener('click',function(e){
+  var t=e.target && e.target.closest ? e.target.closest('.aA') : null;
+  if(!t)return;
+  var apt=t.getAttribute('data-apt')||'';
+  if(t.classList.contains('naver')){ ga('apt_finder_naver',{apt:apt}); return; }
+  if(t.classList.contains('ask')){
+    ga('apt_finder_ask',{apt:apt});
+    if(window.BOOBI&&window.BOOBI.ask){
+      window.BOOBI.ask(apt+' 단지를 실거주 관점에서 더 자세히 알려줘. 장단점, 최근 실거래 흐름, 임장 갈 때 꼭 확인할 것 위주로.');
+    }else{
+      alert('오른쪽 아래 부비 버튼을 눌러 "'+apt+'" 단지를 물어보세요!');
+    }
+  }
+});
+</script>
+\n<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "내 아파트 찾기", "url": "https://boobi.ai.kr/apt-finder.html", "description": "예산·직장·자녀·연식 조건 진단 후 국토부 실거래가 기반으로 아파트 5곳을 추천하는 무료 서비스", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://boobi.ai.kr/"}, {"@type": "ListItem", "position": 2, "name": "내 아파트 찾기", "item": "https://boobi.ai.kr/apt-finder.html"}]}</script>
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+</body>
+</html>
