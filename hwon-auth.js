@@ -20,7 +20,7 @@ var link=null;
 (function(){
 var nav=document.querySelector('header nav, nav.gnb');
 if(!nav) return;
-var items=[['/tools.html','AI툴'],['/calculator.html','계산기'],['/rental-board.html','청년·신혼부부'],['/senior.html','시니어'],['/invest.html','투자'],['/ai-check.html','AI진단'],['/column.html','칼럼']];
+var items=[['/tools.html','AI툴'],['/calculator.html','계산기'],['/rental-board.html','청년·신혼부부'],['/senior.html','시니어'],['/invest.html','투자'],['/column.html','칼럼']];
 var here=location.pathname.replace(/^\//,'').replace(/index\.html$/,'');
 nav.innerHTML='';
 items.forEach(function(it){
