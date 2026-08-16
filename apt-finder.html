@@ -114,6 +114,12 @@ footer a{color:#B9DCD9;margin:0 8px}
 <input class="f" id="fArea" type="text" placeholder="예: 서울 마포구, 경기 성남시 분당구">
 <label class="f">지역 규제 여부 <span style="font-weight:300;color:var(--sub)">— 모르면 '자동'으로 두세요, 희망 지역으로 판별해드려요</span></label>
 <div class="seg" id="fReg"><button data-v="auto" class="on">🧭 자동 판별</button><button data-v="y">규제지역</button><button data-v="n">비규제</button></div>
+<label class="f">대출받을 금융권 <span style="font-weight:300;color:var(--sub)">— DSR 한도가 달라져요</span></label>
+<div class="seg" id="fBank"><button data-v="b1" class="on">1금융권 (DSR 40%)</button><button data-v="b2">2금융권 (DSR 50%)</button></div>
+<label class="f">주택 구입 우대 조건 <span style="font-weight:300;color:var(--sub)">— 규제지역 LTV 한도가 달라져요</span></label>
+<div class="seg" id="fLtv"><button data-v="none" class="on">해당 없음</button><button data-v="first">🌱 생애최초</button><button data-v="seomin">서민 실수요자</button></div>
+<label class="f">월 저축 가능액 (만원, 선택) <span style="font-weight:300;color:var(--sub)">— 입력하면 1·3·5년 후 예산도 알려드려요</span></label>
+<input class="f" id="fSave" type="number" placeholder="예: 150">
 <label class="f">⑤ 나이대</label>
 <div class="seg" id="fAge"><button data-v="20대" >20대</button><button data-v="30대" class="on">30대</button><button data-v="40대">40대</button><button data-v="50대 이상">50대+</button></div>
 <label class="f">⑥ 자녀</label>
@@ -129,7 +135,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 <div style="font-size:.9rem;color:var(--sub)" id="fLoadMsg">부비가 실거래 데이터를 뒤지는 중...</div>
 </div>
 <div class="result" id="fRes" style="white-space:normal"></div>
-<p class="note">추천은 국토부 실거래가 공개 데이터와 AI 분석 기반의 참고 정보이며, 투자 권유가 아닙니다. 대출 한도는 DSR 40%·30년·금리 4.2% 가정의 추정치로 실제 한도(LTV·스트레스 DSR 포함)와 다를 수 있어요.</p>
+<p class="note">추천은 국토부 실거래가 공개 데이터와 AI 분석 기반의 참고 정보이며, 투자 권유가 아닙니다. 대출 한도는 선택한 금융권의 DSR(1금융 40%/2금융 50%)·스트레스 금리(+1.5%p)·LTV 우대(생애최초 70%/서민실수요자 60%/일반 40%)·규제지역 가격 차등 상한(15억↓ 6억/15~25억 4억/25억↑ 2억)을 반영한 30년 원리금균등 가정 추정치로, 실제 은행 심사 결과와 다를 수 있어요.</p>
 </div>
 
 <div class="rel"><h2 class="sec">추천받은 다음엔</h2><div class="grid">
@@ -139,7 +145,14 @@ footer a{color:#B9DCD9;margin:0 8px}
 </div></div>
 <style>@keyframes fSpin{to{transform:rotate(360deg)}}
 #fRes h3,#fRes b{color:var(--forest)} #fRes a{color:var(--teal);font-weight:600}
-#fRes .apt{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;font-size:.9rem;line-height:1.65}</style>
+#fRes .apt{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;font-size:.9rem;line-height:1.65}
+#fRes .apt.sum{background:#FFF9E9;border-color:#F2E3B3}
+#fRes .aptActs{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+#fRes .aA{flex:1;min-width:132px;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 10px;border-radius:10px;font-size:.83rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s}
+#fRes .aA.naver{background:#E5F8F6;color:#20A6A2;border:1.5px solid #BFE9E6;text-decoration:none}
+#fRes .aA.naver:hover{background:#D2F2EF}
+#fRes .aA.ask{background:#2AC1BC;color:#fff;border:none;box-shadow:0 3px 10px rgba(42,193,188,.3)}
+#fRes .aA.ask:hover{background:#20A6A2}</style>
 </div></main>
 <footer><div class="wrap">
 부비 — 부동산 비서<br>
@@ -160,19 +173,26 @@ var BOOBI_API='https://hwon-boobi.tndud-brad.workers.dev/chat';
 function fmt(n){return Math.round(n).toLocaleString('ko-KR');}
 document.querySelectorAll('.seg').forEach(function(seg){seg.addEventListener('click',function(e){if(e.target.tagName!=='BUTTON')return;seg.querySelectorAll('button').forEach(function(b){b.classList.remove('on')});e.target.classList.add('on');});});
 function segVal(id){return document.querySelector('#'+id+' button.on').dataset.v;}
-function loanLimit(income, debt){
-  var payYear=Math.max(0, income*0.4 - debt);
-  var r=0.042/12, n=360, m=payYear/12;
-  return m*( (Math.pow(1+r,n)-1) / (r*Math.pow(1+r,n)) );
-}
-
-function maxBudget(cash,income,debtPay){
-  var dsr=loanLimit(income,debtPay);
-  var t1=Math.min(cash+Math.min(dsr,60000),150000);
-  var p2=cash+Math.min(dsr,40000); var t2=(p2>150000)?Math.min(p2,250000):0;
-  var p3=cash+Math.min(dsr,20000); var t3=(p3>250000)?p3:0;
-  var P=Math.max(t1,t2,t3);
-  return {P:P, loan:Math.max(0,P-cash), dsrOnly:dsr};
+/* 대출 계산 v2 — 금융권별 DSR(1금융 40%/2금융 50%) + 스트레스 금리(+1.5%p) + LTV 우대(생애최초 70/서민 60/일반 40) + 규제지역 가격 차등 상한(15억↓6억/15~25억 4억/25억↑2억) 중 최솟값 */
+function annuityLoan(payMonth, rate){ var r=rate/12, n=360; return payMonth*((Math.pow(1+r,n)-1)/(r*Math.pow(1+r,n))); }
+function monthlyPay(loan, rate){ var r=rate/12, n=360; return loan*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1); }
+function bandCap(P){ return P<=150000?60000:(P<=250000?40000:20000); }
+function calcBudget(cash,income,debt,reg,bank,ltvKind){
+  var dsrRate = bank==='b2'?0.5:0.4;
+  var baseRate = bank==='b2'?0.047:0.041;
+  var stressRate = baseRate+0.015; // 한도 판정은 스트레스 금리, 실제 상환액은 기본금리
+  var dsr = annuityLoan(Math.max(0, income*dsrRate - debt)/12, stressRate);
+  var ltv = reg ? (ltvKind==='first'?0.7 : ltvKind==='seomin'?0.6 : 0.4) : 0.7;
+  var P = cash + dsr;
+  for(var i=0;i<40;i++){
+    var loan = Math.min(dsr, ltv*P, reg?bandCap(P):Infinity);
+    var nP = cash + Math.max(0,loan);
+    if(Math.abs(nP-P)<1){ P=nP; break; }
+    P=nP;
+  }
+  var loanF = Math.max(0, Math.min(dsr, ltv*P, reg?bandCap(P):Infinity));
+  var bind = (loanF>=dsr-1) ? 'DSR '+(dsrRate*100)+'%' : (reg && loanF>=bandCap(P)-1 && bandCap(P)<ltv*P) ? '가격구간 대출상한' : 'LTV '+Math.round(ltv*100)+'%';
+  return {P:P, loan:loanF, dsr:dsr, ltv:ltv, bind:bind, pay:monthlyPay(loanF, baseRate), baseRate:baseRate, dsrRate:dsrRate};
 }
 function isRegulated(txt){
   if(!txt) return true;
@@ -183,15 +203,31 @@ function isRegulated(txt){
 }
 function readMan(v){ v=Math.round(v); var eok=Math.floor(v/10000), man=v%10000, s=''; if(eok>0){s=eok.toLocaleString('ko-KR')+'억'; if(man>=1000)s+=' '+Math.round(man/1000)+'천';}else{s=man.toLocaleString('ko-KR')+'만원';} return s; }
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
+function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
+function aptActions(name){
+  return '<div class="aptActs">'
+   +'<a class="aA naver" target="_blank" rel="noopener" href="https://m.land.naver.com/search/result/'+encodeURIComponent(name)+'" data-apt="'+escAttr(name)+'">🏠 네이버 매물 보기</a>'
+   +'<button type="button" class="aA ask" data-apt="'+escAttr(name)+'">💬 부비에게 물어보기</button>'
+   +'</div>';
+}
 function md(s){
-  s=esc(s);
-  s=s.replace(/\[([^\]]+)\]\((\/[^)\s]+|https?:[^)\s]+)\)/g,'<a href="$2">$1</a>');
-  s=s.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
-  var blocks=s.split(/\n(?=\*\*\d\.)/);
-  if(blocks.length>=4){
-    return blocks.map(function(b,i){ return i===0? b.replace(/\n/g,'<br>') : '<div class="apt">'+b.replace(/\n/g,'<br>')+'</div>'; }).join('');
+  function conv(x){
+    x=esc(x);
+    x=x.replace(/\[([^\]]+)\]\((\/[^)\s]+|https?:[^)\s]+)\)/g,'<a href="$2">$1</a>');
+    x=x.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+    return x.replace(/\n/g,'<br>');
   }
-  return s.replace(/\n/g,'<br>');
+  var blocks=s.split(/\n(?=\*\*(?:\d\.|부비))/);
+  if(blocks.length>=4){
+    return blocks.map(function(b,i){
+      if(i===0) return conv(b);
+      var m=b.match(/^\*\*\d+\.\s*([^(\n*]+)/);
+      if(m){ var name=m[1].trim(); return '<div class="apt">'+conv(b)+aptActions(name)+'</div>'; }
+      return '<div class="apt sum">'+conv(b)+'</div>';
+    }).join('');
+  }
+  return conv(s);
 }
 var MSGS=['부비가 실거래 데이터를 뒤지는 중...','예산에 맞는 단지를 추리는 중...','학군·직주근접을 따져보는 중...','추천 이유를 정리하는 중...'];
 function findApt(){
@@ -203,20 +239,37 @@ function findApt(){
   var regSel=segVal('fReg');
   var regArea=(document.getElementById('fArea').value.trim()||document.getElementById('fWork').value.trim());
   var reg = regSel==='auto' ? isRegulated(regArea) : regSel==='y';
-  var mb, loan, budget, capped=false;
-  if(reg){ mb=maxBudget(cash,income,debt); loan=mb.loan; budget=mb.P; capped=mb.dsrOnly>loan+1; }
-  else { loan=loanLimit(income,debt); budget=cash+loan; }
+  var bank=segVal('fBank'), ltvKind=segVal('fLtv');
+  var save=+document.getElementById('fSave').value||0;
+  var mb=calcBudget(cash,income,debt,reg,bank,ltvKind);
+  var budget=mb.P, loan=mb.loan;
   var bEl=document.getElementById('fBudget');
   bEl.style.display='block';
-  var regLabel = reg ? ('🔒 '+(regSel==='auto'?'규제지역으로 판별':'규제지역')+(capped?' — <b>대출한도 차등 적용</b>(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)':' (한도 내 DSR 적용)')) : '🔓 비규제지역 — DSR 한도만 적용';
-  bEl.innerHTML='💰 추정 예산: <b style="font-size:1.15rem;color:var(--teal)">'+readMan(budget)+'</b><span style="color:var(--sub);font-size:.84rem"> = 현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+' · '+regLabel+'</span>';
+  var regLabel = (reg?'🔒 '+(regSel==='auto'?'규제지역으로 판별':'규제지역'):'🔓 비규제지역')
+    +' · '+(bank==='b2'?'2금융권':'1금융권')+' DSR '+(mb.dsrRate*100)+'% · LTV '+Math.round(mb.ltv*100)+'%'
+    +(ltvKind==='first'?' (생애최초 우대)':ltvKind==='seomin'?' (서민실수요자 우대)':'')
+    +' · 한도를 결정한 건 <b>'+mb.bind+'</b>';
+  var futHtml='', futPlain='';
+  if(save>0){
+    var futs=[1,3,5].map(function(y){ return {y:y, P:calcBudget(cash+save*12*y,income,debt,reg,bank,ltvKind).P}; });
+    futHtml='<div style="margin-top:9px;font-size:.86rem">📈 월 '+save+'만원씩 모으면 예산이: '+futs.map(function(f){return '<b>'+f.y+'년 후 '+readMan(f.P)+'</b>';}).join(' → ')+'</div>';
+    futPlain=futs.map(function(f){return f.y+'년 후 약 '+readMan(f.P);}).join(', ');
+  }
+  bEl.innerHTML='💰 추정 예산: <b style="font-size:1.15rem;color:var(--teal)">'+readMan(budget)+'</b>'
+    +'<span style="color:var(--sub);font-size:.84rem"> = 현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+'</span>'
+    +'<div style="color:var(--sub);font-size:.84rem;margin-top:5px">'+regLabel+'</div>'
+    +'<div style="font-size:.86rem;margin-top:5px">🏦 대출 '+readMan(loan)+' 시 월 상환액 약 <b>'+fmt(mb.pay)+'만원</b> <span style="color:var(--sub)">(금리 '+(mb.baseRate*100).toFixed(1)+'%·30년 · 한도 판정엔 스트레스 +1.5%p 적용)</span></div>'
+    +futHtml
+    +'<div style="color:var(--sub);font-size:.8rem;margin-top:8px">부비가 실거래를 뒤지는 30초~1분 동안, 위 예산 구성을 먼저 확인해보세요.</div>';
   var profile='[아파트찾기] 내 조건에 맞는 아파트 5곳을 추천해줘.\n'
-   +'- 총 예산: 약 '+readMan(budget)+' (현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+', '+(reg?'규제지역 가격 차등 대출한도 반영':'비규제지역 DSR 기준')+')\n'
+   +'- 총 예산: 약 '+readMan(budget)+' (현금 '+readMan(cash)+' + 대출 가능액 약 '+readMan(loan)+', '+(reg?'규제지역':'비규제지역')+' · '+(bank==='b2'?'2금융권 DSR 50%':'1금융권 DSR 40%')+' · LTV '+Math.round(mb.ltv*100)+'%'+(ltvKind==='first'?'(생애최초)':ltvKind==='seomin'?'(서민실수요자)':'')+' · 스트레스 금리 반영)\n'
    +'- 직장: '+work+'\n'
    +'- 희망 지역: '+(area||('직장('+work+') 출퇴근 30~40분권에서 골라줘'))+'\n'
    +'- 나이: '+segVal('fAge')+', 자녀: '+segVal('fKids')+'\n'
-   +'- 연식: '+segVal('fYear')+', 면적: '+segVal('fSize');
+   +'- 연식: '+segVal('fYear')+', 면적: '+segVal('fSize')
+   +(save>0? '\n- 월 저축 '+save+'만원 기준 미래 예산: '+futPlain+'. 만약 예산이 부족해 희망 지역 대신 다른 지역을 추천하게 되면, 답변 마지막에 이 미래 예산으로 희망 지역 진입이 언제쯤 가능해질지 한 줄로 알려줘.':'');
   var load=document.getElementById('fLoading'), res=document.getElementById('fRes'), btn=document.getElementById('fGo');
+  ga('apt_finder_run',{budget_man:Math.round(budget), region:(area||work), kids:segVal('fKids'), age:segVal('fAge'), size:segVal('fSize'), bank:bank, ltv:ltvKind, save_man:save});
   res.classList.remove('show'); res.innerHTML='';
   load.style.display='block'; btn.disabled=true; btn.style.opacity=.6;
   var mi=0; var tick=setInterval(function(){ mi=(mi+1)%MSGS.length; document.getElementById('fLoadMsg').textContent=MSGS[mi]; },4000);
@@ -227,21 +280,37 @@ function findApt(){
   .then(function(d){
     clearInterval(tick); load.style.display='none'; btn.disabled=false; btn.style.opacity=1;
     if(!d.reply)throw new Error('empty');
-    res.innerHTML=md(d.reply)+'<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💬 더 자세히 알아보고 싶은 단지가 있다면 오른쪽 아래 <b>부비</b>에게 단지명을 물어보세요!</div>';
+    ga('apt_finder_result',{ok:1});
+    if(window.BOOBI&&window.BOOBI.seed){ window.BOOBI.seed(profile, d.reply); }
+    res.innerHTML=md(d.reply)+'<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💬 단지 카드의 <b>부비에게 물어보기</b>를 누르면 추천 맥락을 기억한 채로 이어서 상담해드려요!</div>';
     res.classList.add('show');
     res.scrollIntoView({behavior:'smooth',block:'start'});
   })
   .catch(function(){
     clearInterval(tick); load.style.display='none'; btn.disabled=false; btn.style.opacity=1;
+    ga('apt_finder_result',{ok:0});
     res.innerHTML='일시적으로 추천을 불러오지 못했어요. 잠시 후 다시 시도해주세요. 급하시면 오른쪽 아래 부비에게 직접 물어봐도 돼요!';
     res.classList.add('show');
   });
 }
+document.getElementById('fRes').addEventListener('click',function(e){
+  var t=e.target && e.target.closest ? e.target.closest('.aA') : null;
+  if(!t)return;
+  var apt=t.getAttribute('data-apt')||'';
+  if(t.classList.contains('naver')){ ga('apt_finder_naver',{apt:apt}); return; }
+  if(t.classList.contains('ask')){
+    ga('apt_finder_ask',{apt:apt});
+    if(window.BOOBI&&window.BOOBI.ask){
+      window.BOOBI.ask(apt+' 단지를 실거주 관점에서 더 자세히 알려줘. 장단점, 최근 실거래 흐름, 임장 갈 때 꼭 확인할 것 위주로.');
+    }else{
+      alert('오른쪽 아래 부비 버튼을 눌러 "'+apt+'" 단지를 물어보세요!');
+    }
+  }
+});
 </script>
 \n<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "내 아파트 찾기", "url": "https://boobi.ai.kr/apt-finder.html", "description": "예산·직장·자녀·연식 조건 진단 후 국토부 실거래가 기반으로 아파트 5곳을 추천하는 무료 서비스", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://boobi.ai.kr/"}, {"@type": "ListItem", "position": 2, "name": "내 아파트 찾기", "item": "https://boobi.ai.kr/apt-finder.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
-<script src="/boobi-login-gate.js?v=1" defer></script>
 </body>
 </html>

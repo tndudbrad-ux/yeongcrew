@@ -358,13 +358,38 @@ function answer(t){
   ruleAnswer(t);
 }
 var opened=false;
-btn.onclick=function(){
+function openPanel(silent){
   hideTeaser();btn.classList.remove('pulse');try{sessionStorage.setItem('hwbSeen','1');}catch(e){}
-  panel.classList.toggle('open');
-  if(panel.classList.contains('open')&&!opened){
+  panel.classList.add('open');
+  if(!opened){
     opened=true;
-    bot('안녕하세요, 부비예요! 🔆\n부동산 비서라서 부비 🙋\n깜깜한 곳을 훤히 밝혀드릴게요. 어떤 게 궁금하세요?');
-    chips();
+    if(!silent){
+      bot('안녕하세요, 부비예요! 🔆\n부동산 비서라서 부비 🙋\n깜깜한 곳을 훤히 밝혀드릴게요. 어떤 게 궁금하세요?');
+      chips();
+    }
+  }
+}
+btn.onclick=function(){
+  if(panel.classList.contains('open')){panel.classList.remove('open');return;}
+  openPanel();
+};
+/* 외부 페이지(내 아파트 찾기 등)에서 부비를 여닫고 맥락을 넘기는 공개 API */
+window.BOOBI={
+  open:function(){openPanel();},
+  /* 다른 도구의 대화 결과를 히스토리에 시드해서, 위젯에서 이어 묻는 후속 질문에 맥락이 유지되게 함 */
+  seed:function(u,a){
+    try{
+      if(u)HIST.push({role:'user',content:String(u).slice(0,2000)});
+      if(a)HIST.push({role:'assistant',content:String(a).slice(0,2000)});
+      if(HIST.length>12)HIST=HIST.slice(-12);
+    }catch(e){}
+  },
+  /* 패널을 열고 질문을 바로 전송 */
+  ask:function(t){
+    t=String(t||'').trim(); if(!t)return;
+    openPanel(true); opened=true;
+    user(t);
+    setTimeout(function(){answer(t);},300);
   }
 };
 panel.querySelector('#hwbClose').onclick=function(){panel.classList.remove('open');};
