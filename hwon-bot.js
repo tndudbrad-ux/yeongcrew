@@ -209,7 +209,59 @@ function ctas(raw){
  });
  body.appendChild(c);scrollDown();
 }
-function llmAnswer(t, attempt, ty){
+/* 스트리밍 우선: 첫 문장이 1~2초 안에 나타나기 시작. 실패 시 기존(비스트리밍) 경로로 자동 폴백 */
+function llmAnswer(t){
+ HIST.push({role:'user',content:t});
+ if(HIST.length>12)HIST=HIST.slice(-12);
+ var ty=botTyping();
+ llmStream(t, ty);
+}
+function llmStream(t, ty){
+ var acc='', bubble=null;
+ var ctrl=new AbortController();
+ var to=setTimeout(function(){ctrl.abort();},90000);
+ function render(){
+   if(!bubble){ ty.remove(); bubble=el('div','hwbMsg hwbBot',''); body.appendChild(bubble); }
+   bubble.innerHTML=mdLite(acc); scrollDown();
+ }
+ fetch(BOOBI_API.replace('/chat','/chat-stream'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:HIST}),signal:ctrl.signal})
+ .then(function(r){
+   if(!r.ok||!r.body) throw new Error('bad');
+   var reader=r.body.getReader(), dec=new TextDecoder(), buf='', failed=null;
+   function handleLine(ln){
+     if(!ln)return;
+     var o; try{o=JSON.parse(ln);}catch(e){return;}
+     if(o.t!==undefined){ acc+=o.t; render(); }
+     else if(o.s && !bubble){ var tx=ty.querySelector('.hwbTyTxt'); if(tx){ ty.dataset.hold='1'; tx.textContent=o.s; } }
+     else if(o.error){ failed=o.error; }
+   }
+   function pump(){
+     return reader.read().then(function(x){
+       if(x.done){
+         if(buf)handleLine(buf.trim());
+         clearTimeout(to);
+         if(!acc) throw new Error(failed||'empty');
+         HIST.push({role:'assistant',content:acc});
+         ctas(acc);
+         return;
+       }
+       buf+=dec.decode(x.value,{stream:true});
+       var ls=buf.split('\n'); buf=ls.pop();
+       for(var i=0;i<ls.length;i++) handleLine(ls[i]);
+       return pump();
+     });
+   }
+   return pump();
+ })
+ .catch(function(){
+   clearTimeout(to);
+   if(bubble) bubble.remove();
+   if(!document.body.contains(ty)) ty=botTyping();
+   delete ty.dataset.hold;
+   llmAnswerHTTP(t, 2, ty); // 기존 경로로 폴백 (HIST엔 이미 user가 있으므로 attempt=2)
+ });
+}
+function llmAnswerHTTP(t, attempt, ty){
  attempt=attempt||1;
  if(attempt===1){
    HIST.push({role:'user',content:t});
@@ -235,7 +287,7 @@ function llmAnswer(t, attempt, ty){
      ty.dataset.hold='1';
      var tx=ty.querySelector('.hwbTyTxt');
      if(tx){ tx.textContent='응답이 늦어지네요 — 자동으로 다시 시도 중이에요 🔁'; }
-     setTimeout(function(){ delete ty.dataset.hold; llmAnswer(t, attempt+1, ty); },1500);
+     setTimeout(function(){ delete ty.dataset.hold; llmAnswerHTTP(t, attempt+1, ty); },1500);
      return;
    }
    ty.remove();

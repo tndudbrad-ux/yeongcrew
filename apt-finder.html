@@ -272,26 +272,65 @@ function findApt(){
   ga('apt_finder_run',{budget_man:Math.round(budget), region:(area||work), kids:segVal('fKids'), age:segVal('fAge'), size:segVal('fSize'), bank:bank, ltv:ltvKind, save_man:save});
   res.classList.remove('show'); res.innerHTML='';
   load.style.display='block'; btn.disabled=true; btn.style.opacity=.6;
-  var mi=0; var tick=setInterval(function(){ mi=(mi+1)%MSGS.length; document.getElementById('fLoadMsg').textContent=MSGS[mi]; },4000);
-  var ctrl=new AbortController();
-  var to=setTimeout(function(){ctrl.abort();},75000);
-  fetch(BOOBI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:profile}]}),signal:ctrl.signal})
-  .then(function(r){clearTimeout(to);if(!r.ok)throw new Error('bad');return r.json();})
-  .then(function(d){
-    clearInterval(tick); load.style.display='none'; btn.disabled=false; btn.style.opacity=1;
-    if(!d.reply)throw new Error('empty');
+  var mi=0; var tick=setInterval(function(){ mi=(mi+1)%MSGS.length; var lm=document.getElementById('fLoadMsg'); if(lm)lm.textContent=MSGS[mi]; },4000);
+  var TIP='<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💬 단지 카드의 <b>부비에게 물어보기</b>를 누르면 추천 맥락을 기억한 채로 이어서 상담해드려요!</div>';
+  function finishUI(){ clearInterval(tick); load.style.display='none'; btn.disabled=false; btn.style.opacity=1; }
+  function success(reply){
+    finishUI();
     ga('apt_finder_result',{ok:1});
-    if(window.BOOBI&&window.BOOBI.seed){ window.BOOBI.seed(profile, d.reply); }
-    res.innerHTML=md(d.reply)+'<div style="background:#fff;border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.87rem">💬 단지 카드의 <b>부비에게 물어보기</b>를 누르면 추천 맥락을 기억한 채로 이어서 상담해드려요!</div>';
+    if(window.BOOBI&&window.BOOBI.seed){ window.BOOBI.seed(profile, reply); }
+    res.innerHTML=md(reply)+TIP;
     res.classList.add('show');
-    res.scrollIntoView({behavior:'smooth',block:'start'});
-  })
-  .catch(function(){
-    clearInterval(tick); load.style.display='none'; btn.disabled=false; btn.style.opacity=1;
+  }
+  function totalFail(){
+    finishUI();
     ga('apt_finder_result',{ok:0});
     res.innerHTML='일시적으로 추천을 불러오지 못했어요. 잠시 후 다시 시도해주세요. 급하시면 오른쪽 아래 부비에게 직접 물어봐도 돼요!';
     res.classList.add('show');
-  });
+  }
+  function legacyFetch(){ // 스트리밍 실패 시 기존(한 번에 받기) 방식 폴백
+    var c2=new AbortController();
+    var t2=setTimeout(function(){c2.abort();},75000);
+    fetch(BOOBI_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:profile}]}),signal:c2.signal})
+    .then(function(r){clearTimeout(t2);if(!r.ok)throw new Error('bad');return r.json();})
+    .then(function(d){ if(!d.reply)throw new Error('empty'); success(d.reply); res.scrollIntoView({behavior:'smooth',block:'start'}); })
+    .catch(function(){ clearTimeout(t2); totalFail(); });
+  }
+  var acc='', started=false;
+  var ctrl=new AbortController();
+  var to=setTimeout(function(){ctrl.abort();},90000);
+  fetch(BOOBI_API.replace('/chat','/chat-stream'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'user',content:profile}]}),signal:ctrl.signal})
+  .then(function(r){
+    if(!r.ok||!r.body) throw new Error('bad');
+    var reader=r.body.getReader(), dec=new TextDecoder(), buf='', failed=null;
+    function handleLine(ln){
+      if(!ln)return;
+      var o; try{o=JSON.parse(ln);}catch(e){return;}
+      if(o.t!==undefined){
+        acc+=o.t;
+        if(!started){ started=true; load.style.display='none'; res.classList.add('show'); res.scrollIntoView({behavior:'smooth',block:'start'}); }
+        res.innerHTML=md(acc);
+      } else if(o.s){ var lm=document.getElementById('fLoadMsg'); if(lm&&!started) lm.textContent=o.s; }
+      else if(o.error){ failed=o.error; }
+    }
+    function pump(){
+      return reader.read().then(function(x){
+        if(x.done){
+          if(buf)handleLine(buf.trim());
+          clearTimeout(to);
+          if(!acc) throw new Error(failed||'empty');
+          success(acc);
+          return;
+        }
+        buf+=dec.decode(x.value,{stream:true});
+        var ls=buf.split('\n'); buf=ls.pop();
+        for(var i=0;i<ls.length;i++) handleLine(ls[i]);
+        return pump();
+      });
+    }
+    return pump();
+  })
+  .catch(function(){ clearTimeout(to); legacyFetch(); });
 }
 document.getElementById('fRes').addEventListener('click',function(e){
   var t=e.target && e.target.closest ? e.target.closest('.aA') : null;
