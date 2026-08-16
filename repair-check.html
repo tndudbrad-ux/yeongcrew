@@ -123,7 +123,9 @@ footer a{color:#B9DCD9;margin:0 8px}
 <option value="lockmech">도어락 기계 고장·오작동</option>
 <option value="lock">도어락 배터리</option>
 <option value="sink">싱크대·붙박이장 파손</option>
+<option value="custom">✍️ 목록에 없어요 — 직접 입력할래요</option>
 </select>
+<input class="f" id="rCustom" type="text" maxlength="80" placeholder="어떤 하자인지 적어주세요 (예: 베란다 타일이 깨졌어요)" style="display:none;margin-top:8px">
 <label class="f">언제부터 그랬나요?</label>
 <div class="seg" id="rWhen"><button data-v="before" class="on">입주 때부터</button><button data-v="natural">살다 보니 자연히</button><button data-v="fault">내(가족·손님) 실수로</button></div>
 <label class="f">거주 형태</label>
@@ -170,11 +172,34 @@ function card(color,icon,title,body){
   return '<div style="background:'+bg+';border:1.5px solid '+bd+';border-radius:14px;padding:16px 18px;margin-top:10px"><div style="font-weight:600;font-size:1.02rem">'+icon+' '+title+'</div><div style="font-size:.9rem;line-height:1.7;margin-top:6px">'+body+'</div></div>';
 }
 var STEPS='<div style="background:#fff;border-radius:12px;padding:14px 16px;margin-top:10px;font-size:.88rem;line-height:1.8"><b>임대인에게 요구하는 순서</b><br>① 하자 사진·영상 확보 (날짜 나오게)<br>② 문자·카톡으로 수리 요청 → 기록이 증거<br>③ 무시하면 내용증명 발송<br>④ 그래도 안 하면 직접 수리 후 비용 청구(필요비) 또는 월세에서 공제<br>⑤ 분쟁 시 <b>주택임대차분쟁조정위원회</b> (무료, 전화 132)</div>';
+/* 직접 입력 토글 */
+document.getElementById('rItem').addEventListener('change',function(){
+  var c=document.getElementById('rCustom');
+  c.style.display=this.value==='custom'?'block':'none';
+  if(this.value==='custom')c.focus();
+});
+/* 직접 입력 텍스트 → 기존 분류로 매핑 (키워드 기반) */
+function classifyCustom(t){
+  var K=[[/(보일러|난방|온수)/,'boiler'],[/동파/,'frozen'],[/(누수|천장.*물|물.*샌|물샘)/,'leak'],[/(배관|수도관|파이프)/,'pipe'],[/(에어컨|세탁기|냉장고|가전|인덕션|쿡탑|후드)/,'aircon'],[/(인터폰|비디오폰|초인종)/,'phone'],[/(창문|새시|샷시|유리|바람)/,'window'],[/(전기|콘센트|두꺼비집|차단기|누전)/,'elec'],[/(욕조|세면대|타일)/,'toilet'],[/(막힘|막혔|하수구|배수구|역류)/,'clog'],[/(곰팡이|결로|습기)/,'mold'],[/(장판|도배|벽지|바닥|마루)/,'paper'],[/(전구|형광등|전등|조명|등이)/,'bulb'],[/(비데|변기\s*커버)/,'seat'],[/(문고리|손잡이|경첩|방문)/,'knob'],[/방충망/,'screen'],[/(샤워|수전|수도꼭지)/,'shower'],[/도어락.*(배터리|건전지)|배터리/,'lock'],[/(도어락|현관.*잠금|번호키)/,'lockmech'],[/(변기)/,'toilet'],[/(싱크대|붙박이|수납장|찬장)/,'sink']];
+  for(var i=0;i<K.length;i++){ if(K[i][0].test(t)) return K[i][1]; }
+  return null;
+}
 function calcRepair(){
   var item=document.getElementById('rItem').value;
   var when=segVal('rWhen'), type=segVal('rType');
   var el=document.getElementById('rRes'); el.classList.add('show');
-  var name=(MAJOR[item]||MINOR[item]||GRAY[item]);
+  var customTxt='';
+  if(item==='custom'){
+    customTxt=(document.getElementById('rCustom').value||'').trim();
+    if(!customTxt){ el.innerHTML=card('y','✍️','하자 내용을 적어주세요','어떤 하자인지 한 줄이면 충분해요. 예: "베란다 타일이 깨졌어요", "현관 센서등이 안 켜져요"'); return; }
+    var mapped=classifyCustom(customTxt);
+    if(mapped){ item=mapped; }
+    else if(segVal('rType')!=='own' && segVal('rWhen')!=='fault'){
+      el.innerHTML=card('y','⚖️','일반 기준으로 판단해보세요','"<b>'+customTxt.replace(/[<>&"]/g,'')+'</b>" — 목록에 없는 하자라 일반 원칙으로 안내드려요.<br><br>· <b>노후·설비·구조 문제</b>(고치지 않으면 정상 거주가 어려운 것) → <b>임대인</b> 책임 (민법 제623조 수선의무)<br>· <b>소모품·간단 교체</b>(몇 천원~몇 만원으로 쉽게 교체) → <b>임차인</b> 부담이 관례<br>· <b>내 실수로 파손</b> → 원인 제공자(임차인) 부담<br><br>애매하면 화면 오른쪽 아래 <b>부비 챗봇</b>에게 상황을 그대로 물어보세요 — 판례 기준으로 짚어드려요.')+STEPS;
+      return;
+    }
+  }
+  var name=(MAJOR[item]||MINOR[item]||GRAY[item]||(customTxt?customTxt.replace(/[<>&"]/g,''):''));
   if(type==='own'){
     el.innerHTML=card('g','🏗️','시공사에 하자보수를 청구하세요','자가(신축)의 하자는 임대차가 아니라 <b>시공사의 하자담보책임</b>이에요. 공종별 책임기간: 마감(도배·타일 등) 2년, 기계·설비(보일러·배관) 3년, 방수·지붕 5년, 기둥·내력벽 10년. 관리사무소나 시공사 하자접수 채널에 <b>사진과 함께 서면 접수</b>하고 접수번호를 보관하세요. 기간 지나기 전 접수가 핵심!')+'<div style="font-size:.85rem;margin-top:8px">→ 입주 초기라면 <a href="/rental-care.html" style="color:var(--teal);font-weight:600">하자 점검 체크리스트</a>로 전수 점검부터.</div>';
     return;
