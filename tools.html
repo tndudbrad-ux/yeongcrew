@@ -52,6 +52,20 @@ h2.sec::before{content:"";width:9px;height:9px;border-radius:50%;background:line
 .notice{background:#F3FBFA;border:1px solid #C7EEEA;border-radius:12px;padding:13px 16px;font-size:.84rem;color:var(--sub);margin-top:34px}
 footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center;margin-top:40px}
 footer a{color:#B9DCD9;margin:0 8px}
+/* ===== 3D 부비링 궤도 (좌우 드래그/스크롤) ===== */
+.orbitWrap{margin:2px 0 10px;user-select:none;-webkit-user-select:none}
+.orbitStage{position:relative;height:300px;touch-action:pan-y;cursor:grab}
+.orbitStage.grabbing{cursor:grabbing}
+.orbitRingLine{position:absolute;left:50%;top:50%;width:80%;max-width:540px;height:154px;transform:translate(-50%,-50%);border-radius:50%;border:1.5px dashed rgba(42,193,188,.30);pointer-events:none}
+.orbitRingLine::after{content:"";position:absolute;left:50%;top:50%;width:64%;height:66%;transform:translate(-50%,-50%);border-radius:50%;border:1px dashed rgba(42,193,188,.15)}
+.orbitCore{position:absolute;left:50%;top:50%;width:120px;height:120px;transform:translate(-50%,-50%);z-index:100;filter:drop-shadow(0 12px 26px rgba(27,145,141,.4));animation:coreFloat 5s ease-in-out infinite;pointer-events:none}
+@keyframes coreFloat{0%,100%{transform:translate(-50%,-53%)}50%{transform:translate(-50%,-47%)}}
+.sat{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;gap:6px;width:82px;opacity:0;text-decoration:none;will-change:transform,opacity}
+.satIco{width:56px;height:56px;border-radius:17px;display:flex;align-items:center;justify-content:center;font-size:1.55rem;background:linear-gradient(180deg,#FFFFFF,#E7F6F4);border:1px solid #DCEEEC;box-shadow:0 12px 24px -8px rgba(32,166,162,.45),inset 0 1px 0 #fff}
+.satLbl{font-size:.77rem;font-weight:700;color:var(--forest);letter-spacing:-.01em;white-space:nowrap;background:rgba(255,255,255,.72);padding:1px 8px;border-radius:11px}
+.orbitHint{text-align:center;font-size:.75rem;color:var(--sub);margin-top:-2px;letter-spacing:.03em;transition:opacity .5s}
+@media(max-width:520px){.orbitStage{height:250px}.orbitCore{width:94px;height:94px}.satIco{width:50px;height:50px;font-size:1.35rem}.satLbl{font-size:.71rem}}
+@media(prefers-reduced-motion:reduce){.orbitCore{animation:none}}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css?v=3">
 </head>
@@ -64,8 +78,22 @@ footer a{color:#B9DCD9;margin:0 8px}
 <main><div class="wrap">
 <div class="crumb"><a href="/">홈</a> › 부비 툴박스</div>
 <h1><img src="/boobi-ring-3d.png" alt="">부비 툴박스</h1>
-<p class="lead">계약 전 진단부터 현장 체크리스트, 세금·대출 계산까지 — 부비의 모든 툴을 한곳에 모았어요. 전부 무료, 로그인 없이 바로 쓸 수 있어요.</p>
+<p class="lead">계약 전 진단부터 현장 체크리스트, 세금·대출 계산까지 — 부비의 모든 툴을 한곳에 모았어요. 전부 무료 — 구글 로그인 한 번이면 모든 툴을 쓸 수 있어요.</p>
 <span class="bmk">🔖 이 페이지를 북마크해두면 필요할 때 바로 꺼내 쓸 수 있어요</span>
+
+<div class="orbitWrap">
+<div class="orbitStage" id="orbitStage" aria-label="바로가기 메뉴 — 좌우로 드래그하세요">
+<div class="orbitRingLine" aria-hidden="true"></div>
+<img class="orbitCore" src="boobi-ring-3d.png" alt="부비" width="120" height="120">
+<a class="sat" href="apt-finder.html" data-a="0" draggable="false"><span class="satIco">🔎</span><span class="satLbl">아파트 찾기</span></a>
+<a class="sat" href="wealth-check.html" data-a="1" draggable="false"><span class="satIco">🧭</span><span class="satLbl">자산 진단</span></a>
+<a class="sat" href="contract-check.html" data-a="2" draggable="false"><span class="satIco">🩺</span><span class="satLbl">계약 검진</span></a>
+<a class="sat" href="jeonse-safety-check.html" data-a="3" draggable="false"><span class="satIco">🛡️</span><span class="satLbl">전세사기 체크</span></a>
+<a class="sat" href="repair-check.html" data-a="4" draggable="false"><span class="satIco">🔧</span><span class="satLbl">수리 책임</span></a>
+<a class="sat" href="calculator.html" data-a="5" draggable="false"><span class="satIco">🧮</span><span class="satLbl">부동산 계산기</span></a>
+</div>
+<div class="orbitHint" id="orbitHint">← 좌우로 돌려보세요 →</div>
+
 
 <h2 class="sec">🩺 계약 전 진단</h2>
 <div class="grid">
@@ -130,5 +158,49 @@ footer a{color:#B9DCD9;margin:0 8px}
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
 <script src="/hwon-ui.js" defer></script>
+<script>
+(function(){
+  var stage=document.getElementById('orbitStage'); if(!stage) return;
+  var sats=[].slice.call(stage.querySelectorAll('.sat'));
+  var N=sats.length, TAU=Math.PI*2;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rot=0, vel=0, dragging=false, lastX=0, moved=0, hintOff=false;
+  var hint=document.getElementById('orbitHint');
+  function dims(){ var w=stage.clientWidth,h=stage.clientHeight; return {cx:w/2,cy:h/2,RX:Math.min(w/2-46,242),RY:Math.max(46,h*0.205)}; }
+  function layout(){
+    var d=dims();
+    for(var i=0;i<N;i++){
+      var base=(+sats[i].getAttribute('data-a'))/N*TAU, a=base+rot;
+      var sinA=Math.sin(a), cosA=Math.cos(a);
+      var x=d.cx+sinA*d.RX, y=d.cy+cosA*d.RY, t=(cosA+1)/2;
+      var s=0.5+t*0.66, op=0.34+t*0.66, el=sats[i];
+      el.style.left=x+'px'; el.style.top=y+'px';
+      el.style.transform='translate(-50%,-50%) scale('+s.toFixed(3)+')';
+      el.style.opacity=op.toFixed(3);
+      el.style.zIndex=Math.round(t*200);
+      el.style.filter= cosA<0 ? 'blur('+((-cosA)*1.1).toFixed(2)+'px)' : 'none';
+    }
+  }
+  function frame(){
+    if(!dragging){
+      if(Math.abs(vel)>0.0002){ rot+=vel; vel*=0.94; }
+      else { vel=0; if(!reduce) rot+=0.0018; }
+    }
+    layout(); requestAnimationFrame(frame);
+  }
+  function killHint(){ if(hintOff||!hint)return; hintOff=true; hint.style.opacity='0'; }
+  var pendingSat=null;
+  stage.addEventListener('pointerdown',function(e){ dragging=true; lastX=e.clientX; moved=0; vel=0; stage.classList.add('grabbing'); pendingSat=e.target.closest?e.target.closest('.sat'):null; try{stage.setPointerCapture(e.pointerId);}catch(_){} });
+  stage.addEventListener('pointermove',function(e){ if(!dragging)return; var dx=e.clientX-lastX; lastX=e.clientX; rot+=dx*0.0062; vel=dx*0.0062; moved+=Math.abs(dx); if(moved>4)killHint(); });
+  function endDrag(){ dragging=false; stage.classList.remove('grabbing');
+    /* 포인터 캡처 때문에 앵커 click이 막히므로 탭(이동량<=6px)이면 직접 이동 */
+    if(pendingSat && moved<=6){ var href=pendingSat.getAttribute('href'); if(href) location.href=href; }
+    pendingSat=null; }
+  stage.addEventListener('pointerup',endDrag); stage.addEventListener('pointercancel',function(){ pendingSat=null; dragging=false; stage.classList.remove('grabbing'); });
+  stage.addEventListener('wheel',function(e){ if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){ rot+=e.deltaX*0.003; vel=e.deltaX*0.0015; killHint(); e.preventDefault(); } },{passive:false});
+  sats.forEach(function(a){ a.addEventListener('click',function(e){ if(moved>6) e.preventDefault(); }); });
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
