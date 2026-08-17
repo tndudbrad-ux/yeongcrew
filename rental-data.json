@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-16T09:25:43.995Z",
+  "updatedAt": "2026-08-17T00:29:03.352Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
   "count": 48,
   "schema": {
@@ -153,21 +153,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020521",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "남양주 장현5 2BL 행복주택 예비입주자 입주자격완화 모집(2026.08.05.공고)",
-      "region": "경기도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-20",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020521&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020519",
       "provider": "LH",
       "ltype": "행복주택",
@@ -179,6 +164,21 @@
       "rcritEnd": "2026-08-20",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020519&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020521",
+      "provider": "LH",
+      "ltype": "행복주택",
+      "name": "남양주 장현5 2BL 행복주택 예비입주자 입주자격완화 모집(2026.08.05.공고)",
+      "region": "경기도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-08-20",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020521&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -198,32 +198,32 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020541",
+      "id": "LH-2015122300020480",
       "provider": "LH",
       "ltype": "매입임대",
-      "name": "[정정공고][청년신혼부부매입임대리츠]_강원지역 입주자 모집",
-      "region": "강원특별자치도",
+      "name": "[청년신혼부부매입임대리츠]_경기남부지역 예비입주자 모집",
+      "region": "경기도",
       "units": null,
       "target": "무주택 등 · 자격은 공고문 확인",
       "rcritStart": null,
       "rcritEnd": "2026-08-20",
       "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020541&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020480&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020538",
+      "id": "LH-2015122300020478",
       "provider": "LH",
       "ltype": "매입임대",
-      "name": "[정정공고] [청년신혼부부 매입임대리츠] 충북지역 입주자 모집",
-      "region": "충청북도",
+      "name": "[청년신혼부부매입임대리츠]_광주전남 입주자 모집",
+      "region": "전남광주통합특별시",
       "units": null,
       "target": "무주택 등 · 자격은 공고문 확인",
       "rcritStart": null,
       "rcritEnd": "2026-08-20",
       "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020538&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020478&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
