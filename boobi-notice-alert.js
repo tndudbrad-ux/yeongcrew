@@ -5,6 +5,9 @@
  * 저장: Firestore `noticeAlerts/{uid_공고ID}` → 발송: GitHub Actions send-notice-alerts.mjs (전날 18시·당일 8시 KST)
  * 필요: hwon-auth.js (구글 로그인) 선로딩 */
 (function(){
+/* ⏸️ 임시 비활성화 (2026-08-14, 수영 지시) — 다시 켜려면 아래 DISABLED를 false로 */
+var DISABLED=true;
+if(DISABLED){ var st=document.createElement('style'); st.textContent='.nalert-btn{display:none!important}'; document.head.appendChild(st); return; }
 if(window.__boobiNAlert)return; window.__boobiNAlert=1;
 
 /* ---- 스타일 ---- */
