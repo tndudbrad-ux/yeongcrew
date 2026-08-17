@@ -3,6 +3,7 @@
 function has(re){ return [].some.call(document.scripts, function(s){ return re.test(s.src||''); }); }
 function add(src){ var s=document.createElement('script'); s.src=src; s.defer=true; document.head.appendChild(s); }
 if(!has(/hwon-ui\.js/)) add('/hwon-ui.js');                 // 금액 힌트·애니메이션 등 UI 공통
+if(!has(/boobi-survey\.js/)) add('/boobi-survey.js?v=1'); // 가입 기대 설문 모달 (미응답 유저 1회)
 var art=document.querySelector('meta[property="og:type"][content="article"]')||document.querySelector('article');
 var hub=/column\.html$/.test(location.pathname)||document.getElementById('popularCols');
 if((art||hub) && !has(/column-views\.js/)) add('/column-views.js?v=2'); // 조회수 배지·인기글: 모든 칼럼/글에 자동
