@@ -7,6 +7,7 @@ if(!has(/boobi-survey\.js/)) add('/boobi-survey.js?v=1'); // 가입 기대 설�
 var art=document.querySelector('meta[property="og:type"][content="article"]')||document.querySelector('article');
 var hub=/column\.html$/.test(location.pathname)||document.getElementById('popularCols');
 if((art||hub) && !has(/column-views\.js/)) add('/column-views.js?v=2'); // 조회수 배지·인기글: 모든 칼럼/글에 자동
+if(art && !has(/boobi-article-share\.js/)) add('/boobi-article-share.js?v=1'); // 공유 바: 모든 칼럼/글에 자동 (클린 URL 공유)
 })();
 
 /* 부비 계정 v1 — Firebase Google 로그인 */
