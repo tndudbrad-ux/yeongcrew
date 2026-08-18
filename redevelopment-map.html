@@ -383,7 +383,10 @@ var EXTRA = [
     {min:0,c:'#EFF6F5',l:'0'},{min:1,c:'#D6F1EE',l:'1~5'},{min:6,c:'#A5E3DE',l:'6~10'},
     {min:11,c:'#5FCEC8',l:'11~20'},{min:21,c:'#22A9A4',l:'21~30'},{min:31,c:'#0F7C79',l:'31+'}
   ];
-  var IDX=null, REG={}, F={}, ROWS=[], BYGU={}, curSido=null, curGu=null, fType=null, fStage=null, limit=12;
+  var EXTRA_LABEL = {scale:'규모',dong:'동수',builder:'시공자',supervisor:'감리자',designer:'설계자',
+    members:'조합원',far:'용적률',bcr:'건폐율',area:'구역면적',owner:'사업주체',tel:'연락처'};
+  var EXTRA_UNIT = {members:'명',far:'%',bcr:'%',area:'㎡',dong:'개동'};
+  var IDX=null, REG={}, F={}, ROWS=[], BYGU={}, EXTRAS=[], curSido=null, curGu=null, fType=null, fStage=null, limit=12;
   var $ = function(id){ return document.getElementById(id); };
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function pick(sc,n){ var c=sc[0].c; for(var i=0;i<sc.length;i++){ if(n>=sc[i].min) c=sc[i].c; } return c; }
@@ -516,7 +519,10 @@ var EXTRA = [
 
   function loadRegion(name, doc, gu){
     F={}; doc.fields.forEach(function(k,i){ F[k]=i; });
+    EXTRAS = doc.fields.filter(function(k){ return EXTRA_LABEL[k]; });
     ROWS = doc.rows; BYGU={};
+    var fallbackGu = (REG[name] && REG[name].short) || name;
+    ROWS.forEach(function(r){ if(!r[F['gu']]) r[F['gu']] = fallbackGu; });
     ROWS.forEach(function(r){ (BYGU[get(r,'gu')] = BYGU[get(r,'gu')] || []).push(r); });
     var totUnits = ROWS.reduce(function(a,r){ return a+(get(r,'tot')||0); },0);
     var building = ROWS.filter(function(r){ return get(r,'stage')==='착공'; }).length;
@@ -648,6 +654,12 @@ var EXTRA = [
     var prog = si<0 ? '' : '<div class="prog">'+STAGES.map(function(s,i){ return '<span class="'+(i<si?'done':(i===si?'now':''))+'"></span>'; }).join('')+'</div>'+
       '<div class="proglb"><span>구역지정</span><b>현재 '+esc(stage)+'</b><span>착공</span></div>';
     var tl=DATEKEYS.map(function(d){ var v=ymd(get(r,d[0])); return v?'<span>'+d[1]+' <b>'+esc(v)+'</b></span>':''; }).join('');
+    var ex=EXTRAS.map(function(k){
+      var v=get(r,k);
+      if(v==null||v===''||v==='미선정'||v==='미정') return '';
+      var s2=(typeof v==='number')? v.toLocaleString('ko-KR') : esc(v);
+      return '<span>'+EXTRA_LABEL[k]+' <b>'+s2+(EXTRA_UNIT[k]||'')+'</b></span>';
+    }).join('');
     var n=(typeof NOTES!=='undefined') && NOTES[gu+'|'+nm];
     return '<div class="acard">'+
       '<div class="top"><div><h4>'+esc(nm)+'</h4><div class="addr">'+esc(gu)+' '+esc(get(r,'addr'))+'</div></div>'+
@@ -657,12 +669,17 @@ var EXTRA = [
         (get(r,'pro')==='재촉'?'<span class="tag pro">재정비촉진</span>':'')+
         '<span class="tag md">'+esc(get(r,'type'))+'</span>'+
       '</div></div>'+ prog +
-      '<div class="units">'+
-        '<div>기존 <b>'+num(get(r,'exist'))+'</b>세대</div>'+
-        '<div>건립 <b>'+num(get(r,'tot'))+'</b>세대</div>'+
-        '<div>분양 <b>'+num(get(r,'sale'))+'</b></div>'+
-        '<div>임대 <b>'+num(get(r,'rent'))+'</b></div>'+
-      '</div>'+
+      (function(){
+        var e=get(r,'exist'), t=get(r,'tot'), sa=get(r,'sale'), re=get(r,'rent');
+        if(e==null&&t==null&&sa==null&&re==null) return '';
+        var h='<div class="units">';
+        if(e!=null) h+='<div>기존 <b>'+num(e)+'</b>세대</div>';
+        if(t!=null) h+='<div>건립 <b>'+num(t)+'</b>세대</div>';
+        if(sa!=null) h+='<div>분양 <b>'+num(sa)+'</b></div>';
+        if(re!=null) h+='<div>임대 <b>'+num(re)+'</b></div>';
+        return h+'</div>';
+      })()+
+      (ex?'<div class="tl">'+ex+'</div>':'')+
       (tl?'<div class="tl">'+tl+'</div>':'')+
       (n&&(n.extra||n.price)?'<div class="noteBox">'+(n.extra?'<b>부비 노트.</b> '+esc(n.extra):'')+(n.price?(n.extra?'<br>':'')+'참고 시세 — '+esc(n.price):'')+'</div>':'')+
       (n&&n.watch?'<div class="warnrow">⚠️ '+esc(n.watch)+'</div>':'')+
