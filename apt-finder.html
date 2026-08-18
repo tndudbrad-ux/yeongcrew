@@ -353,10 +353,11 @@ function boot(){
     document.getElementById('areaCasc').innerHTML='<p class="hintline">지역 데이터를 불러오지 못했어요. 새로고침 해주세요.</p>';
   });
 }
+/* 2026.7 개편 반영 — 광주광역시+전라남도 → 전남광주통합특별시 */
 var SHORT={'서울특별시':'서울','경기도':'경기','인천광역시':'인천','부산광역시':'부산','대구광역시':'대구',
- '광주광역시':'광주','대전광역시':'대전','울산광역시':'울산','세종특별자치시':'세종','강원특별자치도':'강원',
- '충청북도':'충북','충청남도':'충남','전북특별자치도':'전북','전라남도':'전남','경상북도':'경북',
- '경상남도':'경남','제주특별자치도':'제주'};
+ '대전광역시':'대전','울산광역시':'울산','세종특별자치시':'세종','강원특별자치도':'강원',
+ '충청북도':'충북','충청남도':'충남','전북특별자치도':'전북','전남광주통합특별시':'전남광주',
+ '경상북도':'경북','경상남도':'경남','제주특별자치도':'제주'};
 var FULL={}; Object.keys(SHORT).forEach(function(k){FULL[SHORT[k]]=k;});
 boot();
 (function(){
@@ -670,8 +671,14 @@ function renderFinder(){
 /* ── 상급지 이동 시뮬레이터 ── */
 function growthOf(sido,sgg){
   var G=DATA.growth; if(!G) return null;
-  var sd=SHORT[sido]||sido;
-  if(sgg && G.sgg[sd] && G.sgg[sd][sgg]) return {r:G.sgg[sd][sgg], nm:sgg};
+  var sd=SHORT[sido]||sido, T=G.sgg[sd]||{};
+  if(sgg && T[sgg]) return {r:T[sgg], nm:sgg};
+  /* 최근 분구된 곳(화성시 동탄구 등)은 상승률 통계에 아직 없다.
+     시도 평균으로 떨어뜨리기 전에 모시(市) 값을 먼저 쓴다 — '경기'보다 '화성시'가 훨씬 가깝다. */
+  if(sgg && sgg.indexOf(' ')>0){
+    var parent=sgg.split(' ')[0];
+    if(T[parent]) return {r:T[parent], nm:sgg};
+  }
   if(G.sido[sd]) return {r:G.sido[sd], nm:sd};
   return null;
 }
