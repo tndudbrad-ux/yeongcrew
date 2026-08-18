@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>내 아파트 찾기 — 예산·라이프스타일 맞춤 추천 | 부비</title>
-<meta name="description" content="현금·소득·직장·자녀·연식 조건을 입력하면 국토부 실거래 데이터로 예산에 맞는 아파트 5곳을 추천해드립니다. 내집마련, 훤히.">
+<meta name="description" content="매매·청약/분양·재개발·경매 중에서 고르세요. 매매는 현금·소득 조건만 넣으면 국토부 실거래 데이터로 예산에 맞는 아파트 5곳을 추천해드립니다. 내집마련, 훤히.">
 <link rel="canonical" href="https://boobi.ai.kr/apt-finder.html">
 <meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
@@ -164,6 +164,46 @@ details.adv summary{font-size:.85rem;font-weight:500;cursor:pointer;color:var(--
 <main><div class="wrap">
 
 <div class="crumb"><a href="/">홈</a> › 내 아파트 찾기</div>
+
+<div id="finderHub">
+<h1 class="hubH1">🏠 내 아파트 찾기</h1>
+<p class="hubSub">어떤 방식으로 집을 찾고 계세요? 고르시면 바로 이어드릴게요.</p>
+<div class="hubGrid">
+
+<button type="button" class="hubCard" data-go="buy">
+  <span class="hi">🔎</span>
+  <span class="ht">매매</span>
+  <span class="hd">내 예산부터 계산하고, 국토부 실거래가에서 조건에 맞는 단지를 찾아드려요.</span>
+  <span class="hb">내 예산으로 찾기 →</span>
+</button>
+
+<a class="hubCard" href="/calendar.html">
+  <span class="hi">📅</span>
+  <span class="ht">청약 · 분양</span>
+  <span class="hd">부비 캘린더에서 청약 일정과 모집공고를 한눈에 확인하세요.</span>
+  <span class="hb">부비 캘린더 열기 →</span>
+</a>
+
+<button type="button" class="hubCard soon" data-go="redev">
+  <span class="hi">🏗️</span>
+  <span class="ht">재개발 <span class="soonTag">준비중</span></span>
+  <span class="hd">조합 단계·감정평가·분담금까지 훤하게 보여드릴 기능을 준비하고 있어요.</span>
+  <span class="hb">준비 중이에요</span>
+</button>
+
+<a class="hubCard" href="/auction-tools.html">
+  <span class="hi">🔨</span>
+  <span class="ht">경매</span>
+  <span class="hd">수익률·입찰가 계산부터 임장·계약 체크, 명도 서식까지 한 번에.</span>
+  <span class="hb">경매 툴 열기 →</span>
+</a>
+
+</div>
+<p class="hubNote">💡 매매는 <b>현행 대출 규제</b>로 살 수 있는 금액을 먼저 계산한 뒤, 그 예산에 맞는 단지를 실거래 데이터에서 찾아드립니다.</p>
+</div>
+
+<div id="buyMode" style="display:none">
+<button type="button" class="backBtn" id="buyBack">← 아파트 찾기 처음으로</button>
 <div class="tool-box">
 <h2>🔎 내 아파트 찾기 <span style="font-weight:300;font-size:.85rem;color:var(--sub)">내집마련, 훤히</span></h2>
 <p style="font-size:.88rem;color:var(--sub);margin-bottom:4px">5개만 답하면 <b>현행 대출 규제</b>로 살 수 있는 금액을 계산하고, <b>국토부 실거래가</b>에서 그 예산에 맞는 단지를 찾아드려요.</p>
@@ -241,6 +281,7 @@ DSR 40%(은행권)·스트레스 금리(수도권 규제지역 변동 3.0%p / �
 <a class="card" href="/moving-guide.html"><div class="ic">📦</div><h3>매매 로드맵</h3><p>계약 전 체크리스트</p></a>
 <a class="card" href="/acquisition-tax.html"><div class="ic">🧾</div><h3>취득세 계산기</h3><p>사기 전 세금 확인</p></a>
 </div></div>
+</div><!-- /#buyMode -->
 <style>@keyframes fSpin{to{transform:rotate(360deg)}}
 #fRes h3,#fRes b{color:var(--forest)} #fRes a{color:var(--teal);font-weight:600}
 #fRes .apt{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;font-size:.9rem;line-height:1.65}
@@ -251,7 +292,44 @@ DSR 40%(은행권)·스트레스 금리(수도권 규제지역 변동 3.0%p / �
 .aA.naver:hover{background:#D2F2EF}
 .aA.ask{position:relative;color:#fff;border:none;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 48%,#8B6CF6 100%);background-size:170% 170%;background-position:0% 50%;box-shadow:0 4px 14px rgba(61,139,253,.28);text-shadow:0 1px 2px rgba(13,42,41,.12)}
 .aA.ask:hover{background-position:95% 50%;box-shadow:0 6px 18px rgba(139,108,246,.34);transform:translateY(-1px)}
-.aA.ask:active{transform:translateY(0)}</style>
+.aA.ask:active{transform:translateY(0)}
+/* ══════ 아파트 찾기 허브 (매매/청약·분양/재개발/경매) ══════ */
+#finderHub .hubH1{font-size:1.52rem;font-weight:700;letter-spacing:-.03em;margin-bottom:6px}
+#finderHub .hubSub{font-size:.92rem;color:var(--sub);margin-bottom:20px;font-weight:300}
+.hubGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hubCard{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:22px 20px 18px;cursor:pointer;font-family:inherit;color:var(--forest);transition:.18s;overflow:hidden;width:100%}
+.hubCard::after{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(115deg,#26C6B9,#3D8BFD,#8B6CF6);opacity:0;transition:.18s}
+.hubCard:hover{transform:translateY(-3px);border-color:#B5E4E1;box-shadow:0 16px 36px rgba(32,166,162,.16)}
+.hubCard:hover::after{opacity:1}
+.hubCard .hi{font-size:1.7rem;line-height:1}
+.hubCard .ht{font-size:1.1rem;font-weight:700;letter-spacing:-.02em;margin:10px 0 5px;display:flex;align-items:center;gap:7px}
+.hubCard .hd{font-size:.855rem;color:var(--sub);line-height:1.6;font-weight:300}
+.hubCard .hb{margin-top:12px;font-size:.83rem;font-weight:700;color:var(--teal)}
+.hubCard.soon{background:#FAFDFD}
+.hubCard.soon .hb{color:#8AA5A2}
+.soonTag{font-size:.66rem;font-weight:700;color:#9A6B00;background:#FFF3D6;padding:3px 7px;border-radius:6px;letter-spacing:0}
+.hubNote{font-size:.82rem;color:var(--sub);margin-top:18px;font-weight:300;line-height:1.7}
+.backBtn{position:relative;z-index:9995;display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:8px 15px;font-size:.85rem;font-weight:600;color:var(--sub);cursor:pointer;font-family:inherit;margin-bottom:14px;transition:.15s}
+.backBtn:hover{border-color:var(--mint);color:var(--teal)}
+#soonModal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:9992;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(13,42,41,.42);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+#soonModal.on{display:flex}
+#soonModal .sbox{background:#fff;border:1px solid var(--line);border-radius:22px;max-width:360px;width:100%;padding:30px 26px;text-align:center;box-shadow:0 24px 70px rgba(13,42,41,.24)}
+#soonModal .sic{font-size:2.2rem;line-height:1}
+#soonModal h3{font-size:1.15rem;font-weight:700;letter-spacing:-.02em;margin:12px 0 8px}
+#soonModal p{font-size:.88rem;color:var(--sub);line-height:1.7;font-weight:300;margin-bottom:18px}
+#soonModal .sgo{display:block;padding:13px;border-radius:13px;background:linear-gradient(115deg,#26C6B9,#3D8BFD,#8B6CF6);color:#fff;font-size:.94rem;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(61,139,253,.28)}
+#soonModal .sclose{width:100%;margin-top:9px;padding:12px;border:1.5px solid var(--line);border-radius:13px;background:#fff;color:var(--sub);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit}
+@media(max-width:620px){#finderHub .hubH1{font-size:1.34rem}.hubGrid{gap:10px}.hubCard{padding:16px 14px 14px;border-radius:16px}.hubCard .hi{font-size:1.45rem}.hubCard .ht{font-size:.98rem;margin:8px 0 4px;flex-wrap:wrap;gap:5px}.hubCard .hd{font-size:.78rem;line-height:1.55}.hubCard .hb{margin-top:10px;font-size:.78rem}.soonTag{font-size:.6rem;padding:2px 5px}}
+</style>
+<div id="soonModal" role="dialog" aria-modal="true" aria-labelledby="soonTitle">
+<div class="sbox">
+<div class="sic">🏗️</div>
+<h3 id="soonTitle">재개발 기능은 준비 중이에요</h3>
+<p>조합 진행 단계·감정평가액·분담금까지 한눈에 보여드릴 기능을 만들고 있어요.<br>그동안 기본기부터 훤하게 정리해뒀어요.</p>
+<a class="sgo" href="/redevelopment.html">재개발·재건축 기초 가이드 보기 →</a>
+<button type="button" class="sclose" id="soonClose">닫기</button>
+</div>
+</div>
 </div></main>
 <footer><div class="wrap">
 부비 — 부동산 비서<br>
@@ -839,10 +917,85 @@ document.getElementById('fRes').addEventListener('click',function(e){
   }
 });
 </script>
-\n<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "내 아파트 찾기", "url": "https://boobi.ai.kr/apt-finder.html", "description": "예산·직장·자녀·연식 조건 진단 후 국토부 실거래가 기반으로 아파트 5곳을 추천하는 무료 서비스", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "내 아파트 찾기", "url": "https://boobi.ai.kr/apt-finder.html", "description": "예산·직장·자녀·연식 조건 진단 후 국토부 실거래가 기반으로 아파트 5곳을 추천하는 무료 서비스", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://boobi.ai.kr/"}, {"@type": "ListItem", "position": 2, "name": "내 아파트 찾기", "item": "https://boobi.ai.kr/apt-finder.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
 <script src="/hwon-auth.js" defer></script>
-<script src="/boobi-login-gate.js?v=1" defer></script>
+<!-- 로그인 게이트는 제거된 게 아니라 "매매" 모드 진입 시 동적으로 로드됩니다(아래 허브 스크립트의 loadGate()).
+     허브 카드(매매/청약/재개발/경매)는 비로그인도 볼 수 있어야 유입이 막히지 않습니다.
+     원래 줄: <script src="/boobi-login-gate.js?v=1" defer></script> -->
+<script>
+/* ══════ 아파트 찾기 허브 라우팅 ══════
+   허브(4개 카드) ↔ 매매 도구 전환. 매매 진입 시에만 로그인 게이트를 로드한다. */
+(function(){
+  var hub=document.getElementById('finderHub');
+  var buy=document.getElementById('buyMode');
+  var soon=document.getElementById('soonModal');
+  if(!hub||!buy) return;
+  var mode='hub', gateLoaded=false;
+
+  function loadGate(){
+    if(gateLoaded) return; gateLoaded=true;
+    var sc=document.createElement('script');
+    sc.src='/boobi-login-gate.js?v=1'; sc.defer=true;
+    document.body.appendChild(sc);
+  }
+  function setGate(on){
+    var g=document.getElementById('bbGate');
+    if(!g) return;
+    g.style.display = on ? '' : 'none';
+    if(on) document.body.classList.add('bb-gated');
+    else document.body.classList.remove('bb-gated');
+  }
+  function track(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
+
+  function showBuy(push){
+    mode='buy';
+    hub.style.display='none'; buy.style.display='';
+    loadGate(); setGate(true);
+    if(push){ try{ history.pushState({m:'buy'},'', location.pathname+'?mode=buy'); }catch(e){} }
+    window.scrollTo(0,0);
+    track('finder_hub_select',{choice:'buy'});
+  }
+  function showHub(push){
+    mode='hub';
+    buy.style.display='none'; hub.style.display='';
+    setGate(false);
+    if(push){ try{ history.pushState({m:'hub'},'', location.pathname); }catch(e){} }
+    window.scrollTo(0,0);
+  }
+  function openSoon(){
+    if(soon) soon.classList.add('on');
+    track('finder_hub_select',{choice:'redev_soon'});
+  }
+  function closeSoon(){ if(soon) soon.classList.remove('on'); }
+
+  hub.addEventListener('click',function(e){
+    var c=e.target.closest ? e.target.closest('.hubCard') : null;
+    if(!c) return;
+    var go=c.getAttribute('data-go');
+    if(go==='buy'){ e.preventDefault(); showBuy(true); }
+    else if(go==='redev'){ e.preventDefault(); openSoon(); }
+    else { track('finder_hub_select',{choice:(c.getAttribute('href')||'link')}); }
+  });
+  var bb=document.getElementById('buyBack');
+  if(bb) bb.addEventListener('click',function(){ showHub(true); });
+  var sx=document.getElementById('soonClose');
+  if(sx) sx.addEventListener('click',closeSoon);
+  if(soon) soon.addEventListener('click',function(e){ if(e.target===soon) closeSoon(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeSoon(); });
+
+  window.addEventListener('popstate',function(){
+    if(/[?&]mode=buy/.test(location.search)) showBuy(false); else showHub(false);
+  });
+  /* 게이트가 뒤늦게 뜨는 경우(auth 판정 지연) 허브에서는 즉시 감춘다 */
+  document.addEventListener('hwon-auth',function(){ setTimeout(function(){ if(mode!=='buy') setGate(false); },0); });
+  setInterval(function(){ if(mode!=='buy' && document.getElementById('bbGate')) setGate(false); },1000);
+
+  /* 진입 라우팅: ?mode=buy, #buy, 또는 예산 파라미터(자산진단 등 외부 링크)면 바로 매매로 */
+  var qs=location.search;
+  if(/[?&]mode=buy/.test(qs) || location.hash==='#buy' || /[?&](cash|income)=/.test(qs)) showBuy(false);
+})();
+</script>
 </body>
 </html>
