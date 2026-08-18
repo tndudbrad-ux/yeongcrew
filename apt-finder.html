@@ -184,12 +184,12 @@ details.adv summary{font-size:.85rem;font-weight:500;cursor:pointer;color:var(--
   <span class="hb">부비 캘린더 열기 →</span>
 </a>
 
-<button type="button" class="hubCard soon" data-go="redev">
+<a class="hubCard" href="/redevelopment-map.html">
   <span class="hi">🏗️</span>
-  <span class="ht">재개발 <span class="soonTag">준비중</span></span>
-  <span class="hd">조합 단계·감정평가·분담금까지 훤하게 보여드릴 기능을 준비하고 있어요.</span>
-  <span class="hb">준비 중이에요</span>
-</button>
+  <span class="ht">재개발</span>
+  <span class="hd">서울 지도에서 자치구별 정비사업 개수와 진행 단계를 한눈에 확인하세요.</span>
+  <span class="hb">서울 재개발 지도 열기 →</span>
+</a>
 
 <a class="hubCard" href="/auction-tools.html">
   <span class="hi">🔨</span>
@@ -311,25 +311,8 @@ DSR 40%(은행권)·스트레스 금리(수도권 규제지역 변동 3.0%p / �
 .hubNote{font-size:.82rem;color:var(--sub);margin-top:18px;font-weight:300;line-height:1.7}
 .backBtn{position:relative;z-index:9995;display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:8px 15px;font-size:.85rem;font-weight:600;color:var(--sub);cursor:pointer;font-family:inherit;margin-bottom:14px;transition:.15s}
 .backBtn:hover{border-color:var(--mint);color:var(--teal)}
-#soonModal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:9992;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(13,42,41,.42);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-#soonModal.on{display:flex}
-#soonModal .sbox{background:#fff;border:1px solid var(--line);border-radius:22px;max-width:360px;width:100%;padding:30px 26px;text-align:center;box-shadow:0 24px 70px rgba(13,42,41,.24)}
-#soonModal .sic{font-size:2.2rem;line-height:1}
-#soonModal h3{font-size:1.15rem;font-weight:700;letter-spacing:-.02em;margin:12px 0 8px}
-#soonModal p{font-size:.88rem;color:var(--sub);line-height:1.7;font-weight:300;margin-bottom:18px}
-#soonModal .sgo{display:block;padding:13px;border-radius:13px;background:linear-gradient(115deg,#26C6B9,#3D8BFD,#8B6CF6);color:#fff;font-size:.94rem;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(61,139,253,.28)}
-#soonModal .sclose{width:100%;margin-top:9px;padding:12px;border:1.5px solid var(--line);border-radius:13px;background:#fff;color:var(--sub);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit}
 @media(max-width:620px){#finderHub .hubH1{font-size:1.34rem}.hubGrid{gap:10px}.hubCard{padding:16px 14px 14px;border-radius:16px}.hubCard .hi{font-size:1.45rem}.hubCard .ht{font-size:.98rem;margin:8px 0 4px;flex-wrap:wrap;gap:5px}.hubCard .hd{font-size:.78rem;line-height:1.55}.hubCard .hb{margin-top:10px;font-size:.78rem}.soonTag{font-size:.6rem;padding:2px 5px}}
 </style>
-<div id="soonModal" role="dialog" aria-modal="true" aria-labelledby="soonTitle">
-<div class="sbox">
-<div class="sic">🏗️</div>
-<h3 id="soonTitle">재개발 기능은 준비 중이에요</h3>
-<p>조합 진행 단계·감정평가액·분담금까지 한눈에 보여드릴 기능을 만들고 있어요.<br>그동안 기본기부터 훤하게 정리해뒀어요.</p>
-<a class="sgo" href="/redevelopment.html">재개발·재건축 기초 가이드 보기 →</a>
-<button type="button" class="sclose" id="soonClose">닫기</button>
-</div>
-</div>
 </div></main>
 <footer><div class="wrap">
 부비 — 부동산 비서<br>
@@ -930,7 +913,6 @@ document.getElementById('fRes').addEventListener('click',function(e){
 (function(){
   var hub=document.getElementById('finderHub');
   var buy=document.getElementById('buyMode');
-  var soon=document.getElementById('soonModal');
   if(!hub||!buy) return;
   var mode='hub', gateLoaded=false;
 
@@ -964,26 +946,16 @@ document.getElementById('fRes').addEventListener('click',function(e){
     if(push){ try{ history.pushState({m:'hub'},'', location.pathname); }catch(e){} }
     window.scrollTo(0,0);
   }
-  function openSoon(){
-    if(soon) soon.classList.add('on');
-    track('finder_hub_select',{choice:'redev_soon'});
-  }
-  function closeSoon(){ if(soon) soon.classList.remove('on'); }
 
   hub.addEventListener('click',function(e){
     var c=e.target.closest ? e.target.closest('.hubCard') : null;
     if(!c) return;
     var go=c.getAttribute('data-go');
     if(go==='buy'){ e.preventDefault(); showBuy(true); }
-    else if(go==='redev'){ e.preventDefault(); openSoon(); }
     else { track('finder_hub_select',{choice:(c.getAttribute('href')||'link')}); }
   });
   var bb=document.getElementById('buyBack');
   if(bb) bb.addEventListener('click',function(){ showHub(true); });
-  var sx=document.getElementById('soonClose');
-  if(sx) sx.addEventListener('click',closeSoon);
-  if(soon) soon.addEventListener('click',function(e){ if(e.target===soon) closeSoon(); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeSoon(); });
 
   window.addEventListener('popstate',function(){
     if(/[?&]mode=buy/.test(location.search)) showBuy(false); else showHub(false);
