@@ -1,0 +1,67 @@
+name: 실거래가 월간 갱신
+
+# 매달 1일 새벽 4시(KST). 국토부 실거래 신고가 계약 후 30일 이내라
+# 전달치가 어느 정도 쌓인 시점에 돌린다.
+on:
+  schedule:
+    - cron: '0 19 1 * *'   # UTC 19:00 = KST 익일 04:00
+  workflow_dispatch:        # 수동 실행용
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install requests
+
+      - name: 실거래가 수집 + 시군구별 분할
+        env:
+          RTMS_KEY: ${{ secrets.RTMS_KEY }}
+        run: |
+          python tools/rtms_collector.py \
+            --key "$RTMS_KEY" \
+            --months 12 \
+            --regions data/regions.json \
+            --out /tmp/listings.json \
+            --shard-dir data/listings \
+            --qps 3 --workers 4
+
+      - name: 결과 점검
+        run: |
+          set -e
+          N=$(ls data/listings/*.json | grep -v index.json | wc -l)
+          echo "지역 파일 $N개"
+          # 수집이 통째로 실패했는데 조용히 커밋되는 걸 막는다
+          if [ "$N" -lt 100 ]; then echo "::error::지역 파일이 $N개뿐입니다 — 수집 실패로 판단"; exit 1; fi
+          python - <<'PY'
+          import json, glob, sys
+          tot = 0
+          for f in glob.glob('data/listings/*.json'):
+              d = json.load(open(f, encoding='utf-8'))   # 파싱 실패 시 예외
+              if not f.endswith('index.json'):
+                  tot += len(d)
+          print(f'단지 {tot:,}개')
+          if tot < 50000:
+              sys.exit(f'단지 수가 {tot}개로 비정상적으로 적습니다')
+          PY
+
+      - name: 커밋
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/listings
+          if git diff --staged --quiet; then
+            echo "변경 없음"
+          else
+            git commit -m "chore: 실거래가 월간 갱신 ($(date -u -d '+9 hours' +%Y-%m-%d))"
+            git push
+          fi
