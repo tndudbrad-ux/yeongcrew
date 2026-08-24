@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-23T09:25:51.779Z",
+  "updatedAt": "2026-08-24T00:30:34.629Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
   "count": 53,
   "schema": {
@@ -288,6 +288,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300020583",
+      "provider": "LH",
+      "ltype": "영구임대",
+      "name": "인천서창1단지 영구임대주택 예비입주자 모집 공고",
+      "region": "인천광역시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-09-02",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020583&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020602",
       "provider": "LH",
       "ltype": "영구임대",
@@ -329,21 +344,6 @@
       "rcritEnd": "2026-09-02",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020595&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020583",
-      "provider": "LH",
-      "ltype": "영구임대",
-      "name": "인천서창1단지 영구임대주택 예비입주자 모집 공고",
-      "region": "인천광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-09-02",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020583&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -438,21 +438,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020513",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "천안아산 대학생,청년 행복주택 자격완화 예비입주자 모집 (2026.08.18)",
-      "region": "충청남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-09-02",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020513&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020563",
       "provider": "LH",
       "ltype": "행복주택",
@@ -479,6 +464,21 @@
       "rcritEnd": "2026-09-02",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020561&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020513",
+      "provider": "LH",
+      "ltype": "행복주택",
+      "name": "천안아산 대학생,청년 행복주택 자격완화 예비입주자 모집 (2026.08.18)",
+      "region": "충청남도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-09-02",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020513&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
