@@ -204,70 +204,133 @@ details.adv summary{font-size:.85rem;font-weight:500;cursor:pointer;color:var(--
 
 <div id="buyMode" style="display:none">
 <button type="button" class="backBtn" id="buyBack">← 아파트 찾기 처음으로</button>
-<div class="tool-box">
-<h2>🔎 내 아파트 찾기 <span style="font-weight:300;font-size:.85rem;color:var(--sub)">내집마련, 훤히</span></h2>
-<p style="font-size:.88rem;color:var(--sub);margin-bottom:4px">5개만 답하면 <b>현행 대출 규제</b>로 살 수 있는 금액을 계산하고, <b>국토부 실거래가</b>에서 그 예산에 맞는 단지를 찾아드려요.</p>
-
-<label class="f">① 보유 현금 (만원) <span style="font-weight:300;color:var(--sub)">— 예금·주식·전세보증금 등 실제 동원 가능한 돈</span></label>
-<input class="f" id="fCash" type="number" inputmode="numeric" placeholder="예: 30000 (3억)">
-<div class="row2">
-<div><label class="f">② 연소득 (만원, 세전) <span style="font-weight:300;color:var(--sub)">— 부부합산</span></label>
-  <input class="f" id="fIncome" type="number" inputmode="numeric" placeholder="예: 7000"></div>
-<div><label class="f">③ 매달 갚는 돈 (만원)</label>
-  <input class="f" id="fDebt" type="number" inputmode="numeric" placeholder="없으면 0"></div>
-</div>
-<p class="hintline">💡 신용대출·자동차할부·학자금의 <b>월 상환액</b>만 넣어주세요. 카드값·월세·보험료는 DSR에 들어가지 않습니다.</p>
-
-<label class="f">④ 주택 보유 상황 <span style="font-weight:300;color:var(--sub)">— LTV 한도가 완전히 달라져요</span></label>
-<div class="seg" id="fOwn">
-  <button data-v="first" class="on">🌱 생애최초</button>
-  <button data-v="none">무주택 (두 번째 이상)</button>
-  <button data-v="one">1주택 이상</button>
+<div class="tool-box" id="wizBox">
+<div class="wizTop">
+  <button type="button" class="wizBack" id="wizBack">← 이전</button>
+  <div class="wizBar"><i id="wizBarFill"></i></div>
+  <div class="wizNum" id="wizNum">1 / 7</div>
 </div>
 
-<label class="f">⑤ 희망 지역 <span style="font-weight:300;color:var(--sub)">— 광역시·도 → 시군구 순으로 선택</span></label>
-<div id="areaCasc"></div>
-<input type="hidden" id="fArea">
-<div id="regBadge" class="regbadge off" style="display:none"></div>
+<section class="wq on" data-k="own">
+  <h3 class="wqT">지금 집을 몇 채 갖고 계세요?</h3>
+  <p class="wqS">보유 상황에 따라 <b>대출 한도(LTV)</b>가 완전히 달라져요.</p>
+  <div class="wopt" id="fOwnNew">
+    <button type="button" data-v="none"><b>무주택</b><em>아직 내 집이 없어요</em></button>
+    <button type="button" data-v="one"><b>1주택</b><em>갈아타기·추가 매수를 생각 중이에요</em></button>
+    <button type="button" data-v="multi"><b>다주택</b><em>2채 이상 갖고 있어요</em></button>
+  </div>
+  <label class="wchk" id="firstWrap" style="display:none"><input type="checkbox" id="fFirst"><span><b>생애최초</b>로 사는 집이에요 <em>— LTV 70% 우대 대상</em></span></label>
+  <div class="wnav" id="ownNav" style="display:none"><button type="button" class="go wnext">다음</button></div>
+  <div class="seg" id="fOwn" style="display:none" aria-hidden="true">
+    <button type="button" data-v="first" class="on">생애최초</button><button type="button" data-v="none">무주택</button><button type="button" data-v="one">1주택 이상</button>
+  </div>
+</section>
 
-<label class="f">월 저축 가능액 (만원, 선택) <span style="font-weight:300;color:var(--sub)">— 상급지 이동 계획을 함께 봐드려요</span></label>
-<input class="f" id="fSave" type="number" inputmode="numeric" placeholder="예: 150">
+<section class="wq" data-k="purpose">
+  <h3 class="wqT">어떤 집을 찾고 계세요?</h3>
+  <p class="wqS">고르신 방향에 맞춰 추천 기준을 바꿔드려요.</p>
+  <div class="wopt" id="fPurpose">
+    <button type="button" data-v="live"><b>실거주만</b><em>내가 살기 좋으면 충분해요</em></button>
+    <button type="button" data-v="invest"><b>실거주 + 자산가치</b><em>살면서 가치도 볼 수 있는 곳으로</em></button>
+  </div>
+  <p class="wqNote">※ 자산가치는 <b>정비사업 진행 여부처럼 공개 자료로 확인되는 근거</b>만 반영해요. 수익률이나 가격 상승은 약속하지 않습니다.</p>
+</section>
 
-<details class="adv">
-  <summary>고급 설정 — 대출금리 직접 지정</summary>
-  <label class="f" style="margin-top:12px">예상 대출금리 (%)</label>
-  <input class="f" id="fRate" type="number" step="0.1" placeholder="비워두면 시장금리 자동">
-  <p class="hintline" id="rateHint">코픽스(신규취급액) + 가산 1.2%p로 자동 계산합니다.</p>
-</details>
+<section class="wq" data-k="area">
+  <h3 class="wqT">어느 지역을 보고 계세요?</h3>
+  <p class="wqS">광역시·도를 고르면 시군구가 이어서 나와요.</p>
+  <div id="areaCasc"></div>
+  <input type="hidden" id="fArea">
+  <div id="regBadge" class="regbadge off" style="display:none"></div>
+  <div class="wnav"><button type="button" class="go wnext">다음</button></div>
+</section>
 
-<button class="go" id="fGo" onclick="calcBudgetNow()">내 예산 계산하기</button>
+<section class="wq" data-k="cash">
+  <h3 class="wqT">지금 동원할 수 있는 현금은 얼마인가요?</h3>
+  <p class="wqS">예금·주식·전세보증금처럼 실제로 꺼낼 수 있는 돈이요.</p>
+  <input class="f wbig" id="fCash" type="number" inputmode="numeric" placeholder="예: 30000">
+  <p class="wqUnit">만원 단위 · 3억이면 <b>30000</b></p>
+  <div class="wnav"><button type="button" class="go wnext">다음</button></div>
+</section>
+
+<section class="wq" data-k="income">
+  <h3 class="wqT">연소득은 얼마인가요?</h3>
+  <p class="wqS">세전 기준이고, 부부라면 합산해서 적어주세요.</p>
+  <input class="f wbig" id="fIncome" type="number" inputmode="numeric" placeholder="예: 7000">
+  <p class="wqUnit">만원 단위 · 7천만원이면 <b>7000</b></p>
+  <div class="wnav"><button type="button" class="go wnext">다음</button></div>
+</section>
+
+<section class="wq" data-k="debt">
+  <h3 class="wqT">매달 갚고 있는 돈이 있나요?</h3>
+  <p class="wqS">신용대출·자동차할부·학자금의 <b>월 상환액</b>만요. 카드값·월세·보험료는 DSR에 들어가지 않아요.</p>
+  <input class="f wbig" id="fDebt" type="number" inputmode="numeric" placeholder="없으면 0">
+  <p class="wqUnit">만원 단위 · 없으면 <b>0</b></p>
+  <div class="wnav"><button type="button" class="go wnext">다음</button></div>
+</section>
+
+<section class="wq" data-k="save">
+  <h3 class="wqT">매달 저축할 수 있는 금액이 있나요?</h3>
+  <p class="wqS">예산이 모자랄 때 <b>희망 지역에 언제쯤 갈 수 있는지</b> 같이 계산해드려요. 건너뛰어도 괜찮아요.</p>
+  <input class="f wbig" id="fSave" type="number" inputmode="numeric" placeholder="예: 150">
+  <p class="wqUnit">만원 단위 · 선택 항목</p>
+  <details class="adv"><summary>고급 설정 — 대출금리 직접 지정</summary>
+    <input class="f" id="fRate" type="number" step="0.1" placeholder="비워두면 시장금리 자동" style="margin-top:10px">
+    <p class="hintline" id="rateHint">코픽스(신규취급액) + 가산 1.2%p로 자동 계산합니다.</p>
+  </details>
+  <div class="wnav two"><button type="button" class="wskip" id="skipSave">건너뛰기</button><button class="go" id="fGo" type="button" onclick="calcBudgetNow()">내 예산 계산하기</button></div>
+</section>
+
+<section class="wq" data-k="work" data-ai="1">
+  <h3 class="wqT">직장은 어디신가요?</h3>
+  <p class="wqS">출퇴근 시간을 따져서 추천해드려요. 지역을 고르면 주요 업무지구가 이어서 나와요.</p>
+  <div id="workCasc"></div>
+  <input type="hidden" id="fWork">
+  <div class="wnav two"><button type="button" class="wskip wnext">건너뛰기</button><button type="button" class="go wnext">다음</button></div>
+</section>
+
+<section class="wq" data-k="age" data-ai="1">
+  <h3 class="wqT">나이대가 어떻게 되세요?</h3>
+  <p class="wqS">생활 반경과 자금 계획을 가늠하는 데 씁니다.</p>
+  <div class="seg wseg" id="fAge"><button type="button" data-v="20대">20대</button><button type="button" data-v="30대" class="on">30대</button><button type="button" data-v="40대">40대</button><button type="button" data-v="50대 이상">50대 이상</button></div>
+</section>
+
+<section class="wq" data-k="kids" data-ai="1">
+  <h3 class="wqT">함께 사는 자녀가 있나요?</h3>
+  <p class="wqS">학군·통학 여건을 얼마나 볼지 달라져요.</p>
+  <div class="seg wseg" id="fKids"><button type="button" data-v="없음" class="on">없어요</button><button type="button" data-v="영유아">영유아·예정</button><button type="button" data-v="초등학생">초등학생</button><button type="button" data-v="중고등학생">중·고등학생</button></div>
+</section>
+
+<section class="wq" data-k="year" data-ai="1">
+  <h3 class="wqT">연식은 어느 쪽이 좋으세요?</h3>
+  <p class="wqS">신축 프리미엄을 낼지, 구축에서 여지를 볼지 갈리는 지점이에요.</p>
+  <div class="seg wseg" id="fYear"><button type="button" data-v="10년 이내 신축·준신축" class="on">신축·준신축</button><button type="button" data-v="연식 무관">연식 무관</button><button type="button" data-v="재건축 기대 구축도 좋음">재건축 기대 구축</button></div>
+</section>
+
+<section class="wq" data-k="size" data-ai="1">
+  <h3 class="wqT">어느 정도 넓이를 찾으세요?</h3>
+  <p class="wqS">전용면적 기준이에요.</p>
+  <div class="seg wseg" id="fSize"><button type="button" data-v="전용 59㎡ 이하">59㎡ 이하</button><button type="button" data-v="전용 59~84㎡" class="on">59~84㎡</button><button type="button" data-v="전용 84㎡ 이상">84㎡ 이상</button></div>
+  <div class="wnav"><button class="go" id="fGo2" type="button" onclick="findApt()">AI 추천 5곳 받기</button></div>
+</section>
+</div>
+
+<div class="tool-box" id="resultBox" style="display:none">
 <div id="budgetOut"></div>
-<div id="findOut"></div>
-<div id="upgradeOut"></div>
 <p class="note" id="calcNote">대출 한도는 <b>2026년 8월 기준 규제</b>를 반영한 추정치입니다 —
 DSR 40%(은행권)·스트레스 금리(수도권 규제지역 변동 3.0%p / 지방 0.75%p)·LTV(생애최초 70%, 무주택 규제지역 40%, 규제지역 유주택 불가)·
 수도권 주담대 절대한도(15억↓ 6억 / 15~25억 4억 / 25억↑ 2억)·만기 30년 원리금균등 가정.
 취득세·중개보수 등 부대비용과 은행별 심사 결과는 반영되지 않으며, 투자 권유가 아닙니다.</p>
+<div id="findOut"></div>
+<div id="upgradeOut"></div>
+<div class="wnav two" style="margin-top:20px">
+  <button type="button" class="wskip" id="editAns">← 답변 고치기</button>
+  <button type="button" class="go" id="startAi">🤖 조건 더 알려주고 AI 추천 받기</button>
+</div>
 </div>
 
 <div class="tool-box" id="aiBox" style="display:none">
-<h2>🤖 부비 AI 추천 받기 <span style="font-weight:300;font-size:.85rem;color:var(--sub)">선택</span></h2>
-<p style="font-size:.88rem;color:var(--sub);margin-bottom:4px">몇 가지만 더 알려주시면, 계산된 예산 안에서 조건에 맞는 단지를 추려드려요.</p>
-
-<label class="f">직장 위치 <span style="font-weight:300;color:var(--sub)">— 지역을 고르면 주요 업무지구가 이어서 나와요</span></label>
-<div id="workCasc"></div>
-<input type="hidden" id="fWork">
-
-<label class="f">나이대</label>
-<div class="seg" id="fAge"><button data-v="20대">20대</button><button data-v="30대" class="on">30대</button><button data-v="40대">40대</button><button data-v="50대 이상">50대+</button></div>
-<label class="f">자녀</label>
-<div class="seg" id="fKids"><button data-v="없음" class="on">없음</button><button data-v="영유아">영유아·예정</button><button data-v="초등학생">초등</button><button data-v="중고등학생">중·고등</button></div>
-<label class="f">연식 선호</label>
-<div class="seg" id="fYear"><button data-v="10년 이내 신축·준신축" class="on">신축·준신축</button><button data-v="연식 무관">연식 무관</button><button data-v="재건축 기대 구축도 좋음">재건축 노림</button></div>
-<label class="f">희망 전용면적</label>
-<div class="seg" id="fSize"><button data-v="전용 59㎡ 이하">~59㎡</button><button data-v="전용 59~84㎡" class="on">59~84㎡</button><button data-v="전용 84㎡ 이상">84㎡~</button></div>
-
-<button class="go" id="fGo2" onclick="findApt()">AI 추천 5곳 받기</button>
+<h2>🤖 부비 AI 추천</h2>
 <div id="fLoading" style="display:none;text-align:center;padding:28px 0">
 <div style="width:34px;height:34px;border-radius:50%;border:7px solid #DCEEEC;border-top-color:#2AC1BC;margin:0 auto 12px;animation:fSpin 1s linear infinite"></div>
 <div style="font-size:.9rem;color:var(--sub)" id="fLoadMsg">부비가 실거래 데이터를 뒤지는 중...</div>
@@ -312,6 +375,55 @@ DSR 40%(은행권)·스트레스 금리(수도권 규제지역 변동 3.0%p / �
 .backBtn{position:relative;z-index:9995;display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:8px 15px;font-size:.85rem;font-weight:600;color:var(--sub);cursor:pointer;font-family:inherit;margin-bottom:14px;transition:.15s}
 .backBtn:hover{border-color:var(--mint);color:var(--teal)}
 @media(max-width:620px){#finderHub .hubH1{font-size:1.34rem}.hubGrid{gap:10px}.hubCard{padding:16px 14px 14px;border-radius:16px}.hubCard .hi{font-size:1.45rem}.hubCard .ht{font-size:.98rem;margin:8px 0 4px;flex-wrap:wrap;gap:5px}.hubCard .hd{font-size:.78rem;line-height:1.55}.hubCard .hb{margin-top:10px;font-size:.78rem}.soonTag{font-size:.6rem;padding:2px 5px}}
+/* ══════ 매매 설문형 위저드 ══════ */
+#wizBox{padding:26px 24px 30px}
+.wizTop{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.wizBack{flex:0 0 auto;background:none;border:none;padding:6px 2px;font-family:inherit;font-size:.85rem;font-weight:500;color:var(--sub);cursor:pointer;transition:.15s;min-height:34px}
+.wizBack:hover{color:var(--teal)}
+.wizBar{flex:1;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.wizBar>i{display:block;height:100%;width:14%;border-radius:99px;background:linear-gradient(90deg,#33CCC7,#20A6A2);transition:width .32s cubic-bezier(.4,0,.2,1)}
+.wizNum{flex:0 0 auto;font-size:.78rem;font-weight:600;color:var(--sub);letter-spacing:-.01em;white-space:nowrap}
+.wq{display:none}
+.wq.on{display:block;animation:wqIn .26s cubic-bezier(.22,.8,.3,1) both}
+@keyframes wqIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wqT{font-size:1.28rem;font-weight:700;letter-spacing:-.03em;line-height:1.42;color:var(--forest);margin-bottom:7px}
+.wqS{font-size:.89rem;color:var(--sub);font-weight:300;line-height:1.6;margin-bottom:18px}
+.wqS b{font-weight:600;color:var(--forest)}
+.wqUnit{font-size:.8rem;color:var(--sub);font-weight:300;margin-top:8px}
+.wqUnit b{font-weight:700;color:var(--teal)}
+.wqNote{font-size:.79rem;color:var(--sub);font-weight:300;line-height:1.6;margin-top:14px;background:#F6FCFB;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+.wqNote b{font-weight:600;color:var(--forest)}
+.wopt{display:flex;flex-direction:column;gap:10px}
+.wopt button{display:block;width:100%;text-align:left;padding:16px 18px;border:1.5px solid var(--line);background:#fff;border-radius:15px;cursor:pointer;font-family:inherit;color:var(--forest);transition:.16s;min-height:60px}
+.wopt button b{display:block;font-size:1rem;font-weight:600;letter-spacing:-.02em}
+.wopt button em{display:block;font-style:normal;font-size:.82rem;font-weight:300;color:var(--sub);margin-top:2px}
+.wopt button:hover{border-color:#AEE3E0;background:#FAFEFE}
+.wopt button.on{border-color:var(--mint);background:#E5F8F6;box-shadow:0 0 0 3px rgba(42,193,188,.13)}
+.wopt button.on b{color:var(--teal)}
+.wseg button{min-height:48px}
+input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:-.02em}
+.wchk{display:flex;align-items:flex-start;gap:10px;margin-top:12px;padding:13px 15px;border:1.5px solid var(--line);border-radius:14px;background:#FAFEFE;cursor:pointer;font-size:.88rem;line-height:1.55}
+.wchk input{width:19px;height:19px;margin-top:1px;accent-color:var(--mint);flex:0 0 auto}
+.wchk b{font-weight:600;color:var(--forest)}
+.wchk em{font-style:normal;font-size:.8rem;color:var(--sub);font-weight:300}
+.wnav{margin-top:6px}
+.wnav.two{display:flex;gap:10px;align-items:stretch}
+.wnav.two .wskip{flex:0 0 auto;min-width:104px}
+.wnav.two button.go{flex:1;margin-top:22px}
+.wskip{margin-top:22px;padding:15px 14px;border:1.5px solid var(--line);border-radius:14px;background:#fff;color:var(--sub);font-family:inherit;font-size:.93rem;font-weight:500;cursor:pointer;transition:.15s}
+.wskip:hover{border-color:#AEE3E0;color:var(--teal)}
+.werr{font-size:.82rem;color:#C0453F;font-weight:500;margin-top:10px}
+.tg.rd{background:#FFF1E8;color:#B4603A;border-color:#F5D9C6}
+@media(max-width:620px){
+  #wizBox{padding:22px 16px 26px}
+  .wqT{font-size:1.15rem}
+  .wopt button{padding:15px 15px;min-height:58px}
+  .wnav.two{flex-direction:column-reverse;gap:8px}
+  .wnav.two .wskip,.wnav.two button.go{width:100%;margin-top:0}
+  .wnav.two button.go{margin-top:18px}
+  .wizNum{font-size:.74rem}
+  .wizBack{font-size:.8rem}
+}
 </style>
 </div></main>
 <footer><div class="wrap">
@@ -334,19 +446,20 @@ var SIDOS=[];
 function buildCascade(mountId, hiddenId, opts){
   var mount=document.getElementById(mountId), hid=document.getElementById(hiddenId);
   if(!mount||!hid)return;
+  function fire(el){ try{ el.dispatchEvent(new Event('change',{bubbles:true})); }catch(e){} }
   function chip(txt, cls){ var b=document.createElement('button'); b.type='button'; b.className='cChip'+(cls?' '+cls:''); b.textContent=txt; return b; }
   var rowS=document.createElement('div'); rowS.className='cRow';
   var sub=document.createElement('div'); sub.className='cRow cSub'; sub.style.display='none';
   var selBox=document.createElement('div'); selBox.className='cSel'; selBox.style.display='none';
   var custom=null;
   function reset(){
-    hid.value=''; selBox.style.display='none';
+    hid.value=''; fire(hid); selBox.style.display='none';
     rowS.style.display='flex'; sub.style.display='none';
     rowS.querySelectorAll('.cChip').forEach(function(x){x.classList.remove('on');});
     if(custom){ custom.style.display='block'; custom.value=''; }
   }
   function setVal(v, label){
-    hid.value=v;
+    hid.value=v; fire(hid);
     selBox.innerHTML='📍 <b>'+String(label||v||'선택 안 함').replace(/</g,'&lt;')+'</b><span class="cX">바꾸기</span>';
     selBox.style.display='block';
     rowS.style.display='none'; sub.style.display='none';
@@ -538,6 +651,8 @@ function findApt(){
   var area=document.getElementById('fArea').value.trim();
   var save=+document.getElementById('fSave').value||0;
   var ownLabel={first:'생애최초',none:'무주택(두 번째 이상)',one:'1주택 이상'}[segVal('fOwn')];
+  var ownReal=window.__ownLabel?window.__ownLabel():ownLabel;
+  var purpose=window.__purposeLabel?window.__purposeLabel():'실거주 위주';
   var cands=(window.__CANDS||[]).slice(0,30).map(function(d){
     return d.name+'('+SHORT[d.sido]+' '+d.sgg+' '+d.dong+', 전용 '+d.area+'㎡, '+readMan(d.price)+')';
   });
@@ -546,6 +661,12 @@ function findApt(){
    +'- 대출 조건: '+(R.regulated?'규제지역':'비규제지역')+' · LTV '+Math.round(R.ltvR*100)+'%('+ownLabel+') · DSR 40% · 스트레스 +'+R.stress.toFixed(2)+'%p · 만기 '+R.years+'년\n'
    +'- 직장: '+work+'\n'
    +'- 희망 지역: '+(area||('직장('+work+') 출퇴근 30~40분권에서 골라줘'))+'\n'
+   +'- 주택 보유: '+ownReal+(window.__MULTI?' (취득세 중과 대상일 수 있음 — 예산에 취득세는 빠져 있다고 짚어줘)':'')+'\n'
+   +'- 구매 목적: '+purpose+'\n'
+   +(window.__PURPOSE==='invest'
+      ? '  ※ 자산가치는 정비사업 추진 여부·교통 확정 계획·신축 여부처럼 공개 자료로 확인되는 사실만 근거로 들어라. '
+        +'수익률·가격 상승률을 예측하거나 약속하지 말고, 확인되지 않은 호재는 언급하지 마라.\n'
+      : '  ※ 실거주 편의(직주근접·학군·생활 인프라) 위주로 판단해줘.\n')
    +'- 나이: '+segVal('fAge')+', 자녀: '+segVal('fKids')+'\n'
    +'- 연식: '+segVal('fYear')+', 면적: '+segVal('fSize')
    +(cands.length? '\n\n[실거래 후보군] 아래는 국토부 실거래가에서 이 예산대에 실제 거래된 단지들이야. '
@@ -655,7 +776,7 @@ function calcBudgetNow(){
   ga('budget_calc',{budget_man:Math.round(R.price),bind:R.bind,own:segVal('fOwn')});
   renderBudget();
   document.getElementById('findOut').innerHTML='<p class="note" style="text-align:center;padding:24px 0">실거래 데이터를 불러오는 중...</p>';
-  document.getElementById('aiBox').style.display='block';
+  if(window.__wizResult) window.__wizResult();
   document.getElementById('budgetOut').scrollIntoView({behavior:'smooth',block:'start'});
   loadListings(area.sido,area.sgg).then(function(list){
     DATA.listings=list; renderFinder(); renderUpgrade();
@@ -697,6 +818,7 @@ function renderFinder(){
   if(UI.type) rows=rows.filter(function(d){return d.type===UI.type;});
   var sk=SORTS[UI.sort].k;
   rows.sort(function(x,y){return sk==='near'?Math.abs(x.price-b)-Math.abs(y.price-b):(sk==='desc'?y.price-x.price:x.price-y.price);});
+  if(window.__PURPOSE==='invest') rows=investRank(rows);
   window.__CANDS=rows;
   var where=(SHORT[R.area.sido]||R.area.sido)+(R.area.sgg?' '+R.area.sgg:'');
 
@@ -720,12 +842,14 @@ function renderFinder(){
       return '<div class="lrow"><div class="ic" style="background:'+COLORS[d.id%COLORS.length]+'">'+esc(d.name.slice(0,1))+'</div>'
        +'<div style="flex:1;min-width:0"><div class="nm">'+esc(d.name)+(TYPE_BADGE[d.type]?'<span class="vb '+d.type+'">'+TYPE_BADGE[d.type]+'</span>':'')+'</div>'
        +'<div class="lo">'+SHORT[d.sido]+' '+esc(d.sgg)+' '+esc(d.dong)+'</div>'
-       +'<div class="mt"><span class="tg">전용 '+d.area+'㎡ ('+py(d.area)+'평)</span><span class="tg">'+d.floor+'층</span><span class="tg">'+d.dealYm.replace('-','.')+' 거래</span></div>'
+       +'<div class="mt"><span class="tg">전용 '+d.area+'㎡ ('+py(d.area)+'평)</span><span class="tg">'+d.floor+'층</span><span class="tg">'+d.dealYm.replace('-','.')+' 거래</span>'+redevTag(d)+'</div>'
        +'<div><span class="pr">'+readMan(d.price)+'</span><span class="df '+cls+'">'+txt+'</span></div>'
        +aptActions(d.name,d.dong)+'</div></div>';
     }).join('');
   }
-  h+='<p class="note">국토부 실거래가(아파트·연립다세대·오피스텔 매매) 최근 12개월 · 단지×면적대별 최신 거래. 해제된 거래는 제외했습니다.</p></div>';
+  h+='<p class="note">국토부 실거래가(아파트·연립다세대·오피스텔 매매) 최근 12개월 · 단지×면적대별 최신 거래. 해제된 거래는 제외했습니다.'
+   +((window.__PURPOSE==='invest'&&REDEV.rows.length)?'<br>🏗️ 태그는 <b>서울시 정비사업 통계</b>에 등록된 같은 법정동의 구역 수예요. 사업이 진행 중이라는 사실만 알려줄 뿐, 가격 상승을 뜻하지는 않습니다.':'')
+   +'</p></div>';
   document.getElementById('findOut').innerHTML=h;
 }
 
@@ -750,7 +874,7 @@ function budgetAt(cash0,save,t,ltv,loanNow){
 function renderUpgrade(){
   var R=window.__R, save=+document.getElementById('fSave').value||0;
   var el=document.getElementById('upgradeOut');
-  if(!save){ el.innerHTML='<div class="tipcard" style="border-left-color:#DCEEEC">💡 위에 <b>월 저축 가능액</b>을 넣으면, 지금 예산으로 부족한 상급지에 <b>몇 년 뒤 갈 수 있는지</b>도 계산해드려요.</div>'; return; }
+  if(!save){ el.innerHTML='<div class="tipcard" style="border-left-color:#DCEEEC">💡 <b>답변 고치기</b>에서 마지막 질문의 <b>월 저축 가능액</b>을 채우면, 지금 예산으로 부족한 상급지에 <b>몇 년 뒤 갈 수 있는지</b>도 계산해드려요.</div>'; return; }
   var g=growthOf(R.area.sido,R.area.sgg); if(!g){ el.innerHTML=''; return; }
   var target=STEPS[UI.idx], rate=g.r.base/100;
   var perYear=target*rate, myYear=save*12/(1-R.ltvR);
@@ -903,6 +1027,209 @@ document.getElementById('fRes').addEventListener('click',function(e){
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "내 아파트 찾기", "url": "https://boobi.ai.kr/apt-finder.html", "description": "예산·직장·자녀·연식 조건 진단 후 국토부 실거래가 기반으로 아파트 5곳을 추천하는 무료 서비스", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://boobi.ai.kr/"}, {"@type": "ListItem", "position": 2, "name": "내 아파트 찾기", "item": "https://boobi.ai.kr/apt-finder.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
+<script>
+/* ══════════════ 매매 설문형 위저드 ══════════════
+   한 화면에 한 질문. 기존 입력 요소(id)를 그대로 재배치했기 때문에
+   calcBudget·findApt 등 계산 로직은 손대지 않고 그대로 동작한다. */
+(function(){
+  var box=document.getElementById('wizBox');
+  if(!box) return;
+  var $=function(id){return document.getElementById(id);};
+  var steps=[].slice.call(box.querySelectorAll('.wq'));
+  var budgetSteps=steps.filter(function(s){return !s.dataset.ai;});
+  var aiSteps=steps.filter(function(s){return s.dataset.ai;});
+  var phase='budget', idx=0;
+
+  function list(){ return phase==='ai' ? aiSteps : budgetSteps; }
+  function cur(){ return list()[idx]; }
+
+  function paint(){
+    var L=list();
+    steps.forEach(function(s){ s.classList.remove('on'); });
+    L[idx].classList.add('on');
+    $('wizNum').textContent=(idx+1)+' / '+L.length+(phase==='ai'?' · 추천 정보':'');
+    $('wizBarFill').style.width=Math.round(((idx+1)/L.length)*100)+'%';
+    $('wizBack').textContent=(phase==='budget'&&idx===0)?'← 처음으로':'← 이전';
+    var f=L[idx].querySelector('input[type=number]');
+    if(f && window.matchMedia && !window.matchMedia('(max-width:620px)').matches){ try{ f.focus(); }catch(e){} }
+  }
+  function go(n){
+    var L=list();
+    idx=Math.max(0,Math.min(L.length-1,n));
+    paint();
+    try{ box.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
+  }
+  function advance(){ if(idx<list().length-1) go(idx+1); }
+  function err(sec,msg){
+    var e=sec.querySelector('.werr');
+    if(!e){ e=document.createElement('p'); e.className='werr'; sec.appendChild(e); }
+    e.textContent=msg;
+    setTimeout(function(){ if(e) e.textContent=''; },3500);
+  }
+  function valid(sec){
+    var k=sec.dataset.k;
+    if(k==='own'&&!$('fOwnNew').querySelector('button.on')){ err(sec,'하나를 골라주세요.'); return false; }
+    if(k==='purpose'&&!$('fPurpose').querySelector('button.on')){ err(sec,'하나를 골라주세요.'); return false; }
+    if(k==='area'&&!$('fArea').value.trim()){ err(sec,'희망 지역을 선택해주세요.'); return false; }
+    if(k==='cash'){ var c=$('fCash').value; if(c===''||isNaN(+c)||+c<0){ err(sec,'보유 현금을 만원 단위로 적어주세요.'); return false; } }
+    if(k==='income'){ var i=$('fIncome').value; if(!i||isNaN(+i)||+i<=0){ err(sec,'연소득을 만원 단위로 적어주세요.'); return false; } }
+    if(k==='debt'){ var d=$('fDebt').value; if(d===''||isNaN(+d)||+d<0){ err(sec,'없으면 0을 적어주세요.'); return false; } }
+    return true;
+  }
+  function next(){ var sec=cur(); if(valid(sec)) advance(); }
+
+  /* ── 선택형: 고르면 자동으로 다음 ── */
+  function bindPick(el,onPick){
+    if(!el) return;
+    el.addEventListener('click',function(e){
+      var b=e.target.closest&&e.target.closest('button');
+      if(!b||!b.dataset.v||!el.contains(b)) return;
+      [].forEach.call(el.querySelectorAll('button'),function(x){ x.classList.toggle('on',x===b); });
+      var hold=onPick?onPick(b.dataset.v):false;
+      if(hold) return;
+      setTimeout(advance,170);
+    });
+  }
+
+  /* 보유 현황 → 기존 계산 로직(#fOwn)에 매핑 */
+  function syncOwn(){
+    var b=$('fOwnNew').querySelector('button.on');
+    var v=b?b.dataset.v:'none';
+    window.__MULTI=(v==='multi');
+    var legacy=(v==='one'||v==='multi')?'one':($('fFirst').checked?'first':'none');
+    [].forEach.call($('fOwn').querySelectorAll('button'),function(x){ x.classList.toggle('on',x.dataset.v===legacy); });
+  }
+  bindPick($('fOwnNew'),function(v){
+    var isNone=(v==='none');
+    $('firstWrap').style.display=isNone?'flex':'none';
+    $('ownNav').style.display=isNone?'block':'none';
+    if(!isNone) $('fFirst').checked=false;
+    syncOwn();
+    return isNone; /* 생애최초 여부를 확인한 뒤 진행 */
+  });
+  $('fFirst').addEventListener('change',function(){ syncOwn(); setTimeout(advance,220); });
+
+  bindPick($('fPurpose'),function(v){
+    window.__PURPOSE=v;
+    if(v==='invest') loadRedev();
+  });
+  ['fAge','fKids','fYear','fSize'].forEach(function(id){ bindPick($(id)); });
+
+  /* ── 다음 / 건너뛰기 ── */
+  box.addEventListener('click',function(e){
+    if(e.target.closest&&e.target.closest('.wnext')) next();
+  });
+  $('skipSave').addEventListener('click',function(){ $('fSave').value=''; $('fGo').click(); });
+  $('wizBack').addEventListener('click',function(){
+    if(idx>0){ go(idx-1); return; }
+    if(phase==='ai'){ phase='budget'; idx=budgetSteps.length-1; showWizard(); return; }
+    var hb=document.getElementById('buyBack'); if(hb) hb.click();
+  });
+
+  /* 지역 칩을 고르면 자동으로 다음 (buildCascade가 change 이벤트를 쏴준다) */
+  $('fArea').addEventListener('change',function(){
+    var sec=cur();
+    if(sec&&sec.dataset.k==='area'&&this.value.trim())
+      setTimeout(function(){ if(cur()&&cur().dataset.k==='area') advance(); },220);
+  });
+
+  /* 엔터로 다음 */
+  box.addEventListener('keydown',function(e){
+    if(e.key!=='Enter') return;
+    var t=e.target;
+    if(t&&t.tagName==='INPUT'&&t.type==='number'){
+      e.preventDefault();
+      if(cur().dataset.k==='save') $('fGo').click(); else next();
+    }
+  });
+
+  /* ── 화면 전환 ── */
+  function showWizard(){
+    $('resultBox').style.display='none';
+    $('aiBox').style.display='none';
+    box.style.display='';
+    paint();
+    try{ box.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
+  }
+  window.__wizResult=function(){
+    box.style.display='none';
+    $('resultBox').style.display='block';
+  };
+  $('editAns').addEventListener('click',function(){ phase='budget'; idx=0; showWizard(); });
+  $('startAi').addEventListener('click',function(){ phase='ai'; idx=0; showWizard(); });
+  $('fGo2').addEventListener('click',function(){
+    box.style.display='none';
+    $('resultBox').style.display='block';
+    $('aiBox').style.display='block';
+    try{ $('aiBox').scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){}
+  });
+
+  /* ── 다주택 취득세 중과 안내 ── */
+  var origRenderBudget=window.renderBudget;
+  window.renderBudget=function(){
+    origRenderBudget.apply(this,arguments);
+    if(!window.__MULTI) return;
+    var el=document.getElementById('budgetOut');
+    if(el) el.insertAdjacentHTML('beforeend',
+      '<div class="regbadge on" style="margin-top:9px">🧾 <b>다주택자는 취득세가 중과될 수 있어요.</b> '
+      +'주택 수·지역에 따라 세율이 크게 달라지니 <a href="/acquisition-tax.html" style="color:#B23B3B;font-weight:700;text-decoration:underline">취득세 계산기</a>에서 꼭 확인하세요. '
+      +'위 예산에는 취득세가 포함돼 있지 않습니다.</div>');
+  };
+
+  /* ── 결과·프롬프트 전달용 라벨 ── */
+  window.__ownLabel=function(){
+    var b=$('fOwnNew').querySelector('button.on'); var v=b?b.dataset.v:'none';
+    if(v==='multi') return '다주택(2채 이상)';
+    if(v==='one') return '1주택';
+    return $('fFirst').checked?'무주택(생애최초)':'무주택';
+  };
+  window.__purposeLabel=function(){
+    return window.__PURPOSE==='invest'?'실거주 + 자산가치':'실거주 위주';
+  };
+
+  syncOwn();
+  paint();
+})();
+
+/* ══════════════ 정비사업 근거 (실거주+자산가치 선택 시) ══════════════
+   서울시 공식 정비사업 통계로 확인되는 사실만 붙인다. 수익률·상승 전망은 만들지 않는다. */
+var REDEV={state:'idle',rows:[]};
+function loadRedev(){
+  if(REDEV.state!=='idle') return;
+  REDEV.state='loading';
+  fetch('/data/redev-seoul.json').then(function(r){ return r.ok?r.json():null; }).then(function(doc){
+    REDEV.state='done';
+    if(!doc||!doc.fields) return;
+    var F={}; doc.fields.forEach(function(k,i){ F[k]=i; });
+    REDEV.rows=doc.rows.map(function(r){
+      return {gu:r[F.gu]||'',addr:r[F.addr]||'',nm:r[F.nm]||'',stage:r[F.stage]||''};
+    });
+    if(window.__R&&window.__PURPOSE==='invest'&&(DATA.listings||[]).length) renderFinder();
+  }).catch(function(){ REDEV.state='done'; });
+}
+function redevInfo(d){
+  if(!REDEV.rows.length||d.sido!=='서울특별시') return null;
+  var dong=String(d.dong||''); if(!dong) return null;
+  var core=dong.replace(/\d+가$/,'');
+  var hit=REDEV.rows.filter(function(r){
+    if(r.gu!==d.sgg) return false;
+    return r.addr.indexOf(dong)>=0||(core&&core.length>2&&r.addr.indexOf(core)>=0);
+  });
+  return hit.length?{n:hit.length,first:hit[0]}:null;
+}
+function redevTag(d){
+  if(window.__PURPOSE!=='invest') return '';
+  var info=redevInfo(d);
+  if(!info) return '';
+  return '<span class="tg rd" title="'+esc(info.first.nm)+' · '+esc(info.first.stage)+'">🏗️ 인근 정비사업 '+info.n+'곳</span>';
+}
+/* 정비사업이 확인되는 단지를 앞으로. 그 안에서는 기존 정렬 순서를 그대로 유지한다. */
+function investRank(rows){
+  var w=rows.map(function(d,i){ var v=redevInfo(d); return {d:d,n:v?v.n:0,i:i}; });
+  w.sort(function(x,y){ return (y.n-x.n)||(x.i-y.i); });
+  return w.map(function(x){ return x.d; });
+}
+</script>
 <script src="/hwon-auth.js" defer></script>
 <!-- 로그인 게이트는 제거된 게 아니라 "매매" 모드 진입 시 동적으로 로드됩니다(아래 허브 스크립트의 loadGate()).
      허브 카드(매매/청약/재개발/경매)는 비로그인도 볼 수 있어야 유입이 막히지 않습니다.
