@@ -22,7 +22,9 @@ function labelText(inp){
 }
 function attach(inp){
   var t=labelText(inp), ph=inp.placeholder||'';
-  if(!/만원/.test(t) && !/억/.test(ph)) return;
+  var sib=inp.nextElementSibling; var unitTxt=sib?(sib.textContent||''):'';
+  var sec=inp.closest&&inp.closest('section'); var secTxt=sec?(sec.textContent||'').slice(0,400):'';
+  if(!/만원/.test(t) && !/억/.test(ph) && !/만원/.test(unitTxt) && !/만원 단위/.test(secTxt)) return;
   var hint=document.createElement('div');
   hint.className='hwHint';
   inp.insertAdjacentElement('afterend',hint);

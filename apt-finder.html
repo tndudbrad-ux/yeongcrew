@@ -44,13 +44,13 @@ h2.sec:first-child{margin-top:0}
 .tool-box h2::before{content:"";flex:0 0 12px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, transparent 26%),linear-gradient(180deg,#8FE9E4,#1B918D);-webkit-mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);mask:radial-gradient(circle, transparent 0 2.5px, #000 3px);box-shadow:0 0 9px var(--glow)}
 label.f{display:block;font-size:.87rem;font-weight:500;margin:15px 0 6px;color:var(--forest)}
 input.f,select.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
-input.f:focus,select.f:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(42,193,188,.13)}
+input.f:focus,select.f:focus{outline:none;border-color:#3D8BFD;box-shadow:0 0 0 3px rgba(61,139,253,.13)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .seg button{flex:1;min-width:90px;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:var(--sub);font-family:inherit;transition:.15s}
 .seg button.on{border-color:var(--mint);background:#E5F8F6;color:var(--teal);font-weight:600;box-shadow:0 0 10px rgba(42,193,188,.18)}
-button.go{width:100%;margin-top:22px;padding:15px;border:none;border-radius:14px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.35);transition:.15s}
-button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(42,193,188,.45)}
+button.go{width:100%;margin-top:22px;padding:15px;border:none;border-radius:14px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(61,139,253,.3);transition:.15s}
+button.go:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(61,139,253,.38)}
 .result{display:none;margin-top:22px;background:linear-gradient(180deg,#EAFAF8,#F0FAF8);border:1.5px solid #BFE9E6;border-radius:16px;padding:22px}
 .result.show{display:block}
 .result .big{font-size:1.55rem;font-weight:600;color:var(--teal);letter-spacing:-.02em}
@@ -381,7 +381,7 @@ DSR 40%(은행권)·스트레스 금리(수도권 규제지역 변동 3.0%p / �
 .wizBack{flex:0 0 auto;background:none;border:none;padding:6px 2px;font-family:inherit;font-size:.85rem;font-weight:500;color:var(--sub);cursor:pointer;transition:.15s;min-height:34px}
 .wizBack:hover{color:var(--teal)}
 .wizBar{flex:1;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
-.wizBar>i{display:block;height:100%;width:14%;border-radius:99px;background:linear-gradient(90deg,#33CCC7,#20A6A2);transition:width .32s cubic-bezier(.4,0,.2,1)}
+.wizBar>i{display:block;height:100%;width:14%;border-radius:99px;background:linear-gradient(90deg,#26C6B9,#3D8BFD);transition:width .32s cubic-bezier(.4,0,.2,1)}
 .wizNum{flex:0 0 auto;font-size:.78rem;font-weight:600;color:var(--sub);letter-spacing:-.01em;white-space:nowrap}
 .wq{display:none}
 .wq.on{display:block;animation:wqIn .26s cubic-bezier(.22,.8,.3,1) both}
@@ -390,16 +390,16 @@ DSR 40%(은행권)·스트레스 금리(수도권 규제지역 변동 3.0%p / �
 .wqS{font-size:.89rem;color:var(--sub);font-weight:300;line-height:1.6;margin-bottom:18px}
 .wqS b{font-weight:600;color:var(--forest)}
 .wqUnit{font-size:.8rem;color:var(--sub);font-weight:300;margin-top:8px}
-.wqUnit b{font-weight:700;color:var(--teal)}
+.wqUnit b{font-weight:700;color:#2A7DE8}
 .wqNote{font-size:.79rem;color:var(--sub);font-weight:300;line-height:1.6;margin-top:14px;background:#F6FCFB;border:1px solid var(--line);border-radius:12px;padding:11px 13px}
 .wqNote b{font-weight:600;color:var(--forest)}
 .wopt{display:flex;flex-direction:column;gap:10px}
 .wopt button{display:block;width:100%;text-align:left;padding:16px 18px;border:1.5px solid var(--line);background:#fff;border-radius:15px;cursor:pointer;font-family:inherit;color:var(--forest);transition:.16s;min-height:60px}
 .wopt button b{display:block;font-size:1rem;font-weight:600;letter-spacing:-.02em}
 .wopt button em{display:block;font-style:normal;font-size:.82rem;font-weight:300;color:var(--sub);margin-top:2px}
-.wopt button:hover{border-color:#AEE3E0;background:#FAFEFE}
-.wopt button.on{border-color:var(--mint);background:#E5F8F6;box-shadow:0 0 0 3px rgba(42,193,188,.13)}
-.wopt button.on b{color:var(--teal)}
+.wopt button:hover{border-color:#BFD9FB;background:#FAFCFF}
+.wopt button.on{border-color:#3D8BFD;background:linear-gradient(120deg,#F0FBFA,#EFF6FF);box-shadow:0 0 0 3px rgba(61,139,253,.13)}
+.wopt button.on b{color:#2A7DE8}
 .wseg button{min-height:48px}
 input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:-.02em}
 .wchk{display:flex;align-items:flex-start;gap:10px;margin-top:12px;padding:13px 15px;border:1.5px solid var(--line);border-radius:14px;background:#FAFEFE;cursor:pointer;font-size:.88rem;line-height:1.55}

@@ -14,9 +14,9 @@ button.go:active{transform:scale(.98)}
 .seg button{transition:all .16s ease}
 .seg button:hover{border-color:#8FE9E4;color:#20A6A2;transform:translateY(-1px)}
 a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid #2AC1BC;outline-offset:2px;border-radius:4px}
-.hwHint{font-size:.86rem;color:#20A6A2;font-weight:600;margin-top:5px;min-height:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .2s ease,opacity .25s ease;letter-spacing:-.01em}
+.hwHint{font-size:.86rem;color:#2A7DE8;font-weight:600;margin-top:5px;min-height:0;max-height:0;opacity:0;overflow:hidden;transition:max-height .2s ease,opacity .25s ease;letter-spacing:-.01em}
 .hwHint.on{max-height:26px;opacity:1}
-.hwHint::before{content:"= ";color:#9FC4C1;font-weight:400}
+.hwHint::before{content:"= ";color:#A9C4E8;font-weight:400}
 .hwReveal{opacity:0;transform:translateY(16px);transition:opacity .55s cubic-bezier(.22,.9,.35,1),transform .55s cubic-bezier(.22,.9,.35,1)}
 .hwReveal.hwIn{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){.hwReveal{opacity:1;transform:none;transition:none}}
