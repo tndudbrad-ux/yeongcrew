@@ -204,3 +204,24 @@ window.gtag=gtag;
 gtag('js', new Date());
 gtag('config', 'G-2KYCGVDL67');
 })();
+
+/* ===== 부비 — 신뢰 푸터: 사업자 정보·정책 링크 전 페이지 공통 주입 ===== */
+(function(){
+if(window.__bbBizFoot)return; window.__bbBizFoot=1;
+function init(){
+  var f=document.querySelector('footer');
+  if(!f || f.querySelector('.bbBiz')) return;
+  if((f.textContent||'').indexOf('사업자등록번호')>-1) return; // 이미 있는 페이지는 건너뜀
+  var st=document.createElement('style');
+  st.textContent='.bbBiz{margin-top:16px;padding-top:14px;border-top:1px solid rgba(127,165,162,.28);font-size:.76rem;line-height:1.9;text-align:center;opacity:.92;font-weight:300}'+
+  '.bbBiz a{margin:0 7px;text-decoration:none;color:inherit;opacity:.95}.bbBiz a:hover{text-decoration:underline}'+
+  '.bbBiz .ln2{opacity:.8}';
+  document.head.appendChild(st);
+  var d=document.createElement('div'); d.className='bbBiz';
+  var hasLinks=(f.textContent||'').indexOf('이용약관')>-1; // 정책 링크가 이미 있으면 사업자 정보만
+  d.innerHTML=(hasLinks?'':'<div><a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/terms.html">이용약관</a>·<a href="/privacy.html">개인정보처리방침</a></div>')+
+  '<div class="ln2">부비 boobi.ai.kr · 상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074<br>서울특별시 동작구 만양로 75 · 문의 tndud.brad@gmail.com · © 2026 원대시투</div>';
+  f.appendChild(d);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
