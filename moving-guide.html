@@ -77,6 +77,12 @@ footer a{color:#B9DCD9;margin:0 8px}
 .crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
 .crumb a{color:var(--teal)}
 @media(max-width:620px){.row2{grid-template-columns:1fr}nav.gnb{display:none}.tool-box{padding:24px 18px}}
+.rmBtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.rmBtn{display:inline-flex;align-items:center;gap:6px;padding:8px 15px;border-radius:999px;font-size:.82rem;font-weight:700;text-decoration:none;transition:.15s;white-space:nowrap}
+.rmBtn.main{color:#fff;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);box-shadow:0 5px 14px rgba(61,139,253,.25)}
+.rmBtn.main:hover{transform:translateY(-1px)}
+.rmBtn.ext{background:rgba(61,139,253,.08);color:#2A7DE8;border:1.5px solid rgba(61,139,253,.28)}
+.rmBtn.ext:hover{background:rgba(61,139,253,.15)}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css?v=3">
 </head>
@@ -127,7 +133,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 <script>
 var RM=[
 [ // 매매 계약 전
- ["등기부등본 직접 발급해서 확인","인터넷등기소(iros.go.kr)에서 700원이면 뗍니다. 갑구(소유자·압류·가압류)와 을구(근저당)를 보세요. 소유자가 계약 상대방과 같은지, 근저당 채권최고액이 얼마인지 확인. 중개사가 보여주는 것 말고 반드시 직접 발급하세요 — 발급 시점이 다르면 그 사이 새 등기가 생길 수 있습니다. 부비의 <a href='/jeonse-safety-check.html'>등기부 체크</a>에 올리면 위험 요소를 자동으로 찾아드려요."],
+ ["등기부등본 직접 발급해서 확인","인터넷등기소(iros.go.kr)에서 700원이면 뗍니다. 갑구(소유자·압류·가압류)와 을구(근저당)를 보세요. 소유자가 계약 상대방과 같은지, 근저당 채권최고액이 얼마인지 확인. 중개사가 보여주는 것 말고 반드시 직접 발급하세요 — 발급 시점이 다르면 그 사이 새 등기가 생길 수 있습니다. 부비의 <a href='/jeonse-safety-check.html'>등기부 체크</a>에 올리면 위험 요소를 자동으로 찾아드려요.<div class='rmBtns'><a class='rmBtn ext' href='https://www.iros.go.kr' target='_blank' rel='noopener' onclick='event.stopPropagation()'>🏛️ 인터넷등기소 바로가기 ↗</a><a class='rmBtn main' href='/home-report.html' onclick='event.stopPropagation()'>🏠 부비 집 종합 리포트 받기</a></div>"],
  ["실거래가 확인으로 가격 검증","국토부 실거래가 공개시스템(rt.molit.go.kr)에서 같은 단지·같은 평형의 최근 6개월 거래를 확인하세요. 호가(부르는 값)와 실거래가는 다릅니다. 최근 거래가 없다면 인근 유사 단지와 비교하고, 급매·직거래 특이 거래는 제외하고 보세요."],
  ["자금 계획 세우기 — 대출 한도부터","계약금(보통 10%)은 현금으로, 중도금·잔금은 대출 계획과 함께. <a href='/loan-calculator.html'>DSR 계산기</a>로 내 한도를 먼저 확인하고, 은행 2곳 이상에서 사전 한도 조회를 받아두세요. 대출 거절 시 계약금을 날릴 수 있으니 '대출 미승인 시 계약 해제' 특약을 고려하세요."],
  ["취득세 포함 총 필요 자금 계산","매매가 외에 취득세(<a href='/acquisition-tax.html'>계산기</a>), 중개보수(<a href='/brokerage-calculator.html'>계산기</a>), 법무사 보수, 이사비, 선수관리비까지. 보통 매매가의 2~4%가 추가로 듭니다. 이걸 몰라서 잔금일에 돈이 모자라는 사고가 실제로 일어납니다."],
