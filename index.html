@@ -55,54 +55,87 @@
 </nav>
 </div>
 </header>
-<div class="hwCar" id="hwCar" aria-label="부비 서비스 소개" role="region">
-<div class="hwCarView"><div class="hwCarTrack" id="hwCarTrack">
+<style>
+.bbDash{background:
+ radial-gradient(700px 420px at 88% -10%,rgba(61,139,253,.14),transparent 60%),
+ radial-gradient(800px 480px at -8% 110%,rgba(42,193,188,.16),transparent 60%),
+ radial-gradient(500px 380px at 104% 96%,rgba(139,108,246,.10),transparent 55%),#FFFFFF;
+ border-bottom:1px solid #EAF3F2;padding:26px 0 30px}
+.bbDashGrid{display:grid;grid-template-columns:255px 1fr 295px;gap:16px;align-items:stretch}
+@media(max-width:1020px){.bbDashGrid{grid-template-columns:1fr 1fr}.bbHero{grid-column:1/-1;order:-1}}
+@media(max-width:640px){.bbDashGrid{grid-template-columns:1fr}}
+.bbCard{background:linear-gradient(135deg,rgba(255,255,255,.78),rgba(255,255,255,.5));border:1.5px solid rgba(255,255,255,.95);border-radius:20px;padding:18px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 14px 36px rgba(13,42,41,.08),inset 0 1px 0 #fff}
+.bbCardT{font-size:.92rem;font-weight:800;color:#0D2A29;margin-bottom:11px;letter-spacing:-.01em}
+.bbBriefRow{display:flex;justify-content:space-between;align-items:baseline;padding:8px 2px;border-bottom:1px solid rgba(13,42,41,.06);font-size:.86rem;color:#547471}
+.bbBriefRow b{font-size:1.28rem;font-weight:800;color:#3D8BFD}
+.bbBriefRow b.warn{color:#E5484D}.bbBriefRow b.ok{color:#149A95}
+.bbBriefRow b small{font-size:.78rem;font-weight:700;color:#8AA5A2;margin-left:2px}
+.bbMini{display:block;margin-top:11px;text-align:center;padding:9px;border-radius:11px;background:rgba(61,139,253,.09);color:#2A7DE8;font-size:.83rem;font-weight:700;text-decoration:none;transition:.15s}
+.bbMini:hover{background:rgba(61,139,253,.16)}
+.bbStat{font-size:.82rem;color:#547471;padding:4px 2px;line-height:1.6}
+.bbStat b{color:#0D2A29;font-weight:800}
+.bbHero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 18px}
+.bbHero img{width:104px;height:104px;object-fit:contain;filter:drop-shadow(0 12px 22px rgba(42,193,188,.3));animation:ringFloat 4.5s ease-in-out infinite}
+.bbHero h1{font-size:1.9rem;font-weight:800;color:#0D2A29;letter-spacing:-.04em;margin:12px 0 8px;line-height:1.3;word-break:keep-all}
+.bbHero h1 .em{background:linear-gradient(115deg,#1FB8AE 0%,#3D8BFD 55%,#8B6CF6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bbHero p{font-size:.95rem;color:#547471;line-height:1.65;word-break:keep-all}
+.bbHeroBtns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;justify-content:center}
+.bbHeroBtns .grad{display:inline-flex;align-items:center;gap:7px;padding:12px 22px;border:none;border-radius:999px;white-space:nowrap;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;font-weight:800;font-size:.95rem;cursor:pointer;font-family:inherit;box-shadow:0 8px 20px rgba(61,139,253,.28);transition:.15s;text-decoration:none}
+.bbHeroBtns .grad:hover{transform:translateY(-1px)}
+.bbHeroBtns .ghost{display:inline-flex;align-items:center;gap:7px;padding:12px 22px;border-radius:999px;white-space:nowrap;background:rgba(255,255,255,.8);border:1.5px solid rgba(61,139,253,.3);color:#2A7DE8;font-weight:800;font-size:.95rem;text-decoration:none;transition:.15s}
+.bbHeroBtns .ghost:hover{background:#fff;border-color:#3D8BFD}
+#bbRankList{list-style:none;margin:0;padding:0}
+#bbRankList li a{display:flex;align-items:center;gap:8px;padding:7px 2px;font-size:.84rem;color:#33514f;text-decoration:none;border-bottom:1px solid rgba(13,42,41,.05)}
+#bbRankList li a:hover span{color:#2A7DE8}
+#bbRankList em{font-style:normal;flex:0 0 22px;text-align:center;font-size:.82rem;font-weight:800;color:#8AA5A2}
+#bbRankList span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:.12s}
+#bbRankList b{flex:0 0 auto;font-size:.74rem;font-weight:700;color:#3D8BFD}
+#bbRankList .ldg{padding:10px 2px;font-size:.82rem;color:#8AA5A2;list-style:none}
+.bbTools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.bbTools a{display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 2px;border-radius:13px;background:rgba(255,255,255,.65);border:1px solid rgba(61,139,253,.12);font-size:.72rem;font-weight:700;color:#33514f;text-decoration:none;transition:.15s}
+.bbTools a:hover{transform:translateY(-2px);border-color:rgba(61,139,253,.35);box-shadow:0 8px 18px rgba(61,139,253,.14)}
+.bbTools .i{font-size:1.25rem}
+</style>
+<div class="bbDash"><div class="wrap">
+<div class="bbDashGrid">
 
-<div class="hwSlide s1">
-<img class="hwSlideRing3d" src="boobi-ring-3d.png" alt="부비" width="120" height="120" style="width:120px;height:120px;object-fit:contain;display:block;margin:0 auto 8px;filter:drop-shadow(0 14px 24px rgba(42,193,188,.30));animation:ringFloat 4.5s ease-in-out infinite">
-<div class="hwSlideTag">REAL ESTATE, ILLUMINATED</div>
-<h1>부동산, <span class="em">부비</span>에게 물어보세요.</h1>
-<p>어려운 부동산, 당신의 비서 부비가 옆에서 챙겨요.<br>계산기·AI 비서·자가진단을 한곳에서.</p>
-<a class="hwSlideBtn" href="#quick">서비스 둘러보기</a>
+<aside class="bbCard" aria-label="오늘의 청약 브리핑">
+<div class="bbCardT">📅 오늘의 청약 브리핑</div>
+<div class="bbBriefRow"><span>오늘 접수 시작</span><b id="bfStart">–<small>건</small></b></div>
+<div class="bbBriefRow"><span>마감 임박 <span style="font-size:.72rem;color:#B6A79E">D-2 이내</span></span><b class="warn" id="bfEnd">–<small>건</small></b></div>
+<div class="bbBriefRow"><span>지금 접수 중</span><b class="ok" id="bfOpen">–<small>건</small></b></div>
+<a class="bbMini" href="/calendar.html">청약 캘린더에서 확인 →</a>
+<div class="bbCardT" style="margin-top:20px">🗺️ 데이터로 보는 부비</div>
+<div class="bbStat"><b>117,272개</b> 단지 실거래가 · 매달 자동 갱신</div>
+<div class="bbStat">서울 정비구역 <b>472곳</b> 전수 수록</div>
+<a class="bbMini" href="/redevelopment-map.html">전국 재개발 지도 →</a>
+</aside>
+
+<section class="bbHero" aria-label="부비 소개">
+<img src="boobi-ring-3d.png" alt="부비" width="104" height="104">
+<h1>부동산, <span class="em">부비</span>에게 물어보세요</h1>
+<p>계산기·AI 진단·실거래 데이터·재개발 지도까지 —<br>어려운 부동산, 한 곳에서 훤하게.</p>
+<div class="bbHeroBtns">
+<button type="button" class="grad" onclick="var b=document.getElementById('hwbBtn');if(b){b.click();}return false;">💬 AI 부비에게 질문</button>
+<a class="ghost" href="/apt-finder.html">🏠 내게 맞는 아파트 찾기</a>
 </div>
+</section>
 
-<div class="hwSlide s2">
-<img class="hwSlideIco3d" src="ico-calc.png" alt="계산기" width="108" height="108">
-<div class="hwSlideTag">계산기 12종</div>
-<h1>세금·대출, <span class="em">숫자로 바로</span></h1>
-<p>취득세·양도세·재산세·종부세부터 DSR·중개보수까지.<br>공시가격만 넣으면 2026년 기준으로 자동 계산.</p>
-<a class="hwSlideBtn" href="calculator.html">계산기 보러가기</a>
+<aside class="bbCard" aria-label="실시간 인기 칼럼">
+<div class="bbCardT">🔥 실시간 인기 칼럼</div>
+<ol id="bbRankList"><li class="ldg">집계 불러오는 중…</li></ol>
+<div class="bbTools">
+<a href="/calculator.html"><span class="i">🧮</span>계산기</a>
+<a href="/jeonse-contract.html"><span class="i">🛡️</span>안심전세</a>
+<a href="/calendar.html"><span class="i">📅</span>청약캘린더</a>
+<a href="/redevelopment-map.html"><span class="i">🗺️</span>재개발지도</a>
+<a href="/apt-finder.html"><span class="i">🏠</span>아파트찾기</a>
+<a href="/tools.html"><span class="i">🤖</span>AI진단</a>
 </div>
+</aside>
 
-<div class="hwSlide s3">
-<img class="hwSlideIco3d" src="ico-chat.png" alt="AI 비서" width="108" height="108">
-<div class="hwSlideTag">AI 비서 부비</div>
-<h1>궁금하면, <span class="em">부비에게</span></h1>
-<p>24시간 부동산 질문에 답하고 실거래가까지 찾아줘요.<br>분양 현장·전매제한도 부비가 훤히 알고 있어요.</p>
-<a class="hwSlideBtn" href="#" onclick="var b=document.getElementById('hwbBtn');if(b){b.click();}return false;">부비에게 질문하기</a>
 </div>
-
-<div class="hwSlide s4">
-<img class="hwSlideIco3d" src="ico-search.png" alt="자가진단" width="108" height="108">
-<div class="hwSlideTag">내 아파트 찾기 · 자가진단</div>
-<h1>내 상황에 <span class="em">딱 맞는 집</span></h1>
-<p>예산·직장·자녀 7문답이면 실거래 데이터로 5곳 추천.<br>계약검진·전세사기·수리책임 진단도 30초면 끝.</p>
-<a class="hwSlideBtn" href="apt-finder.html">아파트 찾으러 가기</a>
-</div>
-
-<div class="hwSlide s5">
-<img class="hwSlideIco3d" src="ico-news.png" alt="실시간 뉴스" width="108" height="108">
-<div class="hwSlideTag">실시간 뉴스 · 전문가 연결</div>
-<h1>지금 시장을, <span class="em">한눈에</span></h1>
-<p>지금 뜨는 부동산 뉴스와 검증된 전문가 연결까지.<br>깜깜이 없이, 결정에 필요한 정보를 훤하게.</p>
-<a class="hwSlideBtn" href="#news">오늘의 뉴스 보기</a>
-</div>
-
 </div></div>
-<button class="hwCarArw prev" id="hwCarPrev" aria-label="이전">‹</button>
-<button class="hwCarArw next" id="hwCarNext" aria-label="다음">›</button>
-<div class="hwCarDots" id="hwCarDots" aria-hidden="true"></div>
-</div>
 <main><div class="wrap">
 
 <section id="quick" aria-label="바로가기">
@@ -284,35 +317,23 @@
 </div>
 </footer>
 <script>
-/* ===== 상단 배너 캐러셀 (자동 + 스와이프 + 화살표 + 점) ===== */
+/* ===== 오늘의 청약 브리핑 ===== */
 (function(){
-  var car=document.getElementById('hwCar'); if(!car) return;
-  var track=document.getElementById('hwCarTrack');
-  var slides=track.children, n=slides.length, i=0, timer=null, DUR=5200;
-  var dotsWrap=document.getElementById('hwCarDots');
-  for(var k=0;k<n;k++){ var d=document.createElement('button'); d.className='hwCarDot'+(k===0?' on':''); d.setAttribute('aria-label',(k+1)+'번째'); (function(idx){d.onclick=function(){go(idx);reset();};})(k); dotsWrap.appendChild(d); }
-  var dots=dotsWrap.children;
-  function go(x){ i=(x+n)%n; track.style.transform='translateX(-'+(i*100)+'%)'; for(var k=0;k<n;k++){dots[k].classList.toggle('on',k===i);} }
-  function next(){ go(i+1); } function prev(){ go(i-1); }
-  function play(){ stop(); timer=setInterval(next,DUR); } function stop(){ if(timer){clearInterval(timer);timer=null;} }
-  function reset(){ play(); }
-  document.getElementById('hwCarNext').onclick=function(){next();reset();};
-  document.getElementById('hwCarPrev').onclick=function(){prev();reset();};
-  car.addEventListener('mouseenter',stop); car.addEventListener('mouseleave',play);
-  // 스와이프 (터치 + 마우스 드래그)
-  var x0=null,dx=0,drag=false;
-  function down(x){ x0=x;dx=0;drag=true;stop();track.style.transition='none'; }
-  function move(x){ if(!drag)return; dx=x-x0; track.style.transform='translateX(calc(-'+(i*100)+'% + '+dx+'px))'; }
-  function up(){ if(!drag)return; drag=false; track.style.transition=''; if(Math.abs(dx)>50){ dx<0?next():prev(); } else { go(i); } dx=0; play(); }
-  var view=car.querySelector('.hwCarView');
-  view.addEventListener('touchstart',function(e){down(e.touches[0].clientX);},{passive:true});
-  view.addEventListener('touchmove',function(e){move(e.touches[0].clientX);},{passive:true});
-  view.addEventListener('touchend',up);
-  view.addEventListener('mousedown',function(e){down(e.clientX);e.preventDefault();});
-  window.addEventListener('mousemove',function(e){move(e.clientX);});
-  window.addEventListener('mouseup',up);
-  document.addEventListener('visibilitychange',function(){document.hidden?stop():play();});
-  go(0); play();
+  var el=function(id){return document.getElementById(id);};
+  if(!el('bfStart')) return;
+  function put(id,n,unit){ el(id).innerHTML=n+'<small>'+(unit||'건')+'</small>'; }
+  fetch('/cheongyak-data.json?t='+Date.now()).then(function(r){return r.json();}).then(function(d){
+    var items=d.items||[]; var t=new Date(); t.setHours(0,0,0,0);
+    function day(v){ if(!v) return null; var x=new Date(v+'T00:00:00'); return isNaN(x)?null:x; }
+    var st=0,en=0,op=0;
+    items.forEach(function(it){
+      var a=day(it.rcritStart), b=day(it.rcritEnd);
+      if(a&&a.getTime()===t.getTime()) st++;
+      if(a&&b&&a<=t&&b>=t) op++;
+      if(b&&a&&a<=t){ var dd=(b-t)/86400000; if(dd>=0&&dd<=2) en++; }
+    });
+    put('bfStart',st); put('bfEnd',en); put('bfOpen',op);
+  }).catch(function(){ put('bfStart','–'); put('bfEnd','–'); put('bfOpen','–'); });
 })();
 
 /* ===== 홈 미니 캘린더 (청약·금리·공휴일·세금) ===== */

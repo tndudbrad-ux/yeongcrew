@@ -125,6 +125,35 @@
   }
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 
-  function boot(){ if(isArticle) runArticle(); if(isHub) runHub(); }
+  /* ---------- 홈 랭킹 카드 (#bbRankList): column.html 목록 + 조회수 합산 상위 5 ---------- */
+  function runHomeRank(){
+    var host=document.getElementById('bbRankList'); if(!host) return;
+    fetch('/column.html').then(function(r){return r.text();}).then(function(html){
+      var doc=new DOMParser().parseFromString(html,'text/html');
+      var metas={};
+      [].slice.call(doc.querySelectorAll('a.brow[href], a.feature[href]')).forEach(function(a){
+        var href=a.getAttribute('href'); if(!href||/^(http|#|mailto)/.test(href)) return;
+        var sg=slug(href); if(!sg||metas[sg]) return;
+        var t=a.querySelector('.bt')||a.querySelector('h2');
+        metas[sg]={path:href,title:(t?t.textContent:sg).trim()};
+      });
+      function draw(map){
+        var items=Object.keys(metas).map(function(sg){ return {s:sg,n:total(sg,map[sg]),m:metas[sg]}; });
+        items.sort(function(a,b){return b.n-a.n;});
+        host.innerHTML=items.slice(0,5).map(function(it,i){
+          var md=['🥇','🥈','🥉','4','5'][i];
+          return '<li><a href="'+it.m.path+'"><em>'+md+'</em><span>'+esc(it.m.title)+'</span><b>'+comma(it.n)+'</b></a></li>';
+        }).join('');
+      }
+      draw({});
+      ensureFS().then(function(){
+        firebase.firestore().collection('columnViews').get().then(function(qs){
+          var map={}; qs.forEach(function(d){ map[d.id]=(d.data().count)||0; }); draw(map);
+        }).catch(function(){});
+      }).catch(function(){});
+    }).catch(function(){ host.innerHTML='<li class="ldg">집계 준비 중이에요</li>'; });
+  }
+
+  function boot(){ if(isArticle) runArticle(); if(isHub) runHub(); runHomeRank(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 })();
