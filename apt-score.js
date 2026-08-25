@@ -275,22 +275,36 @@
       }
       /* 근거: 유저가 고른 순서대로. 투자 모드는 고정 가중치 순서대로. */
       var order = invest ? ['redev', 'liquid', 'prime'] : prios;
-      var why = [];
+      var why = [], bars = [];
       for (var w = 0; w < order.length; w++) {
         var Fx = FMAP[order[w]]; if (!Fx) continue;
         var txt = Fx.why(d, C);
-        if (txt) why.push({ icon: Fx.icon, label: Fx.label, rank: invest ? 0 : w + 1, text: txt });
+        var rk = invest ? 0 : w + 1;
+        if (txt) why.push({ icon: Fx.icon, label: Fx.label, rank: rk, text: txt });
+        /* 막대는 근거 문장을 못 대는 요소도 보여준다 — 상대 위치 자체가 정보다 */
+        bars.push({
+          key: Fx.key, icon: Fx.icon, label: Fx.label, rank: rk,
+          v: Math.round(norm[Fx.key][idx]), text: txt || null,
+        });
       }
-      return { d: d, sc: sc, why: why, i: idx };
+      return { d: d, sc: sc, why: why, bars: bars, i: idx };
     });
 
     scored.sort(function (a, b) { return (b.sc - a.sc) || (a.i - b.i); });
 
-    return scored.map(function (s) {
+    /* 총점을 후보군 안에서 0~100으로 다시 편다.
+       절대 점수가 아니라 "이 후보군 안에서의 상대 위치"라는 뜻이므로
+       화면에서도 반드시 그렇게 표기할 것. */
+    var raw = scored.map(function (s) { return s.sc; });
+    var fit = normalize(raw);
+
+    return scored.map(function (s, i) {
       var o = {};
       for (var kk in s.d) o[kk] = s.d[kk];
       o._score = Math.round(s.sc);
+      o._fit = Math.round(fit[i]);
       o._why = s.why;
+      o._bars = s.bars;
       return o;
     });
   }
