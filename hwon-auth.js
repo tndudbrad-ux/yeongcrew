@@ -152,13 +152,14 @@ function injectStyle(){
 if(document.getElementById('boobiGateStyle'))return;
 var st=document.createElement('style'); st.id='boobiGateStyle';
 st.textContent=
-'.boobiGateRest{position:relative;max-height:150px;overflow:hidden}'+
-'.boobiGateRest::after{content:"";position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(180deg,rgba(240,250,248,0),var(--cream,#F0FAF8) 94%);pointer-events:none}'+
-'.boobiGateWall{margin:8px 0 22px;padding:26px 22px;border:1px solid #B5E4E1;border-radius:18px;background:linear-gradient(120deg,#EAFAF8,#F4FBFA);text-align:center}'+
+'.boobiGateRest{position:relative;max-height:250px;overflow:hidden}'+
+'.boobiGateRest::after{content:"";position:absolute;left:0;right:0;top:22%;bottom:0;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.45) 45%,rgba(255,255,255,.8) 100%);pointer-events:none}'+
+'.boobiGateWall{margin:-95px 0 22px;position:relative;z-index:2;padding:30px 24px;border:1.5px solid rgba(255,255,255,.95);border-radius:22px;text-align:center;background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.14),transparent 55%),radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.16),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.72),rgba(255,255,255,.45));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 50px rgba(13,42,41,.12),inset 0 1px 0 #fff}'+
 '.boobiGateWall .lk{font-size:1.7rem}'+
 '.boobiGateWall h3{font-size:1.12rem;font-weight:800;margin:6px 0 4px;color:#0D2A29}'+
 '.boobiGateWall p{font-size:.92rem;color:#547471;margin-bottom:16px;line-height:1.6}'+
-'.boobiGateBtn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#33CCC7,#20A6A2);color:#fff;font-weight:800;font-size:1rem;padding:13px 26px;border:none;border-radius:12px;cursor:pointer;font-family:inherit;box-shadow:0 6px 18px rgba(42,193,188,.32)}'+
+'.boobiGateBtn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;font-weight:800;font-size:1rem;padding:13px 26px;border:none;border-radius:999px;cursor:pointer;font-family:inherit;box-shadow:0 8px 22px rgba(61,139,253,.3);transition:.15s}'+
+'.boobiGateBtn:hover{transform:translateY(-1px)}'+
 '.boobiGateNote{font-size:.8rem;color:#8aa5a2;margin-top:12px}'+
 'body.boobi-unlocked .boobiGateRest{max-height:none;overflow:visible}'+
 'body.boobi-unlocked .boobiGateRest::after{display:none}'+
