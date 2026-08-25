@@ -1,0 +1,31 @@
+name: redev-collect
+
+# 전국 정비사업 현황 자동 갱신
+# 원본 갱신주기가 분기~월간이라 매월 1회만 돌린다.
+on:
+  schedule:
+    - cron: "30 21 1 * *"   # KST 매월 2일 06:30
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Collect redevelopment status (Seoul / Busan / Incheon)
+        run: node collect-redev.mjs
+        env:
+          SEOUL_OPENAPI_KEY: ${{ secrets.SEOUL_OPENAPI_KEY }}
+          DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+      - name: Commit if changed
+        run: |
+          git config user.name "boobi-bot"
+          git config user.email "boobi-bot@users.noreply.github.com"
+          git add data/redev-*.json
+          git diff --staged --quiet || (git commit -m "chore: auto update redev data" && git push)
