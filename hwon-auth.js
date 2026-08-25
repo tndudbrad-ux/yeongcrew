@@ -32,7 +32,7 @@ var hcss=document.createElement('style');
 hcss.textContent='.hwLoginBtn{margin-left:auto;flex:0 0 auto;padding:8px 19px;border-radius:999px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff!important;font-weight:700;font-size:.84rem;text-decoration:none;box-shadow:0 4px 12px rgba(61,139,253,.22);white-space:nowrap;transition:.15s}'
  +'.hwLoginBtn:hover{transform:translateY(-1px)}'
  +'#hwNavRow{display:block;border-top:1px solid #EEF5F4;background:inherit}'
- +'#hwNavRowIn{display:flex!important;justify-content:flex-start!important;align-items:center;gap:26px;height:46px!important;max-width:1100px;margin:0 auto;padding:0 22px;overflow-x:auto;scrollbar-width:none}'
+ +'#hwNavRowIn{display:flex!important;justify-content:flex-start!important;align-items:center;gap:26px;height:46px!important;overflow-x:auto;scrollbar-width:none}'
  +'#hwNavRowIn::-webkit-scrollbar{display:none}'
  +'#hwNavRowIn a{position:relative;display:flex;align-items:center;height:100%;font-size:.92rem;font-weight:600;color:#547471;white-space:nowrap;text-decoration:none;transition:color .13s}'
  +'#hwNavRowIn a:hover{color:#2A7DE8}'
