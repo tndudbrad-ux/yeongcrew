@@ -77,8 +77,8 @@ main h2, .sec-title{
 }
 main h2::before, .sec-title::before{
   content:""; width:10px; height:10px; border-radius:50%;
-  background:linear-gradient(180deg,#8FE9E4,#20A6A2);
-  box-shadow:0 0 8px var(--glow);
+  background:linear-gradient(135deg,#26C6B9,#3D8BFD);
+  box-shadow:0 0 8px rgba(61,139,253,.35);
 }
 main > .wrap > section:first-of-type h2{margin-top:0}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px}
@@ -86,7 +86,7 @@ main > .wrap > section:first-of-type h2{margin-top:0}
   background:var(--card); border:1px solid var(--line); border-radius:18px; padding:24px;
   display:block; transition:.18s ease;
 }
-.card:hover{transform:translateY(-3px); border-color:#B5E4E1; box-shadow:0 14px 34px rgba(32,166,162,.14)}
+.card:hover{transform:translateY(-3px); border-color:#BFD9FB; box-shadow:0 14px 34px rgba(61,139,253,.13)}
 .card h3{font-size:1.02rem; font-weight:500; letter-spacing:-.015em; margin-bottom:7px; line-height:1.45}
 .card p{font-size:.87rem; color:var(--sub); font-weight:400; line-height:1.6}
 
