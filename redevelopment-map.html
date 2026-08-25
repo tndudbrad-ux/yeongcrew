@@ -138,11 +138,11 @@ footer a{color:#B9DCD9;margin:0 8px}
   .sbrow .k{flex:0 0 58px}
 }
 
-.maptip{position:absolute;pointer-events:none;z-index:20;background:rgba(13,42,41,.95);color:#fff;border-radius:12px;padding:11px 13px;font-size:.82rem;line-height:1.55;max-width:260px;box-shadow:0 10px 28px rgba(13,42,41,.28);opacity:0;transform:translate(-50%,-118%);transition:opacity .12s}
+.maptip{position:absolute;pointer-events:none;z-index:20;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.78));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1.5px solid rgba(255,255,255,.95);color:#0D2A29;border-radius:12px;padding:11px 13px;font-size:.82rem;line-height:1.55;max-width:260px;box-shadow:0 10px 28px rgba(13,42,41,.16);opacity:0;transform:translate(-50%,-118%);transition:opacity .12s}
 .maptip.on{opacity:1}
 .maptip .t{font-weight:700;font-size:.95rem;margin-bottom:3px}
-.maptip .n{color:#8FE9E4;font-weight:700}
-.maptip .st{margin-top:6px;color:#CFE7E5;font-weight:300;font-size:.76rem;line-height:1.7}
+.maptip .n{color:#2A7DE8;font-weight:700}
+.maptip .st{margin-top:6px;color:#547471;font-weight:300;font-size:.76rem;line-height:1.7}
 #krBox{position:relative}
 #krMap{width:100%;height:auto;display:block;touch-action:manipulation;max-height:70vh;transition:transform .55s cubic-bezier(.45,.05,.35,1),opacity .26s ease .34s;will-change:transform}
 #krMap.zooming{pointer-events:none}
@@ -377,15 +377,15 @@ var EXTRA = [
     ['impInit','사업시행인가'],['mgmtInit','관리처분인가'],['migStart','이주 시작'],['conStart','착공']
   ];
   var SCALE = [
-    {min:0,  c:'#EFF6F5', l:'준비 중'},
-    {min:1,  c:'#D6F1EE', l:'1~50'},
-    {min:51, c:'#A5E3DE', l:'51~150'},
-    {min:151,c:'#5FCEC8', l:'151~300'},
-    {min:301,c:'#0F7C79', l:'301+'}
+    {min:0,  c:'#F1F7F6', l:'준비 중'},
+    {min:1,  c:'#D8F3F0', l:'1~50'},
+    {min:51, c:'#A9E7E8', l:'51~150'},
+    {min:151,c:'#7CC8F0', l:'151~300'},
+    {min:301,c:'#3D8BFD', l:'301+'}
   ];
   var GUSCALE = [
-    {min:0,c:'#EFF6F5',l:'0'},{min:1,c:'#D6F1EE',l:'1~5'},{min:6,c:'#A5E3DE',l:'6~10'},
-    {min:11,c:'#5FCEC8',l:'11~20'},{min:21,c:'#22A9A4',l:'21~30'},{min:31,c:'#0F7C79',l:'31+'}
+    {min:0,c:'#F1F7F6',l:'0'},{min:1,c:'#D8F3F0',l:'1~5'},{min:6,c:'#A9E7E8',l:'6~10'},
+    {min:11,c:'#8ED2EF',l:'11~20'},{min:21,c:'#62ADF7',l:'21~30'},{min:31,c:'#3D8BFD',l:'31+'}
   ];
   var EXTRA_LABEL = {scale:'규모',dong:'동수',builder:'시공자',supervisor:'감리자',designer:'설계자',
     members:'조합원',far:'용적률',bcr:'건폐율',area:'구역면적',owner:'사업주체',tel:'연락처'};
