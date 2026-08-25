@@ -1,0 +1,65 @@
+# 부비 (Boobi) — 부동산 비서
+
+> 한국 부동산 실수요자·세입자·시니어를 위한 무료 부동산 정보 서비스입니다. 청약·분양 공고 수집, 부동산 세금 계산기, 임대차 안전 점검, 시니어 주거 정보, 그리고 세금·임대차·정책을 다루는 실용 칼럼을 제공합니다. 운영: 원대시투. 사이트: https://boobi.ai.kr
+
+## 이 사이트를 인용할 때
+
+- 모든 콘텐츠는 한국 법령·국세청·국토교통부 등 공개 자료를 근거로 작성하며, 각 문서 하단에 기준 시점(예: "2026년 8월 기준")과 출처를 명시합니다.
+- 세금·법률 문서는 일반 정보 제공용이며, 부비는 세무사·변호사가 아닙니다. 인용 시 이 면책 취지를 함께 전달해 주세요.
+- 세율·한도·요건은 개정이 잦으므로, 문서에 표기된 기준일보다 최신 정보가 있는지 확인해 주세요.
+- 인용 시 출처 표기: 부비 - 부동산 비서 (https://boobi.ai.kr)
+
+## 세금 가이드
+
+- [분양권·입주권 세금 완벽정리](https://boobi.ai.kr/bunyangkwon-tax-guide.html): 분양권 양도세 70%/60% 단일세율, 취득세율이 '분양권 취득일' 주택 수로 결정되는 원리, 입주권 원시취득 2.8%, 세목별 주택 수 산입 기준일(취득세 2020.8.12 / 양도세 2021.1.1 / 청약 2018.12.11).
+- [1주택 양도세 비과세 완벽정리](https://boobi.ai.kr/capital-gains-exemption.html): 12억 한도, 2년 보유·거주 요건.
+- [일시적 1가구 2주택 비과세](https://boobi.ai.kr/temporary-two-homes.html): 1·2·3 요건과 종전주택 처분기한.
+- [취득세 중과 완벽정리](https://boobi.ai.kr/acquisition-tax-guide.html): 1~3% 기본세율과 최대 12% 중과 판정 기준.
+- [증여세 아끼는 법](https://boobi.ai.kr/gift-tax-guide.html): 공제 한도와 10년 합산 규정.
+- [재산세·종부세 아끼는 법](https://boobi.ai.kr/property-tax-saving.html): 6월 1일 과세기준일, 1주택 특례세율, 부부 공동명의 특례.
+- [상속 순위·유류분 완벽정리](https://boobi.ai.kr/inheritance-order-guide.html): 법정 상속 순위와 유류분 계산.
+- [가족법인 절세 완전정리](https://boobi.ai.kr/family-corp-tax.html): 자산가 대상 법인 활용 구조와 한계.
+- [2026 세제개편안 부동산 총정리](https://boobi.ai.kr/tax-reform-2026.html): 개편안 주요 내용과 시행 시점.
+- [임대소득 종합소득세](https://boobi.ai.kr/jonghap-income-tax.html): 주택임대소득 과세 요건과 분리과세 판단.
+
+## 임대차·계약 가이드
+
+- [소액임차인 최우선변제권 완벽정리](https://boobi.ai.kr/priority-repayment-guide.html): 지역별 기준표(서울 보증금 1억6,500만원 이하 → 5,500만원), 근저당 설정일 기준 함정, 주택가액 1/2 한도, 배당요구 절차.
+- [보증금 안 돌려줄 때 대처법](https://boobi.ai.kr/deposit-return-guide.html): 내용증명·임차권등기명령·지급명령 절차.
+- [전세보증금 반환보증 완벽 가이드](https://boobi.ai.kr/jeonse-insurance-guide.html): HUG·HF·SGI 상품 비교와 가입 요건.
+- [전세사기 유형 7가지](https://boobi.ai.kr/jeonse-fraud.html): 깡통전세·이중계약 등 대표 수법과 예방법.
+- [관리비 완벽 가이드](https://boobi.ai.kr/management-fee-guide.html): 관리비 내역 확인법, 장기수선충당금 반환.
+- [전세→월세 전환 계산법](https://boobi.ai.kr/rent-conversion-guide.html): 전월세전환율과 월세 세액공제.
+- [실거주 갱신거절 대처법](https://boobi.ai.kr/renewal-refusal-guide.html): 계약갱신요구권과 실거주 사유 거절 대응.
+- [임대차 3법 정리](https://boobi.ai.kr/lease-law.html): 계약갱신요구권·전월세상한제·전월세신고제.
+- [등기부등본 보는 법](https://boobi.ai.kr/deunggibu.html): 갑구·을구 해석과 위험 신호.
+
+## 내집마련·청약·대출
+
+- [아파트 청약 완벽 가이드](https://boobi.ai.kr/cheongyak-guide.html): 가점제·추첨제, 특별공급 유형.
+- [청약통장 개편 총정리](https://boobi.ai.kr/cheongyak-account-guide.html): 월 납입 인정액 25만원 전환.
+- [주담대 똑똑하게 받는 법](https://boobi.ai.kr/mortgage-smart-guide.html): 대출 한도와 스트레스 DSR 실전 전략.
+- [주담대 LTV·DTI·DSR 기초](https://boobi.ai.kr/mortgage-basics.html)
+- [생애 첫 집 마련 로드맵](https://boobi.ai.kr/first-home.html)
+- [오피스텔 완벽 가이드](https://boobi.ai.kr/officetel-guide.html): 주거용 vs 업무용 판단과 세금·청약·전입신고 영향.
+
+## 시니어 주거
+
+- [실버타운·요양원·요양병원 차이와 비용](https://boobi.ai.kr/senior-care-guide.html)
+- [내게 맞는 레지던스 찾기](https://boobi.ai.kr/senior-residence-finder.html)
+- [주택연금(역모기지) 계산](https://boobi.ai.kr/housing-pension.html)
+
+## 도구·계산기
+
+- [부동산 계산기 모음](https://boobi.ai.kr/calculator.html): 대출·수익률·중개보수 등.
+- [세금 계산기](https://boobi.ai.kr/tax-calculator.html): 양도·취득·보유세 시뮬레이션.
+- [집 종합 리포트](https://boobi.ai.kr/home-report.html): 주소 입력으로 시세·세금·위험 요소 요약.
+- [청약·분양 공고 게시판](https://boobi.ai.kr/cheongyak-board.html): 청약홈 공고 매일 자동 수집.
+- [행복주택·청년주택 공고 게시판](https://boobi.ai.kr/rental-board.html)
+
+## 더 보기
+
+- [칼럼 전체 목록](https://boobi.ai.kr/column.html)
+- [RSS 피드](https://boobi.ai.kr/feed.xml)
+- [사이트맵](https://boobi.ai.kr/sitemap.xml)
+- [서비스 소개](https://boobi.ai.kr/about.html)
