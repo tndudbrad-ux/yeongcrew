@@ -236,6 +236,14 @@ details.adv summary{font-size:.85rem;font-weight:500;cursor:pointer;color:var(--
   <p class="wqNote">※ 자산가치는 <b>정비사업 진행 여부처럼 공개 자료로 확인되는 근거</b>만 반영해요. 수익률이나 가격 상승은 약속하지 않습니다.</p>
 </section>
 
+<section class="wq" data-k="prio">
+  <h3 class="wqT">살기 좋은 집의 기준, 뭐가 제일 중요하세요?</h3>
+  <p class="wqS"><b>중요한 순서대로 최대 3개</b>를 눌러주세요. 누른 순서가 그대로 순위가 됩니다.</p>
+  <div class="prioOpt" id="fPrio"></div>
+  <p class="wqNote" id="prioPending"></p>
+  <div class="wnav two"><button type="button" class="wskip wnext">건너뛰기</button><button type="button" class="go wnext">다음</button></div>
+</section>
+
 <section class="wq" data-k="area">
   <h3 class="wqT">어느 지역을 보고 계세요?</h3>
   <p class="wqS">광역시·도를 고르면 시군구가 이어서 나와요.</p>
@@ -401,6 +409,24 @@ DSR 40%(은행권)·스트레스 금리(수도권 규제지역 변동 3.0%p / �
 .wopt button.on{border-color:#3D8BFD;background:linear-gradient(120deg,#F0FBFA,#EFF6FF);box-shadow:0 0 0 3px rgba(61,139,253,.13)}
 .wopt button.on b{color:#2A7DE8}
 .wseg button{min-height:48px}
+/* 우선순위 선택 (최대 3개, 누른 순서 = 순위) */
+.prioOpt{display:flex;flex-direction:column;gap:9px}
+.prioOpt button{position:relative;display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px 46px 14px 16px;border:1.5px solid var(--line);background:#fff;border-radius:15px;cursor:pointer;font-family:inherit;color:var(--forest);transition:.16s;min-height:58px}
+.prioOpt button .pi{flex:0 0 auto;font-size:1.15rem;line-height:1}
+.prioOpt button b{display:block;font-size:.97rem;font-weight:600;letter-spacing:-.02em}
+.prioOpt button em{display:block;font-style:normal;font-size:.79rem;font-weight:300;color:var(--sub);margin-top:2px;line-height:1.45}
+.prioOpt button:hover{border-color:#BFD9FB;background:#FAFCFF}
+.prioOpt button.on{border-color:#3D8BFD;background:linear-gradient(120deg,#F0FBFA,#EFF6FF);box-shadow:0 0 0 3px rgba(61,139,253,.13)}
+.prioOpt button.on b{color:#2A7DE8}
+.prioOpt button.dim{opacity:.5}
+.prioRk{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff;background:linear-gradient(135deg,#26C6B9,#3D8BFD)}
+.prioOpt button.on .prioRk{display:flex}
+/* 추천 근거 */
+.whyBox{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+.whyRow{display:flex;align-items:flex-start;gap:7px;font-size:.79rem;font-weight:300;color:var(--sub);line-height:1.5}
+.whyRow .wi{flex:0 0 auto}
+.whyRow .wl{font-weight:600;color:#2A7DE8}
+.whyRow .wn{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:5px;background:#EAF3FF;color:#2A7DE8;font-size:.66rem;font-weight:700;margin-top:2px}
 input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:-.02em}
 .wchk{display:flex;align-items:flex-start;gap:10px;margin-top:12px;padding:13px 15px;border:1.5px solid var(--line);border-radius:14px;background:#FAFEFE;cursor:pointer;font-size:.88rem;line-height:1.55}
 .wchk input{width:19px;height:19px;margin-top:1px;accent-color:var(--mint);flex:0 0 auto}
@@ -644,6 +670,17 @@ function md(s){
   return conv(s);
 }
 var MSGS=['부비가 실거래 데이터를 뒤지는 중...','예산에 맞는 단지를 추리는 중...','학군·직주근접을 따져보는 중...','추천 이유를 정리하는 중...'];
+/* 유저가 고른 우선순위를 AI 프롬프트에도 순위 그대로 실어 보낸다 */
+function prioLine(){
+  var p=window.__PRIOS||[];
+  if(!p.length||!window.AptScore) return '';
+  var names=p.map(function(k){
+    for(var i=0;i<AptScore.FACTORS.length;i++) if(AptScore.FACTORS[i].key===k) return AptScore.FACTORS[i].label;
+    return k;
+  });
+  return '- 집을 고르는 기준 (중요한 순): '+names.map(function(n,i){return (i+1)+'순위 '+n;}).join(' · ')
+    +'\n  ※ 추천 이유를 쓸 때 이 순위를 그대로 언급하며 근거를 대라. 확인 안 되는 사실은 지어내지 마라.\n';
+}
 function findApt(){
   var R=window.__R;
   if(!R){ alert('먼저 예산을 계산해주세요'); return; }
@@ -667,6 +704,7 @@ function findApt(){
       ? '  ※ 자산가치는 정비사업 추진 여부·교통 확정 계획·신축 여부처럼 공개 자료로 확인되는 사실만 근거로 들어라. '
         +'수익률·가격 상승률을 예측하거나 약속하지 말고, 확인되지 않은 호재는 언급하지 마라.\n'
       : '  ※ 실거주 편의(직주근접·학군·생활 인프라) 위주로 판단해줘.\n')
+   +prioLine()
    +'- 나이: '+segVal('fAge')+', 자녀: '+segVal('fKids')+'\n'
    +'- 연식: '+segVal('fYear')+', 면적: '+segVal('fSize')
    +(cands.length? '\n\n[실거래 후보군] 아래는 국토부 실거래가에서 이 예산대에 실제 거래된 단지들이야. '
@@ -745,7 +783,9 @@ var STEPS=(function(){var a=[];
   for(v=1050000;v<=3000000;v+=50000)a.push(v);
   return a;})();
 function nearestIdx(v){var b=0,d=1e12;for(var i=0;i<STEPS.length;i++){var x=Math.abs(STEPS[i]-v);if(x<d){d=x;b=i}}return b;}
-var UI={idx:0,type:null,sort:0};
+/* '내 아파트 찾기'이므로 기본 유형은 아파트. 평당가 기준으로 정렬하면
+   빌라가 상단을 전부 차지해버려서, 유형은 유저가 명시적으로 넓히게 둔다. */
+var UI={idx:0,type:'apt',sort:0};
 var SORTS=[{k:'near',t:'예산 근접순'},{k:'desc',t:'가격 높은순'},{k:'asc',t:'가격 낮은순'}];
 var TYPES=[{k:null,t:'전체'},{k:'apt',t:'아파트'},{k:'rh',t:'연립·다세대'},{k:'offi',t:'오피스텔'}];
 var TYPE_BADGE={rh:'빌라',offi:'오피스텔'};
@@ -818,7 +858,10 @@ function renderFinder(){
   if(UI.type) rows=rows.filter(function(d){return d.type===UI.type;});
   var sk=SORTS[UI.sort].k;
   rows.sort(function(x,y){return sk==='near'?Math.abs(x.price-b)-Math.abs(y.price-b):(sk==='desc'?y.price-x.price:x.price-y.price);});
-  if(window.__PURPOSE==='invest') rows=investRank(rows);
+  /* 예산 규율(85~105%)로 후보를 먼저 걸러낸 뒤, 그 안에서만 점수 경쟁을 시킨다.
+     점수가 예산 규율을 밀어내는 일은 없어야 한다. */
+  var ranked=(UI.sort===0)&&(window.__PURPOSE==='invest'||(window.__PRIOS||[]).length>0);
+  if(ranked) rows=rankCands(rows,b);
   window.__CANDS=rows;
   var where=(SHORT[R.area.sido]||R.area.sido)+(R.area.sgg?' '+R.area.sgg:'');
 
@@ -830,7 +873,7 @@ function renderFinder(){
    +'<div class="tabs2">'+TYPES.map(function(t){return '<button class="'+(UI.type===t.k?'on':'')+'" onclick="UI.type='+(t.k?"'"+t.k+"'":'null')+';renderFinder()">'+t.t+'</button>';}).join('')+'</div>'
    +'<div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 10px">'
    +'<div style="font-size:.85rem;font-weight:500;color:var(--sub)">'+where+' · <b style="color:var(--forest)">'+rows.length+'</b>개 단지</div>'
-   +'<button class="tabs2" style="display:inline-block;margin:0"><span style="font-size:.78rem;font-weight:500;color:var(--sub);border:1.5px solid var(--line);padding:6px 10px;border-radius:9px;cursor:pointer" onclick="UI.sort=(UI.sort+1)%3;renderFinder()">'+SORTS[UI.sort].t+'</span></button></div>';
+   +'<button class="tabs2" style="display:inline-block;margin:0"><span style="font-size:.78rem;font-weight:500;color:var(--sub);border:1.5px solid var(--line);padding:6px 10px;border-radius:9px;cursor:pointer" onclick="UI.sort=(UI.sort+1)%3;renderFinder()">'+(ranked?'부비 추천순':SORTS[UI.sort].t)+'</span></button></div>';
   if(!rows.length){
     h+='<div style="text-align:center;padding:34px 12px;color:var(--sub);font-size:.9rem">'
       +'이 예산대에 '+where+' 실거래가 없어요.<br>예산을 조절하거나 유형을 넓혀보세요.<br>'
@@ -844,11 +887,16 @@ function renderFinder(){
        +'<div class="lo">'+SHORT[d.sido]+' '+esc(d.sgg)+' '+esc(d.dong)+'</div>'
        +'<div class="mt"><span class="tg">전용 '+d.area+'㎡ ('+py(d.area)+'평)</span><span class="tg">'+d.floor+'층</span><span class="tg">'+d.dealYm.replace('-','.')+' 거래</span>'+redevTag(d)+'</div>'
        +'<div><span class="pr">'+readMan(d.price)+'</span><span class="df '+cls+'">'+txt+'</span></div>'
+       +whyHtml(d)
        +aptActions(d.name,d.dong)+'</div></div>';
     }).join('');
   }
   h+='<p class="note">국토부 실거래가(아파트·연립다세대·오피스텔 매매) 최근 12개월 · 단지×면적대별 최신 거래. 해제된 거래는 제외했습니다.'
-   +((window.__PURPOSE==='invest'&&REDEV.rows.length)?'<br>🏗️ 태그는 <b>서울시 정비사업 통계</b>에 등록된 같은 법정동의 구역 수예요. 사업이 진행 중이라는 사실만 알려줄 뿐, 가격 상승을 뜻하지는 않습니다.':'')
+   +((window.__PURPOSE==='invest'&&REDEV.rows.length)?'<br>🏗️ 태그는 <b>서울·부산·인천 정비사업 통계</b>에 등록된 같은 법정동의 구역 수예요. 사업이 진행 중이라는 사실만 알려줄 뿐, 가격 상승을 뜻하지는 않습니다.':'')
+   +(ranked?'<br>순서는 '+(window.__PURPOSE==='invest'
+        ? '<b>정비사업 진행 단계·거래 활발도·동네 가격대</b>를 가중 합산한 결과예요.'
+        : '<b>고르신 우선순위</b>(1순위 3배·2순위 2배·3순위 1.5배, 나머지 항목도 0.5배로 반영)로 매긴 점수예요.')
+      +' 각 줄의 근거는 국토부 실거래·정비사업 통계에서 확인된 사실만 적었고, 가격이 오른다는 뜻은 아닙니다.':'')
    +'</p></div>';
   document.getElementById('findOut').innerHTML=h;
 }
@@ -1027,6 +1075,7 @@ document.getElementById('fRes').addEventListener('click',function(e){
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "내 아파트 찾기", "url": "https://boobi.ai.kr/apt-finder.html", "description": "예산·직장·자녀·연식 조건 진단 후 국토부 실거래가 기반으로 아파트 5곳을 추천하는 무료 서비스", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://boobi.ai.kr/"}, {"@type": "ListItem", "position": 2, "name": "내 아파트 찾기", "item": "https://boobi.ai.kr/apt-finder.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
+<script src="/apt-score.js?v=1"></script>
 <script>
 /* ══════════════ 매매 설문형 위저드 ══════════════
    한 화면에 한 질문. 기존 입력 요소(id)를 그대로 재배치했기 때문에
@@ -1040,11 +1089,20 @@ document.getElementById('fRes').addEventListener('click',function(e){
   var aiSteps=steps.filter(function(s){return s.dataset.ai;});
   var phase='budget', idx=0;
 
-  function list(){ return phase==='ai' ? aiSteps : budgetSteps; }
+  /* 우선순위 질문은 '실거주만'을 고른 사람에게만 보여준다.
+     투자 모드는 정비사업·거래량 고정 가중치로 돌아가므로 순위를 물을 필요가 없다. */
+  function list(){
+    if(phase==='ai') return aiSteps;
+    return budgetSteps.filter(function(s){
+      return !(s.dataset.k==='prio' && window.__PURPOSE==='invest');
+    });
+  }
   function cur(){ return list()[idx]; }
 
   function paint(){
     var L=list();
+    if(idx>L.length-1) idx=L.length-1;
+    if(idx<0) idx=0;
     steps.forEach(function(s){ s.classList.remove('on'); });
     L[idx].classList.add('on');
     $('wizNum').textContent=(idx+1)+' / '+L.length+(phase==='ai'?' · 추천 정보':'');
@@ -1111,8 +1169,41 @@ document.getElementById('fRes').addEventListener('click',function(e){
 
   bindPick($('fPurpose'),function(v){
     window.__PURPOSE=v;
-    if(v==='invest') loadRedev();
+    loadRedev(); /* 실거주 모드에서도 '정비사업이 도는 곳'을 고를 수 있어 항상 받아둔다 */
   });
+
+  /* ── 우선순위: 누른 순서가 순위. 최대 3개 ── */
+  window.__PRIOS=[];
+  (function(){
+    var wrap=$('fPrio'); if(!wrap||!window.AptScore) return;
+    wrap.innerHTML=AptScore.FACTORS.map(function(f){
+      return '<button type="button" data-k="'+f.key+'"><span class="pi">'+f.icon+'</span>'
+        +'<span style="flex:1;min-width:0"><b>'+f.label+'</b><em>'+f.desc+'</em></span>'
+        +'<span class="prioRk"></span></button>';
+    }).join('');
+    var pend=$('prioPending');
+    if(pend) pend.innerHTML='※ '+AptScore.PENDING.join(' · ')+'은 아직 공개 데이터를 붙이지 못해 이번 추천에서는 빼놨어요. '
+      +'추정으로 채우면 근거가 사실이 아니게 되니까요. 데이터가 붙는 대로 항목을 늘릴게요.';
+    function paintPrio(){
+      [].forEach.call(wrap.querySelectorAll('button'),function(b){
+        var i=window.__PRIOS.indexOf(b.dataset.k);
+        b.classList.toggle('on',i>=0);
+        b.classList.toggle('dim',i<0&&window.__PRIOS.length>=3);
+        b.querySelector('.prioRk').textContent=i>=0?(i+1):'';
+      });
+    }
+    wrap.addEventListener('click',function(e){
+      var b=e.target.closest&&e.target.closest('button');
+      if(!b||!wrap.contains(b)) return;
+      var k=b.dataset.k, i=window.__PRIOS.indexOf(k);
+      if(i>=0) window.__PRIOS.splice(i,1);
+      else if(window.__PRIOS.length<3) window.__PRIOS.push(k);
+      else return;
+      paintPrio();
+      ga('finder_prio',{picked:window.__PRIOS.join(',')});
+    });
+    paintPrio();
+  })();
   ['fAge','fKids','fYear','fSize'].forEach(function(id){ bindPick($(id)); });
 
   /* ── 다음 / 건너뛰기 ── */
@@ -1193,18 +1284,30 @@ document.getElementById('fRes').addEventListener('click',function(e){
 
 /* ══════════════ 정비사업 근거 (실거주+자산가치 선택 시) ══════════════
    서울시 공식 정비사업 통계로 확인되는 사실만 붙인다. 수익률·상승 전망은 만들지 않는다. */
+/* 정비사업 통계 — 인가일까지 통째로 들고 있어야 "조합설립(2022.09)" 같은 근거를 댈 수 있다.
+   서울·부산·인천 세 곳에 데이터가 있으므로 셋 다 받아 합친다. */
 var REDEV={state:'idle',rows:[]};
+var REDEV_FILES=['/data/redev-seoul.json','/data/redev-busan.json','/data/redev-incheon.json'];
 function loadRedev(){
   if(REDEV.state!=='idle') return;
   REDEV.state='loading';
-  fetch('/data/redev-seoul.json').then(function(r){ return r.ok?r.json():null; }).then(function(doc){
+  Promise.all(REDEV_FILES.map(function(u){
+    return fetch(u).then(function(r){ return r.ok?r.json():null; }).catch(function(){ return null; });
+  })).then(function(docs){
     REDEV.state='done';
-    if(!doc||!doc.fields) return;
-    var F={}; doc.fields.forEach(function(k,i){ F[k]=i; });
-    REDEV.rows=doc.rows.map(function(r){
-      return {gu:r[F.gu]||'',addr:r[F.addr]||'',nm:r[F.nm]||'',stage:r[F.stage]||''};
+    var out=[];
+    docs.forEach(function(doc){
+      if(!doc||!doc.fields||!doc.rows) return;
+      var F={}; doc.fields.forEach(function(k,i){ F[k]=i; });
+      doc.rows.forEach(function(r){
+        var o={};
+        for(var k in F) o[k]=r[F[k]];
+        o.gu=o.gu||''; o.addr=o.addr||''; o.nm=o.nm||''; o.stage=o.stage||'';
+        out.push(o);
+      });
     });
-    if(window.__R&&window.__PURPOSE==='invest'&&(DATA.listings||[]).length) renderFinder();
+    REDEV.rows=out;
+    if(window.__R&&(DATA.listings||[]).length) renderFinder();
   }).catch(function(){ REDEV.state='done'; });
 }
 function redevInfo(d){
@@ -1223,11 +1326,23 @@ function redevTag(d){
   if(!info) return '';
   return '<span class="tg rd" title="'+esc(info.first.nm)+' · '+esc(info.first.stage)+'">🏗️ 인근 정비사업 '+info.n+'곳</span>';
 }
-/* 정비사업이 확인되는 단지를 앞으로. 그 안에서는 기존 정렬 순서를 그대로 유지한다. */
-function investRank(rows){
-  var w=rows.map(function(d,i){ var v=redevInfo(d); return {d:d,n:v?v.n:0,i:i}; });
-  w.sort(function(x,y){ return (y.n-x.n)||(x.i-y.i); });
-  return w.map(function(x){ return x.d; });
+/* 실거주/투자 분기 랭킹 — 점수 로직은 apt-score.js에 있다(앱과 동일 유지). */
+function rankCands(rows,budget){
+  if(!window.AptScore) return rows;
+  return AptScore.rank(rows,{
+    all:DATA.listings||rows,
+    budget:budget,
+    purpose:window.__PURPOSE==='invest'?'invest':'live',
+    prios:window.__PRIOS||[],
+    redevRows:REDEV.rows
+  });
+}
+function whyHtml(d){
+  if(!d._why||!d._why.length) return '';
+  return '<div class="whyBox">'+d._why.map(function(w){
+    return '<div class="whyRow">'+(w.rank?'<span class="wn">'+w.rank+'순위</span>':'<span class="wi">'+w.icon+'</span>')
+      +'<span><span class="wl">'+esc(w.label)+'</span> — '+esc(w.text)+'</span></div>';
+  }).join('')+'</div>';
 }
 </script>
 <script src="/hwon-auth.js" defer></script>
