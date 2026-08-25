@@ -24,17 +24,36 @@ var nav=document.querySelector('header nav, nav.gnb');
 if(!nav) return;
 var items=[['/tools.html','AI진단'],['/calculator.html','계산기'],['/rental-board.html','청년·신혼부부'],['/senior.html','시니어'],['/invest.html','투자'],['/column.html','칼럼']];
 var here=location.pathname.replace(/^\//,'').replace(/index\.html$/,'');
-nav.innerHTML='';
+/* ── 2단 헤더: 1줄 = 로고 + 로그인 버튼, 2줄 = 메뉴 탭 (아파티 스타일) ── */
+nav.innerHTML=''; nav.style.display='none';
+var hd=nav.closest('header')||document.querySelector('header');
+var wr=nav.parentElement||hd;
+var hcss=document.createElement('style');
+hcss.textContent='.hwLoginBtn{margin-left:auto;flex:0 0 auto;padding:8px 19px;border-radius:999px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff!important;font-weight:700;font-size:.84rem;text-decoration:none;box-shadow:0 4px 12px rgba(61,139,253,.22);white-space:nowrap;transition:.15s}'
+ +'.hwLoginBtn:hover{transform:translateY(-1px)}'
+ +'#hwNavRow{display:block;border-top:1px solid #EEF5F4;background:inherit}'
+ +'#hwNavRowIn{display:flex!important;justify-content:flex-start!important;align-items:center;gap:26px;height:46px!important;max-width:1100px;margin:0 auto;padding:0 22px;overflow-x:auto;scrollbar-width:none}'
+ +'#hwNavRowIn::-webkit-scrollbar{display:none}'
+ +'#hwNavRowIn a{position:relative;display:flex;align-items:center;height:100%;font-size:.92rem;font-weight:600;color:#547471;white-space:nowrap;text-decoration:none;transition:color .13s}'
+ +'#hwNavRowIn a:hover{color:#2A7DE8}'
+ +'#hwNavRowIn a.on{color:#2A7DE8;font-weight:800}'
+ +'#hwNavRowIn a.on::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2.5px;border-radius:2px 2px 0 0;background:linear-gradient(90deg,#26C6B9,#3D8BFD)}'
+ +'@media(max-width:700px){#hwNavRow{display:none}}';
+document.head.appendChild(hcss);
+link=document.createElement('a'); link.href='/account.html'; link.id='hwAuthLink'; link.className='hwLoginBtn'; link.textContent='로그인';
+wr.appendChild(link);
+var bar=document.createElement('nav'); bar.id='hwNavRow';
+var inner=document.createElement('div'); inner.className='wrap'; inner.id='hwNavRowIn';
 items.forEach(function(it){
 var a=document.createElement('a'); a.href=it[0]; a.textContent=it[1];
 var slug=it[0].replace(/^\//,'').replace(/\.html$/,'');
 if(here && (here===slug+'.html' || here.indexOf(slug)===0)) a.className='on';
 /* 경매 등 투자 하위 페이지는 '투자' 탭 활성화 */
 if(slug==='invest' && (here.indexOf('auction')===0)) a.className='on';
-nav.appendChild(a);
+inner.appendChild(a);
 });
-link=document.createElement('a'); link.href='/account.html'; link.id='hwAuthLink'; link.textContent='로그인';
-nav.appendChild(link);
+bar.appendChild(inner);
+if(hd) hd.appendChild(bar);
 
 /* ===== 모바일 햄버거 메뉴 =====
  * 좁은 화면에선 페이지 CSS가 nav를 숨겨 진입로가 없었음 → 햄버거 버튼 + 드롭다운으로 전 페이지 일괄 해결 */
