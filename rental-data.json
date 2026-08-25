@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-24T09:45:05.712Z",
+  "updatedAt": "2026-08-25T00:30:25.483Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
   "count": 56,
   "schema": {
@@ -783,21 +783,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020584",
-      "provider": "LH",
-      "ltype": "영구임대",
-      "name": "[안동옥동2]  영구임대주택 예비입주자 모집",
-      "region": "경상북도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-09-11",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020584&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020609",
       "provider": "LH",
       "ltype": "영구임대",
@@ -809,6 +794,21 @@
       "rcritEnd": "2026-09-11",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020609&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020584",
+      "provider": "LH",
+      "ltype": "영구임대",
+      "name": "[안동옥동2]  영구임대주택 예비입주자 모집",
+      "region": "경상북도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-09-11",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020584&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
