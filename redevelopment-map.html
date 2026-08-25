@@ -144,7 +144,11 @@ footer a{color:#B9DCD9;margin:0 8px}
 .maptip .n{color:#8FE9E4;font-weight:700}
 .maptip .st{margin-top:6px;color:#CFE7E5;font-weight:300;font-size:.76rem;line-height:1.7}
 #krBox{position:relative}
-#krMap{width:100%;height:auto;display:block;touch-action:manipulation;max-height:70vh}
+#krMap{width:100%;height:auto;display:block;touch-action:manipulation;max-height:70vh;transition:transform .55s cubic-bezier(.45,.05,.35,1),opacity .26s ease .34s;will-change:transform}
+#krMap.zooming{pointer-events:none}
+#krHolder{overflow:hidden}
+#regionWrap.zoomin,#soonWrap.zoomin{animation:bbZoomIn .5s cubic-bezier(.16,1,.3,1)}
+@keyframes bbZoomIn{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:scale(1)}}
 #krMap path{stroke:#fff;stroke-width:1.4;cursor:pointer;transition:fill .15s}
 #krMap path:hover,#krMap path.on{stroke:#0D2A29;stroke-width:2.2}
 #krMap text{font-size:14px;font-weight:600;fill:#0D2A29;pointer-events:none;paint-order:stroke;stroke:rgba(255,255,255,.9);stroke-width:3.5px}
@@ -458,7 +462,7 @@ var EXTRA = [
     map.addEventListener('mouseleave', function(){ tip.classList.remove('on'); });
     map.addEventListener('click', function(e){
       var p=e.target.closest && e.target.closest('path');
-      if(p&&p.dataset.sido){ tip.classList.remove('on'); openSido(p.dataset.sido, null, true); }
+      if(p&&p.dataset.sido){ tip.classList.remove('on'); zoomToSido(p, p.dataset.sido); }
     });
   }
 
@@ -468,7 +472,10 @@ var EXTRA = [
     }).join('');
     $('sidoChips').addEventListener('click', function(e){
       var b=e.target.closest && e.target.closest('button');
-      if(b&&b.dataset.sido) openSido(b.dataset.sido, null, true);
+      if(!b||!b.dataset.sido) return;
+      var p=document.querySelector('#krMap path[data-sido="'+b.dataset.sido.replace(/"/g,'')+'"]');
+      if(p && $('krBox').style.display!=='none') zoomToSido(p, b.dataset.sido);
+      else openSido(b.dataset.sido, null, true);
     });
   }
 
@@ -486,11 +493,38 @@ var EXTRA = [
     }).join('');
   }
 
+  /* ── 전국→지역 클로즈업 줌 ── */
+  var zoomBusy=false;
+  function zoomToSido(p, name){
+    if(zoomBusy) return; zoomBusy=true;
+    var svg=$('krMap');
+    try{
+      var bb=p.getBBox();
+      var vw=svg.clientWidth, vh=svg.clientHeight||svg.clientWidth*(KR.h/KR.w);
+      var s0=Math.min(vw/KR.w, vh/KR.h); /* preserveAspectRatio meet */
+      var offX=(vw-KR.w*s0)/2, offY=(vh-KR.h*s0)/2;
+      var cx=offX+(bb.x+bb.width/2)*s0, cy=offY+(bb.y+bb.height/2)*s0;
+      var scale=Math.min(7, Math.max(2.2, Math.min(vw/(bb.width*s0), vh/(bb.height*s0))*0.85));
+      svg.classList.add('zooming');
+      var tx=vw/2-cx, ty=vh/2-cy;
+      svg.style.transformOrigin=cx.toFixed(1)+'px '+cy.toFixed(1)+'px';
+      svg.style.transform='translate('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px) scale('+scale.toFixed(2)+')';
+      svg.style.opacity='0';
+    }catch(e){}
+    setTimeout(function(){ zoomBusy=false; openSido(name, null, true); }, 460);
+  }
+  function resetKr(){
+    var svg=$('krMap'); if(!svg) return;
+    svg.style.transition='none'; svg.style.transform=''; svg.style.opacity=''; svg.classList.remove('zooming');
+    void svg.offsetWidth; svg.style.transition='';
+  }
   /* ── 지역 열기 ── */
   function showView(v){
     $('krBox').style.display = v==='kr' ? '' : 'none';
     $('regionWrap').style.display = v==='region' ? '' : 'none';
     $('soonWrap').style.display = v==='soon' ? '' : 'none';
+    if(v==='kr'){ resetKr(); }
+    else{ var w=$(v==='region'?'regionWrap':'soonWrap'); w.classList.remove('zoomin'); void w.offsetWidth; w.classList.add('zoomin'); }
   }
   function openSido(name, gu, push){
     var r = REG[name];
