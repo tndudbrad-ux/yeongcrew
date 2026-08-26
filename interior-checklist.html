@@ -63,6 +63,8 @@ main{padding:26px 0 140px}
 .iwhy{display:block;font-size:.8rem;color:var(--sub);margin-top:3px;word-break:keep-all}
 .item.on .iwhy{color:#A9BEBC}
 .req{display:inline-block;font-size:.68rem;font-weight:700;color:#fff;background:linear-gradient(115deg,#FF7A59,#E5484D);border-radius:6px;padding:1px 7px;margin-left:6px;vertical-align:2px;white-space:nowrap}
+.golink{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:.82rem;font-weight:700;color:#fff;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 70%);border-radius:999px;padding:7px 15px;box-shadow:0 6px 16px rgba(61,139,253,.25);white-space:nowrap}
+.item.on .golink{opacity:.55}
 .scorebar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-top:1.5px solid rgba(255,255,255,.95);box-shadow:0 -10px 30px rgba(13,42,41,.10)}
 .scorebar .in{max-width:760px;margin:0 auto;padding:12px 20px 14px}
 .srow{display:flex;align-items:center;gap:12px}
@@ -101,7 +103,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 
 <div class="sec"><h2>🏢 1. 업체 검증</h2><span class="cnt" data-cnt="g1"></span></div>
 <div class="glass list" id="g1">
-<label class="item"><input type="checkbox" data-k="kiscon" data-req="1"><span class="cbox"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12L13.5 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="itxt"><span class="ititle">KISCON에서 실내건축공사업 등록을 확인했다<span class="req">필수</span></span><span class="iwhy">1,500만원 이상 공사는 등록 업체만 시공할 수 있어요. kiscon.net에서 업체명으로 조회.</span></span></label>
+<label class="item"><input type="checkbox" data-k="kiscon" data-req="1"><span class="cbox"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12L13.5 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="itxt"><span class="ititle">KISCON에서 실내건축공사업 등록을 확인했다<span class="req">필수</span></span><span class="iwhy">1,500만원 이상 공사는 등록 업체만 시공할 수 있어요. 업체명으로 바로 조회해 보세요.</span><a class="golink" href="https://www.kiscon.net" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔎 KISCON에서 조회하기</a></span></label>
 <label class="item"><input type="checkbox" data-k="bond"><span class="cbox"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12L13.5 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="itxt"><span class="ititle">하자이행보증보험(증권) 발행이 가능한지 확인했다</span><span class="iwhy">발행 가능 여부 자체가 하자를 책임질 의지가 있는 업체인지 보여주는 척도예요.</span></span></label>
 <label class="item"><input type="checkbox" data-k="bizacct" data-req="1"><span class="cbox"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12L13.5 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="itxt"><span class="ititle">입금 계좌가 사업자 명의 통장이다<span class="req">필수</span></span><span class="iwhy">개인 통장 입금 요구는 먹튀 피해의 전형적인 신호예요.</span></span></label>
 <label class="item"><input type="checkbox" data-k="receipt"><span class="cbox"><svg viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5L6 12L13.5 4.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="itxt"><span class="ititle">현금영수증·세금계산서 발급이 가능하다</span><span class="iwhy">나중에 양도세 필요경비 증빙과 분쟁 대비 근거가 돼요.</span></span></label>
