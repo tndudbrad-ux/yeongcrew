@@ -24,6 +24,7 @@
 
 ## 임대차·계약 가이드
 
+- [전월세 신고제 완벽정리](https://boobi.ai.kr/jeonwolse-singo-guide.html): 보증금 6,000만원 초과 또는 월세 30만원 초과 계약의 30일 내 신고 의무, 2025년 6월 시작된 과태료(지연 2만~30만원·거짓 100만원), 확정일자 자동 부여.
 - [소액임차인 최우선변제권 완벽정리](https://boobi.ai.kr/priority-repayment-guide.html): 지역별 기준표(서울 보증금 1억6,500만원 이하 → 5,500만원), 근저당 설정일 기준 함정, 주택가액 1/2 한도, 배당요구 절차.
 - [보증금 안 돌려줄 때 대처법](https://boobi.ai.kr/deposit-return-guide.html): 내용증명·임차권등기명령·지급명령 절차.
 - [전세보증금 반환보증 완벽 가이드](https://boobi.ai.kr/jeonse-insurance-guide.html): HUG·HF·SGI 상품 비교와 가입 요건.
