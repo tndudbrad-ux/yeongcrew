@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-08-25T09:33:25.196Z",
+  "updatedAt": "2026-08-26T00:31:38.197Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
-  "count": 52,
+  "count": 51,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,21 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "LH-2015122300020552",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "의왕고천A-1BL[리츠]·안양명학A-1BL 행복주택 예비입주자 모집",
-      "region": "경기도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-08-25",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020552&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "LH-2015122300020531",
       "provider": "LH",
