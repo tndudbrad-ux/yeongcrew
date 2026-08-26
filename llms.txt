@@ -53,6 +53,7 @@
 
 ## 도구·계산기
 
+- [인테리어 견적서 체크리스트](https://boobi.ai.kr/interior-checklist.html): 계약 전 18개 항목 셀프 검증 — KISCON 면허, '1식' 견적, 사업자 통장, 잔금 조건 등 필수 4개 판정.
 - [부동산 계산기 모음](https://boobi.ai.kr/calculator.html): 대출·수익률·중개보수 등.
 - [세금 계산기](https://boobi.ai.kr/tax-calculator.html): 양도·취득·보유세 시뮬레이션.
 - [집 종합 리포트](https://boobi.ai.kr/home-report.html): 주소 입력으로 시세·세금·위험 요소 요약.
