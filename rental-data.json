@@ -1,7 +1,7 @@
 {
   "updatedAt": "2026-08-26T00:31:38.197Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
-  "count": 51,
+  "count": 54,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,6 +17,51 @@
     "note": "비고(선택)"
   },
   "items": [
+    {
+      "id": "SH-mirinaejip-2026-1",
+      "provider": "SH",
+      "ltype": "매입임대",
+      "name": "2026년 1차 일반주택형 미리내집(신혼·신생아 매입임대주택Ⅱ) 입주자 모집",
+      "region": "서울",
+      "units": 128,
+      "target": "서울 무주택 신혼부부·예비신혼부부·신생아가구·한부모가족 등 · 소득 130%(맞벌이 200%) 이하",
+      "rcritStart": "2026-08-31",
+      "rcritEnd": "2026-09-02",
+      "winnerDate": "2027-01-07",
+      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=308644&multi_itm_seq=2",
+      "note": "공고 8/14 · 강북·구로·금천·송파·도봉·중랑 6개구 · 서류심사대상자 발표 9/7 · 최장 10년(유자녀 14년) 거주",
+      "_src": "manual-curated"
+    },
+    {
+      "id": "SH-gukmin-imdae-2026",
+      "provider": "SH",
+      "ltype": "국민임대",
+      "name": "2026년 국민임대주택 입주자 모집",
+      "region": "서울",
+      "units": 1973,
+      "target": "무주택세대구성원 · 주택형별 소득·자산 기준 충족(선순위는 청약통장 24회 이상)",
+      "rcritStart": "2026-08-31",
+      "rcritEnd": "2026-09-03",
+      "winnerDate": "2027-02-15",
+      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=308340&multi_itm_seq=2",
+      "note": "공고 8/20 · 공가입주자 409·예비입주자 1,564 · 선순위 인터넷청약 8/31~9/3 · 후순위 9/16 · 서류심사대상자 발표 10/12",
+      "_src": "manual-curated"
+    },
+    {
+      "id": "SH-jangjeon2-8cha",
+      "provider": "SH",
+      "ltype": "장기전세",
+      "name": "제8차 장기전세주택2(미리내집) 입주자 모집",
+      "region": "서울",
+      "units": 496,
+      "target": "공고일 기준 서울 거주 무주택세대구성원 · 신청면적별 소득·부동산·자동차 기준 충족",
+      "rcritStart": "2026-09-07",
+      "rcritEnd": "2026-09-09",
+      "winnerDate": "2027-01-22",
+      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=308944&multi_itm_seq=2",
+      "note": "공고 8/21 · 신규 293호·재공급 203호 · 서류심사대상자 발표 10/7",
+      "_src": "manual-curated"
+    },
     {
       "id": "LH-2015122300020531",
       "provider": "LH",
