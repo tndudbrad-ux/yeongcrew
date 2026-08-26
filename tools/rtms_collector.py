@@ -425,7 +425,10 @@ def shard(listings: list[dict], out_dir: str) -> int:
     buckets: dict[str, list[dict]] = collections.defaultdict(list)
     for it in listings:
         buckets[it["sggCode"]].append({"t": it["type"], "n": it["name"], "d": it["dong"],
-                                       "a": it["area"], "f": it["floor"], "p": it["price"], "m": it["dealYm"]})
+                                       "a": it["area"], "f": it["floor"], "p": it["price"], "m": it["dealYm"],
+                                       # 건축년도는 실거래 API가 이미 주는 값이다. 추천의 '연식' 요소가
+                                       # 이걸 쓰므로 버리지 말 것 (없는 건은 키를 빼서 용량을 아낀다).
+                                       **({"y": it["buildYear"]} if it.get("buildYear") else {})})
     index = {}
     for code, items in buckets.items():
         items.sort(key=lambda x: -x["p"])
