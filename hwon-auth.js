@@ -244,3 +244,24 @@ function init(){
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
+
+/* ===== 모션·재질 공통 — Apple Fluid Interfaces 원칙의 부비 적용 =====
+ * ① 버튼 press-down 즉시 피드백 ② 글래스 헤더(콘텐츠가 유리 밑으로 스크롤)
+ * ③ 모달 materialize 등장 ④ 접근성: reduced-motion/transparency 폴백 */
+(function(){
+if(window.__bbMotion)return; window.__bbMotion=1;
+var st=document.createElement('style'); st.id='bbMotionStyle';
+st.textContent=
+/* ① 누르는 순간 반응 (pointer-down) */
+'button:not(:disabled):active,.rmBtn:active,.bbMini:active,.hwLoginBtn:active,.bbShareBtn:active,.bbHeroBtns a:active,.boobiGateBtn:active,a.go:active,.bbTools a:active,.qt:active,.card:active{transform:scale(.97);transition:transform .1s ease-out}'+
+/* ② 글래스 헤더 — 반투명 + 블러, 1px 보더 대신 부드러운 경계 */
+'header.top,header.site-header{background:rgba(255,255,255,.62)!important;backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-bottom:none!important;box-shadow:0 1px 0 rgba(13,42,41,.05),0 10px 28px -18px rgba(13,42,41,.16)}'+
+'#hwNavRow{border-top:1px solid rgba(13,42,41,.05);background:transparent}'+
+/* ③ 모달·게이트 materialize (스케일+투명도 동시) */
+'@keyframes bbMat{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:none}}'+
+'.boobiGateWall,#bbSvBox{animation:bbMat .45s cubic-bezier(.16,1,.3,1)}'+
+/* ④ 접근성 폴백 */
+'@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}'+
+'@media(prefers-reduced-transparency:reduce){header.top,header.site-header,.boobiGateWall,.bbCard,.maptip,#bbSvBox,.hero,.bres,.feature{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#fff!important}}';
+document.head.appendChild(st);
+})();
