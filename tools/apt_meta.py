@@ -145,9 +145,13 @@ def call(url: str, params: dict) -> tuple[list[dict], int]:
         if code and code not in ("00", "000"):
             raise ApiError(f"[{code}] {head.get('resultMsg') or '알 수 없는 오류'}")
         b = resp.get("body") or {}
+        # 목록 조회는 body.items(복수), 단건 조회는 body.item(단수)로 온다.
+        # items가 {"item": ...}로 한 겹 더 싸여 오는 서비스도 있다.
         items = b.get("items")
-        if isinstance(items, dict):          # {"item": [...]} 또는 {"item": {...}}
+        if isinstance(items, dict):
             items = items.get("item")
+        if items is None:
+            items = b.get("item")
         if items is None:
             items = []
         if isinstance(items, dict):          # 단건이면 dict 하나로 온다
