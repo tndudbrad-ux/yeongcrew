@@ -184,7 +184,9 @@ st.textContent=
 'body.boobi-unlocked .boobiGateWall{display:none}';
 document.head.appendChild(st);
 }
-function unlock(){ document.body.classList.add('boobi-unlocked'); }
+function unlock(){
+if(walled&&window.gtag){try{gtag('event','gate_unlocked',{page:location.pathname,type:'article'});}catch(x){}}
+document.body.classList.add('boobi-unlocked'); }
 function wall(){
 if(walled) return;
 var art=document.querySelector('article'); if(!art) return;
@@ -194,6 +196,7 @@ for(var i=0;i<kids.length;i++){ if(kids[i].tagName==='H2'){h2++; if(h2===2){cut=
 if(cut===-1) cut=Math.max(3, Math.floor(kids.length*0.4));
 if(kids.length-cut < 2) return; // 너무 짧으면 게이트 안 함
 walled=true; injectStyle();
+if(window.gtag){try{gtag('event','gate_shown',{page:location.pathname,type:'article'});}catch(x){}}
 var rest=document.createElement('div'); rest.className='boobiGateRest';
 art.insertBefore(rest, kids[cut]);
 for(var j=cut;j<kids.length;j++){ rest.appendChild(kids[j]); }
@@ -203,7 +206,9 @@ wl.innerHTML='<div class="lk">🔒</div><h3>로그인하면 이어서 읽을 수
 '<button class="boobiGateBtn" id="boobiGateBtn">🅶 구글로 로그인하고 계속 읽기</button>'+
 '<div class="boobiGateNote">지금은 무료예요 · 로그인만 하면 전체 공개</div>';
 rest.parentNode.insertBefore(wl, rest.nextSibling);
-document.getElementById('boobiGateBtn').onclick=function(){ if(window.hwonAuth) hwonAuth.signInGoogle(); };
+document.getElementById('boobiGateBtn').onclick=function(){
+if(window.gtag){try{gtag('event','gate_login_click',{page:location.pathname,type:'article'});}catch(x){}}
+if(window.hwonAuth) hwonAuth.signInGoogle(); };
 }
 document.addEventListener('hwon-auth',function(e){ decided=true; if(e.detail) unlock(); else wall(); });
 function boot(){ if(window.hwonUser){decided=true;unlock();} }
