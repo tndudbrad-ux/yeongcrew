@@ -119,6 +119,47 @@ def check(root: ET.Element) -> None:
         raise ApiError(f"[{code}] {msg or '알 수 없는 오류'}")
 
 
+def pick(d: dict, *keys: str) -> str:
+    """항목 하나에서 값 꺼내기. 스펙이 바뀌어도 조용히 빈 값이 되지 않도록 후보를 여러 개 둔다."""
+    for k in keys:
+        v = d.get(k)
+        if v is not None and str(v).strip():
+            return str(v).strip()
+    return ""
+
+
+def call(url: str, params: dict) -> tuple[list[dict], int]:
+    """API 한 번 호출 → (항목 리스트, totalCount)
+
+    AptListService4는 JSON, 구세대 서비스는 XML을 준다. 어느 쪽이 오든 같은 모양으로
+    돌려줘서 호출부가 응답 형식을 몰라도 되게 한다.
+    """
+    body = fetch(url, params)
+    s = body.lstrip()
+
+    if s.startswith("{") or s.startswith("["):
+        d = json.loads(body)
+        resp = d.get("response", d) if isinstance(d, dict) else {}
+        head = resp.get("header") or {}
+        code = str(head.get("resultCode") or "")
+        if code and code not in ("00", "000"):
+            raise ApiError(f"[{code}] {head.get('resultMsg') or '알 수 없는 오류'}")
+        b = resp.get("body") or {}
+        items = b.get("items")
+        if isinstance(items, dict):          # {"item": [...]} 또는 {"item": {...}}
+            items = items.get("item")
+        if items is None:
+            items = []
+        if isinstance(items, dict):          # 단건이면 dict 하나로 온다
+            items = [items]
+        return items, to_int(str(b.get("totalCount") or 0))
+
+    root = ET.fromstring(body)
+    check(root)
+    items = [{c.tag: (c.text or "") for c in it} for it in root.iterfind(".//item")]
+    return items, to_int(text(root, "./body/totalCount"))
+
+
 # ── DB ──────────────────────────────────────────────────────────────────────
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS complex (
@@ -179,22 +220,18 @@ def stage_list(con: sqlite3.Connection, key: str, only: list[str] | None) -> Non
     def one(code: str, name: str, sido: str) -> tuple[str, int]:
         rows, page = [], 1
         while True:
-            xml = fetch(LIST_SVC, {"serviceKey": key, "sigunguCode": code,
-                                   "pageNo": page, "numOfRows": 1000})
-            root = ET.fromstring(xml)
-            check(root)
-            items = list(root.iterfind(".//item"))
+            items, total = call(LIST_SVC, {"serviceKey": key, "sigunguCode": code,
+                                           "pageNo": page, "numOfRows": 1000})
             for it in items:
-                kc = text(it, "kaptCode", "KAPT_CODE")
+                kc = pick(it, "kaptCode", "KAPT_CODE")
                 if not kc:
                     continue
                 rows.append((
                     kc, code,
-                    text(it, "kaptName", "KAPT_NAME", "kaptNm"),
-                    text(it, "as1"), text(it, "as2"), text(it, "as3"), text(it, "as4"),
-                    text(it, "bjdCode", "BJD_CODE"),
+                    pick(it, "kaptName", "KAPT_NAME", "kaptNm"),
+                    pick(it, "as1"), pick(it, "as2"), pick(it, "as3"), pick(it, "as4"),
+                    pick(it, "bjdCode", "BJD_CODE"),
                 ))
-            total = to_int(text(root, "./body/totalCount"))
             if not items or page * 1000 >= total:
                 break
             page += 1
@@ -236,14 +273,11 @@ def stage_info(con: sqlite3.Connection, key: str, budget: int) -> None:
         print(f"[{kind}] 이번 실행 {len(rows):,}개 / 남은 {left:,}개", flush=True)
 
         def one(kc: str):
-            xml = fetch(url, {"serviceKey": key, "kaptCode": kc})
-            root = ET.fromstring(xml)
-            check(root)
-            item = root.find(".//item")
+            items, _ = call(url, {"serviceKey": key, "kaptCode": kc})
             with lock:
                 # 응답이 비어도 done 처리한다. 안 그러면 폐지된 단지에 매일 예산을 태운다.
-                if item is not None:
-                    apply_row(kc, item)
+                if items:
+                    apply_row(kc, items[0])
                 con.execute(f"UPDATE complex SET {flag}=1 WHERE kapt_code=?", (kc,))
 
         ok = err = 0
@@ -264,30 +298,30 @@ def stage_info(con: sqlite3.Connection, key: str, budget: int) -> None:
         con.commit()
         print(f"[{kind}] 성공 {ok:,} / 실패 {err:,}", flush=True)
 
-    def apply_bass(kc: str, it: ET.Element) -> None:
+    def apply_bass(kc: str, it: dict) -> None:
         con.execute(
             "UPDATE complex SET households=?,dong_cnt=?,use_date=?,road_addr=?,"
             "builder=?,hall_type=?,sale_type=? WHERE kapt_code=?",
-            (to_int(text(it, "kaptdaCnt", "kaptDaCnt", "hoCnt")),
-             to_int(text(it, "kaptDongCnt")),
-             text(it, "kaptUsedate", "kaptUseDate"),
-             text(it, "doroJuso", "kaptAddr"),
-             text(it, "kaptBcompany"),
-             text(it, "codeHallNm"),
-             text(it, "codeSaleNm"),
+            (to_int(pick(it, "kaptdaCnt", "kaptDaCnt", "hoCnt")),
+             to_int(pick(it, "kaptDongCnt")),
+             pick(it, "kaptUsedate", "kaptUseDate"),
+             pick(it, "doroJuso", "kaptAddr"),
+             pick(it, "kaptBcompany"),
+             pick(it, "codeHallNm"),
+             pick(it, "codeSaleNm"),
              kc))
 
-    def apply_dtl(kc: str, it: ET.Element) -> None:
+    def apply_dtl(kc: str, it: dict) -> None:
         con.execute(
             "UPDATE complex SET subway_line=?,subway_stn=?,subway_min=?,bus_min=?,"
             "edu=?,park_cnt=?,cctv_cnt=? WHERE kapt_code=?",
-            (text(it, "subwayLine"),
-             text(it, "subwayStation"),
-             text(it, "kaptdWtimesub"),
-             text(it, "kaptdWtimebus"),
-             text(it, "educationFacility"),
-             to_int(text(it, "kaptdPcnt")) + to_int(text(it, "kaptdPcntu")),
-             to_int(text(it, "kaptdCccnt")),
+            (pick(it, "subwayLine"),
+             pick(it, "subwayStation"),
+             pick(it, "kaptdWtimesub"),
+             pick(it, "kaptdWtimebus"),
+             pick(it, "educationFacility"),
+             to_int(pick(it, "kaptdPcnt")) + to_int(pick(it, "kaptdPcntu")),
+             to_int(pick(it, "kaptdCccnt")),
              kc))
 
     run("기본정보", BASS_SVC, "bass_done", apply_bass)
@@ -342,22 +376,25 @@ def probe(key: str) -> None:
     # 키 자체는 절대 찍지 않는다. 모양만 알려줘도 403의 원인은 대부분 가려진다.
     print(f"[키] 길이 {len(key)}자 · 끝 3자 …{key[-3:]} · 공백/개행 없음: {key == key.strip()}")
     print("=" * 70)
+    p = {"serviceKey": key, "sigunguCode": "11110", "pageNo": 1, "numOfRows": 3}
     print("① 시군구 아파트 목록 (11110 종로구)")
-    xml = fetch(LIST_SVC, {"serviceKey": key, "sigunguCode": "11110",
-                           "pageNo": 1, "numOfRows": 3})
-    print(xml[:2000])
-    root = ET.fromstring(xml)
-    check(root)
-    it = root.find(".//item")
-    if it is None:
+    print(fetch(LIST_SVC, p)[:2000])
+    items, total = call(LIST_SVC, p)
+    if not items:
         sys.exit("목록이 비었습니다 — 인증키 승인 여부를 확인하세요.")
-    kc = text(it, "kaptCode", "KAPT_CODE")
-    print(f"\n첫 단지코드: {kc}")
+    kc = pick(items[0], "kaptCode", "KAPT_CODE")
+    print(f"\n파싱 OK · 항목 {len(items)}개 · totalCount {total} · 첫 단지코드 {kc}")
 
     for label, url in (("② 기본 정보조회", BASS_SVC), ("③ 상세 정보조회", DTL_SVC)):
         print("=" * 70)
         print(f"{label}  kaptCode={kc}")
-        print(fetch(url, {"serviceKey": key, "kaptCode": kc})[:3000])
+        q = {"serviceKey": key, "kaptCode": kc}
+        print(fetch(url, q)[:3000])
+        got, _ = call(url, q)
+        # 코드에 박아둔 필드명이 실제 응답에 있는지 눈으로 확인할 수 있게 키를 나열한다
+        print(f"\n파싱 OK · 필드 {len(got[0]) if got else 0}개")
+        if got:
+            print("  " + ", ".join(sorted(got[0])))
 
 
 def main() -> None:
