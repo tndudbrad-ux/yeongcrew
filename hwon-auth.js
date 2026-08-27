@@ -224,10 +224,33 @@ gtag('js', new Date());
 gtag('config', 'G-2KYCGVDL67');
 })();
 
-/* ===== 부비 — 신뢰 푸터: 사업자 정보·정책 링크 전 페이지 공통 주입 ===== */
+/* ===== 부비 — 신뢰 푸터: 사업자 정보·정책 링크 전 페이지 공통 주입 =====
+ * ⚠️ 카드사(PG) 심사는 이 푸터를 직접 확인합니다. 아래 6가지가 전부 있어야 합니다:
+ *    상호 · 대표자명 · 사업자등록번호 · 사업장 주소 · 유선번호 · 통신판매업 신고번호
+ *    (유선번호는 070·0505·전국대표번호·080·휴대폰 모두 인정됩니다)
+ *    값을 바꿀 때는 아래 BIZ 객체 한 곳만 고치면 전 페이지에 반영됩니다.
+ */
 (function(){
 if(window.__bbBizFoot)return; window.__bbBizFoot=1;
+
+var BIZ = {
+  name:  '원대시투',
+  ceo:   '정수영',
+  regNo: '102-32-62074',
+  addr:  '서울특별시 동작구 만양로 75',
+  tel:   '010-6751-4513',
+  mailOrder: '', // ← ★ 통신판매업 신고번호를 여기에 넣으세요. 예: '제2026-서울동작-1234호'
+  email: 'tndud.brad@gmail.com'
+};
+window.BOOBI_BIZ = BIZ;
+
 function init(){
+  /* 본문 안의 <span data-bb-tel> / <span data-bb-mail-order> 자리도 같이 채웁니다 */
+  var t = BIZ.tel || '(준비 중)';
+  var m = BIZ.mailOrder || '(신고 진행 중)';
+  [].forEach.call(document.querySelectorAll('[data-bb-tel]'), function(el){ el.textContent = t; });
+  [].forEach.call(document.querySelectorAll('[data-bb-mail-order]'), function(el){ el.textContent = m; });
+
   var f=document.querySelector('footer');
   if(!f || f.querySelector('.bbBiz')) return;
   if((f.textContent||'').indexOf('사업자등록번호')>-1) return; // 이미 있는 페이지는 건너뜀
@@ -238,8 +261,15 @@ function init(){
   document.head.appendChild(st);
   var d=document.createElement('div'); d.className='bbBiz';
   var hasLinks=(f.textContent||'').indexOf('이용약관')>-1; // 정책 링크가 이미 있으면 사업자 정보만
-  d.innerHTML=(hasLinks?'':'<div><a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/terms.html">이용약관</a>·<a href="/privacy.html">개인정보처리방침</a></div>')+
-  '<div class="ln2">부비 boobi.ai.kr · 상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074<br>서울특별시 동작구 만양로 75 · 문의 tndud.brad@gmail.com · © 2026 원대시투</div>';
+  /* 정책 링크가 이미 있더라도 '취소·환불 정책'이 빠져 있으면 그 줄만 채워 넣습니다
+     (카드사 심사에서 환불 규정 링크 누락은 반려 사유입니다) */
+  var needRefund = hasLinks && (f.textContent||'').indexOf('환불')===-1;
+  d.innerHTML=(hasLinks?(needRefund?'<div><a href="/refund.html">취소·환불 정책</a></div>':''):'<div><a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/terms.html">이용약관</a>·<a href="/refund.html">취소·환불 정책</a>·<a href="/privacy.html">개인정보처리방침</a></div>')+
+  '<div class="ln2">부비 boobi.ai.kr · 상호 '+BIZ.name+' · 대표 '+BIZ.ceo+' · 사업자등록번호 '+BIZ.regNo+
+  (BIZ.mailOrder ? ' · 통신판매업신고 '+BIZ.mailOrder : '')+
+  '<br>'+BIZ.addr+
+  (BIZ.tel ? ' · 전화 '+BIZ.tel : '')+
+  ' · 문의 '+BIZ.email+' · © 2026 '+BIZ.name+'</div>';
   f.appendChild(d);
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
