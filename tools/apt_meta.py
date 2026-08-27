@@ -35,6 +35,7 @@ import time
 import xml.etree.ElementTree as ET
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
+from urllib.parse import unquote
 
 try:
     import requests
@@ -78,13 +79,32 @@ class ApiError(RuntimeError):
     pass
 
 
+def clean_key(raw: str) -> str:
+    """인증키를 그대로 믿지 않는다.
+
+    - 시크릿에 붙여넣을 때 끝에 줄바꿈이 딸려오면 %0A로 전송돼 403이 난다.
+    - data.go.kr은 Encoding/Decoding 두 형태를 주는데, Encoding 키를 requests에
+      그대로 넘기면 '%'가 다시 인코딩돼(%2B → %252B) 역시 403이 난다.
+      그래서 한 번 풀어서 넘기고, 인코딩은 requests에게 딱 한 번만 맡긴다.
+    """
+    k = (raw or "").strip()
+    if "%" in k:
+        k = unquote(k)
+    return k
+
+
 def fetch(url: str, params: dict) -> str:
     last = None
     for attempt in range(RETRIES):
         try:
             r = requests.get(url, params=params, timeout=TIMEOUT)
+            if 400 <= r.status_code < 500:
+                # 4xx는 재시도해봐야 똑같다. 포털이 본문에 실제 사유를 담아주므로 같이 올린다.
+                raise ApiError(f"HTTP {r.status_code} — {r.text.strip()[:300]}")
             r.raise_for_status()
             return r.text
+        except ApiError:
+            raise
         except Exception as e:      # 네트워크·5xx는 잠깐 쉬고 재시도
             last = e
             time.sleep(1.5 * (attempt + 1))
@@ -319,6 +339,8 @@ def emit(con: sqlite3.Connection) -> None:
 # ── 진단 ────────────────────────────────────────────────────────────────────
 def probe(key: str) -> None:
     """인증키가 살아있는지, 필드명이 코드와 맞는지 원시 XML로 확인한다."""
+    # 키 자체는 절대 찍지 않는다. 모양만 알려줘도 403의 원인은 대부분 가려진다.
+    print(f"[키] 길이 {len(key)}자 · 끝 3자 …{key[-3:]} · 공백/개행 없음: {key == key.strip()}")
     print("=" * 70)
     print("① 시군구 아파트 목록 (11110 종로구)")
     xml = fetch(LIST_SVC, {"serviceKey": key, "sigunguCode": "11110",
@@ -351,6 +373,7 @@ def main() -> None:
 
     if not a.key and (a.stage or a.probe):
         sys.exit("인증키가 없습니다. --key 또는 APT_KEY 환경변수를 지정하세요.")
+    a.key = clean_key(a.key)
 
     if a.probe:
         probe(a.key)
