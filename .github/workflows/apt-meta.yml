@@ -1,0 +1,102 @@
+name: 단지 메타 수집
+
+# 일일 트래픽이 상세기능당 5,000건이라 전국 약 3만 단지를 하루에 못 받는다.
+# 매일 예산만큼만 받아 이어붙이고, 다 채워지면 알아서 빈 실행이 된다.
+on:
+  schedule:
+    - cron: '30 20 * * *'   # UTC 20:30 = KST 05:30 (실거래 갱신과 안 겹치게)
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: '실행 단계'
+        type: choice
+        default: 'daily'
+        options:
+          - daily     # 목록 보충 + 상세 수집 + 산출 (평소 이것)
+          - probe     # 인증키·필드명 확인용. 원시 XML만 출력하고 끝
+          - list      # 단지코드 목록만
+          - emit      # 재수집 없이 JSON만 다시 생성
+      budget:
+        description: '상세기능당 이번 실행 호출 수 (한도 5000)'
+        default: '4800'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apt-meta
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - run: pip install requests
+
+      # 진행상황 DB를 복원한다. 이게 없으면 매일 처음부터 다시 받는다.
+      - name: 진행상황 복원
+        run: |
+          if [ -f tools/apt_meta.db.gz ]; then
+            gunzip -kf tools/apt_meta.db.gz
+            echo "복원됨: $(du -h tools/apt_meta.db | cut -f1)"
+          else
+            echo "첫 실행 — 새 DB로 시작"
+          fi
+
+      - name: 인증키·필드명 확인
+        if: inputs.stage == 'probe'
+        env:
+          APT_KEY: ${{ secrets.APT_KEY }}
+        run: python tools/apt_meta.py --probe
+
+      - name: 단지코드 목록
+        if: inputs.stage == 'list' || inputs.stage == 'daily' || github.event_name == 'schedule'
+        env:
+          APT_KEY: ${{ secrets.APT_KEY }}
+        run: python tools/apt_meta.py --stage list
+
+      - name: 단지별 기본·상세 정보
+        if: inputs.stage == 'daily' || github.event_name == 'schedule'
+        env:
+          APT_KEY: ${{ secrets.APT_KEY }}
+        run: python tools/apt_meta.py --stage info --budget ${{ inputs.budget || 4800 }}
+
+      - name: JSON 산출
+        if: inputs.stage != 'probe'
+        env:
+          APT_KEY: ${{ secrets.APT_KEY }}
+        run: python tools/apt_meta.py --emit
+
+      - name: 커밋
+        if: inputs.stage != 'probe'
+        run: |
+          gzip -9 -c tools/apt_meta.db > tools/apt_meta.db.gz
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A data/apt-meta tools/apt_meta.db.gz
+          if git diff --cached --quiet; then
+            echo "변경 없음"
+            exit 0
+          fi
+          DONE=$(python - <<'PY'
+          import sqlite3
+          c = sqlite3.connect('tools/apt_meta.db')
+          t = c.execute('SELECT COUNT(*) FROM complex').fetchone()[0]
+          d = c.execute('SELECT COUNT(*) FROM complex WHERE bass_done=1').fetchone()[0]
+          print(f'{d:,}/{t:,}')
+          PY
+          )
+          git commit -m "chore: 단지 메타 수집 ($DONE)"
+          # 다른 워크플로가 그 사이 커밋했을 수 있다
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 10
+          done
+          exit 1
