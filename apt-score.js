@@ -143,6 +143,21 @@
       why: function (d) { var b = brandOf(d.name); return b ? b + ' 브랜드 단지' : null; }
     },
     {
+      key: 'newer', icon: '🏗️', label: '지은 지 얼마 안 된 곳',
+      desc: '실거래에 기록된 건축년도가 최근인 단지',
+      raw: function (d) {
+        /* 건축년도가 없는 건은 NaN을 돌려 정규화에서 중립(50)을 받게 한다.
+           모른다는 이유로 꼴찌를 주면 데이터 공백이 곧 감점이 되어버린다. */
+        return d.buildYear > 0 ? d.buildYear : NaN;
+      },
+      why: function (d, C) {
+        if (!d.buildYear) return null;
+        var now = +String(C.stats.maxYm).slice(0, 4) || d.buildYear;
+        var age = now - d.buildYear;
+        return d.buildYear + '년 준공' + (age <= 1 ? ' (신축)' : ' · ' + age + '년 차');
+      }
+    },
+    {
       key: 'liquid', icon: '🔁', label: '거래가 잘 되는 단지',
       desc: '최근 1년 실거래가 많아 사고팔기 수월한 곳',
       raw: function (d, C) { var s = C.stats.byName[d.name + '|' + d.dong]; return s ? s.n : 0; },
@@ -200,12 +215,13 @@
   for (var fi = 0; fi < FACTORS.length; fi++) FMAP[FACTORS[fi].key] = FACTORS[fi];
 
   /* 데이터가 아직 없어서 뺀 요소 — 화면에 솔직히 밝힌다 */
-  var PENDING = ['역세권·교통', '학군·초품아', '세대수(대단지)', '준공연도(신축)'];
+  var PENDING = ['역세권·교통', '학군·초품아', '세대수(대단지)'];
 
   /* 투자 모드 고정 가중치.
-     인수인계 문서의 원안은 정비사업 2.5 · 역세권 2.0 · 연식 1.5 · 대단지 1.5 · 거래량 1.0 이지만
-     역세권·연식·대단지는 쓸 데이터가 없어 이번 판에서는 빼둔다(추정으로 채우지 않는다). */
-  var INVEST_W = { redev: 2.5, liquid: 1.0, prime: 1.0 };
+     인수인계 문서의 원안은 정비사업 2.5 · 역세권 2.0 · 연식 1.5 · 대단지 1.5 · 거래량 1.0.
+     연식은 실거래 API가 주는 건축년도로 채웠다(아파트 기준 100% 확보).
+     역세권·대단지는 아직 쓸 데이터가 없어 빼둔다 — 추정으로 채우지 않는다. */
+  var INVEST_W = { redev: 2.5, newer: 1.5, liquid: 1.0, prime: 1.0 };
 
   function normalize(vals) {
     var min = Infinity, max = -Infinity, i;

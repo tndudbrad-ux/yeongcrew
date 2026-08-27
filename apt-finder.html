@@ -798,7 +798,7 @@ function loadListings(sido,sgg){
   if(DATA.cache[code]) return Promise.resolve(DATA.cache[code]);
   return fetch('/data/listings/'+code+'.json').then(function(r){return r.ok?r.json():[]})
     .then(function(a){
-      var out=a.map(function(x,i){return {id:i+1,type:x.t,name:x.n,dong:x.d,area:x.a,
+      var out=a.map(function(x,i){return {id:i+1,type:x.t,name:x.n,dong:x.d,area:x.a,buildYear:x.y,
         floor:x.f,price:x.p,dealYm:x.m,sido:sido,sgg:sgg,sggCode:code};});
       DATA.cache[code]=out; return out;
     }).catch(function(){return []});
