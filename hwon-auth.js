@@ -6,7 +6,7 @@ if(!has(/hwon-ui\.js/)) add('/hwon-ui.js');                 // 금액 힌트·�
 if(!has(/boobi-survey\.js/)) add('/boobi-survey.js?v=1'); // 가입 기대 설문 모달 (미응답 유저 1회)
 var art=document.querySelector('meta[property="og:type"][content="article"]')||document.querySelector('article');
 var hub=/column\.html$/.test(location.pathname)||document.getElementById('popularCols')||document.getElementById('bbRankList');
-if((art||hub) && !has(/column-views\.js/)) add('/column-views.js?v=3'); // 조회수 배지·인기글·홈 랭킹: 자동
+if((art||hub) && !has(/column-views\.js/)) add('/column-views.js?v=4'); // 조회수 배지·인기글·홈 랭킹: 자동
 if(art && !has(/boobi-article-share\.js/)) add('/boobi-article-share.js?v=1'); // 공유 바: 모든 칼럼/글에 자동 (클린 URL 공유)
 })();
 

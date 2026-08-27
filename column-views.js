@@ -39,6 +39,7 @@
   function total(s, real){ return seed(s) + (real||0); }
 
   var isArticle = !!document.querySelector('meta[property="og:type"][content="article"]') || !!document.querySelector('article');
+  var PIN='semiconductor-bonus-guide'; // 한동안 인기글 1위 고정 (해제: 이 줄과 PIN 사용부 2곳 제거)
   var isHub = /(^|\/)column\.html$/.test(location.pathname) || !!document.getElementById('popularCols');
 
   /* ---------- 글 페이지: 실제 조회 +1, 합산 표시 ---------- */
@@ -114,6 +115,7 @@
     if(!host || !items.length) return;
     var seen={}, uniq=[];
     items.sort(function(a,b){return b.n-a.n;}).forEach(function(it){ if(seen[it.slug])return; seen[it.slug]=1; uniq.push(it); });
+    uniq.sort(function(a,b){return (b.slug===PIN?1:0)-(a.slug===PIN?1:0);});
     var top=uniq.slice(0,5);
     var h='<h2 class="sec" style="display:flex;align-items:center;gap:6px">🔥 지금 인기 글</h2><ul class="blist">';
     top.forEach(function(it,i){
@@ -140,6 +142,7 @@
       function draw(map){
         var items=Object.keys(metas).map(function(sg){ return {s:sg,n:total(sg,map[sg]),m:metas[sg]}; });
         items.sort(function(a,b){return b.n-a.n;});
+        items.sort(function(a,b){return (b.s===PIN?1:0)-(a.s===PIN?1:0);});
         host.innerHTML=items.slice(0,5).map(function(it,i){
           var md=['🥇','🥈','🥉','4','5'][i];
           return '<li><a href="'+it.m.path+'"><em>'+md+'</em><span>'+esc(it.m.title)+'</span><b>'+comma(it.n)+'</b></a></li>';
