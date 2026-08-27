@@ -37,6 +37,7 @@
 
 ## 내집마련·청약·대출
 
+- [성과급만 5년 모으면 35억? 반도체 돈과 아파트](https://boobi.ai.kr/semiconductor-bonus-guide.html): 하이닉스 PS 평균 7억 시나리오, 삼성 사내대출 연 1.5%·5억(DSR 미적용), 동탄 +11.33%·최고가 거래 64.6%, 재직자 내집마련 전략.
 - [구축 아파트 인테리어 완벽 가이드](https://boobi.ai.kr/interior-remodeling-guide.html): 30평대 올수리 3,500만~6,000만원, 12단계 공사 순서, 턴키 vs 직영, 1,500만원 이상 공사 KISCON 면허 조회, 견적서 '1식' 함정.
 - [아파트 청약 완벽 가이드](https://boobi.ai.kr/cheongyak-guide.html): 가점제·추첨제, 특별공급 유형.
 - [청약통장 개편 총정리](https://boobi.ai.kr/cheongyak-account-guide.html): 월 납입 인정액 25만원 전환.
