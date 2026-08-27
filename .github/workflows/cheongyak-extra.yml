@@ -21,10 +21,13 @@ jobs:
         run: node collect-cheongyak-extra.mjs
         env:
           CHEONGYAK_API_KEY: ${{ secrets.CHEONGYAK_API_KEY }}
+      - name: Rebuild static notice list
+        run: node build-cheongyak-static.mjs
+
       - name: Commit if changed
         run: |
           git config user.name "boobi-bot"
           git config user.email "boobi-bot@users.noreply.github.com"
           git pull --rebase origin main || true
-          git add cheongyak-data.json
+          git add cheongyak-data.json cheongyak-board.html
           git diff --staged --quiet || (git commit -m "chore: 무순위·재공급 공고 병합 (cheongyak-extra)" && git push)
