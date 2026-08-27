@@ -385,16 +385,49 @@ def probe(key: str) -> None:
     kc = pick(items[0], "kaptCode", "KAPT_CODE")
     print(f"\n파싱 OK · 항목 {len(items)}개 · totalCount {total} · 첫 단지코드 {kc}")
 
-    for label, url in (("② 기본 정보조회", BASS_SVC), ("③ 상세 정보조회", DTL_SVC)):
+    # 코드가 읽는 필드가 응답에 실제로 있는지 확인한다. 이름이 어긋나면 수집은
+    # 조용히 성공하면서 값만 전부 비는데, 3만 건을 다 받고 나서야 알게 된다.
+    # 그래서 여기서 시끄럽게 실패시킨다.
+    NEEDED = {
+        "② 기본 정보조회": (BASS_SVC, {
+            "세대수": ("kaptdaCnt", "kaptDaCnt", "hoCnt"),
+            "사용승인일": ("kaptUsedate", "kaptUseDate"),
+            "동수": ("kaptDongCnt",),
+            "도로명주소": ("doroJuso", "kaptAddr"),
+        }),
+        "③ 상세 정보조회": (DTL_SVC, {
+            "지하철역명": ("subwayStation",),
+            "역 도보거리": ("kaptdWtimesub",),
+            "교육시설": ("educationFacility",),
+            "주차대수": ("kaptdPcnt",),
+        }),
+    }
+
+    missing: list[str] = []
+    for label, (url, needed) in NEEDED.items():
         print("=" * 70)
         print(f"{label}  kaptCode={kc}")
         q = {"serviceKey": key, "kaptCode": kc}
         print(fetch(url, q)[:3000])
         got, _ = call(url, q)
-        # 코드에 박아둔 필드명이 실제 응답에 있는지 눈으로 확인할 수 있게 키를 나열한다
-        print(f"\n파싱 OK · 필드 {len(got[0]) if got else 0}개")
-        if got:
-            print("  " + ", ".join(sorted(got[0])))
+        if not got:
+            missing.append(f"{label}: 응답이 비었음")
+            continue
+        keys = set(got[0])
+        print(f"\n파싱 OK · 필드 {len(keys)}개")
+        for ko, cands in needed.items():
+            hit = next((c for c in cands if c in keys), None)
+            print(f"  {'OK ' if hit else '없음'} {ko:<8} {hit or ' / '.join(cands)}")
+            if not hit:
+                missing.append(f"{label} {ko} — 후보 {cands} 중 없음")
+        if missing:
+            print("\n실제 응답 필드 전체:")
+            print("  " + ", ".join(sorted(keys)))
+
+    if missing:
+        sys.exit("필드명 불일치:\n  - " + "\n  - ".join(missing))
+    print("=" * 70)
+    print("필드 확인 완료 — 본 수집(stage: daily)을 돌려도 됩니다.")
 
 
 def main() -> None:
