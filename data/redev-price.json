@@ -1,0 +1,1458 @@
+{
+ "updatedAt": "2026-08-27T17:54:30+09:00",
+ "source": "서울열린데이터광장 도시정비사업 통계 + 국토교통부 아파트 실거래가",
+ "note": "정비사업 구역명과 실거래 단지명을 같은 법정동 문맥 안에서 정합한 결과입니다. 확신이 없는 후보는 병합하지 않았으므로, 여기 없는 구역이 사업이 없다는 뜻은 아닙니다.",
+ "count": 34,
+ "items": [
+  {
+   "project": "개포주공5단지",
+   "complex": "개포주공5단지",
+   "sido": "서울특별시",
+   "gu": "강남구",
+   "dong": "개포동",
+   "type": "공동주택재건축",
+   "stage": "관리처분",
+   "addr": "개포동187",
+   "builders": [],
+   "exist": 940,
+   "total": 1279,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "260108",
+   "conStart": "",
+   "tradeCount": 2,
+   "pyeongAvg": 15102,
+   "pyeongMax": 17286,
+   "priceMax": 388000,
+   "priceMin": 211000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 54.0,
+     "floor": 2,
+     "price": 211000,
+     "pyeong": 12917
+    },
+    {
+     "month": "2026-02",
+     "area": 74.2,
+     "floor": 10,
+     "price": 388000,
+     "pyeong": 17286
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 36
+  },
+  {
+   "project": "은마아파트",
+   "complex": "은마",
+   "sido": "서울특별시",
+   "gu": "강남구",
+   "dong": "대치동",
+   "type": "공동주택재건축",
+   "stage": "건축심의",
+   "addr": "대치동316",
+   "builders": [],
+   "exist": 4424,
+   "total": 5893,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 14377,
+   "pyeongMax": 14377,
+   "priceMax": 334000,
+   "priceMin": 334000,
+   "lastMonth": "2026-08",
+   "recent": [
+    {
+     "month": "2026-08",
+     "area": 76.8,
+     "floor": 3,
+     "price": 334000,
+     "pyeong": 14377
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 33
+  },
+  {
+   "project": "신동아아파트",
+   "complex": "신동아",
+   "sido": "서울특별시",
+   "gu": "용산구",
+   "dong": "서빙고동",
+   "type": "아파트지구재건축",
+   "stage": "조합설립",
+   "addr": "서빙고동241-21",
+   "builders": [],
+   "exist": 1326,
+   "total": 1903,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 2,
+   "pyeongAvg": 10746,
+   "pyeongMax": 12090,
+   "priceMax": 475000,
+   "priceMin": 350000,
+   "lastMonth": "2026-08",
+   "recent": [
+    {
+     "month": "2026-08",
+     "area": 167.0,
+     "floor": 9,
+     "price": 475000,
+     "pyeong": 9403
+    },
+    {
+     "month": "2026-06",
+     "area": 95.7,
+     "floor": 1,
+     "price": 350000,
+     "pyeong": 12090
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 44
+  },
+  {
+   "project": "산호아파트",
+   "complex": "산호",
+   "sido": "서울특별시",
+   "gu": "용산구",
+   "dong": "원효로4가",
+   "type": "아파트지구재건축",
+   "stage": "사업시행",
+   "addr": "원효로4가118-16",
+   "builders": [],
+   "exist": 554,
+   "total": 647,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 4,
+   "pyeongAvg": 10654,
+   "pyeongMax": 15427,
+   "priceMax": 250000,
+   "priceMin": 189000,
+   "lastMonth": "2026-06",
+   "recent": [
+    {
+     "month": "2026-06",
+     "area": 78.1,
+     "floor": 11,
+     "price": 250000,
+     "pyeong": 10582
+    },
+    {
+     "month": "2026-06",
+     "area": 86.1,
+     "floor": 4,
+     "price": 225000,
+     "pyeong": 8639
+    },
+    {
+     "month": "2026-05",
+     "area": 103.7,
+     "floor": 10,
+     "price": 250000,
+     "pyeong": 7970
+    },
+    {
+     "month": "2026-05",
+     "area": 40.5,
+     "floor": 12,
+     "price": 189000,
+     "pyeong": 15427
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 17
+  },
+  {
+   "project": "왕궁아파트",
+   "complex": "왕궁",
+   "sido": "서울특별시",
+   "gu": "용산구",
+   "dong": "이촌동",
+   "type": "아파트지구재건축",
+   "stage": "조합설립",
+   "addr": "이촌동300-11",
+   "builders": [],
+   "exist": 250,
+   "total": 318,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 10643,
+   "pyeongMax": 10643,
+   "priceMax": 330000,
+   "priceMin": 330000,
+   "lastMonth": "2025-12",
+   "recent": [
+    {
+     "month": "2025-12",
+     "area": 102.5,
+     "floor": 4,
+     "price": 330000,
+     "pyeong": 10643
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 27
+  },
+  {
+   "project": "도곡우성",
+   "complex": "도곡우성아파트",
+   "sido": "서울특별시",
+   "gu": "강남구",
+   "dong": "도곡동",
+   "type": "공동주택재건축",
+   "stage": "조합설립",
+   "addr": "도곡동934-10",
+   "builders": [],
+   "exist": 390,
+   "total": 548,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 9746,
+   "pyeongMax": 9746,
+   "priceMax": 250000,
+   "priceMin": 250000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 84.8,
+     "floor": 1,
+     "price": 250000,
+     "pyeong": 9746
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 41
+  },
+  {
+   "project": "방배임광3차",
+   "complex": "방배임광3차",
+   "sido": "서울특별시",
+   "gu": "서초구",
+   "dong": "방배동",
+   "type": "공동주택재건축",
+   "stage": "구역지정",
+   "addr": "방배동1010-1외1",
+   "builders": [],
+   "exist": 316,
+   "total": 379,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 2,
+   "pyeongAvg": 9399,
+   "pyeongMax": 9892,
+   "priceMax": 215000,
+   "priceMin": 155000,
+   "lastMonth": "2026-05",
+   "recent": [
+    {
+     "month": "2026-05",
+     "area": 51.8,
+     "floor": 4,
+     "price": 155000,
+     "pyeong": 9892
+    },
+    {
+     "month": "2026-04",
+     "area": 79.8,
+     "floor": 6,
+     "price": 215000,
+     "pyeong": 8907
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 20
+  },
+  {
+   "project": "가락미륭",
+   "complex": "가락미륭아파트",
+   "sido": "서울특별시",
+   "gu": "송파구",
+   "dong": "가락동",
+   "type": "공동주택재건축",
+   "stage": "관리처분",
+   "addr": "가락동138",
+   "builders": [],
+   "exist": 435,
+   "total": 614,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 2,
+   "pyeongAvg": 9264,
+   "pyeongMax": 10975,
+   "priceMax": 191000,
+   "priceMin": 166000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 50.0,
+     "floor": 15,
+     "price": 166000,
+     "pyeong": 10975
+    },
+    {
+     "month": "2026-07",
+     "area": 83.6,
+     "floor": 1,
+     "price": 191000,
+     "pyeong": 7553
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 41
+  },
+  {
+   "project": "한남하이츠",
+   "complex": "한남하이츠",
+   "sido": "서울특별시",
+   "gu": "성동구",
+   "dong": "옥수동",
+   "type": "공동주택재건축",
+   "stage": "사업시행",
+   "addr": "옥수동220-1",
+   "builders": [],
+   "exist": 535,
+   "total": 790,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 2,
+   "pyeongAvg": 8970,
+   "pyeongMax": 9989,
+   "priceMax": 426000,
+   "priceMin": 265000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 177.1,
+     "floor": 4,
+     "price": 426000,
+     "pyeong": 7952
+    },
+    {
+     "month": "2026-05",
+     "area": 87.7,
+     "floor": 12,
+     "price": 265000,
+     "pyeong": 9989
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 48
+  },
+  {
+   "project": "강남원효성빌라",
+   "complex": "강남원효성빌라",
+   "sido": "서울특별시",
+   "gu": "서초구",
+   "dong": "반포동",
+   "type": "공동주택재건축",
+   "stage": "조합설립",
+   "addr": "반포동591-1외5",
+   "builders": [],
+   "exist": 103,
+   "total": 103,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 8695,
+   "pyeongMax": 8695,
+   "priceMax": 454000,
+   "priceMin": 454000,
+   "lastMonth": "2026-05",
+   "recent": [
+    {
+     "month": "2026-05",
+     "area": 172.6,
+     "floor": 3,
+     "price": 454000,
+     "pyeong": 8695
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 0
+  },
+  {
+   "project": "삼익그린2차",
+   "complex": "삼익그린2차",
+   "sido": "서울특별시",
+   "gu": "강동구",
+   "dong": "명일동",
+   "type": "아파트지구재건축",
+   "stage": "조합설립",
+   "addr": "명일동15",
+   "builders": [],
+   "exist": 2400,
+   "total": null,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 3,
+   "pyeongAvg": 8660,
+   "pyeongMax": 10942,
+   "priceMax": 223000,
+   "priceMin": 142000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 42.9,
+     "floor": 3,
+     "price": 142000,
+     "pyeong": 10942
+    },
+    {
+     "month": "2026-07",
+     "area": 84.8,
+     "floor": 4,
+     "price": 210000,
+     "pyeong": 8186
+    },
+    {
+     "month": "2026-06",
+     "area": 107.6,
+     "floor": 9,
+     "price": 223000,
+     "pyeong": 6851
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": null
+  },
+  {
+   "project": "가락삼익맨숀",
+   "complex": "가락삼익맨숀",
+   "sido": "서울특별시",
+   "gu": "송파구",
+   "dong": "송파동",
+   "type": "공동주택재건축",
+   "stage": "관리처분",
+   "addr": "송파동166",
+   "builders": [],
+   "exist": 936,
+   "total": 1531,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 3,
+   "pyeongAvg": 8280,
+   "pyeongMax": 10136,
+   "priceMax": 292000,
+   "priceMin": 260000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 108.3,
+     "floor": 8,
+     "price": 273000,
+     "pyeong": 8333
+    },
+    {
+     "month": "2026-02",
+     "area": 151.5,
+     "floor": 10,
+     "price": 292000,
+     "pyeong": 6372
+    },
+    {
+     "month": "2026-02",
+     "area": 84.8,
+     "floor": 3,
+     "price": 260000,
+     "pyeong": 10136
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 64
+  },
+  {
+   "project": "방배신삼호",
+   "complex": "방배신삼호",
+   "sido": "서울특별시",
+   "gu": "서초구",
+   "dong": "방배동",
+   "type": "공동주택재건축",
+   "stage": "조합설립",
+   "addr": "방배동725",
+   "builders": [],
+   "exist": 481,
+   "total": 920,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 2,
+   "pyeongAvg": 8109,
+   "pyeongMax": 9445,
+   "priceMax": 380000,
+   "priceMin": 300000,
+   "lastMonth": "2026-06",
+   "recent": [
+    {
+     "month": "2026-06",
+     "area": 185.5,
+     "floor": 1,
+     "price": 380000,
+     "pyeong": 6772
+    },
+    {
+     "month": "2026-05",
+     "area": 105.0,
+     "floor": 9,
+     "price": 300000,
+     "pyeong": 9445
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 91
+  },
+  {
+   "project": "유원제일2차아파트",
+   "complex": "유원제일2차",
+   "sido": "서울특별시",
+   "gu": "영등포구",
+   "dong": "당산동5가",
+   "type": "공동주택재건축",
+   "stage": "사업시행",
+   "addr": "당산동5가7-2",
+   "builders": [],
+   "exist": 410,
+   "total": 703,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 3,
+   "pyeongAvg": 6363,
+   "pyeongMax": 8089,
+   "priceMax": 225000,
+   "priceMin": 207000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 84.6,
+     "floor": 8,
+     "price": 207000,
+     "pyeong": 8089
+    },
+    {
+     "month": "2026-07",
+     "area": 123.8,
+     "floor": 9,
+     "price": 225000,
+     "pyeong": 6008
+    },
+    {
+     "month": "2025-09",
+     "area": 145.7,
+     "floor": 12,
+     "price": 220000,
+     "pyeong": 4992
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 71
+  },
+  {
+   "project": "삼익파크",
+   "complex": "삼익파크맨션",
+   "sido": "서울특별시",
+   "gu": "강동구",
+   "dong": "길동",
+   "type": "공동주택재건축",
+   "stage": "관리처분",
+   "addr": "길동54",
+   "builders": [],
+   "exist": 1092,
+   "total": 1665,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 5,
+   "pyeongAvg": 5294,
+   "pyeongMax": 7410,
+   "priceMax": 175000,
+   "priceMin": 128000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 57.1,
+     "floor": 1,
+     "price": 128000,
+     "pyeong": 7410
+    },
+    {
+     "month": "2026-07",
+     "area": 79.6,
+     "floor": 7,
+     "price": 144900,
+     "pyeong": 6018
+    },
+    {
+     "month": "2026-06",
+     "area": 130.8,
+     "floor": 10,
+     "price": 163000,
+     "pyeong": 4120
+    },
+    {
+     "month": "2026-06",
+     "area": 97.2,
+     "floor": 6,
+     "price": 150000,
+     "pyeong": 5102
+    },
+    {
+     "month": "2026-04",
+     "area": 151.4,
+     "floor": 7,
+     "price": 175000,
+     "pyeong": 3821
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 52
+  },
+  {
+   "project": "워커힐아파트",
+   "complex": "워커힐",
+   "sido": "서울특별시",
+   "gu": "광진구",
+   "dong": "광장동",
+   "type": "공동주택재건축",
+   "stage": "추진위",
+   "addr": "광장동145-8",
+   "builders": [],
+   "exist": 432,
+   "total": 982,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 2,
+   "pyeongAvg": 5075,
+   "pyeongMax": 5198,
+   "priceMax": 356000,
+   "priceMin": 250000,
+   "lastMonth": "2026-06",
+   "recent": [
+    {
+     "month": "2026-06",
+     "area": 166.9,
+     "floor": 8,
+     "price": 250000,
+     "pyeong": 4952
+    },
+    {
+     "month": "2026-05",
+     "area": 226.4,
+     "floor": 8,
+     "price": 356000,
+     "pyeong": 5198
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 127
+  },
+  {
+   "project": "방배신동아",
+   "complex": "방배신동아럭스빌",
+   "sido": "서울특별시",
+   "gu": "서초구",
+   "dong": "방배동",
+   "type": "공동주택재건축",
+   "stage": "관리처분",
+   "addr": "방배동988-1",
+   "builders": [],
+   "exist": 493,
+   "total": 843,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "231012",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 4012,
+   "pyeongMax": 4012,
+   "priceMax": 200000,
+   "priceMin": 200000,
+   "lastMonth": "2026-05",
+   "recent": [
+    {
+     "month": "2026-05",
+     "area": 164.8,
+     "floor": 13,
+     "price": 200000,
+     "pyeong": 4012
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(방배신동아럭스빌)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 71
+  },
+  {
+   "project": "신월시영",
+   "complex": "신월시영",
+   "sido": "서울특별시",
+   "gu": "양천구",
+   "dong": "신월동",
+   "type": "공동주택재건축",
+   "stage": "조합설립",
+   "addr": "양천구신월동987-1",
+   "builders": [],
+   "exist": 2256,
+   "total": 3149,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 3912,
+   "pyeongMax": 3912,
+   "priceMax": 60000,
+   "priceMin": 60000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 50.7,
+     "floor": 1,
+     "price": 60000,
+     "pyeong": 3912
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 40
+  },
+  {
+   "project": "보광아파트",
+   "complex": "보광",
+   "sido": "서울특별시",
+   "gu": "구로구",
+   "dong": "구로동",
+   "type": "공동주택재건축",
+   "stage": "사업시행",
+   "addr": "구로동440",
+   "builders": [],
+   "exist": 340,
+   "total": 675,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 3684,
+   "pyeongMax": 3684,
+   "priceMax": 74000,
+   "priceMin": 74000,
+   "lastMonth": "2026-05",
+   "recent": [
+    {
+     "month": "2026-05",
+     "area": 66.4,
+     "floor": 4,
+     "price": 74000,
+     "pyeong": 3684
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 99
+  },
+  {
+   "project": "우신빌라",
+   "complex": "우신빌라",
+   "sido": "서울특별시",
+   "gu": "구로구",
+   "dong": "궁동",
+   "type": "공동주택재건축",
+   "stage": "구역지정",
+   "addr": "궁동213-21",
+   "builders": [],
+   "exist": 762,
+   "total": 1127,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 2,
+   "pyeongAvg": 3586,
+   "pyeongMax": 3704,
+   "priceMax": 60000,
+   "priceMin": 44700,
+   "lastMonth": "2026-06",
+   "recent": [
+    {
+     "month": "2026-06",
+     "area": 57.2,
+     "floor": 2,
+     "price": 60000,
+     "pyeong": 3468
+    },
+    {
+     "month": "2025-12",
+     "area": 39.9,
+     "floor": 3,
+     "price": 44700,
+     "pyeong": 3704
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 48
+  },
+  {
+   "project": "용답동",
+   "complex": "용답동 큐브스테이트",
+   "sido": "서울특별시",
+   "gu": "성동구",
+   "dong": "용답동",
+   "type": "주택정비형재개발",
+   "stage": "착공",
+   "addr": "용답동108-1",
+   "builders": [],
+   "exist": 1844,
+   "total": 1670,
+   "members": null,
+   "mgmtDate": "240404",
+   "migStart": "180927",
+   "conStart": "231024",
+   "tradeCount": 1,
+   "pyeongAvg": 3517,
+   "pyeongMax": 3517,
+   "priceMax": 20000,
+   "priceMin": 20000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 18.8,
+     "floor": 4,
+     "price": 20000,
+     "pyeong": 3517
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(용답동 큐브스테이트)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": -9
+  },
+  {
+   "project": "한효아파트",
+   "complex": "한효",
+   "sido": "서울특별시",
+   "gu": "구로구",
+   "dong": "고척동",
+   "type": "공동주택재건축",
+   "stage": "구역지정",
+   "addr": "고척동52-332",
+   "builders": [],
+   "exist": 290,
+   "total": 440,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 3472,
+   "pyeongMax": 3472,
+   "priceMax": 66800,
+   "priceMin": 66800,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 63.6,
+     "floor": 9,
+     "price": 66800,
+     "pyeong": 3472
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 52
+  },
+  {
+   "project": "장안현대",
+   "complex": "장안현대",
+   "sido": "서울특별시",
+   "gu": "동대문구",
+   "dong": "장안동",
+   "type": "공동주택재건축",
+   "stage": "사업시행",
+   "addr": "장안동95-1",
+   "builders": [],
+   "exist": 456,
+   "total": 746,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 3223,
+   "pyeongMax": 3223,
+   "priceMax": 93000,
+   "priceMin": 93000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 95.4,
+     "floor": 10,
+     "price": 93000,
+     "pyeong": 3223
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 64
+  },
+  {
+   "project": "수정아파트",
+   "complex": "수정",
+   "sido": "서울특별시",
+   "gu": "양천구",
+   "dong": "신정동",
+   "type": "공동주택재건축",
+   "stage": "관리처분",
+   "addr": "신정동733-31",
+   "builders": [],
+   "exist": 220,
+   "total": 276,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 2771,
+   "pyeongMax": 2771,
+   "priceMax": 43000,
+   "priceMin": 43000,
+   "lastMonth": "2026-08",
+   "recent": [
+    {
+     "month": "2026-08",
+     "area": 51.3,
+     "floor": 2,
+     "price": 43000,
+     "pyeong": 2771
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 25
+  },
+  {
+   "project": "삼성콘도맨션(소규모) 소규모재건축",
+   "complex": "삼성콘도맨션",
+   "sido": "부산광역시",
+   "gu": "해운대구",
+   "dong": "중동",
+   "type": "소규모재건축",
+   "stage": "건축심의",
+   "addr": "부산광역시 해운대구 중동1로 37번길 9, 3층",
+   "builders": [],
+   "exist": null,
+   "total": 114,
+   "members": 89,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 2530,
+   "pyeongMax": 2530,
+   "priceMax": 61000,
+   "priceMin": 61000,
+   "lastMonth": "2026-04",
+   "recent": [
+    {
+     "month": "2026-04",
+     "area": 79.7,
+     "floor": 11,
+     "price": 61000,
+     "pyeong": 2530
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(삼성콘도맨션)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": null
+  },
+  {
+   "project": "삼환도봉아파트",
+   "complex": "삼환도봉",
+   "sido": "서울특별시",
+   "gu": "도봉구",
+   "dong": "도봉동",
+   "type": "공동주택재건축",
+   "stage": "조합설립",
+   "addr": "도봉동87",
+   "builders": [],
+   "exist": 680,
+   "total": 993,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 2440,
+   "pyeongMax": 2440,
+   "priceMax": 62000,
+   "priceMin": 62000,
+   "lastMonth": "2026-05",
+   "recent": [
+    {
+     "month": "2026-05",
+     "area": 84.0,
+     "floor": 6,
+     "price": 62000,
+     "pyeong": 2440
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 46
+  },
+  {
+   "project": "화목타운 소규모재건축",
+   "complex": "화목타운",
+   "sido": "부산광역시",
+   "gu": "수영구",
+   "dong": "남천동",
+   "type": "소규모재건축",
+   "stage": "건축심의",
+   "addr": "수영구 남천동 47-1번지",
+   "builders": [],
+   "exist": null,
+   "total": 286,
+   "members": 186,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 2100,
+   "pyeongMax": 2100,
+   "priceMax": 53500,
+   "priceMin": 53500,
+   "lastMonth": "2026-08",
+   "recent": [
+    {
+     "month": "2026-08",
+     "area": 84.2,
+     "floor": 9,
+     "price": 53500,
+     "pyeong": 2100
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(화목타운)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": null
+  },
+  {
+   "project": "뉴서울개나리열망연립",
+   "complex": "뉴서울",
+   "sido": "서울특별시",
+   "gu": "관악구",
+   "dong": "신림동",
+   "type": "공동주택재건축",
+   "stage": "사업시행",
+   "addr": "신림동739",
+   "builders": [],
+   "exist": 211,
+   "total": 306,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 2047,
+   "pyeongMax": 2047,
+   "priceMax": 41000,
+   "priceMin": 41000,
+   "lastMonth": "2025-10",
+   "recent": [
+    {
+     "month": "2025-10",
+     "area": 66.2,
+     "floor": 4,
+     "price": 41000,
+     "pyeong": 2047
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(뉴서울)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": 45
+  },
+  {
+   "project": "이진캐스빌 소규모재건축",
+   "complex": "이진캐스빌",
+   "sido": "부산광역시",
+   "gu": "해운대구",
+   "dong": "중동",
+   "type": "소규모재건축",
+   "stage": "건축심의",
+   "addr": "부산광역시 해운대구 중동 1526-1번지 상가",
+   "builders": [],
+   "exist": null,
+   "total": null,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 1224,
+   "pyeongMax": 1224,
+   "priceMax": 28000,
+   "priceMin": 28000,
+   "lastMonth": "2026-04",
+   "recent": [
+    {
+     "month": "2026-04",
+     "area": 75.6,
+     "floor": 2,
+     "price": 28000,
+     "pyeong": 1224
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(이진캐스빌)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": null
+  },
+  {
+   "project": "태창파크맨션 소규모재건축",
+   "complex": "태창파크",
+   "sido": "부산광역시",
+   "gu": "수영구",
+   "dong": "민락동",
+   "type": "소규모재건축",
+   "stage": "조합설립",
+   "addr": "수영구 민락동 11-1번지 일원",
+   "builders": [
+    "삼정건설"
+   ],
+   "exist": null,
+   "total": 122,
+   "members": 116,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 1022,
+   "pyeongMax": 1022,
+   "priceMax": 19500,
+   "priceMin": 19500,
+   "lastMonth": "2026-06",
+   "recent": [
+    {
+     "month": "2026-06",
+     "area": 63.1,
+     "floor": 1,
+     "price": 19500,
+     "pyeong": 1022
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(태창파크)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": null
+  },
+  {
+   "project": "용마루",
+   "complex": "용마루",
+   "sido": "인천광역시",
+   "gu": "미추홀구",
+   "dong": "용현동",
+   "type": "주거환경개선",
+   "stage": "착공",
+   "addr": "용현동 528번지 일원",
+   "builders": [],
+   "exist": null,
+   "total": null,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 962,
+   "pyeongMax": 962,
+   "priceMax": 16700,
+   "priceMin": 16700,
+   "lastMonth": "2026-01",
+   "recent": [
+    {
+     "month": "2026-01",
+     "area": 57.4,
+     "floor": 12,
+     "price": 16700,
+     "pyeong": 962
+    }
+   ],
+   "match": {
+    "confidence": 1.0,
+    "method": "동일 법정동 + 정규화 명칭 완전일치"
+   },
+   "src": "derived:entity-resolution",
+   "growth": null
+  },
+  {
+   "project": "협진신태양 소규모재건축(괴정) 소규모재건축",
+   "complex": "협진신태양",
+   "sido": "부산광역시",
+   "gu": "사하구",
+   "dong": "괴정동",
+   "type": "소규모재건축",
+   "stage": "조합설립",
+   "addr": "사하구 사리로52, 2층(괴정동)",
+   "builders": [],
+   "exist": null,
+   "total": 148,
+   "members": 94,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 876,
+   "pyeongMax": 876,
+   "priceMax": 22500,
+   "priceMin": 22500,
+   "lastMonth": "2026-03",
+   "recent": [
+    {
+     "month": "2026-03",
+     "area": 84.9,
+     "floor": 2,
+     "price": 22500,
+     "pyeong": 876
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(협진신태양)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": null
+  },
+  {
+   "project": "동광세화맨션 소규모재건축",
+   "complex": "동광세화맨션",
+   "sido": "부산광역시",
+   "gu": "금정구",
+   "dong": "남산동",
+   "type": "소규모재건축",
+   "stage": "조합설립",
+   "addr": "남산동 39-1",
+   "builders": [
+    "지원건설"
+   ],
+   "exist": null,
+   "total": 125,
+   "members": 79,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 1,
+   "pyeongAvg": 837,
+   "pyeongMax": 837,
+   "priceMax": 16000,
+   "priceMin": 16000,
+   "lastMonth": "2026-01",
+   "recent": [
+    {
+     "month": "2026-01",
+     "area": 63.2,
+     "floor": 3,
+     "price": 16000,
+     "pyeong": 837
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(동광세화맨션)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": null
+  },
+  {
+   "project": "남광로얄A",
+   "complex": "남광로얄",
+   "sido": "인천광역시",
+   "gu": "미추홀구",
+   "dong": "주안동",
+   "type": "재건축",
+   "stage": "사업시행",
+   "addr": "주안동 1458번지 일원",
+   "builders": [],
+   "exist": null,
+   "total": null,
+   "members": null,
+   "mgmtDate": "",
+   "migStart": "",
+   "conStart": "",
+   "tradeCount": 2,
+   "pyeongAvg": 687,
+   "pyeongMax": 739,
+   "priceMax": 16900,
+   "priceMin": 9000,
+   "lastMonth": "2026-07",
+   "recent": [
+    {
+     "month": "2026-07",
+     "area": 75.6,
+     "floor": 2,
+     "price": 16900,
+     "pyeong": 739
+    },
+    {
+     "month": "2026-01",
+     "area": 46.8,
+     "floor": 1,
+     "price": 9000,
+     "pyeong": 636
+    }
+   ],
+   "match": {
+    "confidence": 0.7,
+    "method": "동일 법정동 + 접두 일치(남광로얄)"
+   },
+   "src": "derived:entity-resolution",
+   "growth": null
+  }
+ ]
+}
