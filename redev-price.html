@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>재건축 단지 시세 — 기존 세대수·계획 세대수와 지금 실거래가 한눈에 | 부비</title>
+<meta name="description" content="재건축·재개발 정비구역으로 지정된 아파트가 지금 얼마에 거래되는지, 기존 세대수가 몇 세대로 늘어나는지 한 화면에서 봅니다. 서울시 도시정비사업 통계와 국토교통부 실거래가를 단지 단위로 이어 붙였습니다.">
+<meta name="keywords" content="재건축 시세, 재건축 실거래가, 정비사업 단계, 조합설립, 관리처분, 세대수 증가, 은마아파트, 개포주공, 부비">
+<link rel="canonical" href="https://boobi.ai.kr/redev-price.html">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="재건축 단지 시세 — 세대수 변화와 실거래를 한 화면에 | 부비">
+<meta property="og:description" content="정비구역으로 지정된 아파트가 지금 얼마에 거래되고, 몇 세대로 늘어나는지.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://boobi.ai.kr/redev-price.html">
+<meta property="og:site_name" content="부비 - 부동산 비서">
+<meta property="og:image" content="https://boobi.ai.kr/og-boobi.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8306509970985233" crossorigin="anonymous"></script>
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--teal:#20A6A2;--blue:#3D8BFD;--purple:#8B6CF6;
+  --forest:#0D2A29;--sub:#547471;--faint:#8AA5A2;--line:#DCEEEC;--card:#fff;--warn:#E5484D}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;
+  background:#fff;color:var(--forest);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+header.top{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500}
+.logo3d{width:26px;height:26px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(42,193,188,.45))}
+nav.gnb{display:flex;gap:16px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--teal)}
+main{padding:24px 0 60px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:12px}
+.crumb a{color:var(--teal)}
+
+/* 페이지 배경 글로우 */
+.glow{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(60% 45% at 88% 2%,rgba(61,139,253,.13),transparent 60%),
+             radial-gradient(55% 45% at 4% 96%,rgba(42,193,188,.14),transparent 60%),
+             radial-gradient(40% 30% at 60% 100%,rgba(139,108,246,.09),transparent 60%)}
+
+/* 글래스 카드 표준 */
+.glass{background:
+   radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),
+   radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),
+   linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));
+  border:1.5px solid rgba(255,255,255,.95);
+  box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;
+  backdrop-filter:blur(14px);color:var(--forest)}
+
+.hero{border-radius:22px;padding:28px 26px;margin-bottom:18px}
+.hero h1{font-size:1.62rem;font-weight:700;letter-spacing:-.025em;word-break:keep-all}
+.hero h1 .g{background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--sub);font-size:.96rem;margin-top:10px;max-width:60ch;word-break:keep-all}
+.kpis{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.kpi{background:rgba(255,255,255,.72);border:1px solid rgba(61,139,253,.18);border-radius:14px;
+  padding:11px 16px;min-width:118px}
+.kpi b{display:block;font-size:1.32rem;font-weight:800;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;color:var(--blue)}
+.kpi span{font-size:.78rem;color:var(--sub)}
+
+/* 컨트롤 */
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:20px 0 6px}
+.chip{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;
+  padding:6px 14px;font-size:.83rem;font-weight:600;cursor:pointer;white-space:nowrap;
+  transition:.15s}
+.chip:hover{border-color:var(--mint);color:var(--teal)}
+.chip[aria-pressed="true"]{background:rgba(61,139,253,.10);border-color:rgba(61,139,253,.42);color:#2A7DE8}
+.ctl-label{font-size:.78rem;color:var(--faint);font-weight:700;letter-spacing:.02em;margin-right:2px;white-space:nowrap;flex:0 0 auto}
+.count{font-size:.85rem;color:var(--sub);margin:10px 0 14px}
+
+/* 카드 그리드 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:15px;align-items:start}
+.item{border-radius:18px;padding:19px 20px 17px;display:flex;flex-direction:column;gap:12px}
+.item .head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.item h3{font-size:1.12rem;font-weight:700;letter-spacing:-.02em;word-break:keep-all;line-height:1.35}
+.item .where{font-size:.79rem;color:var(--faint);margin-top:3px}
+.stage{flex:0 0 auto;font-size:.73rem;font-weight:800;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.s1{background:#F1F7F6;color:#6E8B88}
+.s2{background:#E4F5F3;color:#3E8A85}
+.s3{background:#D8F3F0;color:#1F8B86}
+.s4{background:#CBEAF3;color:#2382A6}
+.s5{background:#BFE0F7;color:#2270B8}
+.s6{background:#A9D3FA;color:#1C5FB5}
+.s7{background:linear-gradient(115deg,#3D8BFD,#8B6CF6);color:#fff}
+
+.price{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.pxsub{font-size:.79rem;color:var(--faint);margin-top:-6px}
+.price b{font-size:1.55rem;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.price span{font-size:.8rem;color:var(--sub)}
+
+.units{background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+.units .row{display:flex;justify-content:space-between;font-size:.82rem;color:var(--sub);margin-bottom:7px}
+.units .row b{color:var(--forest);font-weight:700;font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:99px;background:#EDF4F3;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.bar .now{background:#A9E7E8}
+.bar .add{background:linear-gradient(90deg,#7CC8F0,#3D8BFD)}
+.growth{font-size:.78rem;font-weight:800;color:var(--blue);font-variant-numeric:tabular-nums}
+
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.73rem;color:var(--sub);background:#F0F6FF;border:1px solid rgba(61,139,253,.14);
+  border-radius:8px;padding:3px 9px}
+.tag.b{background:#EAF3FE;color:#2A7DE8;font-weight:700}
+
+details.trades{border-top:1px dashed var(--line);padding-top:10px}
+details.trades summary{font-size:.81rem;color:var(--teal);font-weight:700;cursor:pointer;list-style:none}
+details.trades summary::-webkit-details-marker{display:none}
+details.trades summary::after{content:" ▾"}
+details.trades[open] summary::after{content:" ▴"}
+.tt{width:100%;border-collapse:collapse;margin-top:9px;font-size:.79rem}
+.tt th{text-align:left;color:var(--faint);font-weight:600;padding:4px 0;font-size:.73rem}
+.tt td{padding:4px 0;border-top:1px solid #EFF6F5;font-variant-numeric:tabular-nums}
+.tt td:last-child,.tt th:last-child{text-align:right}
+
+.notice{border-radius:16px;padding:18px 20px;margin-top:26px;font-size:.83rem;color:var(--sub);line-height:1.75}
+.notice b{color:var(--forest)}
+.notice ul{margin:8px 0 0 18px}
+.notice li{margin-bottom:5px}
+.src{font-size:.78rem;color:var(--faint);margin-top:14px;line-height:1.7}
+.empty{padding:40px 0;text-align:center;color:var(--faint);font-size:.9rem}
+@media(max-width:640px){
+  .hero{padding:22px 18px}.hero h1{font-size:1.32rem}
+  .grid{grid-template-columns:1fr}
+  /* 칩이 여러 줄로 쌓여 카드가 화면 밖으로 밀리지 않게 가로 스크롤로 */
+  .controls{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .controls::-webkit-scrollbar{display:none}
+  .kpi{flex:1 1 calc(50% - 5px);min-width:0}
+}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><img class="logo3d" src="/boobi-ring-3d.png" alt=""><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
+<nav class="gnb"><a href="/calculator.html">계산기</a><a href="/rental-board.html">청년·신혼부부</a><a href="/senior.html">시니어</a><a href="/invest.html">투자</a><a href="/ai-check.html">AI진단</a><a href="/column.html">칼럼</a></nav>
+</div></header>
+
+<main><div class="wrap">
+  <div class="crumb"><a href="/">홈</a> › <a href="/invest.html">투자</a> › 재건축 단지 시세</div>
+
+  <section class="hero glass">
+    <h1>재건축 들어간 그 단지,<br><span class="g">지금 얼마에 거래되나</span></h1>
+    <p>정비구역으로 지정된 아파트를 실거래 단지와 이어 붙였습니다. 몇 세대가 몇 세대로 늘어나는지, 지금 평당 얼마에 팔리는지를 한 카드에서 봅니다.</p>
+    <div class="kpis">
+      <div class="kpi"><b id="k-count">–</b><span>연결된 단지</span></div>
+      <div class="kpi"><b id="k-pyeong">–</b><span>평균 평단가(만원)</span></div>
+      <div class="kpi"><b id="k-growth">–</b><span>평균 세대수 증가</span></div>
+      <div class="kpi"><b id="k-trade">–</b><span>반영된 실거래</span></div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <span class="ctl-label">정렬</span>
+    <button class="chip" data-sort="pyeongAvg" aria-pressed="true">평단가 높은 순</button>
+    <button class="chip" data-sort="growth" aria-pressed="false">세대수 증가율 순</button>
+    <button class="chip" data-sort="stageOrder" aria-pressed="false">사업 진행 순</button>
+    <button class="chip" data-sort="total" aria-pressed="false">규모 큰 순</button>
+  </div>
+  <div class="controls" id="gu-filters">
+    <span class="ctl-label">지역</span>
+  </div>
+
+  <p class="count" id="count-line"></p>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" hidden>조건에 맞는 단지가 없습니다.</div>
+
+  <section class="notice glass">
+    <b>이 표를 읽을 때 주의할 점</b>
+    <ul>
+      <li>정비사업 통계의 <b>구역명</b>과 실거래의 <b>단지명</b>을 <b>같은 법정동 안에서</b> 이름이 정확히 일치할 때만 연결했습니다. 이름이 비슷하기만 한 경우(예: 신반포22차 ↔ 신반포2)는 다른 단지로 보고 연결하지 않았습니다. 그래서 <b>여기 없는 구역이 사업이 없다는 뜻은 아닙니다.</b></li>
+      <li>실거래가는 최근 12개월 신고분이며, <b>조합원 물건과 일반 물건이 섞여 있습니다.</b> 같은 단지 안에서도 평형·층·권리관계에 따라 가격 차이가 큽니다.</li>
+      <li>계획 세대수는 <b>인가 시점의 계획</b>이고 사업 과정에서 바뀝니다. 세대수가 늘어난다는 것이 곧 조합원 이익을 뜻하지도 않습니다(공사비·분담금은 이 데이터에 없습니다).</li>
+      <li>부비는 공개 데이터를 정리해 보여줄 뿐이며, <b>매수·매도 판단이나 투자 자문을 제공하지 않습니다.</b> 실제 거래 전에는 반드시 조합 공고문과 등기부, 그리고 전문가 상담을 거치세요.</li>
+    </ul>
+    <div class="src" id="srcline"></div>
+  </section>
+</div></main>
+
+<footer></footer>
+
+<script>
+window.__REDEV__ = null; /* 데이터는 /data/redev-price.json 에서 불러옵니다 */
+</script>
+<script>
+(function(){
+  var STAGE_ORDER = {'구역지정':1,'추진위':2,'조합설립':3,'건축심의':4,'사업시행':5,'관리처분':6,'착공':7,'이전고시':8};
+  var state = {sort:'pyeongAvg', gu:'전체', data:[]};
+
+  function num(n){ return (n==null||isNaN(n)) ? '–' : n.toLocaleString('ko-KR'); }
+  function eok(manwon){
+    if(manwon==null) return '–';
+    var v = manwon/10000;
+    var t = v.toFixed(1);
+    return (t.endsWith('.0') ? t.slice(0,-2) : t) + '억';
+  }
+  function ymd(s){ /* '260108' -> '2026.01.08' */
+    if(!s || s.length!==6) return '';
+    return '20'+s.slice(0,2)+'.'+s.slice(2,4)+'.'+s.slice(4,6);
+  }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function render(){
+    var items = state.data.slice();
+    if(state.gu !== '전체') items = items.filter(function(i){ return i.gu === state.gu; });
+    items.sort(function(a,b){
+      if(state.sort==='stageOrder') return (STAGE_ORDER[b.stage]||0)-(STAGE_ORDER[a.stage]||0);
+      var x = a[state.sort], y = b[state.sort];
+      if(x==null) return 1; if(y==null) return -1;
+      return y-x;
+    });
+
+    document.getElementById('count-line').textContent =
+      items.length + '개 단지' + (state.gu!=='전체' ? ' · ' + state.gu : '');
+    document.getElementById('empty').hidden = items.length>0;
+
+    document.getElementById('grid').innerHTML = items.map(function(i){
+      var sc = 's' + (STAGE_ORDER[i.stage] || 1);
+      var pct = (i.exist && i.total) ? Math.min(100, Math.round(i.exist/i.total*100)) : 100;
+      var dates = [];
+      if(i.migStart) dates.push('이주 ' + ymd(i.migStart));
+      if(i.conStart) dates.push('착공 ' + ymd(i.conStart));
+      if(i.mgmtDate) dates.push('관리처분 ' + ymd(i.mgmtDate));
+
+      var title = (i.project||'').length > (i.complex||'').length ? i.project : i.complex;
+      var alt   = (title === i.project) ? i.complex : i.project;
+      var trivial = !alt || title.replace(/\s/g,'').indexOf(alt.replace(/\s/g,'')) === 0;
+      return '<article class="item glass">'
+        + '<div class="head"><div>'
+          + '<h3>' + esc(title) + '</h3>'
+          + '<div class="where">' + esc(i.gu) + ' ' + esc(i.dong)
+          + (trivial ? '' : ' · 실거래 표기 “' + esc(alt) + '”') + '</div>'
+        + '</div><span class="stage ' + sc + '">' + esc(i.stage || '단계미상') + '</span></div>'
+
+        + '<div class="price"><b>' + num(i.pyeongAvg) + '</b><span>만원/평</span></div>'
+        + '<div class="pxsub">최고 ' + eok(i.priceMax) + ' · 최근 거래 ' + esc(i.lastMonth) + '</div>'
+
+        + '<div class="units">'
+          + '<div class="row"><span>기존 <b>' + num(i.exist) + '</b>세대</span>'
+          + '<span>계획 <b>' + num(i.total) + '</b>세대 '
+          + (i.growth!=null ? '<span class="growth">+' + i.growth + '%</span>' : '') + '</span></div>'
+          + '<div class="bar"><i class="now" style="width:' + pct + '%"></i>'
+          + '<i class="add" style="width:' + (100-pct) + '%"></i></div>'
+        + '</div>'
+
+        + '<div class="meta">'
+          + '<span class="tag">' + esc(i.type) + '</span>'
+          + (i.members ? '<span class="tag">조합원 ' + num(i.members) + '명</span>' : '')
+          + (i.builders||[]).map(function(b){ return '<span class="tag b">' + esc(b) + '</span>'; }).join('')
+          + dates.map(function(d){ return '<span class="tag">' + esc(d) + '</span>'; }).join('')
+        + '</div>'
+
+        + '<details class="trades"><summary>실거래 ' + i.tradeCount + '건 보기</summary>'
+          + '<table class="tt"><thead><tr><th>계약월</th><th>전용</th><th>층</th><th>거래가</th></tr></thead><tbody>'
+          + i.recent.map(function(t){
+              return '<tr><td>' + esc(t.month) + '</td><td>' + t.area + '㎡</td><td>'
+                   + (t.floor||'–') + '층</td><td>' + eok(t.price) + '</td></tr>'; }).join('')
+          + '</tbody></table></details>'
+      + '</article>';
+    }).join('');
+  }
+
+  function boot(data){
+    if(!data || !data.items || !data.items.length){
+      document.getElementById('empty').hidden = false;
+      document.getElementById('empty').textContent = '데이터를 불러오지 못했습니다.';
+      return;
+    }
+    state.data = data.items;
+
+    var n = data.items.length;
+    var pAvg = Math.round(data.items.reduce(function(s,i){ return s+i.pyeongAvg; },0)/n);
+    var gs = data.items.filter(function(i){ return i.growth!=null; });
+    var gAvg = Math.round(gs.reduce(function(s,i){ return s+i.growth; },0)/gs.length);
+    var tSum = data.items.reduce(function(s,i){ return s+i.tradeCount; },0);
+    document.getElementById('k-count').textContent  = n;
+    document.getElementById('k-pyeong').textContent = pAvg.toLocaleString('ko-KR');
+    document.getElementById('k-growth').textContent = '+' + gAvg + '%';
+    document.getElementById('k-trade').textContent  = tSum + '건';
+
+    document.getElementById('srcline').textContent =
+      '출처: ' + data.source + ' · 갱신 ' + (data.updatedAt||'').slice(0,10);
+
+    var cnt = {};
+    data.items.forEach(function(i){ cnt[i.gu] = (cnt[i.gu]||0) + 1; });
+    var gus = ['전체'].concat(Object.keys(cnt).sort(function(a,b){
+      return cnt[b]-cnt[a] || a.localeCompare(b,'ko'); }));
+    var box = document.getElementById('gu-filters');
+    gus.forEach(function(g){
+      var b = document.createElement('button');
+      b.className = 'chip';
+      b.textContent = (g==='전체') ? '전체 ' + data.items.length : g + ' ' + cnt[g];
+      b.setAttribute('aria-pressed', g==='전체' ? 'true' : 'false');
+      b.addEventListener('click', function(){
+        state.gu = g;
+        box.querySelectorAll('.chip').forEach(function(c){
+          c.setAttribute('aria-pressed', c===b ? 'true' : 'false'); });
+        render();
+      });
+      box.appendChild(b);
+    });
+
+    document.querySelectorAll('[data-sort]').forEach(function(b){
+      b.addEventListener('click', function(){
+        state.sort = b.dataset.sort;
+        document.querySelectorAll('[data-sort]').forEach(function(c){
+          c.setAttribute('aria-pressed', c===b ? 'true' : 'false'); });
+        render();
+      });
+    });
+
+    render();
+  }
+
+  fetch('/data/redev-price.json')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .catch(function(){ return null; })
+    .then(function(d){ boot(d || window.__REDEV__); });
+})();
+</script>
+<script src="/hwon-auth.js" defer></script>
+</body>
+</html>
