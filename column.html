@@ -43,6 +43,20 @@ main{padding:34px 0 60px}
 .feature h2{font-size:1.4rem;font-weight:700;margin:12px 0 6px;line-height:1.35}
 .feature p{opacity:.92;font-size:.95rem}
 .feature .go{display:inline-block;margin-top:14px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;box-shadow:0 6px 16px rgba(61,139,253,.28);font-weight:700;padding:9px 16px;border-radius:10px;font-size:.9rem}
+.colSearch{position:relative;margin:18px 0 2px}
+.colSearch input{width:100%;padding:14px 44px 14px 46px;border:1.5px solid rgba(61,139,253,.22);border-radius:999px;font-size:.96rem;font-family:inherit;color:#0D2A29;
+ background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.72));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+ box-shadow:0 8px 24px rgba(13,42,41,.06),inset 0 1px 0 #fff;transition:.16s;outline:none}
+.colSearch input::placeholder{color:#9AB5B2}
+.colSearch input::-webkit-search-cancel-button,.colSearch input::-webkit-search-decoration{-webkit-appearance:none;appearance:none;display:none}
+.colSearch input:focus{border-color:#3D8BFD;box-shadow:0 0 0 3px rgba(61,139,253,.13),0 10px 26px rgba(61,139,253,.12)}
+.colSearch .si{position:absolute;left:17px;top:50%;transform:translateY(-50%);font-size:1.05rem;pointer-events:none;opacity:.75}
+.colSearch .sx{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:28px;height:28px;border:none;border-radius:50%;background:rgba(13,42,41,.06);color:#547471;cursor:pointer;font-size:.9rem;line-height:1;display:none;font-family:inherit}
+.colSearch .sx:hover{background:rgba(13,42,41,.12)}
+.colSearch.has .sx{display:block}
+#colSearchInfo{font-size:.83rem;color:#547471;font-weight:300;margin:10px 2px 0}
+#colSearchInfo b{color:#2A7DE8;font-weight:700}
+.blist li.bbHide,.grid a.card.bbHide{display:none!important}
 .cats{display:flex;gap:8px;overflow-x:auto;padding:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .cats::-webkit-scrollbar{display:none}
 .cats button{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--sub);font-size:.88rem;font-weight:600;padding:8px 15px;border-radius:20px;cursor:pointer;font-family:inherit;transition:.15s}
@@ -82,6 +96,13 @@ footer a{color:#B9DCD9;margin:0 8px}
 <h1>📰 부비 칼럼</h1>
 <p>계절과 상황에 맞는 부동산 이야기. 집 구할 때, 계약할 때, 세금 낼 때 — 필요한 순간의 팁을 모았어요.</p>
 </div>
+
+<div class="colSearch" id="colSearchWrap">
+<span class="si">🔍</span>
+<input id="colSearch" type="search" autocomplete="off" placeholder="궁금한 키워드로 칼럼 찾기 — 예: 전세사기, 취득세, 청약">
+<button type="button" class="sx" id="colSearchX" aria-label="검색어 지우기">✕</button>
+</div>
+<div id="colSearchInfo" hidden></div>
 
 <div class="cats" id="colCats" aria-label="칼럼 분류"></div>
 
@@ -217,6 +238,55 @@ if(!all)window.scrollTo({top:0,behavior:'smooth'});
 render('전체');
 })();
 </script>
+
+<script>
+/* ===== 칼럼 검색 — 제목·설명 텍스트 기준 즉시 필터 ===== */
+(function(){
+var inp=document.getElementById('colSearch'); if(!inp)return;
+var wrap=document.getElementById('colSearchWrap'), info=document.getElementById('colSearchInfo');
+var xbtn=document.getElementById('colSearchX'), cats=document.getElementById('colCats');
+var feature=document.querySelector('.feature'), pop=document.getElementById('popularCols');
+var secs=[].slice.call(document.querySelectorAll('h2.sec')).map(function(h){return {h:h,g:h.nextElementSibling};});
+var rows=[].slice.call(document.querySelectorAll('.blist li'));
+var cards=[].slice.call(document.querySelectorAll('.grid a.card'));
+function norm(t){return (t||'').toLowerCase().replace(/\s+/g,'');}
+var items=rows.map(function(el){return {el:el,t:norm(el.textContent)};})
+  .concat(cards.map(function(el){return {el:el,t:norm(el.textContent)};}));
+function ga(q,n){ if(window.gtag){try{gtag('event','column_search',{q:q,results:n});}catch(e){}} }
+var tm=null;
+function run(){
+  var q=norm(inp.value);
+  wrap.classList.toggle('has', !!inp.value);
+  if(!q){ /* 검색 해제 → 원래 보기 복원 */
+    items.forEach(function(it){it.el.classList.remove('bbHide');});
+    secs.forEach(function(s){s.h.style.display='';if(s.g)s.g.style.display='';});
+    if(feature)feature.style.display=''; if(pop)pop.style.display='';
+    if(cats)cats.style.display=''; info.hidden=true; return;
+  }
+  var n=0;
+  items.forEach(function(it){ var hit=it.t.indexOf(q)>-1; it.el.classList.toggle('bbHide',!hit); if(hit)n++; });
+  /* 결과 없는 섹션 헤더는 숨김 */
+  secs.forEach(function(s){
+    var vis=s.g?[].slice.call(s.g.querySelectorAll('li,a.card')).some(function(e){return !e.classList.contains('bbHide');}):false;
+    s.h.style.display=vis?'':'none'; if(s.g)s.g.style.display=vis?'':'none';
+  });
+  if(feature)feature.style.display='none'; if(pop)pop.style.display='none';
+  if(cats)cats.style.display='none';
+  info.hidden=false;
+  info.innerHTML = n ? '“'+inp.value.replace(/</g,'&lt;')+'” 검색 결과 <b>'+n+'</b>건' :
+    '“'+inp.value.replace(/</g,'&lt;')+'”에 맞는 칼럼이 없어요. 다른 키워드로 찾아보시거나 <a href="#" id="colSearchReset" style="color:#2A7DE8;font-weight:700">전체 보기</a>';
+  var rs=document.getElementById('colSearchReset');
+  if(rs)rs.onclick=function(e){e.preventDefault();inp.value='';run();inp.focus();};
+  clearTimeout(tm); tm=setTimeout(function(){ if(norm(inp.value)===q) ga(inp.value.trim(),n); },900);
+}
+inp.addEventListener('input',run);
+xbtn.onclick=function(){inp.value='';run();inp.focus();};
+/* ?q= 로 들어오면 바로 검색 */
+var qp=new URLSearchParams(location.search).get('q');
+if(qp){inp.value=qp;run();}
+})();
+</script>
+
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"부비 칼럼","url":"https://boobi.ai.kr/column.html","description":"계절별 부동산 팁과 가이드를 모은 부비 칼럼","inLanguage":"ko-KR","isPartOf":{"@type":"WebSite","name":"부비","url":"https://boobi.ai.kr/"}}</script>
 <script src="/column-views.js?v=4" defer></script>
 <script src="/hwon-bot.js" defer></script>
