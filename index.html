@@ -41,6 +41,30 @@
 .logo::before{display:none!important}.logo3d{width:30px;height:30px;object-fit:contain;flex:0 0 30px;margin-right:-2px}
 .hwSlideIco3d{width:108px;height:108px;object-fit:contain;display:block;margin:0 auto 8px;filter:drop-shadow(0 12px 20px rgba(42,193,188,.28));animation:ringFloat 4.5s ease-in-out infinite}
 @media(prefers-reduced-motion:reduce){.hwSlideIco3d{animation:none!important}}</style>
+<style>
+#aptFind{margin:34px 0 8px}
+#aptFind .afHead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#aptFind .afHead p{font-size:.86rem;color:var(--sub,#547471);font-weight:300;margin-top:4px}
+#aptFind .afMore{font-size:.83rem;font-weight:700;color:#2A7DE8;text-decoration:none;white-space:nowrap}
+.afGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:14px}
+@media(max-width:900px){.afGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.afGrid{gap:10px}}
+.afCard{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+ background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.10),transparent 55%),
+  radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.12),transparent 55%),
+  linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.72));
+ border:1.5px solid rgba(255,255,255,.95);border-radius:20px;padding:20px 18px 16px;
+ box-shadow:0 10px 30px rgba(13,42,41,.07),inset 0 1px 0 #fff;backdrop-filter:blur(12px);
+ color:#0D2A29;text-decoration:none;transition:.18s;overflow:hidden}
+.afCard::after{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(115deg,#26C6B9,#3D8BFD,#8B6CF6);opacity:0;transition:.18s}
+.afCard:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(61,139,253,.16)}
+.afCard:hover::after{opacity:1}
+.afCard .afI{font-size:1.6rem;line-height:1}
+.afCard .afT{font-size:1.04rem;font-weight:800;letter-spacing:-.02em;margin:9px 0 5px;word-break:keep-all}
+.afCard .afD{font-size:.82rem;color:#547471;line-height:1.6;font-weight:300;word-break:keep-all}
+.afCard .afB{margin-top:11px;font-size:.81rem;font-weight:700;color:#2A7DE8}
+@media(max-width:620px){.afCard{padding:16px 14px 13px;border-radius:16px}.afCard .afI{font-size:1.4rem}.afCard .afT{font-size:.95rem;margin:7px 0 4px}.afCard .afD{font-size:.76rem;line-height:1.55}.afCard .afB{margin-top:9px;font-size:.76rem}}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -117,7 +141,6 @@
 <p>계산기·AI 진단·실거래 데이터·재개발 지도까지 —<br>어려운 부동산, 한 곳에서 훤하게.</p>
 <div class="bbHeroBtns">
 <button type="button" class="grad" onclick="var b=document.getElementById('hwbBtn');if(b){b.click();}return false;">💬 AI 부비에게 질문</button>
-<a class="ghost" href="/apt-finder.html">🏠 내게 맞는 아파트 찾기</a>
 </div>
 </section>
 
@@ -183,6 +206,48 @@
 .liveCol .newsChips{flex-wrap:wrap}
 @media(max-width:860px){.liveGrid{grid-template-columns:1fr;gap:28px}}
 </style>
+</section>
+
+
+<section id="aptFind" aria-label="내 아파트 찾기">
+<div class="afHead">
+<div>
+<h2 style="margin-bottom:0">🏠 내 아파트 찾기</h2>
+<p>어떻게 집을 구하시나요? 방식에 맞춰 부비가 데이터로 좁혀드려요.</p>
+</div>
+<a class="afMore" href="/apt-finder.html">전체 보기 →</a>
+</div>
+<div class="afGrid">
+
+<a class="afCard" href="/apt-finder.html">
+<span class="afI">🔎</span>
+<span class="afT">매매</span>
+<span class="afD">내 예산부터 계산하고, 국토부 실거래가에서 조건에 맞는 단지를 찾아드려요.</span>
+<span class="afB">내 예산으로 찾기 →</span>
+</a>
+
+<a class="afCard" href="/calendar.html">
+<span class="afI">📅</span>
+<span class="afT">청약 · 분양</span>
+<span class="afD">청약 일정과 모집공고를 캘린더 하나로 한눈에 확인하세요.</span>
+<span class="afB">부비 캘린더 열기 →</span>
+</a>
+
+<a class="afCard" href="/redevelopment-map.html">
+<span class="afI">🏗️</span>
+<span class="afT">재개발 · 재건축</span>
+<span class="afD">전국 시·도별 정비사업 현황과 추진 단계를 지도로. 서울 472개 구역 전수 수록.</span>
+<span class="afB">전국 재개발 지도 →</span>
+</a>
+
+<a class="afCard" href="/auction-tools.html">
+<span class="afI">🔨</span>
+<span class="afT">경매</span>
+<span class="afD">수익률·입찰가 계산부터 임장·계약 체크, 명도 서식까지 한 번에.</span>
+<span class="afB">경매 툴 열기 →</span>
+</a>
+
+</div>
 </section>
 
 <section id="news" aria-label="부동산 뉴스 · 캘린더">
