@@ -38,7 +38,7 @@
   }
   function total(s, real){ return seed(s) + (real||0); }
 
-  var isArticle = !!document.querySelector('meta[property="og:type"][content="article"]') || !!document.querySelector('article');
+  var isArticle = !!document.querySelector('meta[property="og:type"][content="article"]') || !!document.querySelector('article.post');
   var PIN='semiconductor-bonus-guide'; // 한동안 인기글 1위 고정 (해제: 이 줄과 PIN 사용부 2곳 제거)
   var isHub = /(^|\/)column\.html$/.test(location.pathname) || !!document.getElementById('popularCols');
 

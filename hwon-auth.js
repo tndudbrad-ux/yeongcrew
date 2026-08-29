@@ -4,10 +4,10 @@ function has(re){ return [].some.call(document.scripts, function(s){ return re.t
 function add(src){ var s=document.createElement('script'); s.src=src; s.defer=true; document.head.appendChild(s); }
 if(!has(/hwon-ui\.js/)) add('/hwon-ui.js');                 // 금액 힌트·애니메이션 등 UI 공통
 if(!has(/boobi-survey\.js/)) add('/boobi-survey.js?v=1'); // 가입 기대 설문 모달 (미응답 유저 1회)
-var art=document.querySelector('meta[property="og:type"][content="article"]')||document.querySelector('article');
+var art=document.querySelector('meta[property="og:type"][content="article"]')||document.querySelector('article.post');
 var hub=/column\.html$/.test(location.pathname)||document.getElementById('popularCols')||document.getElementById('bbRankList');
-if((art||hub) && !has(/column-views\.js/)) add('/column-views.js?v=4'); // 조회수 배지·인기글·홈 랭킹: 자동
-if(art && !has(/boobi-article-share\.js/)) add('/boobi-article-share.js?v=1'); // 공유 바: 모든 칼럼/글에 자동 (클린 URL 공유)
+if((art||hub) && !has(/column-views\.js/)) add('/column-views.js?v=5'); // 조회수 배지·인기글·홈 랭킹: 자동
+if(art && !has(/boobi-article-share\.js/)) add('/boobi-article-share.js?v=2'); // 공유 바: 모든 칼럼/글에 자동 (클린 URL 공유)
 })();
 
 /* 부비 계정 v1 — Firebase Google 로그인 */

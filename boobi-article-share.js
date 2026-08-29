@@ -13,7 +13,9 @@ function cleanUrl(){
 }
 
 function init(){
-  var art=document.querySelector('article'); if(!art)return;
+  var art=document.querySelector('article.post')||
+          (document.querySelector('meta[property="og:type"][content="article"]')?document.querySelector('article'):null);
+  if(!art)return;
   var h1=art.querySelector('h1')||document.querySelector('h1'); if(!h1)return;
   var title=(h1.textContent||document.title).trim();
 
