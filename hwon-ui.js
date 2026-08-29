@@ -49,6 +49,7 @@ function initReveal(){
     es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('hwIn'); io.unobserve(e.target); } });
   },{threshold:0.08,rootMargin:'0px 0px -6% 0px'});
   els.forEach(function(el,i){
+    if(el.closest && el.closest('.deck')) return;   /* 가로 카드덱은 제외 */
     var r=el.getBoundingClientRect();
     if(r.top<innerHeight*0.85){return;}
     el.classList.add('hwReveal');
