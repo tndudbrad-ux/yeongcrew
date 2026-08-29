@@ -170,8 +170,9 @@ function sane(text, f) {
 
 // ---------- 6. HTML 주입 ----------
 function renderBlock(b) {
-  const d = new Date(b.date + 'T00:00:00+09:00');
-  const label = `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
+  // 러너가 UTC라 Date의 지역시간 getter를 쓰면 하루가 밀린다. 문자열을 그대로 쪼갠다.
+  const [yy, mm, dd] = b.date.split('-').map(Number);
+  const label = `${yy}년 ${mm}월 ${dd}일`;
   const sents = b.brief.split(/(?<=다\.)\s+/).filter(Boolean);
   return (
     `${START}\n` +
