@@ -42,12 +42,15 @@
 .hwSlideIco3d{width:108px;height:108px;object-fit:contain;display:block;margin:0 auto 8px;filter:drop-shadow(0 12px 20px rgba(42,193,188,.28));animation:ringFloat 4.5s ease-in-out infinite}
 @media(prefers-reduced-motion:reduce){.hwSlideIco3d{animation:none!important}}</style>
 <style>
-#aptFind{margin:34px 0 8px}
-#aptFind .afHead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
-#aptFind .afHead p{font-size:.86rem;color:var(--sub,#547471);font-weight:300;margin-top:4px}
-#aptFind .afMore{font-size:.83rem;font-weight:700;color:#2A7DE8;text-decoration:none;white-space:nowrap}
+#aptFind,#rentFind{margin:34px 0 8px}
+#aptFind .afHead,#rentFind .afHead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#aptFind .afHead>div,#rentFind .afHead>div{flex:1 1 320px}
+#aptFind .afHead p,#rentFind .afHead p{font-size:.86rem;color:var(--sub,#547471);font-weight:300;margin-top:4px}
+#aptFind .afMore,#rentFind .afMore{font-size:.83rem;font-weight:700;color:#2A7DE8;text-decoration:none;white-space:nowrap}
 .afGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:14px}
 @media(max-width:900px){.afGrid{grid-template-columns:1fr 1fr}}
+.afGrid.afGrid2{grid-template-columns:1fr 1fr}
+@media(max-width:560px){.afGrid.afGrid2{grid-template-columns:1fr}}
 @media(max-width:420px){.afGrid{gap:10px}}
 .afCard{position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;
  background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.10),transparent 55%),
@@ -249,6 +252,34 @@
 
 </div>
 </section>
+
+<section id="rentFind" aria-label="내 임대주택 찾기">
+<div class="afHead">
+<div>
+<h2 style="margin-bottom:0">🏢 내 임대주택 찾기</h2>
+<p>행복주택·국민임대·매입임대… 이름은 많지만, 내게 맞는 건 몇 개뿐이에요.</p>
+</div>
+<a class="afMore" href="/rental-board.html">공고 모아보기 →</a>
+</div>
+<div class="afGrid afGrid2">
+
+<a class="afCard" href="/rental-match.html">
+<span class="afI">🎯</span>
+<span class="afT">자격 진단</span>
+<span class="afD">나이·소득·자산을 한 번만 넣으면 지금 신청 가능한 공고만 골라드려요.</span>
+<span class="afB">내 자격 판정받기 →</span>
+</a>
+
+<a class="afCard" href="/rental-types-guide.html">
+<span class="afI">📖</span>
+<span class="afT">유형별 차이</span>
+<span class="afD">행복주택·국민임대·매입임대·전세임대·장기전세, 소득 기준과 임대료·거주 기간을 표 하나로.</span>
+<span class="afB">임대주택 6종 비교 보기 →</span>
+</a>
+
+</div>
+</section>
+
 
 <section id="check"><h2>부비 진단 — 계약 전에, 훤히</h2><div class="grid">
 <a class="card" href="home-report.html" style="grid-column:1/-1;background:linear-gradient(120deg,#EFF6FF,#FAFCFF);border-color:#C9DFFB"><h3>🏠 집 종합 리포트 — 주소 하나로 세금·리스크 한눈에 ✨</h3><p>이 집 사도 될까? 취득세·보유세·전세 리스크를 한 장으로 정리하고 <b>신호등(🟢🟡🔴)으로 결론</b>까지. 정보만 보여주는 다른 앱과 달리, 부비는 계산하고 결론을 내드려요.</p></a>
