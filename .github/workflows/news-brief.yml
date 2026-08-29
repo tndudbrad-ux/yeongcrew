@@ -1,0 +1,55 @@
+name: 부비 브리핑 갱신
+
+# 매일 아침 홈 브리핑을 다시 쓴다.
+# 실패해도 기존 브리핑이 남아 있어 홈이 비지 않는다.
+on:
+  schedule:
+    - cron: "40 21 * * *"   # UTC 21:40 = KST 06:40
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: boobi-brief
+  cancel-in-progress: false
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 브리핑 생성
+        run: node build-news-brief.mjs
+
+      - name: 검증
+        run: |
+          set -e
+          node -e "
+            const fs=require('fs');
+            const h=fs.readFileSync('index.html','utf-8');
+            if(!h.includes('<!-- boobi-brief start -->')) throw new Error('브리핑 블록 없음');
+            if(!h.trimEnd().endsWith('</html>')) throw new Error('index.html 손상');
+            const b=JSON.parse(fs.readFileSync('news-brief.json','utf-8'));
+            if(!b.brief || b.brief.length<80) throw new Error('브리핑 본문 이상');
+            console.log('검증 통과:', b.date, b.brief.length+'자');
+          "
+
+      - name: 커밋
+        run: |
+          git config user.name  "boobi-bot"
+          git config user.email "boobi-bot@users.noreply.github.com"
+          git pull --rebase origin main || true
+          git add index.html news-brief.json
+          if git diff --staged --quiet; then
+            echo "변경 없음"
+          else
+            git commit -m "chore: 부비 브리핑 갱신 ($(date -u -d '+9 hours' +%Y-%m-%d))"
+            git push
+          fi
