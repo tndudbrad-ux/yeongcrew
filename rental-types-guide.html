@@ -48,6 +48,14 @@ article.post ul{margin:0 0 14px 4px;font-size:1rem;list-style:none}
 article.post li{margin-bottom:8px;padding-left:20px;position:relative}
 article.post li::before{content:"·";position:absolute;left:6px;color:var(--teal);font-weight:700}
 table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:.86rem;display:block;overflow-x:auto}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0 6px;border-radius:14px;border:1px solid var(--line);background:#fff}
+.tscroll table{display:table;width:100%;min-width:660px;margin:0;font-size:.87rem}
+.tscroll th,.tscroll td{padding:11px 12px;line-height:1.55;word-break:keep-all}
+.tscroll th:first-child,.tscroll td:first-child{white-space:nowrap;position:sticky;left:0;background:#fff;z-index:1;border-right:1px solid var(--line);font-weight:700}
+.tscroll th:first-child{background:#EAF3FE}
+.tscroll tbody tr:last-child td{border-bottom:none}
+.tHint{font-size:.79rem;color:#8AA5A2;margin:0 0 14px;display:none}
+@media(max-width:700px){.tHint{display:block}}
 th{background:#EAF3FE;color:#1F5FAF;padding:10px 8px;font-weight:500;white-space:nowrap;text-align:left}
 td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
 .tip{background:#EAFAF8;border:1px solid #BFE9E6;border-radius:12px;padding:14px 16px;font-size:.95rem;margin:16px 0}
@@ -86,6 +94,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 </div>
 
 <h2>한 표로 비교</h2>
+<div class="tscroll">
 <table>
 <thead><tr><th>유형</th><th>주 대상</th><th>소득 기준</th><th>임대료</th><th>최대 거주</th></tr></thead>
 <tbody>
@@ -97,6 +106,8 @@ footer a{color:#B9DCD9;margin:0 8px}
 <tr><td><b>장기전세</b></td><td>무주택 중산층(서울 SH)</td><td>월평균 150% 이하</td><td>주변 전세가 80% 수준 보증금</td><td>최대 20년</td></tr>
 </tbody>
 </table>
+</div>
+<p class="tHint">← 표를 옆으로 밀어서 나머지 항목을 볼 수 있어요</p>
 <p style="font-size:.85rem;color:#547471">※ "월평균"은 <b>전년도 도시근로자 가구원수별 월평균소득</b> 기준이에요. 유형·순위·지역·공고마다 세부 기준이 달라지니 최종 확인은 반드시 모집공고문으로 하세요.</p>
 
 <h2>헷갈리는 이름들 — 사실 같은 집이에요</h2>
