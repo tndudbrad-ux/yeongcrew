@@ -295,7 +295,7 @@ function llmAnswerHTTP(t, attempt, ty){
    bot('앗, AI 답변 서버 연결이 잠시 원활하지 않네요 🙏\n기다리시게 하지 않을게요 — 부비가 바로 아는 내용부터 안내해드릴게요!');
    ruleAnswer(t);
    var c=el('div','hwbChips',null);
-   var b=el('button','','🤖 AI 상세 답변 다시 받기 — "'+(t.length>14?t.slice(0,14)+'…':t)+'"');
+   var b=el('button','','<img src="/boobi-ring-3d.png" alt="" style="width:1.05em;height:1.05em;object-fit:contain;vertical-align:-.18em;margin-right:.35em;filter:drop-shadow(0 2px 5px rgba(42,193,188,.45))">AI 상세 답변 다시 받기 — "'+escapeHtml(t.length>14?t.slice(0,14)+'…':t)+'"');
    b.onclick=function(){ c.remove(); llmAnswer(t); };
    c.appendChild(b); body.appendChild(c); scrollDown();
  });

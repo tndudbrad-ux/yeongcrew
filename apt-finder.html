@@ -151,6 +151,20 @@ input[type=range].bs::-webkit-slider-thumb{-webkit-appearance:none;width:26px;he
 .df.u{color:#1E9E7E;background:#E8F8F3}.df.o{color:#C4453F;background:#FDEDED}.df.f{color:var(--teal);background:#E5F8F6}
 .vb{font-size:.66rem;font-weight:700;color:#9A6B00;background:#FFF3D6;padding:2px 6px;border-radius:5px}
 .vb.offi{color:#3B5BDB;background:#E7ECFD}
+/* 정렬 전환 버튼 — 흰 글래스 알약 + 민트·블루 글로우 */
+.sortBtn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:999px;cursor:pointer;font-family:inherit;
+ font-size:.79rem;font-weight:700;color:#2A7DE8;white-space:nowrap;letter-spacing:-.01em;
+ background:
+  radial-gradient(130% 180% at 100% -30%,rgba(61,139,253,.20),transparent 62%),
+  radial-gradient(130% 180% at 0% 130%,rgba(42,193,188,.22),transparent 62%),
+  linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,255,255,.80));
+ border:1.5px solid rgba(255,255,255,.95);
+ box-shadow:0 4px 14px rgba(13,42,41,.09),inset 0 1px 0 #fff;
+ transition:transform .12s ease-out,box-shadow .15s}
+.sortBtn:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(61,139,253,.18),inset 0 1px 0 #fff}
+.sortBtn:active{transform:scale(.97)}
+.sortBtn .ic{font-size:.9em;opacity:.75;line-height:1}
+@media(prefers-reduced-motion:reduce){.sortBtn{transition:none}}
 .tabs2{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 10px}
 .tabs2 button{font-size:.82rem;font-weight:500;padding:7px 12px;border-radius:99px;border:1.5px solid var(--line);background:#fff;color:var(--sub);cursor:pointer;font-family:inherit}
 .tabs2 button.on{background:linear-gradient(100deg,#2AC1BC,#3B82F6);border-color:transparent;color:#fff;font-weight:600;
@@ -890,7 +904,8 @@ function renderFinder(){
    +'<div class="tabs2">'+TYPES.map(function(t){return '<button class="'+(UI.type===t.k?'on':'')+'" onclick="UI.type='+(t.k?"'"+t.k+"'":'null')+';renderFinder()">'+t.t+'</button>';}).join('')+'</div>'
    +'<div style="display:flex;justify-content:space-between;align-items:center;margin:10px 0 10px">'
    +'<div style="font-size:.85rem;font-weight:500;color:var(--sub)">'+where+' · <b style="color:var(--forest)">'+rows.length+'</b>개 단지</div>'
-   +'<button class="tabs2" style="display:inline-block;margin:0"><span style="font-size:.78rem;font-weight:500;color:var(--sub);border:1.5px solid var(--line);padding:6px 10px;border-radius:9px;cursor:pointer" onclick="UI.sort=(UI.sort+1)%3;renderFinder()">'+(ranked?'부비 추천순':SORTS[UI.sort].t)+'</span></button></div>';
+   +'<button type="button" class="sortBtn" data-nogate="1" onclick="UI.sort=(UI.sort+1)%3;renderFinder()">'
+   +'<span class="ic">⇅</span>'+(ranked?'부비 추천순':SORTS[UI.sort].t)+'</button></div>';
   if(!rows.length){
     h+='<div style="text-align:center;padding:34px 12px;color:var(--sub);font-size:.9rem">'
       +'이 예산대에 '+where+' 실거래가 없어요.<br>예산을 조절하거나 유형을 넓혀보세요.<br>'
