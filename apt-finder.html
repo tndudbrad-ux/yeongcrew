@@ -1433,6 +1433,67 @@ document.addEventListener('bb-premium',function(e){
   /* 진입 라우팅: ?mode=buy, #buy, 또는 예산 파라미터(자산진단 등 외부 링크)면 바로 매매로 */
   var qs=location.search;
   if(/[?&]mode=buy/.test(qs) || location.hash==='#buy' || /[?&](cash|income)=/.test(qs)) showBuy(false);
+  window.__bbShowBuy=showBuy;
+})();
+
+/* ══════ 답변 보존 — 결제하러 나갔다 돌아와도 처음부터 다시 안 하게 ══════
+   결과가 나온 시점의 입력값·선택지를 저장해두고, ?paid=1 / ?restore=1 로
+   돌아오면 그대로 복원해서 결과 화면까지 자동으로 다시 만든다. */
+(function(){
+  var KEY='bbAptState', MAXAGE=7*864e5;
+  function snap(){
+    try{
+      var s={ts:Date.now(),inputs:{},segs:{},purpose:window.__PURPOSE||'',
+             prios:(window.__PRIOS||[]).slice(),idx:UI.idx,type:UI.type,sort:UI.sort};
+      [].forEach.call(document.querySelectorAll('input[id],select[id]'),function(el){
+        if(el.type==='checkbox'||el.type==='radio') s.inputs[el.id]=el.checked;
+        else if(el.type!=='range') s.inputs[el.id]=el.value;
+      });
+      [].forEach.call(document.querySelectorAll('.seg[id]'),function(sg){
+        var on=sg.querySelector('button.on'); if(on) s.segs[sg.id]=on.dataset.v;
+      });
+      localStorage.setItem(KEY,JSON.stringify(s));
+    }catch(e){}
+  }
+  function restore(){
+    var s=null;
+    try{ s=JSON.parse(localStorage.getItem(KEY)||'null'); }catch(e){}
+    if(!s||!s.ts||Date.now()-s.ts>MAXAGE) return false;
+    try{
+      Object.keys(s.inputs||{}).forEach(function(id){
+        var el=document.getElementById(id); if(!el) return;
+        if(el.type==='checkbox'||el.type==='radio') el.checked=!!s.inputs[id]; else el.value=s.inputs[id];
+      });
+      Object.keys(s.segs||{}).forEach(function(id){
+        var sg=document.getElementById(id); if(!sg) return;
+        [].forEach.call(sg.querySelectorAll('button'),function(b){
+          if(b.dataset.v===s.segs[id]) b.classList.add('on'); else b.classList.remove('on');
+        });
+      });
+      window.__PURPOSE=s.purpose||''; window.__PRIOS=s.prios||[];
+      if(typeof UI==='object'){ UI.idx=s.idx||0; if(s.type!==undefined) UI.type=s.type; UI.sort=s.sort||0; }
+      return !!(document.getElementById('fCash')||{}).value;
+    }catch(e){ return false; }
+  }
+  window.__bbSnapApt=snap; window.__bbRestoreApt=restore;
+
+  /* 결과가 만들어질 때마다 저장 */
+  var orig=window.calcBudgetNow;
+  if(typeof orig==='function'){
+    window.calcBudgetNow=function(){ var r=orig.apply(this,arguments); setTimeout(snap,0); return r; };
+  }
+
+  /* 결제 후 복귀(?paid=1) 또는 명시적 복원(?restore=1) */
+  if(!/[?&](paid=1|restore=1)/.test(location.search)) return;
+  var tries=0;
+  (function boot(){
+    if(typeof window.calcBudgetNow!=='function'||!document.getElementById('fCash')){
+      if(tries++<40) return setTimeout(boot,150); return;
+    }
+    if(!restore()) return;
+    if(window.__bbShowBuy) window.__bbShowBuy(false);
+    try{ window.calcBudgetNow(); }catch(e){}
+  })();
 })();
 </script>
 </body>

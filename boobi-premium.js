@@ -18,7 +18,8 @@ var CFG = window.BB_PREMIUM_CFG || {};
 /* ⚠️ 래피드 상품 주소가 정해지면 이 한 줄만 바꾸면 사이트 전체에 반영됨.
    비어 있으면 결제 버튼이 "준비 중"으로 표시되고 링크는 걸리지 않는다. */
 var BUY_URL = CFG.buyUrl || '';
-var PRICE   = CFG.price  || 0;
+var PRICE   = CFG.price  || 2900;    /* 실제 결제 금액(할인가) */
+var LIST    = CFG.list   || 9900;    /* 정가 — 취소선으로 함께 노출. 0이면 숨김 */
 var NAME    = CFG.name   || '부비 프리미엄';
 var API     = window.HW_AUTH_API || 'https://boobi-auth.tndud-brad.workers.dev';
 
@@ -108,7 +109,9 @@ function wall(opt) {
   var unit = opt.unit || '개';
   var title = opt.title || (n ? '나머지 ' + n + unit + '는 프리미엄에서 볼 수 있어요' : '전체 결과는 프리미엄에서 볼 수 있어요');
   var desc = opt.desc || '한 번 결제하면 아파트 찾기 전체 목록은 물론<br>부비의 모든 유료 기능이 계속 열려요.';
-  var priceLine = PRICE ? '<div class="bbwPrice"><span class="num">' + won(PRICE) + '</span><span class="vat">1회 결제 · 계속 이용</span></div>' : '';
+  var priceLine = PRICE ? '<div class="bbwPrice">'
+    + (LIST > PRICE ? '<span class="was">' + won(LIST) + '</span>' : '')
+    + '<span class="num">' + won(PRICE) + '</span><span class="vat">1회 결제 · 계속 이용</span></div>' : '';
   var btn = BUY_URL
     ? '<button class="bbwBuy" type="button" data-nogate="1" onclick="bbPremium.buy()">' + (PRICE ? won(PRICE) + '으로 전체 보기' : '전체 보기') + '</button>'
     : '<button class="bbwBuy" type="button" data-nogate="1" disabled style="opacity:.5;cursor:not-allowed">결제 기능 준비 중이에요</button>';
@@ -150,6 +153,8 @@ css.textContent =
 '.bbWall p{font-size:.89rem;color:#547471;line-height:1.6;word-break:keep-all;margin-bottom:16px}' +
 '.bbwPrice{display:flex;align-items:baseline;justify-content:center;gap:9px;margin-bottom:14px;flex-wrap:wrap}' +
 '.bbwPrice .num{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}' +
+'.bbwPrice .was{font-size:1rem;color:#8AA5A2;text-decoration:line-through;text-decoration-thickness:1.5px}' +
+'.bbwPrice .num{text-decoration:none}' +
 '.bbwPrice .vat{font-size:.8rem;color:#8AA5A2}' +
 '.bbwBuy{display:block;width:100%;max-width:300px;margin:0 auto;padding:14px 22px;border:none;border-radius:999px;cursor:pointer;font-family:inherit;font-size:1rem;font-weight:800;color:#fff;white-space:nowrap;' +
  'background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);box-shadow:0 8px 22px rgba(61,139,253,.3);transition:transform .12s ease-out}' +
@@ -165,7 +170,7 @@ document.head.appendChild(css);
 
 window.bbPremium = { check: check, is: function () { return state === true; }, wall: wall,
   buy: buy, checkout: checkout, backTo: backTo, claim: claim, askClaim: askClaim,
-  cfg: function () { return { buyUrl: BUY_URL, price: PRICE, name: NAME }; } };
+  cfg: function () { return { buyUrl: BUY_URL, price: PRICE, list: LIST, name: NAME }; } };
 
 /* 로그인 상태가 정해지면 자동으로 한 번 확인 */
 document.addEventListener('hwon-auth', function (e) {
