@@ -1,9 +1,84 @@
 {
-"updatedAt": "2026-08-13T15:30:00+09:00",
-"note": "부비가 직접 선별한 확정차익·주목 줍줍. 매일 자동 갱신되는 목록과 별도로 관리됩니다. 안전마진은 부비 자체 판단 기준입니다.",
-"items": [
-{"id":"feat-songpa-lottecastle","type":"무순위","name":"송파 시그니처 롯데캐슬 (불법행위 재공급)","region":"서울","addr":"서울특별시 송파구 거여동 181, 202번지 일원","noticeDate":"2026-08-10","rcritStart":"2026-08-18","rcritEnd":"2026-08-18","winnerDate":"2026-08-21","units":1,"url":"https://www.applyhome.co.kr/ai/aia/selectAPTRemndrLttotPblancListView.do","hot":true,"margin":"안전마진 10억+","note":"84C 105동 2904호(로얄층) 1세대 · 서울 무주택세대주 한정 · 분양가 10억 1,255만(옵션 포함) · 최근 84㎡ 실거래 21억(국토부 7월) · 재당첨제한 10년 · 거주의무 3년 · 입주 5년차 단지라 잔금 후 바로 입주"},
-{"id":"feat-hillstate-chowol-2bl","type":"무순위","name":"힐스테이트 초월역 2BL (불법행위 재공급)","region":"경기","addr":"경기도 광주시 초월읍 쌍동리 일원","noticeDate":"2026-08-10","rcritStart":"2026-08-18","rcritEnd":"2026-08-18","winnerDate":"2026-08-21","units":1,"url":"https://www.applyhome.co.kr/ai/aia/selectAPTRemndrLttotPblancListView.do","note":"84A 1세대 · 경기 광주시 거주 무주택세대구성원 한정 · 분양가 5억 4,770만(발코니 확장 198만 별도) · 계약금 10%+잔금 90%, 중도금 없음 · 청약통장 무관 · 전매제한 도과·거주의무·재당첨제한 없음 · 계약 8/28"},
-{"id":"feat-edps-gangdong","type":"무순위","name":"e편한세상 강동 프레스티지원 (불법행위 재공급)","region":"서울","addr":"서울특별시 강동구 올림픽로78길 37","noticeDate":"2026-07-22","rcritStart":"2026-07-27","rcritEnd":"2026-07-27","winnerDate":"2026-07-31","units":1,"url":"https://www.applyhome.co.kr/ai/aia/selectAPTRemndrLttotPblancListView.do","hot":true,"margin":"안전마진 5억+","note":"노부모부양 특공 1세대 · 서울 무주택세대주 한정 · 분양가 13.7억(옵션 포함)"}
-]
+ "updatedAt": "2026-08-13T15:30:00+09:00",
+ "note": "부비가 직접 선별한 확정차익·주목 줍줍. 매일 자동 갱신되는 목록과 별도로 관리됩니다. 안전마진은 부비 자체 판단 기준입니다.",
+ "items": [
+  {
+   "id": "feat-sejong-hanshin-reserve2",
+   "type": "무순위",
+   "name": "세종 한신더휴 리저브Ⅱ(행정중심복합도시 1-5생활권 H5블록) [한뜰마을4단지]",
+   "region": "세종",
+   "addr": "세종특별자치시 다솜1로 9 (어진동)",
+   "noticeDate": "2026-08-28",
+   "rcritStart": "2026-09-02",
+   "rcritEnd": "2026-09-02",
+   "winnerDate": "2026-09-07",
+   "units": 1,
+   "url": "https://www.applyhome.co.kr/ai/aia/selectAPTRemndrLttotPblancDetailView.do?houseManageNo=2026930029&pblancNo=2026930029",
+   "hot": true,
+   "margin": "안전마진 3억+",
+   "note": "84B 404동 1004호 1세대 · 신혼특공 취소분: 세종 거주 무주택세대구성원+혼인 7년 이내+소득(외벌이140%·맞벌이160%) 또는 부동산자산 3.31억 이하 · 분양가 3억 9,200만(발코니 1,200만 별도) · 같은 단지 84 실거래 7억 후반 · 계약금 20%+잔금 80%(계약 후 60일) · 재당첨제한 10년 · 2022년 준공 즉시입주 · 부비 분석: boobi.ai.kr/jupjup-sejong-hanshin.html"
+  },
+  {
+   "id": "feat-geomdan-pungyeongchae4",
+   "type": "무순위",
+   "name": "제일풍경채 검단Ⅳ (불법행위 재공급)",
+   "region": "인천",
+   "addr": "인천광역시 검단구 불로동 검단신도시 AA22블록",
+   "noticeDate": "2026-08-28",
+   "rcritStart": "2026-09-02",
+   "rcritEnd": "2026-09-02",
+   "winnerDate": "2026-09-07",
+   "units": 1,
+   "url": "https://www.applyhome.co.kr/ai/aia/selectAPTRemndrLttotPblancDetailView.do?houseManageNo=2026930030&pblancNo=2026930030",
+   "hot": true,
+   "margin": "안전마진 2억 안팎",
+   "note": "84㎡ 4602동 1502호 1세대 · 인천 거주 무주택세대주, 청약통장 무관 · 분양가 5억 4,900만(발코니·옵션 약 1,800만 별도) · 검단 역세권 신축 84는 7억~8억대(단지별 편차) · 계약 9/11, 중도금 60% 10/26, 잔금 30% 입주 시 · 재당첨제한 10년·전매 3년 · 입주 2027년 2월 · 부비 분석: boobi.ai.kr/jupjup-geomdan-pungyeongchae.html"
+  },
+  {
+   "id": "feat-songpa-lottecastle",
+   "type": "무순위",
+   "name": "송파 시그니처 롯데캐슬 (불법행위 재공급)",
+   "region": "서울",
+   "addr": "서울특별시 송파구 거여동 181, 202번지 일원",
+   "noticeDate": "2026-08-10",
+   "rcritStart": "2026-08-18",
+   "rcritEnd": "2026-08-18",
+   "winnerDate": "2026-08-21",
+   "units": 1,
+   "url": "https://www.applyhome.co.kr/ai/aia/selectAPTRemndrLttotPblancListView.do",
+   "hot": true,
+   "margin": "안전마진 10억+",
+   "note": "84C 105동 2904호(로얄층) 1세대 · 서울 무주택세대주 한정 · 분양가 10억 1,255만(옵션 포함) · 최근 84㎡ 실거래 21억(국토부 7월) · 재당첨제한 10년 · 거주의무 3년 · 입주 5년차 단지라 잔금 후 바로 입주"
+  },
+  {
+   "id": "feat-hillstate-chowol-2bl",
+   "type": "무순위",
+   "name": "힐스테이트 초월역 2BL (불법행위 재공급)",
+   "region": "경기",
+   "addr": "경기도 광주시 초월읍 쌍동리 일원",
+   "noticeDate": "2026-08-10",
+   "rcritStart": "2026-08-18",
+   "rcritEnd": "2026-08-18",
+   "winnerDate": "2026-08-21",
+   "units": 1,
+   "url": "https://www.applyhome.co.kr/ai/aia/selectAPTRemndrLttotPblancListView.do",
+   "note": "84A 1세대 · 경기 광주시 거주 무주택세대구성원 한정 · 분양가 5억 4,770만(발코니 확장 198만 별도) · 계약금 10%+잔금 90%, 중도금 없음 · 청약통장 무관 · 전매제한 도과·거주의무·재당첨제한 없음 · 계약 8/28"
+  },
+  {
+   "id": "feat-edps-gangdong",
+   "type": "무순위",
+   "name": "e편한세상 강동 프레스티지원 (불법행위 재공급)",
+   "region": "서울",
+   "addr": "서울특별시 강동구 올림픽로78길 37",
+   "noticeDate": "2026-07-22",
+   "rcritStart": "2026-07-27",
+   "rcritEnd": "2026-07-27",
+   "winnerDate": "2026-07-31",
+   "units": 1,
+   "url": "https://www.applyhome.co.kr/ai/aia/selectAPTRemndrLttotPblancListView.do",
+   "hot": true,
+   "margin": "안전마진 5억+",
+   "note": "노부모부양 특공 1세대 · 서울 무주택세대주 한정 · 분양가 13.7억(옵션 포함)"
+  }
+ ]
 }
