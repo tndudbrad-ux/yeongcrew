@@ -163,7 +163,7 @@ css.textContent =
 '.bbwNote{margin-top:12px;font-size:.76rem;color:#8AA5A2}.bbwNote a{color:#8AA5A2;text-decoration:underline}' +
 '.bbwMsg{margin-top:12px;font-size:.84rem;color:#2A7DE8;line-height:1.55}.bbwMsg a{color:#2A7DE8;text-decoration:underline}' +
 /* 페이월 뒤에 살짝 비치는 미리보기 줄 */
-'.bbTease{position:relative;max-height:150px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.5),transparent);mask-image:linear-gradient(180deg,rgba(0,0,0,.5),transparent);filter:blur(3px);pointer-events:none;user-select:none}' +
+'.bbTease{position:relative;max-height:118px;margin-bottom:-10px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.5),transparent);mask-image:linear-gradient(180deg,rgba(0,0,0,.5),transparent);filter:blur(3px);pointer-events:none;user-select:none}' +
 '@media(prefers-reduced-motion:reduce){.bbwBuy{transition:none}}' +
 '@media(prefers-reduced-transparency:reduce){.bbWall{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none}.bbTease{filter:none}}';
 document.head.appendChild(css);
