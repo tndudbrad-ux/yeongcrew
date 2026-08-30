@@ -154,6 +154,7 @@ var BOOBI_API='https://hwon-boobi.tndud-brad.workers.dev/chat';
 var HIST=[];
 function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function mdLite(s){
+ if(window.bbHumanize) s=bbHumanize(s);   /* 개발용 필드명이 화면에 나오지 않게 */
  s=escapeHtml(s);
  s=s.replace(/\[([^\]]+)\]\((\/[^)\s]+|https?:[^)\s]+)\)/g,'<a href="$2">$1</a>');
  s=s.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');

@@ -103,3 +103,24 @@ function initRates(){
 function boot(){ initReveal(); initCountUp(); initRates(); }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 })();
+
+/* ===== bbHumanize — AI 답변에 새어나온 개발용 필드명을 사람 말로 바꾼다 =====
+ * 초심자가 보는 화면이라 dealCount / buildYear 같은 코드 용어가 그대로 나오면 안 된다.
+ * 근본 해결은 워커 프롬프트(영문 필드명 금지)지만, 모델이 실수해도 화면엔 안 나오도록 여기서 한 번 더 거른다. */
+(function(){
+var MAP=[
+  [/\bdeal ?Count\b/gi,'거래'], [/\bdeal ?Amount\b/gi,'거래금액'], [/\bdeal ?Ym\b/gi,'거래월'],
+  [/\bdeal ?Date\b/gi,'거래일'], [/\bbuild ?Year\b/gi,'준공연도'], [/\bexcluUseAr\b/gi,'전용면적'],
+  [/\bumdNm\b/gi,'법정동'], [/\baptNm\b/gi,'단지명'], [/\boffiNm\b/gi,'오피스텔명'],
+  [/\bmonthly ?Rent\b/gi,'월세'], [/\bdeposit\b/gi,'보증금'],
+  [/\bltv ?R\b/gi,'LTV'], [/\bprice ?Man\b/gi,'가격'], [/\bbudget ?Man\b/gi,'예산'],
+  [/\bfloor\b(?=\s*\d)/gi,'층'], [/\barea\b(?=\s*\d)/gi,'전용면적']
+];
+window.bbHumanize=function(s){
+  if(typeof s!=='string'||!s) return s;
+  for(var i=0;i<MAP.length;i++) s=s.replace(MAP[i][0],MAP[i][1]);
+  /* 위 목록에 없는 camelCase 식별자가 숫자 앞에 붙어 나오면 지운다 (예: "someField 2건" → "2건") */
+  s=s.replace(/\b[a-z]+[A-Z][A-Za-z]*\s*(?=\d+\s*(건|개|층|원|만원|억))/g,'');
+  return s;
+};
+})();

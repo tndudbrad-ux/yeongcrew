@@ -681,6 +681,7 @@ function aptActions(name, dong){
    +'</div>';
 }
 function md(s){
+  if(window.bbHumanize) s=bbHumanize(s);   /* 개발용 필드명이 화면에 나오지 않게 */
   function conv(x){
     x=esc(x);
     x=x.replace(/\[([^\]]+)\]\((\/[^)\s]+|https?:[^)\s]+)\)/g,'<a href="$2">$1</a>');
