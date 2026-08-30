@@ -322,7 +322,8 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/+$/, '');
 
-    if (path === '/health') return new Response('ok');
+    /* 붙여넣은 코드가 최신인지 한눈에 확인하는 용도 — 코드를 바꾸면 이 숫자도 올린다 */
+    if (path === '/health') return new Response('ok v3 (kakao+latpeed-hmac)');
 
     const stateSecret = env.KAKAO_CLIENT_SECRET || env.KAKAO_REST_KEY || 'boobi';
 
