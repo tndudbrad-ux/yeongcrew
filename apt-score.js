@@ -65,6 +65,66 @@
     return ymd(r.zoneLast || r.zoneInit);
   }
 
+  /* ══ 조합원 지위 양도 제한 (도시 및 주거환경정비법 §39②) ══
+     투기과열지구에서는 사업이 일정 단계를 넘으면 조합원 지위를 넘겨받을 수 없다.
+       · 재건축 — 조합설립인가 이후
+       · 재개발 — 관리처분계획인가 이후
+     즉 "안전궤도에 오른 구역"일수록 애초에 살 수가 없다. 여기에 높은 점수를 주면
+     못 사는 물건을 1순위로 추천하게 된다. 점수보다 판정이 먼저다.
+
+     다만 시행령 §37에 지연 예외가 있고, 그건 우리가 가진 인가일로 판정된다.
+       ② 재건축 — 조합설립인가 후 3년 넘게 사업시행계획인가 미신청
+       ③ 사업시행계획인가 후 3년 넘게 미착공 (착공 전 양도)
+       ④ 착공 후 3년 넘게 미준공
+     세 예외 모두 "매도인이 그 물건을 3년 이상 계속 소유"를 함께 요구한다.
+     그건 매물마다 다르니 우리가 단정할 수 없다 — 반드시 조건부로 표기한다.
+     (1세대1주택 10년 보유·5년 거주 예외도 있으나 매도인 사정이라 판정 불가) */
+  function ymdToDate(v) {
+    var s = String(v || '').replace(/\D/g, '');
+    if (s.length < 6) return null;
+    var y = +s.slice(0, 2); y += (y > 60 ? 1900 : 2000);
+    var t = new Date(y, (+s.slice(2, 4) || 1) - 1, +s.slice(4, 6) || 1);
+    return isNaN(t.getTime()) ? null : t;
+  }
+  function yearsSince(d, now) { return d ? (now - d) / (365.25 * 24 * 3600 * 1000) : null; }
+
+  /* 재건축 = 조합설립(3), 재개발 = 관리처분(5). STAGE_ORDER의 랭크와 같은 축이다. */
+  function tradeStatus(r, regulated, now) {
+    if (!r) return null;
+    var rebuild = String(r.type || '').indexOf('재건축') >= 0;
+    var limit = rebuild ? 3 : 5;
+    var out = { rebuild: rebuild, stage: r.stage || '', date: stageDate(r), blocked: false, exception: null };
+    if (!regulated || stageRank(r.stage) < limit) return out;
+    out.blocked = true;
+    now = now || new Date();
+    var assoc = ymdToDate(r.assoc),
+        imp = ymdToDate(r.impLast || r.impInit),
+        con = ymdToDate(r.conStart);
+    if (con && yearsSince(con, now) >= 3) out.exception = '착공 후 3년 넘게 준공되지 않음';
+    else if (imp && !con && yearsSince(imp, now) >= 3) out.exception = '사업시행계획인가 후 3년 넘게 착공하지 않음';
+    else if (rebuild && assoc && !imp && yearsSince(assoc, now) >= 3) out.exception = '조합설립인가 후 3년 넘게 사업시행계획인가를 신청하지 않음';
+    return out;
+  }
+
+  /* 카드에 항상 띄우는 고지. 유저가 '정비사업'을 안 골라도 보여준다 —
+     몇 년 뒤 이주해야 할 집인지는 오히려 실거주자에게 더 필요한 정보다.
+     점수에 넣는 것과 화면에 보여주는 것은 별개다. */
+  function redevNotice(d, C) {
+    var m = C.redev && C.redev[d.id];
+    if (!m || !m.exact) return null;
+    var t = tradeStatus(m.exact, C.regulated, C.now);
+    if (!t) return null;
+    var head = m.exact.nm + ' ' + (t.stage || '정비사업') + (t.date ? '(' + t.date + ')' : '') + ' 구역에 포함돼요';
+    if (!t.blocked) return { level: 'info', text: head };
+    if (t.exception) {
+      return { level: 'warn', text: head + ' · 투기과열지구라 조합원 지위 양도가 원칙적으로 제한되지만, '
+        + t.exception + '이라 예외에 해당할 수 있어요(매도인이 3년 이상 계속 보유한 경우). 조합에 꼭 확인하세요.' };
+    }
+    return { level: 'block', text: head + ' · 투기과열지구에서는 '
+      + (t.rebuild ? '조합설립인가' : '관리처분계획인가') + ' 이후 조합원 지위 양도가 제한돼 매수가 어려울 수 있어요. '
+      + '예외 사유 해당 여부는 조합에 확인하세요.' };
+  }
+
   /* ══ 시군구 전체 실거래에서 단지·동 단위 통계를 만든다 ══
      후보군만 보면 "거래가 활발한지"를 알 수 없어서, 파일 전체를 쓴다. */
   function buildStats(all) {
@@ -172,12 +232,22 @@
       raw: function (d, C) {
         var m = C.redev[d.id];
         if (!m) return 0;
+        /* 살 수 없는 물건에 최고점을 주지 않는다 */
+        if (m.exact) {
+          var t = tradeStatus(m.exact, C.regulated, C.now);
+          if (t && t.blocked && !t.exception) return 0;
+        }
         return m.rank * 10 + Math.min(m.n, 8) + (m.exact ? 30 : 0);
       },
       why: function (d, C) {
         var m = C.redev[d.id]; if (!m) return null;
         if (m.exact) {
-          return m.exact.nm + ' ' + (m.exact.stage || '정비사업') + (stageDate(m.exact) ? '(' + stageDate(m.exact) + ')' : '') + ' — 이 단지가 구역에 포함돼요';
+          var t = tradeStatus(m.exact, C.regulated, C.now);
+          /* 매수가 막힌 구역은 추천 근거로 내세우지 않는다. 사실 고지는 redevNotice가 따로 한다. */
+          if (t && t.blocked && !t.exception) return null;
+          return m.exact.nm + ' ' + (m.exact.stage || '정비사업') + (stageDate(m.exact) ? '(' + stageDate(m.exact) + ')' : '')
+            + ' — 이 단지가 구역에 포함돼요'
+            + (t && t.exception ? ' · 양도 제한 예외에 해당할 수 있어요(' + t.exception + ')' : '');
         }
         return d.dong + ' 정비사업 ' + m.n + '곳 · 가장 앞선 단계 ' + (m.best.stage || '진행 중') + (m.date ? '(' + m.date + ')' : '');
       }
@@ -257,6 +327,8 @@
     var C = {
       stats: buildStats(opt.all && opt.all.length ? opt.all : list),
       budget: opt.budget || 0,
+      regulated: !!opt.regulated,   /* 투기과열지구 여부 — 양도 제한 판정에 쓴다 */
+      now: opt.now || new Date(),
       redev: {}
     };
     var rr = opt.redevRows || [];
@@ -321,6 +393,7 @@
       o._fit = Math.round(fit[i]);
       o._why = s.why;
       o._bars = s.bars;
+      o._notice = redevNotice(s.d, C);   /* 우선순위 선택과 무관하게 항상 붙는다 */
       return o;
     });
   }
@@ -328,6 +401,7 @@
   root.AptScore = {
     FACTORS: FACTORS, PENDING: PENDING, INVEST_W: INVEST_W,
     brandOf: brandOf, stageRank: stageRank, stageDate: stageDate,
+    tradeStatus: tradeStatus, redevNotice: redevNotice,
     redevMatch: redevMatch, buildStats: buildStats, rank: rank
   };
 })(typeof window !== 'undefined' ? window : this);
