@@ -100,6 +100,31 @@ main{padding:26px 0 60px}
 button.act{cursor:pointer;font-family:inherit;line-height:inherit}
 .acts.done .act{font-size:.78rem;padding:6px 11px;font-weight:600}
 @media(max-width:520px){.btns{flex-direction:column}.act{text-align:center}}
+/* 공고 유형별 자격 안내 모달 — 흰 글래스 + 민트·블루 글로우 */
+#cyQual{position:fixed;inset:0;z-index:9995;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(240,250,249,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+#cyQual.open{display:flex}
+#cyQual .qbox{position:relative;overflow:hidden;isolation:isolate;clip-path:inset(0 round 22px);width:100%;max-width:420px;max-height:86vh;overflow-y:auto;padding:28px 24px 24px;border-radius:22px;color:#0D2A29;
+ background:radial-gradient(120% 150% at 95% -15%,rgba(61,139,253,.16),transparent 55%),radial-gradient(120% 150% at -8% 115%,rgba(42,193,188,.18),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,255,255,.82));
+ border:1.5px solid rgba(255,255,255,.95);box-shadow:0 24px 70px rgba(13,42,41,.2),inset 0 1px 0 #fff;
+ animation:qPop .34s cubic-bezier(.16,1,.3,1)}
+@keyframes qPop{from{opacity:0;transform:scale(.95) translateY(8px)}to{opacity:1;transform:none}}
+#cyQual .qbadge{display:inline-block;font-size:.74rem;font-weight:800;padding:5px 11px;border-radius:999px;background:linear-gradient(115deg,#26C6B9,#3D8BFD);color:#fff;letter-spacing:-.01em}
+#cyQual h3{font-size:1.18rem;font-weight:800;letter-spacing:-.025em;margin:11px 0 4px;word-break:keep-all;line-height:1.35}
+#cyQual .qname{font-size:.83rem;color:#8AA5A2;margin-bottom:14px;word-break:keep-all}
+#cyQual ul{list-style:none;margin:0 0 6px}
+#cyQual li{position:relative;padding:9px 0 9px 26px;font-size:.9rem;line-height:1.6;color:#0D2A29;word-break:keep-all;border-bottom:1px solid rgba(220,238,236,.8)}
+#cyQual li:last-child{border-bottom:none}
+#cyQual li b{color:#2A7DE8}
+#cyQual li::before{content:attr(data-ic);position:absolute;left:0;top:9px;font-size:.95rem}
+#cyQual .qwarn{margin-top:12px;padding:11px 13px;border-radius:12px;background:rgba(229,72,77,.07);border:1px solid rgba(229,72,77,.22);font-size:.84rem;line-height:1.55;color:#9B2C2F;word-break:keep-all}
+#cyQual .qacts{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+#cyQual .qgo{display:flex;align-items:center;justify-content:center;padding:13px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:800;color:#fff;text-decoration:none;
+ background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);box-shadow:0 8px 20px rgba(61,139,253,.28);transition:transform .12s ease-out}
+#cyQual .qgo:active{transform:scale(.97)}
+#cyQual .qsub{display:flex;align-items:center;justify-content:center;padding:12px;border-radius:999px;text-decoration:none;font-size:.9rem;font-weight:700;color:#2A7DE8;background:rgba(255,255,255,.9);border:1.5px solid rgba(255,255,255,.95);box-shadow:0 4px 12px rgba(13,42,41,.07)}
+#cyQual .qclose{display:block;margin:12px auto 0;background:none;border:none;font-size:.83rem;color:#8AA5A2;cursor:pointer;font-family:inherit}
+@media(prefers-reduced-motion:reduce){#cyQual .qbox{animation:none}#cyQual .qgo{transition:none}}
+@media(prefers-reduced-transparency:reduce){#cyQual{background:rgba(240,250,249,.96);backdrop-filter:none}#cyQual .qbox{background:#fff;backdrop-filter:none}}
 .tag{display:inline-block;font-size:.68rem;font-weight:800;padding:2px 7px;border-radius:20px;margin-right:6px;vertical-align:middle}
 .tag.holiday{background:#FDECEC;color:var(--cHoli)}
 .tag.rate{background:#EEEEFB;color:var(--cRate)}
@@ -307,7 +332,95 @@ return '<div class="acts">'+badge+'<span class="ask">'+ask+'</span><div class="b
 return '<div class="acts done"><span class="st done">마감</span><span class="ask">접수가 마감됐어요. 다음 회차를 노려보세요.</span>'+moreBtn+'</div>';
 }
 
+/* ── 공고 유형별 "내가 넣을 수 있나" 안내 ──
+ * 무순위라고 다 아무나 넣을 수 있는 게 아니다.
+ *  · 임의공급        : 만 19세 이상이면 유주택자도 대부분 가능
+ *  · 무순위 사후접수 : 2025.6.10부터 세대 전원 무주택. 거주요건은 지자체장이 정함
+ *  · 불법행위 재공급 : 해당 시·도 거주 + 무주택 세대주만. 재당첨 제한 10년
+ *  · 일반 APT        : 청약통장·거주기간·특공 요건 → 자가진단 툴로 보낸다
+ * 요건은 공고마다 다를 수 있으므로 모든 안내는 '공고문 원문 확인'으로 끝낸다. */
+function qualKind(e){
+var n=(e.fullName||'')+' '+(e.hnote||''), t=(e.htype||'');
+if(/불법\s*행위|계약\s*취소|취소\s*주택|재공급/.test(n)) return 'cancel';
+if(/임의\s*공급/.test(n)) return 'free';
+if(t.indexOf('무순위')>=0 || /무순위|줍줍|잔여\s*세대/.test(n)) return 'muunwi';
+if(/오피스텔/.test(t)) return 'offi';
+return 'apt';
+}
+var QUAL={
+cancel:{badge:'불법행위 재공급',title:'조건이 까다로운 공고예요',
+ li:[['🏠','<b>해당 시·도에 살고 있는 무주택 세대주</b>만 넣을 수 있어요. 세대원 중 한 명이라도 집이 있으면 안 됩니다.'],
+     ['💳','청약통장은 <b>필요 없어요.</b>'],
+     ['⏳','당첨되면 <b>재당첨 제한 10년</b>이 걸립니다. 다른 청약을 노리고 있다면 신중히.']],
+ warn:'위장전입·불법전매로 계약이 취소된 물량이라 자격 심사가 특히 엄격해요. 거주 기간 요건이 붙는 경우도 있으니 공고문을 꼭 보세요.',
+ sub:['/policy-finder.html','무주택·특공 자격이 헷갈리면 →']},
+free:{badge:'임의공급',title:'누구나 넣을 수 있어요!',
+ li:[['🙆','<b>만 19세 이상이면 신청 가능</b>해요. 집이 있어도 대부분 됩니다.'],
+     ['💳','청약통장 <b>필요 없고</b>, 청약 가점도 안 봐요.'],
+     ['🎯','재당첨 제한도 없어요. 부담 없이 넣어볼 만합니다.']],
+ warn:'다만 단지에 따라 거주지·주택수 조건을 따로 거는 경우가 있어요. 넣기 전에 공고문 자격 항목만 한 번 확인하세요.',
+ sub:null},
+muunwi:{badge:'무순위 (줍줍)',title:'무주택이면 넣을 수 있어요',
+ li:[['🏠','2025년 6월부터 <b>세대 전원이 무주택</b>이어야 신청할 수 있어요. 예전처럼 아무나 넣는 줍줍이 아닙니다.'],
+     ['📍','거주지역 요건은 <b>지자체가 공고마다 따로 정해요.</b> 해당 지역 거주자만 받는 곳도 있습니다.'],
+     ['💳','청약통장은 <b>필요 없어요.</b> 가점도 안 봅니다.'],
+     ['⏳','투기과열지구에서 당첨되면 재당첨 제한 10년이 붙어요.']],
+ warn:'거주요건이 있는지 없는지는 이 공고의 모집공고문에만 적혀 있어요. 신청 전에 꼭 확인하세요.',
+ sub:['/policy-finder.html','내가 무주택 요건에 맞는지 보기 →']},
+offi:{badge:'오피스텔',title:'대부분 누구나 넣을 수 있어요',
+ li:[['🙆','<b>만 19세 이상이면 신청 가능</b>해요. 주택 청약과 달리 무주택 조건이 없습니다.'],
+     ['💳','청약통장 <b>필요 없어요.</b>'],
+     ['⚠️','다만 주거용으로 쓰면 <b>주택 수에 포함</b>될 수 있어요. 취득세·양도세가 달라집니다.']],
+ warn:'100실 이상은 인터넷 청약, 그 미만은 현장 접수인 경우가 많아요. 접수 방법도 공고문에서 확인하세요.',
+ sub:['/acquisition-tax.html','취득세 먼저 계산해보기 →']},
+apt:{badge:'아파트 청약',title:'청약통장과 자격 조건을 봐야 해요',
+ li:[['💳','<b>청약통장이 필요해요.</b> 가입 기간과 예치금 기준을 채워야 신청할 수 있습니다.'],
+     ['📍','해당 지역에 <b>일정 기간 이상 살고 있어야</b> 하는 경우가 많아요.'],
+     ['👨‍👩‍👧','신혼·생애최초·다자녀·노부모 <b>특별공급은 요건이 각각 달라요.</b> 일반공급보다 경쟁이 덜한 경우도 많습니다.']],
+ warn:null,
+ sub:null}
+};
+function openQual(kind,name,url){
+var q=QUAL[kind]||QUAL.apt;
+var box=document.getElementById('cyQual');
+if(!box){
+ box=document.createElement('div'); box.id='cyQual';
+ document.body.appendChild(box);
+ box.addEventListener('click',function(ev){ if(ev.target===box||ev.target.classList.contains('qclose')) closeQual(); });
+}
+var lis=q.li.map(function(x){return '<li data-ic="'+x[0]+'">'+x[1]+'</li>';}).join('');
+var mainBtn = (kind==='apt')
+ ? '<a class="qgo" href="/policy-finder.html">내 특공 자격 진단하기</a>'
+ : (url? '<a class="qgo" href="'+esc(url)+'" target="_blank" rel="noopener">이 공고 자격 요건 확인 ↗</a>'
+       : '<a class="qgo" href="/cheongyak-board.html">진행 중인 공고 보기</a>');
+var subBtn = q.sub ? '<a class="qsub" href="'+q.sub[0]+'">'+q.sub[1]+'</a>' : '';
+var urlBtn = (kind!=='apt'||!url) ? '' : '<a class="qsub" href="'+esc(url)+'" target="_blank" rel="noopener">이 공고 원문 보기 ↗</a>';
+box.innerHTML='<div class="qbox" role="dialog" aria-modal="true">'
+ +'<span class="qbadge">'+q.badge+'</span>'
+ +'<h3>'+q.title+'</h3>'
+ +'<div class="qname">'+esc(name||'')+'</div>'
+ +'<ul>'+lis+'</ul>'
+ +(q.warn?'<div class="qwarn">⚠️ '+q.warn+'</div>':'')
+ +'<div class="qacts">'+mainBtn+subBtn+urlBtn+'</div>'
+ +'<button type="button" class="qclose">닫기</button></div>';
+box.classList.add('open');
+if(window.gtag){try{gtag('event','cheongyak_qual_open',{kind:kind});}catch(x){}}
+}
+function closeQual(){ var b=document.getElementById('cyQual'); if(b) b.classList.remove('open'); }
+document.addEventListener('click',function(ev){
+var b=ev.target.closest&&ev.target.closest('[data-cyqual]');
+if(!b) return;
+ev.preventDefault();
+openQual(b.getAttribute('data-cyqual'), b.getAttribute('data-cyname'), b.getAttribute('data-cyurl'));
+});
+document.addEventListener('keydown',function(ev){ if(ev.key==='Escape') closeQual(); });
+
 // 상태에 따른 액션 블록
+function qualBtnHTML(e){
+var k=qualKind(e);
+var label=(k==='apt')?'자격 되나 확인해보기':(k==='free'?'나도 넣을 수 있나?':'내가 넣을 수 있나?');
+return '<button type="button" class="act ghost" data-cyqual="'+k+'" data-cyname="'+esc(e.fullName||'')+'" data-cyurl="'+esc(e.url||'')+'">'+label+'</button>';
+}
 function actionHTML(e){
 var st=cheongyakState(e), apply=e.url||'https://www.applyhome.co.kr/';
 var ask, badge='', btns='';
@@ -316,12 +429,12 @@ var hotline=(e.hot&&e.margin)?'<div class="hotline">🔥 <b>확정차익 줍줍<
 if(st.s==='open'){
 badge='<span class="st open">접수 중</span>';
 ask=(st.days<=0?'오늘이 접수 마지막 날이에요.':'접수 마감까지 '+st.days+'일 남았어요.');
-btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+shareBtn+
+btns=qualBtnHTML(e)+shareBtn+
 '<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">청약홈에서 신청하기 ↗</a>';
 } else if(st.s==='soon'){
 badge='<span class="st soon">접수 예정</span>';
 ask='접수 시작까지 '+st.days+'일 남았어요.';
-btns='<a class="act ghost" href="/policy-finder.html">자격 되나 확인해보기</a>'+shareBtn+
+btns=qualBtnHTML(e)+shareBtn+
 '<a class="act go" href="'+esc(apply)+'" target="_blank" rel="noopener">공고 자세히 보기 ↗</a>';
 } else if(st.s==='wait'){
 badge='<span class="st wait">발표 대기</span>';
