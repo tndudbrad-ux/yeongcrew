@@ -17,10 +17,10 @@ if (window.bbPremium) return;
 var CFG = window.BB_PREMIUM_CFG || {};
 /* ⚠️ 래피드 상품 주소가 정해지면 이 한 줄만 바꾸면 사이트 전체에 반영됨.
    비어 있으면 결제 버튼이 "준비 중"으로 표시되고 링크는 걸리지 않는다. */
-var BUY_URL = CFG.buyUrl || '';
+var BUY_URL = CFG.buyUrl || 'https://www.latpeed.com/products/HQyuy';
 var PRICE   = CFG.price  || 2900;    /* 실제 결제 금액(할인가) */
 var LIST    = CFG.list   || 9900;    /* 정가 — 취소선으로 함께 노출. 0이면 숨김 */
-var NAME    = CFG.name   || '부비 프리미엄';
+var NAME    = CFG.name   || '맞춤형 아파트 AI리포트';   /* 래피드 상품명과 동일하게 */
 var API     = window.HW_AUTH_API || 'https://boobi-auth.tndud-brad.workers.dev';
 
 var state = null;          /* null=미확인, true/false=확인됨 */
