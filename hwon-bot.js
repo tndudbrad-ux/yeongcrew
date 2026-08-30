@@ -176,39 +176,121 @@ function botTyping(){
  },3500);
  return e;
 }
+/* ── 부비 웹 기능 카탈로그 ──────────────────────────────────────────
+   워커 SYS 프롬프트의 [부비 웹 기능 전체 목록]과 1:1로 맞춰서 관리할 것.
+   형식: [경로, 매칭 정규식, 버튼 라벨]
+   순서 = 우선순위. 구체적인 항목을 위에, 포괄적인 항목을 아래에 둔다. */
 var TOOLCTA=[
- ['/yield-calculator.html',/수익률|임대\s*수익/,'📈 임대수익 계산하러 가기'],
- ['/loan-calculator.html',/DSR|대출/i,'💰 대출·DSR 계산하러 가기'],
+ /* 체크리스트·현장 */
+ ['/auction-survey.html',/현장조사서|임장\s*(보고서|양식|폼|기록)|경매.*임장|임장.*경매/,'📝 임장 현장조사서 열기'],
+ ['/imjang-checklist.html',/임장|집\s*보러|매물\s*보러|현장\s*답사|보러\s*가|집\s*구경|단지\s*비교/,'📋 임장 체크리스트 열기'],
+ ['/repair-booking.html',/(하자|사전)\s*점검\s*(예약|대행|신청)|점검\s*업체/,'📅 하자점검 방문 예약하기'],
+ ['/rental-care.html',/사전\s*점검|입주\s*점검|하자\s*(점검|체크|보수)|담보기간/,'🔍 입주 사전점검 체크리스트'],
+ ['/repair-check.html',/수리\s*(책임|비용|의무)|누가\s*(고치|고쳐|부담|내|물어)|집주인.*(고쳐|고치)|하자\s*책임|고장.*(났|나서|누가)/,'🛠️ 수리 책임 진단하기'],
+ ['/interior-checklist.html',/인테리어|리모델링|견적서|공사\s*견적/,'🧾 인테리어 견적 체크리스트'],
+ ['/jangma-house-check.html',/장마|누수|곰팡이|침수|결로/,'🌧️ 장마철 집 점검 7가지'],
+ ['/jeonse-contract.html',/전세\s*계약\s*(전|시|할|체크|확인)|전세.*체크리스트/,'🛡️ 전세 계약 체크리스트'],
+ ['/auction-bid-checklist.html',/입찰\s*(준비|체크|당일|서류)|경매\s*입찰/,'⚖️ 경매 입찰 체크리스트'],
+ ['/auction-contract-check.html',/계약\s*체크리스트|계약서.*(확인|검토)|특약/,'📄 계약 체크리스트 열기'],
+ ['/model-house.html',/모델하우스|견본주택|분양\s*상담사|유닛\s*관람/,'🏢 모델하우스 호갱 방지 가이드'],
+ ['/moving-guide.html',/이사|잔금|입주\s*준비|전입신고|이삿짐|로드맵/,'📦 이사·잔금 로드맵 열기'],
+ /* AI 진단·자가진단 */
+ ['/apt-finder.html',/내\s*아파트\s*찾기|아파트\s*(추천|골라)|어디\s*(살|사야)|집\s*추천|예산.*(아파트|단지)/,'🏠 내 아파트 찾기 시작'],
+ ['/home-report.html',/종합\s*리포트|집\s*리포트|이\s*집\s*(사도|살까|어때)|주소.*리포트/,'🏠 집 종합 리포트 받기'],
+ ['/jeonse-safety-check.html',/등기부|전세\s*사기|전세사기|깡통|근저당|보증금.*(위험|안전|떼)/,'🛡️ 전세사기 정밀진단 하기'],
+ ['/contract-check.html',/계약\s*(셀프\s*)?검진|잘\s*계약|계약.*맞나|바가지|호구|월세.*(적당|적정|비싼|맞)|(적당|적정).*월세/,'🩺 계약 셀프 검진 하기'],
+ ['/marriage-check.html',/혼인신고|결혼.*(청약|대출).*유리/,'💍 혼인신고 자가진단 하기'],
+ ['/myeongui-check.html',/공동\s*명의|단독\s*명의|명의.*(누구|어떻게|유리)|명의/,'👥 명의 자가진단 하기'],
+ ['/policy-finder.html',/정책\s*대출|디딤돌|버팀목|신생아\s*(대출|특공)|특별\s*공급|특공/,'🎯 내게 맞는 정책대출 찾기'],
+ ['/rental-match.html',/(임대주택|공공임대|행복주택).*(자격|되나|가능)|자격\s*판정/,'✅ 임대주택 자격 판정받기'],
+ ['/youth-housing.html',/주거\s*지원|청년.*지원|신혼.*지원|월세\s*지원|지원\s*제도/,'🏡 주거지원 자격 진단하기'],
+ ['/wealth-check.html',/자산\s*진단|또래|부자\s*(비교|기준)|내\s*위치/,'📊 내 자산 진단하기'],
+ ['/senior-residence-finder.html',/실버타운|시니어\s*레지던스|요양원|요양병원|부모님.*모시/,'🧓 시니어 주거 자가진단'],
+ /* 계산기 */
+ ['/auction-yield.html',/경매.*수익률|낙찰가.*(수익|계산)|명도비/,'📊 경매 수익률 계산하기'],
+ ['/yield-calculator.html',/수익률|임대\s*수익|월세\s*수익/,'📈 임대수익 계산하러 가기'],
+ ['/loan-calculator.html',/DSR|주담대|대출|한도|상환액|원리금|금리|이자/i,'💰 대출·DSR 계산하러 가기'],
  ['/acquisition-tax.html',/취득세/,'🧾 취득세 계산하러 가기'],
- ['/capital-gains-tax.html',/양도세|양도소득세/,'💸 양도세 계산하러 가기'],
- ['/jongbuse-calculator.html',/종부세|종합부동산세/,'🏛️ 종부세 계산하러 가기'],
+ ['/capital-gains-tax.html',/양도\s*소득세|양도세/,'💸 양도세 계산하러 가기'],
+ ['/jongbuse-calculator.html',/종부세|종합\s*부동산세/,'🏛️ 종부세 계산하러 가기'],
  ['/property-tax.html',/재산세|보유세/,'🏠 재산세 계산하러 가기'],
- ['/jonghap-income-tax.html',/종합소득세|종소세|임대소득/,'🧾 종합소득세(임대소득) 계산하러 가기'],
- ['/home-report.html',/종합\s*리포트|집\s*리포트|이\s*집\s*사도|이\s*집\s*살까/,'🏠 집 종합 리포트 받기'],
- ['/brokerage-calculator.html',/중개보수|복비/,'🤝 중개보수 확인하러 가기'],
- ['/jeonse-monthly.html',/전월세\s*전환|전환율/,'🔁 전월세 전환 계산하러 가기'],
- ['/contract-check.html',/계약\s*(셀프)?\s*검진/,'🩺 계약 셀프 검진 하러 가기'],
- ['/jeonse-safety-check.html',/등기부/,'🛡️ 등기부 안전 체크하러 가기'],
- ['/myeongui-check.html',/명의/,'👥 명의 자가진단 하러 가기'],
- ['/marriage-check.html',/혼인신고/,'💍 혼인신고 자가진단 하러 가기'],
- ['/youth-housing.html',/주거지원|버팀목|디딤돌/,'🏡 주거지원 확인하러 가기'],
- ['/moving-guide.html',/잔금|이사/,'📦 이사·잔금 로드맵 보기'],
- ['/rental-board.html',/행복주택|임대주택\s*공고/,'🏢 임대주택 공고 보기'],
- ['/invest.html',/경매|소액\s*투자/,'📊 소액 투자 물건 보기'],
- ['/experts.html',/세무사|법무사|변호사|중개사|전문가/,'🧑‍💼 전문가 찾으러 가기']
+ ['/gift-tax.html',/증여세|증여/,'🎁 증여세 계산하러 가기'],
+ ['/inheritance-tax.html',/상속세|상속|유류분/,'📜 상속세 계산하러 가기'],
+ ['/jonghap-income-tax.html',/종합\s*소득세|종소세|임대\s*소득/,'🧾 종합소득세 계산하러 가기'],
+ ['/brokerage-calculator.html',/중개\s*보수|복비|중개\s*수수료/,'🤝 중개보수 확인하러 가기'],
+ ['/jeonse-monthly.html',/전월세\s*전환|전환율|전세.*월세.*(바꾸|돌리|전환)/,'🔁 전월세 전환 계산하러 가기'],
+ ['/housing-pension.html',/주택\s*연금|역모기지/,'👵 주택연금 계산하러 가기'],
+ ['/downsizing-tax.html',/다운사이징|집.*줄이|큰\s*집.*팔/,'📉 다운사이징 세금 시뮬'],
+ ['/seller-financing-calc.html',/셀러\s*파이낸싱|매도인\s*금융|차용증|금전소비대차/,'🧮 셀러 파이낸싱 계산기'],
+ /* 공고·시세·지도 */
+ ['/cheongyak-board.html',/청약\s*(공고|일정|경쟁률|넣|물량)|분양\s*공고|줍줍|무순위|입주자\s*모집/,'📢 실시간 청약·분양 공고 보기'],
+ ['/rental-board.html',/행복주택|매입\s*임대|공공\s*임대|임대주택\s*공고|국민임대/,'🏢 임대주택 공고 보기'],
+ ['/housing-alert.html',/알림\s*(신청|받|설정)|맞춤\s*알림|놓치지/,'🔔 청약·임대 알림 신청하기'],
+ ['/calendar.html',/캘린더|일정표|금리\s*발표|이달의\s*일정/,'📅 부동산 캘린더 보기'],
+ ['/redev-price.html',/재건축.*(시세|실거래)|정비구역.*시세|세대수\s*변화/,'🏗️ 재건축 단지 시세 보기'],
+ ['/redevelopment-map.html',/재개발\s*지도|정비\s*사업\s*(현황|지도)|추진\s*현황/,'🗺️ 전국 재개발 지도 보기'],
+ ['/auction-tools.html',/경매|낙찰|명도|권리\s*분석/,'⚖️ 경매 실무 툴 보기'],
+ ['/invest.html',/소액\s*투자|투자\s*방법|재테크/,'📊 부동산 투자 방법 보기'],
+ /* 상담·연결 */
+ ['/tax-consult.html',/세무\s*상담|절세\s*상담|가족\s*법인/,'🧾 세무사 상담 연결하기'],
+ ['/legal-consult.html',/법률\s*상담|지역주택조합|지주택|허위\s*분양|분양\s*피해/,'⚖️ 법률 상담 연결하기'],
+ ['/experts.html',/전문가|세무사|법무사|변호사|중개사|상담\s*(받|연결)/,'🧑‍💼 전문가 찾으러 가기'],
+ /* 허브 (가장 포괄적 — 항상 마지막) */
+ ['/tools.html',/무슨\s*기능|어떤\s*(기능|서비스|거\s*할)|뭐\s*(할\s*수|있어)|기능\s*(목록|전체|알려)|부비.*할\s*수/,'🧰 부비 기능 전체 보기',1],
+ ['/tax-calculator.html',/세금.*계산|세금\s*계산기/,'🧮 세금 계산기 모음 열기',1],
+ ['/calculator.html',/계산기/,'🧮 계산기 모음 열기',1]
 ];
-function ctas(raw){
- var hits=[],i;
- for(i=0;i<TOOLCTA.length&&hits.length<2;i++){ if(raw.indexOf(TOOLCTA[i][0])>-1) hits.push(TOOLCTA[i]); }
- for(i=0;i<TOOLCTA.length&&hits.length<2;i++){ if(hits.indexOf(TOOLCTA[i])<0&&TOOLCTA[i][1].test(raw)) hits.push(TOOLCTA[i]); }
+/* 답변 아래에 기능 바로가기 버튼(최대 2개)을 붙인다.
+   raw = 부비의 답변, q = 사용자가 방금 물어본 말.
+   LLM이 링크를 빠뜨려도 q 매칭으로 버튼은 반드시 뜨게 하는 게 핵심. */
+function ctas(raw,q){
+ var hits=[],seen={},i;
+ function add(h){ if(seen[h[0]]||hits.length>=2)return; if(h[3]&&hits.length)return; /* 허브 페이지는 구체적인 버튼이 없을 때만 */ seen[h[0]]=1; hits.push(h); }
+ /* 1순위: 답변 본문에 이미 걸린 경로 */
+ for(i=0;i<TOOLCTA.length;i++){ if(raw.indexOf(TOOLCTA[i][0])>-1) add(TOOLCTA[i]); }
+ /* 2순위: 사용자가 물어본 것 (의도가 가장 확실한 신호) */
+ if(q) for(i=0;i<TOOLCTA.length;i++){ if(TOOLCTA[i][1].test(q)) add(TOOLCTA[i]); }
+ /* 3순위: 답변 본문 키워드 */
+ for(i=0;i<TOOLCTA.length;i++){ if(TOOLCTA[i][1].test(raw)) add(TOOLCTA[i]); }
  if(!hits.length)return;
  var c=el('div','hwbCtas',null);
  hits.forEach(function(h){
    var a=document.createElement('a');a.href=h[0];
    a.innerHTML='<span>'+h[2]+'</span><span class="ar">→</span>';
+   a.addEventListener('click',function(){ try{ if(window.gtag)gtag('event','chat_cta_click',{link_url:h[0]}); }catch(e){} });
    c.appendChild(a);
  });
  body.appendChild(c);scrollDown();
+}
+/* 사용자가 부비의 기능을 이름으로 콕 집어 찾는 경우(체크리스트/계산기/진단/공고/리포트 …)
+   → LLM을 거치지 않고 즉시 해당 페이지로 연결한다. 글로 대신 써주는 사고를 원천 차단. */
+var TOOLNOUN=/체크\s*리스트|체크리스트|현장조사서|자가\s*진단|진단|계산기|계산\s*해|리포트|공고|알림|지도|캘린더|양식|서식|폼|기능|페이지|링크|어디\s*(서|에|있|가)/;
+function directLink(t){
+ if(t.length>60) return false;           /* 긴 상담성 질문은 LLM에게 */
+ if(!TOOLNOUN.test(t)) return false;
+ var hits=[],seen={},i;
+ for(i=0;i<TOOLCTA.length && hits.length<2;i++){
+   var h=TOOLCTA[i]; if(seen[h[0]]||!h[1].test(t))continue; if(h[3]&&hits.length)continue; seen[h[0]]=1; hits.push(h);
+ }
+ if(!hits.length) return false;
+ var LINES=['그거 부비 안에 있어요! 👇 바로 열어드릴게요.','네, 부비에서 바로 하실 수 있어요 👇','찾으시는 거 여기 있어요 👇 눌러서 바로 시작하세요.'];
+ var msg=LINES[Math.floor(Math.random()*LINES.length)];
+ if(hits.length>1) msg='관련된 기능 두 개를 찾았어요 👇';
+ bot(msg);
+ var c=el('div','hwbCtas',null);
+ hits.forEach(function(h){
+   var a=document.createElement('a');a.href=h[0];
+   a.innerHTML='<span>'+h[2]+'</span><span class="ar">→</span>';
+   a.addEventListener('click',function(){ try{ if(window.gtag)gtag('event','chat_cta_click',{link_url:h[0],from:'direct'}); }catch(e){} });
+   c.appendChild(a);
+ });
+ body.appendChild(c);
+ var ch=el('div','hwbChips',null);
+ var b=el('button','','부비가 설명도 해줘');
+ b.onclick=function(){ ch.remove(); llmAnswer(t); };
+ ch.appendChild(b); body.appendChild(ch); scrollDown();
+ try{ if(window.gtag)gtag('event','chat_direct_link',{q:t.slice(0,60)}); }catch(e){}
+ return true;
 }
 /* 스트리밍 우선: 첫 문장이 1~2초 안에 나타나기 시작. 실패 시 기존(비스트리밍) 경로로 자동 폴백 */
 function llmAnswer(t){
@@ -243,7 +325,7 @@ function llmStream(t, ty){
          clearTimeout(to);
          if(!acc) throw new Error(failed||'empty');
          HIST.push({role:'assistant',content:acc});
-         ctas(acc);
+         ctas(acc,t);
          return;
        }
        buf+=dec.decode(x.value,{stream:true});
@@ -279,7 +361,7 @@ function llmAnswerHTTP(t, attempt, ty){
    ty.remove();
    HIST.push({role:'assistant',content:d.reply});
    bot(mdLite(d.reply));
-   ctas(d.reply);
+   ctas(d.reply,t);
  })
  .catch(function(){
    clearTimeout(to);
@@ -399,14 +481,17 @@ function flowStep(t){
   }
 }
 function ruleAnswer(t){
-  for(var i=0;i<KEYWORDS.length;i++){ if(KEYWORDS[i][0].test(t)){ bot(ANSWERS[KEYWORDS[i][1]]); offerChips(); return; } }
+  for(var i=0;i<KEYWORDS.length;i++){ if(KEYWORDS[i][0].test(t)){ bot(ANSWERS[KEYWORDS[i][1]]); ctas(ANSWERS[KEYWORDS[i][1]],t); offerChips(); return; } }
   bot('제가 바로 답할 수 있게 배우는 중이에요! 이런 건 지금 당장 도와드릴 수 있어요:\n\n• "월세 적당한지 모르겠어" → 대화로 바로 검진\n• "복비 많이 낸 건가?" → 법정 상한 확인\n\n아니면 아래에서 골라주세요 👇');
+  ctas('',t);   /* 규칙 답변으로 못 잡아도 관련 기능 버튼은 붙여준다 */
   chips();
 }
 function answer(t){
+  try{ if(window.gtag)gtag('event','chat_ask',{q:String(t).slice(0,80)}); }catch(e){}
   if(FLOW){ flowStep(t); return; }
   if(/월세/.test(t)&&/적당|적정|비싸|맞나|맞는|괜찮|잘.*계약|잘한/.test(t)){ startWolseFlow(); return; }
   if(/복비|중개보수|수수료/.test(t)&&/많|비싸|맞나|맞는|적정|요구|달라/.test(t)){ startFeeFlow(); return; }
+  if(directLink(t)){ return; }   /* 부비에 있는 기능을 이름으로 찾으면 바로 그 페이지로 */
   if(BOOBI_API.indexOf('http')===0){ llmAnswer(t); return; }
   ruleAnswer(t);
 }
@@ -414,6 +499,7 @@ var opened=false;
 function openPanel(silent){
   hideTeaser();btn.classList.remove('pulse');try{sessionStorage.setItem('hwbSeen','1');}catch(e){}
   panel.classList.add('open');
+  try{ if(window.gtag)gtag('event','chat_open'); }catch(e){}
   if(!opened){
     opened=true;
     if(!silent){
