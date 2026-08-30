@@ -25,6 +25,9 @@ css.textContent=
 '#bbGate p{font-size:.89rem;color:#547471;margin:8px 0 20px;line-height:1.6}'+
 '#bbGate .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:13px;border:none;border-radius:999px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);font-size:.96rem;font-weight:700;cursor:pointer;font-family:inherit;color:#fff;box-shadow:0 8px 20px rgba(61,139,253,.28);transition:.14s}'+
 '#bbGate .gbtn:hover{transform:translateY(-1px)}'+
+'#bbGate .gkk{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:13px;margin-bottom:9px;border:none;border-radius:999px;background:#FEE500;color:#191600;font-size:.96rem;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 6px 16px rgba(13,42,41,.10);transition:transform .12s ease-out}'+
+'#bbGate .gkk:hover{transform:translateY(-1px)}'+
+'#bbGate .gkk:active,#bbGate .gbtn:active{transform:scale(.97)}'+
 '#bbGate .gclose{margin-top:12px;background:none;border:none;font-size:.82rem;color:#8aa5a2;cursor:pointer;font-family:inherit}'+
 '#bbGate .gfree{margin-top:10px;font-size:.78rem;color:#8aa5a2}';
 document.head.appendChild(css);
@@ -37,14 +40,20 @@ function show(){
     '<img class="glogo" src="/boobi-ring-3d.png" alt="부비">'+
     '<h3>결과는 로그인하면 바로 나와요</h3>'+
     '<p>입력하신 내용은 그대로 있어요.<br>로그인하면 <b>결과 확인·저장</b>과 모든 진단·툴이 무료예요.</p>'+
-    '<button class="gbtn" id="bbGateGo">🅶 구글로 3초 만에 계속하기</button>'+
+    '<button class="gkk" id="bbGateKk">'+(window.HW_KAKAO_SVG||'')+'카카오로 3초 만에 계속하기</button>'+
+    '<button class="gbtn" id="bbGateGo">구글로 계속하기</button>'+
     '<button class="gclose" id="bbGateClose">나중에 할게요</button>'+
     '<div class="gfree">가입·이용 모두 무료 · <a href="/privacy.html" style="color:#2A7DE8">개인정보처리방침</a></div>'+
     '</div>';
   document.body.appendChild(gate);
   if(!shownOnce){ shownOnce=true; ga('gate_shown'); }
+  document.getElementById('bbGateKk').onclick=function(){
+    ga('gate_login_click',{method:'kakao'});
+    if(window.hwonAuth&&hwonAuth.signInKakao) hwonAuth.signInKakao();
+    else location.href='/account.html';
+  };
   document.getElementById('bbGateGo').onclick=function(){
-    ga('gate_login_click');
+    ga('gate_login_click',{method:'google'});
     if(window.hwonAuth&&hwonAuth.signInGoogle){
       hwonAuth.signInGoogle().catch(function(e){
         if(e&&e.code==='auth/popup-closed-by-user')return;

@@ -1,0 +1,258 @@
+/* =========================================================================
+ * 부비 카카오 로그인 워커  (Cloudflare Workers)
+ * 배포 이름 권장: boobi-auth   →  https://boobi-auth.tndud-brad.workers.dev
+ *
+ * 이 파일은 "붙여넣기용 소스"입니다. 시크릿은 절대 여기 적지 말고
+ * Cloudflare 대시보드 > Workers > boobi-auth > Settings > Variables and Secrets
+ * 에서 Secret(암호화 변수)으로 직접 등록하세요.
+ *
+ *   KAKAO_REST_KEY       카카오 REST API 키
+ *   KAKAO_CLIENT_SECRET  카카오 [보안] Client Secret  (사용 안 함이면 등록 생략)
+ *   FIREBASE_SA_JSON     Firebase 서비스 계정 JSON 파일 내용 전체(한 줄)
+ *
+ * 카카오 디벨로퍼스에 등록할 Redirect URI:
+ *   https://boobi-auth.tndud-brad.workers.dev/kakao/callback
+ *
+ * 흐름
+ *   브라우저 → /kakao/start?rt=/원래보던경로
+ *            → 302 kauth.kakao.com/oauth/authorize
+ *            → 302 /kakao/callback?code=...
+ *            → (서버) 토큰교환 · 사용자조회 · Firebase 커스텀 토큰 발급
+ *            → 302 https://boobi.ai.kr/kakao-callback#t=<커스텀토큰>&rt=...
+ * ========================================================================= */
+
+const SITE          = 'https://boobi.ai.kr';
+const LANDING       = SITE + '/kakao-callback';
+const KAKAO_AUTHZ   = 'https://kauth.kakao.com/oauth/authorize';
+const KAKAO_TOKEN   = 'https://kauth.kakao.com/oauth/token';
+const KAKAO_ME      = 'https://kapi.kakao.com/v2/user/me';
+const IDTK          = 'https://identitytoolkit.googleapis.com/v1';
+
+/* ---------------- 공통 유틸 ---------------- */
+const enc = new TextEncoder();
+
+function b64url(bytes) {
+  let s = '';
+  const a = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  for (let i = 0; i < a.length; i++) s += String.fromCharCode(a[i]);
+  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function b64urlStr(str) { return b64url(enc.encode(str)); }
+function b64urlDecode(str) {
+  const p = str.replace(/-/g, '+').replace(/_/g, '/');
+  return atob(p + '==='.slice((p.length + 3) % 4));
+}
+
+/* state 위조 방지 — rt(복귀 경로)를 HMAC으로 서명해서 왕복시킨다 */
+async function hmacKey(secret) {
+  return crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+}
+async function signState(secret, payloadObj) {
+  const body = b64urlStr(JSON.stringify(payloadObj));
+  const sig = await crypto.subtle.sign('HMAC', await hmacKey(secret), enc.encode(body));
+  return body + '.' + b64url(sig);
+}
+async function verifyState(secret, state) {
+  if (!state || state.indexOf('.') < 0) return null;
+  const [body, sig] = state.split('.');
+  const expect = b64url(await crypto.subtle.sign('HMAC', await hmacKey(secret), enc.encode(body)));
+  if (expect !== sig) return null;
+  try {
+    const o = JSON.parse(b64urlDecode(body));
+    if (!o.ts || Date.now() - o.ts > 10 * 60 * 1000) return null;   // 10분 초과 만료
+    return o;
+  } catch (e) { return null; }
+}
+
+/* 오픈 리다이렉트 방지 — 사이트 내부 경로만 허용 */
+function safePath(p) {
+  if (typeof p !== 'string' || p.charAt(0) !== '/' || p.charAt(1) === '/' || p.indexOf('\\') >= 0) return '/account';
+  return p.slice(0, 300);
+}
+
+function redirect(url) { return new Response(null, { status: 302, headers: { Location: url, 'cache-control': 'no-store' } }); }
+function fail(msg, rt) {
+  return redirect(LANDING + '#e=' + encodeURIComponent(String(msg).slice(0, 160)) + '&rt=' + encodeURIComponent(rt || '/account'));
+}
+
+/* ---------------- 서비스 계정 서명 ---------------- */
+function pemToBuf(pem) {
+  const b64 = pem.replace(/-----[^-]+-----/g, '').replace(/\s+/g, '');
+  const bin = atob(b64);
+  const buf = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+  return buf.buffer;
+}
+let _saKey = null;
+async function saKey(sa) {
+  if (!_saKey) _saKey = await crypto.subtle.importKey('pkcs8', pemToBuf(sa.private_key),
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['sign']);
+  return _saKey;
+}
+async function signRS256(sa, payload) {
+  const data = b64urlStr(JSON.stringify({ alg: 'RS256', typ: 'JWT' })) + '.' + b64urlStr(JSON.stringify(payload));
+  const sig = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', await saKey(sa), enc.encode(data));
+  return data + '.' + b64url(sig);
+}
+/* Identity Toolkit 관리 API 호출용 액세스 토큰 */
+async function googleAccessToken(sa) {
+  const iat = Math.floor(Date.now() / 1000);
+  const assertion = await signRS256(sa, {
+    iss: sa.client_email,
+    scope: 'https://www.googleapis.com/auth/identitytoolkit',
+    aud: 'https://oauth2.googleapis.com/token',
+    iat, exp: iat + 3600
+  });
+  const r = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion })
+  });
+  const j = await r.json();
+  if (!j.access_token) throw new Error('google token 실패');
+  return j.access_token;
+}
+/* 최종 산출물 — 브라우저가 signInWithCustomToken()에 넣을 토큰 */
+async function firebaseCustomToken(sa, uid, claims) {
+  const iat = Math.floor(Date.now() / 1000);
+  return signRS256(sa, {
+    iss: sa.client_email, sub: sa.client_email,
+    aud: 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit',
+    iat, exp: iat + 3600, uid, claims: claims || {}
+  });
+}
+
+/* ---------------- Identity Toolkit ---------------- */
+async function idtk(sa, at, path, body) {
+  const r = await fetch(`${IDTK}/projects/${sa.project_id}/accounts${path}`, {
+    method: 'POST',
+    headers: { authorization: 'Bearer ' + at, 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  return r.json();
+}
+
+/**
+ * 카카오 사용자 → Firebase uid 결정
+ *  1) kakao_{id} 계정이 이미 있으면 그대로 쓴다
+ *  2) 카카오가 "인증된" 이메일을 줬고 그 이메일의 기존 계정(구글 가입자)이 있으면
+ *     그 uid를 재사용해서 같은 계정으로 붙인다  ← 기존 회원 데이터 유지
+ *  3) 둘 다 아니면 kakao_{id}로 새 계정을 만든다
+ *  이메일 미인증인 경우엔 절대 기존 계정에 붙이지 않는다(계정 탈취 방지).
+ */
+async function resolveUid(sa, at, ku) {
+  const kakaoUid = 'kakao_' + ku.id;
+  const acc = (ku.kakao_account || {});
+  const prof = acc.profile || {};
+  const emailOk = !!(acc.email && acc.is_email_valid !== false && acc.is_email_verified === true);
+  const email = emailOk ? String(acc.email).toLowerCase() : '';
+  const name = prof.nickname || '부비 유저';
+  const photo = prof.profile_image_url || prof.thumbnail_image_url || '';
+
+  const mine = await idtk(sa, at, ':lookup', { localId: [kakaoUid] });
+  if (mine && mine.users && mine.users.length) return { uid: kakaoUid, email, name, linked: false, isNew: false };
+
+  if (email) {
+    const byMail = await idtk(sa, at, ':lookup', { email: [email] });
+    if (byMail && byMail.users && byMail.users.length) {
+      return { uid: byMail.users[0].localId, email, name, linked: true, isNew: false };
+    }
+  }
+
+  const created = await idtk(sa, at, '', {
+    localId: kakaoUid,
+    displayName: name,
+    photoUrl: photo || undefined,
+    email: email || undefined,
+    emailVerified: !!email
+  });
+  if (created && created.error && created.error.message &&
+      created.error.message.indexOf('DUPLICATE') < 0 && created.error.message.indexOf('EXISTS') < 0) {
+    throw new Error('계정 생성 실패: ' + created.error.message);
+  }
+  return { uid: kakaoUid, email, name, linked: false, isNew: true };
+}
+
+/* ---------------- 라우팅 ---------------- */
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const path = url.pathname.replace(/\/+$/, '');
+
+    if (path === '/health') return new Response('ok');
+
+    const stateSecret = env.KAKAO_CLIENT_SECRET || env.KAKAO_REST_KEY || 'boobi';
+
+    /* ① 로그인 시작 — 카카오 동의 화면으로 보낸다 */
+    if (path === '/kakao/start') {
+      if (!env.KAKAO_REST_KEY) return new Response('KAKAO_REST_KEY 미설정', { status: 500 });
+      const rt = safePath(url.searchParams.get('rt') || '/account');
+      const state = await signState(stateSecret, { rt, ts: Date.now() });
+      const go = KAKAO_AUTHZ
+        + '?response_type=code'
+        + '&client_id=' + encodeURIComponent(env.KAKAO_REST_KEY)
+        + '&redirect_uri=' + encodeURIComponent(url.origin + '/kakao/callback')
+        + '&state=' + encodeURIComponent(state);
+      /* scope는 일부러 넣지 않는다 — 카카오 콘솔의 동의항목 설정을 그대로 따른다 */
+      return redirect(go);
+    }
+
+    /* ② 카카오가 돌려보낸 인가 코드 처리 */
+    if (path === '/kakao/callback') {
+      const st = await verifyState(stateSecret, url.searchParams.get('state'));
+      const rt = st ? st.rt : '/account';
+      if (!st) return fail('로그인 요청이 만료됐어요. 다시 시도해주세요.', '/account');
+
+      const kerr = url.searchParams.get('error');
+      if (kerr) return fail(kerr === 'access_denied' ? '카카오 로그인을 취소했어요.' : kerr, rt);
+
+      const code = url.searchParams.get('code');
+      if (!code) return fail('인가 코드가 없어요.', rt);
+
+      try {
+        const sa = JSON.parse(env.FIREBASE_SA_JSON);
+
+        /* 인가 코드 → 액세스 토큰 */
+        const form = new URLSearchParams({
+          grant_type: 'authorization_code',
+          client_id: env.KAKAO_REST_KEY,
+          redirect_uri: url.origin + '/kakao/callback',
+          code
+        });
+        if (env.KAKAO_CLIENT_SECRET) form.set('client_secret', env.KAKAO_CLIENT_SECRET);
+        const tr = await fetch(KAKAO_TOKEN, {
+          method: 'POST',
+          headers: { 'content-type': 'application/x-www-form-urlencoded;charset=utf-8' },
+          body: form
+        });
+        const tj = await tr.json();
+        if (!tj.access_token) return fail('카카오 토큰 발급 실패(' + (tj.error || tr.status) + ')', rt);
+
+        /* 사용자 정보 */
+        const ur = await fetch(KAKAO_ME, { headers: { authorization: 'Bearer ' + tj.access_token } });
+        const ku = await ur.json();
+        if (!ku || !ku.id) return fail('카카오 사용자 조회 실패', rt);
+
+        /* Firebase 계정 결정 + 커스텀 토큰 */
+        const at = await googleAccessToken(sa);
+        const who = await resolveUid(sa, at, ku);
+        const token = await firebaseCustomToken(sa, who.uid, {
+          provider: 'kakao',
+          kakaoId: String(ku.id),
+          kkName: who.name,
+          kkEmail: who.email || ''
+        });
+
+        return redirect(LANDING
+          + '#t=' + encodeURIComponent(token)
+          + '&rt=' + encodeURIComponent(rt)
+          + (who.linked ? '&link=1' : '')
+          + (who.isNew ? '&new=1' : ''));
+      } catch (e) {
+        return fail('로그인 처리 중 오류: ' + (e && e.message || e), rt);
+      }
+    }
+
+    return new Response('부비 인증 워커', { status: 404 });
+  }
+};

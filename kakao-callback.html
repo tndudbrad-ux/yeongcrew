@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>카카오 로그인 - 부비</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="부비 카카오 로그인 처리 중입니다.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;
+ color:#0D2A29;line-height:1.65;-webkit-font-smoothing:antialiased;min-height:100vh;
+ display:flex;align-items:center;justify-content:center;padding:24px;
+ background:
+  radial-gradient(120% 120% at 88% -10%,rgba(61,139,253,.14),transparent 55%),
+  radial-gradient(120% 120% at -10% 110%,rgba(42,193,188,.16),transparent 55%),
+  radial-gradient(90% 90% at 50% 50%,rgba(139,108,246,.07),transparent 60%),#fff}
+.kbox{position:relative;overflow:hidden;isolation:isolate;clip-path:inset(0 round 22px);
+ width:100%;max-width:380px;padding:38px 28px;text-align:center;border-radius:22px;
+ background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.68));
+ border:1.5px solid rgba(255,255,255,.95);
+ box-shadow:0 18px 50px rgba(13,42,41,.12),inset 0 1px 0 #fff;
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.kring{width:56px;height:56px;object-fit:contain;margin:0 auto 16px;display:block;
+ filter:drop-shadow(0 4px 14px rgba(42,193,188,.35));animation:kfloat 2.4s ease-in-out infinite}
+@keyframes kfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+h1{font-size:1.14rem;font-weight:800;letter-spacing:-.02em;word-break:keep-all}
+p{font-size:.9rem;color:#547471;margin-top:8px;word-break:keep-all}
+.kbar{height:4px;border-radius:99px;background:#EEF5F4;overflow:hidden;margin-top:20px}
+.kbar i{display:block;height:100%;width:40%;border-radius:99px;
+ background:linear-gradient(90deg,#26C6B9,#3D8BFD,#8B6CF6);animation:kslide 1.15s ease-in-out infinite}
+@keyframes kslide{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}
+.kbtn{display:inline-flex;align-items:center;justify-content:center;margin-top:18px;padding:12px 24px;
+ border:none;border-radius:999px;cursor:pointer;font-family:inherit;font-size:.93rem;font-weight:800;color:#fff;
+ background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);
+ box-shadow:0 8px 20px rgba(61,139,253,.28);transition:transform .12s ease-out;text-decoration:none}
+.kbtn:active{transform:scale(.97)}
+.kmini{display:block;margin-top:12px;font-size:.8rem;color:#8AA5A2}
+@media(prefers-reduced-motion:reduce){.kring,.kbar i{animation:none}.kbtn{transition:none}}
+@media(prefers-reduced-transparency:reduce){.kbox{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none}}
+</style>
+</head>
+<body>
+
+<div class="kbox">
+<img class="kring" src="/boobi-ring-3d.png" alt="부비">
+<h1 id="kTitle">카카오 계정으로 들어가는 중…</h1>
+<p id="kDesc">잠시만 기다려주세요.</p>
+<div class="kbar" id="kBar"><i></i></div>
+<div id="kAct"></div>
+</div>
+
+<script src="/hwon-auth.js" defer></script>
+<script>
+(function(){
+  var h = {};
+  (location.hash||'').replace(/^#/,'').split('&').forEach(function(kv){
+    if(!kv) return; var i=kv.indexOf('='); if(i<0) return;
+    h[decodeURIComponent(kv.slice(0,i))] = decodeURIComponent(kv.slice(i+1));
+  });
+  /* 주소창에서 토큰을 즉시 지운다 (히스토리·공유 노출 방지) */
+  try{ history.replaceState(null,'',location.pathname); }catch(e){}
+
+  var rt = h.rt || '/account';
+  if(rt.charAt(0)!=='/' || rt.charAt(1)==='/') rt='/account';
+
+  function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
+  function err(msg){
+    document.getElementById('kBar').style.display='none';
+    document.getElementById('kTitle').textContent='로그인을 마치지 못했어요';
+    document.getElementById('kDesc').textContent = msg || '잠시 후 다시 시도해주세요.';
+    document.getElementById('kAct').innerHTML =
+      '<a class="kbtn" href="/account">다시 로그인하기</a>'+
+      '<a class="kmini" href="'+rt.replace(/"/g,'&quot;')+'">돌아가기</a>';
+    ga('kakao_login_fail',{reason:(msg||'').slice(0,80)});
+  }
+
+  if(h.e){ err(h.e); return; }
+  if(!h.t){ err('로그인 정보가 전달되지 않았어요.'); return; }
+
+  function go(){
+    if(h['new']) ga('sign_up',{method:'kakao'});
+    ga('kakao_login_success',{linked:h.link?1:0});
+    document.getElementById('kTitle').textContent='로그인됐어요!';
+    document.getElementById('kDesc').textContent = h.link
+      ? '기존 부비 계정과 연결됐어요. 잠시 후 이동합니다.'
+      : '잠시 후 원래 보던 화면으로 돌아갑니다.';
+    setTimeout(function(){ location.replace(rt); }, 700);
+  }
+
+  function tryLogin(tries){
+    if(!window.hwonAuth || !window.hwonAuth.ready){
+      if(tries>60) return err('로그인 모듈을 불러오지 못했어요.');
+      return setTimeout(function(){ tryLogin(tries+1); }, 120);
+    }
+    window.hwonAuth.ready().then(function(auth){
+      return auth.signInWithCustomToken(h.t);
+    }).then(go).catch(function(e){
+      err('인증에 실패했어요 ('+((e&&e.code)||(e&&e.message)||e)+')');
+    });
+  }
+  tryLogin(0);
+})();
+</script>
+</body>
+</html>

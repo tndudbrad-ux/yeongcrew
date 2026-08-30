@@ -116,9 +116,23 @@ throw e;
 });
 });
 },
+/* 카카오 로그인 — 인가코드 교환·커스텀 토큰 발급은 인증 워커가 처리한다.
+ * (카카오 REST 키·시크릿은 워커에만 있고 프론트엔드엔 없음) */
+signInKakao:function(){
+var rt=location.pathname+location.search;
+if(rt.indexOf('/kakao-callback')===0) rt='/account';
+location.href=window.HW_AUTH_API+'/kakao/start?rt='+encodeURIComponent(rt);
+return new Promise(function(){});   /* 페이지가 이동하므로 resolve하지 않음 */
+},
 signOut:function(){return ready.then(function(a){return a.signOut();});}
 };
 })();
+
+/* 부비 인증 워커 (카카오 로그인) */
+window.HW_AUTH_API='https://boobi-auth.tndud-brad.workers.dev';
+
+/* 카카오 로그인 공통 버튼 — 카카오 브랜드 가이드(노란 #FEE500 + 말풍선) 준수 */
+window.HW_KAKAO_SVG='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#191600" d="M12 3C6.99 3 3 6.2 3 10.13c0 2.5 1.66 4.7 4.16 5.96-.14.5-.9 3.1-.93 3.31 0 0-.02.16.08.22.1.06.23.01.23.01.29-.04 3.36-2.2 3.9-2.58.5.07 1.02.11 1.56.11 5.01 0 9-3.2 9-7.03C21 6.2 17.01 3 12 3z"/></svg>';
 
 /* ===== 새 회원가입 알림 — 첫 로그인 시 members 기록 + 운영자 메일 ===== */
 (function(){
@@ -151,10 +165,12 @@ loadFS().then(function(){
 var ref=firebase.firestore().collection('members').doc(u.uid);
 return ref.get().then(function(snap){
 if(snap.exists) return; // 기존 회원이면 아무것도 안 함
-var d={uid:u.uid,email:u.email||'',name:u.displayName||'',
+/* 커스텀 토큰(카카오) 계정은 providerData가 비어 있다 */
+var prov=(u.providerData&&u.providerData.length)?'google':'kakao';
+var d={uid:u.uid,email:u.email||'',name:u.displayName||'',provider:prov,
 createdAt:new Date().toISOString(),firstPage:location.pathname};
 return ref.set(d).then(function(){
-if(window.gtag){try{gtag('event','sign_up',{method:'google'});}catch(x){}}
+if(window.gtag){try{gtag('event','sign_up',{method:prov});}catch(x){}}
 notify(d);
 });
 });
@@ -176,8 +192,11 @@ st.textContent=
 '.boobiGateWall .lk{font-size:1.7rem}'+
 '.boobiGateWall h3{font-size:1.12rem;font-weight:800;margin:6px 0 4px;color:#0D2A29}'+
 '.boobiGateWall p{font-size:.92rem;color:#547471;margin-bottom:16px;line-height:1.6}'+
-'.boobiGateBtn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;font-weight:800;font-size:1rem;padding:13px 26px;border:none;border-radius:999px;cursor:pointer;font-family:inherit;box-shadow:0 8px 22px rgba(61,139,253,.3);transition:.15s}'+
+'.boobiGateBtns{display:flex;flex-direction:column;gap:9px;max-width:300px;margin:0 auto}'+
+'.boobiGateBtn{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;font-weight:800;font-size:.97rem;padding:13px 22px;border:none;border-radius:999px;cursor:pointer;font-family:inherit;box-shadow:0 8px 22px rgba(61,139,253,.3);transition:transform .12s ease-out;white-space:nowrap}'+
 '.boobiGateBtn:hover{transform:translateY(-1px)}'+
+'.boobiGateKk{display:flex;align-items:center;justify-content:center;gap:8px;background:#FEE500;color:#191600;font-weight:800;font-size:.97rem;padding:13px 22px;border:none;border-radius:999px;cursor:pointer;font-family:inherit;box-shadow:0 6px 16px rgba(13,42,41,.10);transition:transform .12s ease-out;white-space:nowrap}'+
+'.boobiGateKk:hover{transform:translateY(-1px)}'+
 '.boobiGateNote{font-size:.8rem;color:#8aa5a2;margin-top:12px}'+
 'body.boobi-unlocked .boobiGateRest{max-height:none;overflow:visible}'+
 'body.boobi-unlocked .boobiGateRest::after{display:none}'+
@@ -202,13 +221,18 @@ art.insertBefore(rest, kids[cut]);
 for(var j=cut;j<kids.length;j++){ rest.appendChild(kids[j]); }
 var wl=document.createElement('div'); wl.className='boobiGateWall';
 wl.innerHTML='<div class="lk">🔒</div><h3>로그인하면 이어서 읽을 수 있어요</h3>'+
-'<p>부비 회원이면 모든 칼럼을 무료로 끝까지 볼 수 있어요.<br>구글 계정으로 3초면 시작돼요.</p>'+
-'<button class="boobiGateBtn" id="boobiGateBtn">🅶 구글로 로그인하고 계속 읽기</button>'+
+'<p>부비 회원이면 모든 칼럼을 무료로 끝까지 볼 수 있어요.<br>카카오·구글 계정으로 3초면 시작돼요.</p>'+
+'<div class="boobiGateBtns">'+
+'<button class="boobiGateKk" id="boobiGateKk">'+(window.HW_KAKAO_SVG||'')+'카카오로 계속 읽기</button>'+
+'<button class="boobiGateBtn" id="boobiGateBtn">구글로 계속 읽기</button>'+
+'</div>'+
 '<div class="boobiGateNote">지금은 무료예요 · 로그인만 하면 전체 공개</div>';
 rest.parentNode.insertBefore(wl, rest.nextSibling);
+function gclick(m){ if(window.gtag){try{gtag('event','gate_login_click',{page:location.pathname,type:'article',method:m});}catch(x){}} }
+document.getElementById('boobiGateKk').onclick=function(){
+gclick('kakao'); if(window.hwonAuth) hwonAuth.signInKakao(); };
 document.getElementById('boobiGateBtn').onclick=function(){
-if(window.gtag){try{gtag('event','gate_login_click',{page:location.pathname,type:'article'});}catch(x){}}
-if(window.hwonAuth) hwonAuth.signInGoogle(); };
+gclick('google'); if(window.hwonAuth) hwonAuth.signInGoogle(); };
 }
 document.addEventListener('hwon-auth',function(e){ decided=true; if(e.detail) unlock(); else wall(); });
 function boot(){ if(window.hwonUser){decided=true;unlock();} }
