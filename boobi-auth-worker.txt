@@ -9,9 +9,12 @@
  *   KAKAO_REST_KEY       카카오 REST API 키
  *   KAKAO_CLIENT_SECRET  카카오 [보안] Client Secret  (사용 안 함이면 등록 생략)
  *   FIREBASE_SA_JSON     Firebase 서비스 계정 JSON 파일 내용 전체(한 줄)
+ *   LATPEED_SECRET       래피드 웹훅 URL 뒤에 붙일 아무 긴 문자열(직접 정해서 양쪽에 동일하게)
  *
  * 카카오 디벨로퍼스에 등록할 Redirect URI:
  *   https://boobi-auth.tndud-brad.workers.dev/kakao/callback
+ * 래피드 관리자에 등록할 결제완료 웹훅 URL:
+ *   https://boobi-auth.tndud-brad.workers.dev/latpeed/webhook?secret=<LATPEED_SECRET>
  *
  * 흐름
  *   브라우저 → /kakao/start?rt=/원래보던경로
@@ -22,6 +25,7 @@
  * ========================================================================= */
 
 const SITE          = 'https://boobi.ai.kr';
+const ALLOW         = ['https://boobi.ai.kr', 'https://www.boobi.ai.kr'];
 const LANDING       = SITE + '/kakao-callback';
 const KAKAO_AUTHZ   = 'https://kauth.kakao.com/oauth/authorize';
 const KAKAO_TOKEN   = 'https://kauth.kakao.com/oauth/token';
@@ -70,6 +74,18 @@ function safePath(p) {
   return p.slice(0, 300);
 }
 
+/* 중첩 페이로드에서 값 꺼내기 — 래피드 필드 위치가 바뀌어도 버티도록 후보를 여러 개 준다 */
+function pick(obj, paths) {
+  for (const p of paths) {
+    let v = obj, ok = true;
+    for (const k of p.split('.')) {
+      if (v && typeof v === 'object' && k in v) v = v[k]; else { ok = false; break; }
+    }
+    if (ok && v !== undefined && v !== null && v !== '') return v;
+  }
+  return '';
+}
+
 function redirect(url) { return new Response(null, { status: 302, headers: { Location: url, 'cache-control': 'no-store' } }); }
 function fail(msg, rt) {
   return redirect(LANDING + '#e=' + encodeURIComponent(String(msg).slice(0, 160)) + '&rt=' + encodeURIComponent(rt || '/account'));
@@ -99,7 +115,7 @@ async function googleAccessToken(sa) {
   const iat = Math.floor(Date.now() / 1000);
   const assertion = await signRS256(sa, {
     iss: sa.client_email,
-    scope: 'https://www.googleapis.com/auth/identitytoolkit',
+    scope: 'https://www.googleapis.com/auth/identitytoolkit https://www.googleapis.com/auth/datastore',
     aud: 'https://oauth2.googleapis.com/token',
     iat, exp: iat + 3600
   });
@@ -120,6 +136,75 @@ async function firebaseCustomToken(sa, uid, claims) {
     aud: 'https://identitytoolkit.googleapis.com/google.identity.identitytoolkit.v1.IdentityToolkit',
     iat, exp: iat + 3600, uid, claims: claims || {}
   });
+}
+
+/* ---------------- Firebase ID 토큰 검증 (프론트가 "나 결제했어요" 할 때) ---------------- */
+const JWKS_URL = 'https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com';
+let _jwks = null, _jwksAt = 0;
+async function jwks() {
+  if (!_jwks || Date.now() - _jwksAt > 3600e3) { _jwks = await (await fetch(JWKS_URL)).json(); _jwksAt = Date.now(); }
+  return _jwks;
+}
+async function verifyIdToken(idToken, projectId) {
+  const parts = String(idToken || '').split('.');
+  if (parts.length !== 3) throw new Error('토큰 형식 오류');
+  const head = JSON.parse(b64urlDecode(parts[0]));
+  const body = JSON.parse(b64urlDecode(parts[1]));
+  const now = Math.floor(Date.now() / 1000);
+  if (body.aud !== projectId) throw new Error('aud 불일치');
+  if (body.iss !== 'https://securetoken.google.com/' + projectId) throw new Error('iss 불일치');
+  if (!body.sub || body.exp <= now) throw new Error('만료된 토큰');
+  const set = await jwks();
+  const jwk = (set.keys || []).filter(function (k) { return k.kid === head.kid; })[0];
+  if (!jwk) throw new Error('서명 키를 찾을 수 없음');
+  const key = await crypto.subtle.importKey('jwk', jwk, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+  const sigBin = b64urlDecode(parts[2]);
+  const sig = new Uint8Array(sigBin.length);
+  for (let i = 0; i < sigBin.length; i++) sig[i] = sigBin.charCodeAt(i);
+  const ok = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, sig, enc.encode(parts[0] + '.' + parts[1]));
+  if (!ok) throw new Error('서명 검증 실패');
+  return body;
+}
+
+/* ---------------- Firestore REST ---------------- */
+function fsUrl(sa, path) {
+  return `https://firestore.googleapis.com/v1/projects/${sa.project_id}/databases/(default)/documents/${path}`;
+}
+function fsVal(v) {
+  if (v === null || v === undefined) return { nullValue: null };
+  if (typeof v === 'boolean') return { booleanValue: v };
+  if (typeof v === 'number') return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+  return { stringValue: String(v) };
+}
+/* 문서를 부분 갱신(merge). 없으면 만들어진다. */
+async function fsMerge(sa, at, path, obj) {
+  const fields = {};
+  const mask = [];
+  for (const k of Object.keys(obj)) { fields[k] = fsVal(obj[k]); mask.push('updateMask.fieldPaths=' + encodeURIComponent(k)); }
+  const r = await fetch(fsUrl(sa, path) + '?' + mask.join('&'), {
+    method: 'PATCH',
+    headers: { authorization: 'Bearer ' + at, 'content-type': 'application/json' },
+    body: JSON.stringify({ fields })
+  });
+  return r.json();
+}
+async function fsGet(sa, at, path) {
+  const r = await fetch(fsUrl(sa, path), { headers: { authorization: 'Bearer ' + at } });
+  if (r.status === 404) return null;
+  const j = await r.json();
+  return j && j.fields ? j : null;
+}
+function fsPlain(doc) {
+  const o = {};
+  const f = (doc && doc.fields) || {};
+  for (const k of Object.keys(f)) {
+    const v = f[k];
+    o[k] = v.stringValue !== undefined ? v.stringValue
+      : v.booleanValue !== undefined ? v.booleanValue
+      : v.integerValue !== undefined ? +v.integerValue
+      : v.doubleValue !== undefined ? v.doubleValue : null;
+  }
+  return o;
 }
 
 /* ---------------- Identity Toolkit ---------------- */
@@ -250,6 +335,97 @@ export default {
           + (who.isNew ? '&new=1' : ''));
       } catch (e) {
         return fail('로그인 처리 중 오류: ' + (e && e.message || e), rt);
+      }
+    }
+
+    /* ③ 래피드(Latpeed) 결제 완료 웹훅 — 구매자 이메일로 프리미엄 해제 */
+    if (path === '/latpeed/webhook') {
+      if (request.method !== 'POST') return new Response('POST only', { status: 405 });
+      /* URL 뒤에 붙인 시크릿으로 인증 (래피드가 헤더 서명을 주지 않는다) */
+      if (!env.LATPEED_SECRET || url.searchParams.get('secret') !== env.LATPEED_SECRET) {
+        return new Response('forbidden', { status: 403 });
+      }
+      let body = {};
+      try { body = await request.json(); } catch (e) { try { body = Object.fromEntries(new URLSearchParams(await request.text())); } catch (e2) {} }
+
+      const email = String(pick(body, ['payment.email', 'data.payment.email', 'payment.buyer.email', 'buyer.email', 'data.email', 'email']) || '').trim().toLowerCase();
+      const status = String(pick(body, ['payment.status', 'data.payment.status', 'status']) || 'SUCCESS').toUpperCase();
+      const amount = pick(body, ['payment.amount', 'data.payment.amount', 'amount']);
+      const method = pick(body, ['payment.method', 'data.payment.method', 'method']);
+      const orderId = String(pick(body, ['payment.id', 'payment.orderId', 'data.payment.id', 'order.id', 'orderId', 'id']) || '');
+      const product = String(pick(body, ['product.name', 'payment.productName', 'data.product.name', 'productName', 'product']) || '');
+
+      try {
+        const sa = JSON.parse(env.FIREBASE_SA_JSON);
+        const at = await googleAccessToken(sa);
+        const now = new Date().toISOString();
+
+        /* 원문을 그대로 남겨둔다 — 래피드 페이로드 모양이 예상과 다를 때 여기서 확인 */
+        await fsMerge(sa, at, 'latpeedLogs/' + Date.now() + '_' + Math.random().toString(36).slice(2, 8), {
+          raw: JSON.stringify(body).slice(0, 20000), receivedAt: now, parsedEmail: email, parsedStatus: status
+        });
+
+        const paid = ['SUCCESS', 'PAID', 'DONE', 'COMPLETED', 'COMPLETE', 'OK'].indexOf(status) >= 0;
+        if (!email) return new Response(JSON.stringify({ ok: false, reason: 'no email in payload' }), { status: 200, headers: { 'content-type': 'application/json' } });
+        if (!paid) return new Response(JSON.stringify({ ok: true, skipped: status }), { status: 200, headers: { 'content-type': 'application/json' } });
+
+        /* 이메일 기준 이용권 원장 — 로그인 계정을 못 찾아도 여기 남는다 */
+        await fsMerge(sa, at, 'entitlements/' + encodeURIComponent(email), {
+          email, premium: true, source: 'latpeed', product, orderId,
+          amount: amount ? Number(String(amount).replace(/[^0-9.]/g, '')) || 0 : 0,
+          method: String(method || ''), paidAt: now
+        });
+
+        /* 같은 이메일의 부비 계정이 있으면 즉시 해제 */
+        let linked = '';
+        const found = await idtk(sa, at, ':lookup', { email: [email] });
+        if (found && found.users && found.users.length) {
+          linked = found.users[0].localId;
+          await fsMerge(sa, at, 'members/' + linked, {
+            premium: true, premiumAt: now, premiumSource: 'latpeed', premiumOrder: orderId, premiumEmail: email
+          });
+        }
+        return new Response(JSON.stringify({ ok: true, linked: !!linked }), { headers: { 'content-type': 'application/json' } });
+      } catch (e) {
+        return new Response(JSON.stringify({ ok: false, error: String(e && e.message || e) }), { status: 500, headers: { 'content-type': 'application/json' } });
+      }
+    }
+
+    /* ④ "결제했는데 안 열려요" — 로그인 토큰으로 본인 이메일의 이용권을 찾아 붙인다 */
+    if (path === '/claim') {
+      const cors = {
+        'access-control-allow-origin': ALLOW.indexOf(request.headers.get('origin')) >= 0 ? request.headers.get('origin') : SITE,
+        'access-control-allow-methods': 'POST,OPTIONS',
+        'access-control-allow-headers': 'content-type',
+        'content-type': 'application/json'
+      };
+      if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
+      if (request.method !== 'POST') return new Response('POST only', { status: 405, headers: cors });
+      try {
+        const sa = JSON.parse(env.FIREBASE_SA_JSON);
+        const inp = await request.json();
+        const claims = await verifyIdToken(inp.idToken, sa.project_id);
+        const at = await googleAccessToken(sa);
+
+        /* 확인할 이메일 후보: 계정 이메일 + 사용자가 "이 이메일로 결제했어요"라고 적어준 것 */
+        const cand = [];
+        if (claims.email) cand.push(String(claims.email).toLowerCase());
+        if (inp.payEmail) cand.push(String(inp.payEmail).trim().toLowerCase());
+
+        for (const em of cand) {
+          const doc = await fsGet(sa, at, 'entitlements/' + encodeURIComponent(em));
+          const d = doc ? fsPlain(doc) : null;
+          if (d && d.premium) {
+            await fsMerge(sa, at, 'members/' + claims.sub, {
+              premium: true, premiumAt: new Date().toISOString(),
+              premiumSource: d.source || 'latpeed', premiumOrder: d.orderId || '', premiumEmail: em
+            });
+            return new Response(JSON.stringify({ premium: true, matched: em }), { headers: cors });
+          }
+        }
+        return new Response(JSON.stringify({ premium: false, checked: cand }), { headers: cors });
+      } catch (e) {
+        return new Response(JSON.stringify({ premium: false, error: String(e && e.message || e) }), { status: 400, headers: cors });
       }
     }
 

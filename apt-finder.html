@@ -786,6 +786,8 @@ function nearestIdx(v){var b=0,d=1e12;for(var i=0;i<STEPS.length;i++){var x=Math
 /* '내 아파트 찾기'이므로 기본 유형은 아파트. 평당가 기준으로 정렬하면
    빌라가 상단을 전부 차지해버려서, 유형은 유저가 명시적으로 넓히게 둔다. */
 var UI={idx:0,type:'apt',sort:0};
+/* 비회원·무료 이용자에게 먼저 보여줄 단지 수 (나머지는 프리미엄) */
+var FREE_CANDS=1;
 var SORTS=[{k:'near',t:'예산 근접순'},{k:'desc',t:'가격 높은순'},{k:'asc',t:'가격 낮은순'}];
 var TYPES=[{k:null,t:'전체'},{k:'apt',t:'아파트'},{k:'rh',t:'연립·다세대'},{k:'offi',t:'오피스텔'}];
 var TYPE_BADGE={rh:'빌라',offi:'오피스텔'};
@@ -879,7 +881,7 @@ function renderFinder(){
       +'이 예산대에 '+where+' 실거래가 없어요.<br>예산을 조절하거나 유형을 넓혀보세요.<br>'
       +'<span style="font-size:.8rem">('+where+' 전체 '+(DATA.listings||[]).length.toLocaleString()+'건 중)</span></div>';
   } else {
-    h+=rows.slice(0,40).map(function(d){
+    var cards=rows.slice(0,40).map(function(d){
       var gap=d.price-b, cls=Math.abs(gap)<=b*0.02?'f':(gap<0?'u':'o');
       var txt=Math.abs(gap)<=b*0.02?'예산 딱 맞음':(gap<0?'-'+readMan(-gap):'+'+readMan(gap));
       return '<div class="lrow"><div class="ic" style="background:'+COLORS[d.id%COLORS.length]+'">'+esc(d.name.slice(0,1))+'</div>'
@@ -889,7 +891,20 @@ function renderFinder(){
        +'<div><span class="pr">'+readMan(d.price)+'</span><span class="df '+cls+'">'+txt+'</span></div>'
        +whyHtml(d)
        +aptActions(d.name,d.dong)+'</div></div>';
-    }).join('');
+    });
+    /* ── 무료는 1순위 단지 1건까지. 나머지는 프리미엄 페이월 뒤로 ── */
+    var paid=!!(window.bbPremium && bbPremium.is());
+    if(paid || cards.length<=FREE_CANDS){
+      h+=cards.join('');
+    } else {
+      h+=cards.slice(0,FREE_CANDS).join('');
+      h+='<div class="bbTease" aria-hidden="true">'+cards.slice(FREE_CANDS,FREE_CANDS+2).join('')+'</div>';
+      h+=window.bbPremium
+        ? bbPremium.wall({count:rows.length-FREE_CANDS, unit:'개 단지',
+            desc:'지금 조건에 맞는 단지가 <b>'+rows.length+'개</b> 나왔어요.<br>한 번 결제하면 전체 목록과 부비의 모든 유료 기능이 계속 열려요.'})
+        : '';
+      if(window.gtag){try{gtag('event','view_paywall',{page:location.pathname,locked:rows.length-FREE_CANDS});}catch(x){}}
+    }
   }
   h+='<p class="note">국토부 실거래가(아파트·연립다세대·오피스텔 매매) 최근 12개월 · 단지×면적대별 최신 거래. 해제된 거래는 제외했습니다.'
    +((window.__PURPOSE==='invest'&&REDEV.rows.length)?'<br>🏗️ 태그는 <b>서울·부산·인천 정비사업 통계</b>에 등록된 같은 법정동의 구역 수예요. 사업이 진행 중이라는 사실만 알려줄 뿐, 가격 상승을 뜻하지는 않습니다.':'')
@@ -1346,6 +1361,15 @@ function whyHtml(d){
 }
 </script>
 <script src="/hwon-auth.js" defer></script>
+<script src="/boobi-premium.js?v=1" defer></script>
+<script>
+/* 이용권 상태가 정해지면 목록을 다시 그린다 (결제 직후 새로고침 없이 열림) */
+document.addEventListener('bb-premium',function(e){
+  if(e.detail===true && window.__CANDS && typeof renderFinder==='function'){
+    try{ renderFinder(); }catch(x){}
+  }
+});
+</script>
 <!-- 로그인 게이트는 제거된 게 아니라 "매매" 모드 진입 시 동적으로 로드됩니다(아래 허브 스크립트의 loadGate()).
      허브 카드(매매/청약/재개발/경매)는 비로그인도 볼 수 있어야 유입이 막히지 않습니다.
      원래 줄: <script src="/boobi-login-gate.js?v=3" defer></script> -->
