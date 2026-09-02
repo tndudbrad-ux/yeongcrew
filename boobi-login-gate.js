@@ -27,6 +27,9 @@ css.textContent=
 '#bbGate .gbtn:hover{transform:translateY(-1px)}'+
 '#bbGate .gkk{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:13px;margin-bottom:9px;border:none;border-radius:999px;background:#FEE500;color:#191600;font-size:.96rem;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 6px 16px rgba(13,42,41,.10);transition:transform .12s ease-out}'+
 '#bbGate .gkk:hover{transform:translateY(-1px)}'+
+'#bbGate .gnv{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:13px;margin-bottom:9px;border:none;border-radius:999px;background:#03C75A;color:#fff;font-size:.96rem;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 6px 16px rgba(3,199,90,.22);transition:transform .12s ease-out}'+
+'#bbGate .gnv:hover{transform:translateY(-1px)}'+
+'#bbGate .gnv:active{transform:scale(.97)}'+
 '#bbGate .gkk:active,#bbGate .gbtn:active{transform:scale(.97)}'+
 '#bbGate .gclose{margin-top:12px;background:none;border:none;font-size:.82rem;color:#8aa5a2;cursor:pointer;font-family:inherit}'+
 '#bbGate .gfree{margin-top:10px;font-size:.78rem;color:#8aa5a2}';
@@ -41,6 +44,7 @@ function show(){
     '<h3>결과는 로그인하면 바로 나와요</h3>'+
     '<p>입력하신 내용은 그대로 있어요.<br>로그인하면 <b>결과 확인·저장</b>과 모든 진단·툴이 무료예요.</p>'+
     '<button class="gkk" id="bbGateKk">'+(window.HW_KAKAO_SVG||'')+'카카오로 3초 만에 계속하기</button>'+
+'<button class="gnv" id="bbGateNv">'+(window.HW_NAVER_SVG||'')+'네이버로 계속하기</button>'+
     '<button class="gbtn" id="bbGateGo">구글로 계속하기</button>'+
     '<button class="gclose" id="bbGateClose">나중에 할게요</button>'+
     '<div class="gfree">가입·이용 모두 무료 · <a href="/privacy.html" style="color:#2A7DE8">개인정보처리방침</a></div>'+
@@ -50,6 +54,11 @@ function show(){
   document.getElementById('bbGateKk').onclick=function(){
     ga('gate_login_click',{method:'kakao'});
     if(window.hwonAuth&&hwonAuth.signInKakao) hwonAuth.signInKakao();
+    else location.href='/account.html';
+  };
+  document.getElementById('bbGateNv').onclick=function(){
+    ga('gate_login_click',{method:'naver'});
+    if(window.hwonAuth&&hwonAuth.signInNaver) hwonAuth.signInNaver();
     else location.href='/account.html';
   };
   document.getElementById('bbGateGo').onclick=function(){

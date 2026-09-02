@@ -103,6 +103,14 @@ if(link) link.textContent = u ? '마이' : '로그인';
 document.dispatchEvent(new CustomEvent('hwon-auth',{detail:u||null}));
 });
 }).catch(function(e){ console.warn('hwon-auth init fail', e); });
+/* 카카오·네이버 공통 진입 — 워커의 /<provider>/start 로 보낸다.
+ * 돌아올 경로(rt)를 같이 넘겨서 로그인 후 보던 화면으로 복귀시킨다. */
+function startSocial(provider){
+var rt=location.pathname+location.search;
+if(rt.indexOf('/kakao-callback')===0) rt='/account';
+location.href=window.HW_AUTH_API+'/'+provider+'/start?rt='+encodeURIComponent(rt);
+return new Promise(function(){});   /* 페이지가 이동하므로 resolve하지 않음 */
+}
 window.hwonAuth={
 ready:function(){return ready;},
 signInGoogle:function(){
@@ -116,22 +124,21 @@ throw e;
 });
 });
 },
-/* 카카오 로그인 — 인가코드 교환·커스텀 토큰 발급은 인증 워커가 처리한다.
- * (카카오 REST 키·시크릿은 워커에만 있고 프론트엔드엔 없음) */
-signInKakao:function(){
-var rt=location.pathname+location.search;
-if(rt.indexOf('/kakao-callback')===0) rt='/account';
-location.href=window.HW_AUTH_API+'/kakao/start?rt='+encodeURIComponent(rt);
-return new Promise(function(){});   /* 페이지가 이동하므로 resolve하지 않음 */
-},
+/* 카카오·네이버 로그인 — 인가코드 교환·커스텀 토큰 발급은 인증 워커가 처리한다.
+ * (REST 키·시크릿은 워커에만 있고 프론트엔드엔 없음) */
+/* provider: 'kakao' | 'naver' */
+signInKakao:function(){ return startSocial('kakao'); },
+/* 네이버 로그인 — 카카오와 같은 워커가 인가코드 교환·커스텀 토큰 발급을 처리한다 */
+signInNaver:function(){ return startSocial('naver'); },
 signOut:function(){return ready.then(function(a){return a.signOut();});}
 };
 })();
 
-/* 부비 인증 워커 (카카오 로그인) */
+/* 부비 인증 워커 (카카오·네이버 로그인) */
 window.HW_AUTH_API='https://boobi-auth.tndud-brad.workers.dev';
 
 /* 카카오 로그인 공통 버튼 — 카카오 브랜드 가이드(노란 #FEE500 + 말풍선) 준수 */
+window.HW_NAVER_SVG='<svg width="15" height="15" viewBox="0 0 20 20" aria-hidden="true"><path fill="#fff" d="M13.06 10.72 6.66 1.5H1.5v17h5.44V9.28l6.4 9.22h5.16v-17h-5.44v9.22z"/></svg>';
 window.HW_KAKAO_SVG='<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#191600" d="M12 3C6.99 3 3 6.2 3 10.13c0 2.5 1.66 4.7 4.16 5.96-.14.5-.9 3.1-.93 3.31 0 0-.02.16.08.22.1.06.23.01.23.01.29-.04 3.36-2.2 3.9-2.58.5.07 1.02.11 1.56.11 5.01 0 9-3.2 9-7.03C21 6.2 17.01 3 12 3z"/></svg>';
 
 /* ===== 새 회원가입 알림 — 첫 로그인 시 members 기록 + 운영자 메일 ===== */
@@ -197,6 +204,8 @@ st.textContent=
 '.boobiGateBtn:hover{transform:translateY(-1px)}'+
 '.boobiGateKk{display:flex;align-items:center;justify-content:center;gap:8px;background:#FEE500;color:#191600;font-weight:800;font-size:.97rem;padding:13px 22px;border:none;border-radius:999px;cursor:pointer;font-family:inherit;box-shadow:0 6px 16px rgba(13,42,41,.10);transition:transform .12s ease-out;white-space:nowrap}'+
 '.boobiGateKk:hover{transform:translateY(-1px)}'+
+'.boobiGateNv{display:flex;align-items:center;justify-content:center;gap:8px;background:#03C75A;color:#fff;font-weight:800;font-size:.97rem;padding:13px 22px;border:none;border-radius:999px;cursor:pointer;font-family:inherit;box-shadow:0 6px 16px rgba(3,199,90,.22);transition:transform .12s ease-out;white-space:nowrap}'+
+'.boobiGateNv:hover{transform:translateY(-1px)}'+
 '.boobiGateNote{font-size:.8rem;color:#8aa5a2;margin-top:12px}'+
 'body.boobi-unlocked .boobiGateRest{max-height:none;overflow:visible}'+
 'body.boobi-unlocked .boobiGateRest::after{display:none}'+
@@ -221,9 +230,10 @@ art.insertBefore(rest, kids[cut]);
 for(var j=cut;j<kids.length;j++){ rest.appendChild(kids[j]); }
 var wl=document.createElement('div'); wl.className='boobiGateWall';
 wl.innerHTML='<div class="lk">🔒</div><h3>로그인하면 이어서 읽을 수 있어요</h3>'+
-'<p>부비 회원이면 모든 칼럼을 무료로 끝까지 볼 수 있어요.<br>카카오·구글 계정으로 3초면 시작돼요.</p>'+
+'<p>부비 회원이면 모든 칼럼을 무료로 끝까지 볼 수 있어요.<br>카카오·네이버·구글 계정으로 3초면 시작돼요.</p>'+
 '<div class="boobiGateBtns">'+
 '<button class="boobiGateKk" id="boobiGateKk">'+(window.HW_KAKAO_SVG||'')+'카카오로 계속 읽기</button>'+
+'<button class="boobiGateNv" id="boobiGateNv">'+(window.HW_NAVER_SVG||'')+'네이버로 계속 읽기</button>'+
 '<button class="boobiGateBtn" id="boobiGateBtn">구글로 계속 읽기</button>'+
 '</div>'+
 '<div class="boobiGateNote">지금은 무료예요 · 로그인만 하면 전체 공개</div>';
@@ -231,6 +241,8 @@ rest.parentNode.insertBefore(wl, rest.nextSibling);
 function gclick(m){ if(window.gtag){try{gtag('event','gate_login_click',{page:location.pathname,type:'article',method:m});}catch(x){}} }
 document.getElementById('boobiGateKk').onclick=function(){
 gclick('kakao'); if(window.hwonAuth) hwonAuth.signInKakao(); };
+document.getElementById('boobiGateNv').onclick=function(){
+gclick('naver'); if(window.hwonAuth) hwonAuth.signInNaver(); };
 document.getElementById('boobiGateBtn').onclick=function(){
 gclick('google'); if(window.hwonAuth) hwonAuth.signInGoogle(); };
 }

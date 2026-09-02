@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>카카오 로그인 - 부비</title>
+<title>소셜 로그인 - 부비</title>
 <meta name="robots" content="noindex,nofollow">
-<meta name="description" content="부비 카카오 로그인 처리 중입니다.">
+<meta name="description" content="부비 소셜 로그인 처리 중입니다.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
 <style>
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
@@ -52,7 +52,7 @@ p{font-size:.9rem;color:#547471;margin-top:8px;word-break:keep-all}
 
 <div class="kbox">
 <img class="kring" src="/boobi-ring-3d.png" alt="부비">
-<h1 id="kTitle">카카오 계정으로 들어가는 중…</h1>
+<h1 id="kTitle">로그인하는 중…</h1>
 <p id="kDesc">잠시만 기다려주세요.</p>
 <div class="kbar" id="kBar"><i></i></div>
 <div id="kAct"></div>
@@ -72,6 +72,11 @@ p{font-size:.9rem;color:#547471;margin-top:8px;word-break:keep-all}
   var rt = h.rt || '/account';
   if(rt.charAt(0)!=='/' || rt.charAt(1)==='/') rt='/account';
 
+  /* 어느 소셜로 들어왔는지 — 워커가 #p= 로 알려준다 (없으면 카카오) */
+  var prov = (h.p==='naver') ? 'naver' : 'kakao';
+  var provName = prov==='naver' ? '네이버' : '카카오';
+  document.getElementById('kTitle').textContent = provName+' 계정으로 들어가는 중…';
+
   function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
   function err(msg){
     document.getElementById('kBar').style.display='none';
@@ -80,15 +85,15 @@ p{font-size:.9rem;color:#547471;margin-top:8px;word-break:keep-all}
     document.getElementById('kAct').innerHTML =
       '<a class="kbtn" href="/account">다시 로그인하기</a>'+
       '<a class="kmini" href="'+rt.replace(/"/g,'&quot;')+'">돌아가기</a>';
-    ga('kakao_login_fail',{reason:(msg||'').slice(0,80)});
+    ga(prov+'_login_fail',{reason:(msg||'').slice(0,80)});
   }
 
   if(h.e){ err(h.e); return; }
   if(!h.t){ err('로그인 정보가 전달되지 않았어요.'); return; }
 
   function go(){
-    if(h['new']) ga('sign_up',{method:'kakao'});
-    ga('kakao_login_success',{linked:h.link?1:0});
+    if(h['new']) ga('sign_up',{method:prov});
+    ga(prov+'_login_success',{linked:h.link?1:0});
     document.getElementById('kTitle').textContent='로그인됐어요!';
     document.getElementById('kDesc').textContent = h.link
       ? '기존 부비 계정과 연결됐어요. 잠시 후 이동합니다.'
