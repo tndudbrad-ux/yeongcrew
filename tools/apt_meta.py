@@ -18,6 +18,11 @@
   python apt_meta.py --stage list            1단계: 단지코드 목록 (가벼움)
   python apt_meta.py --stage info --budget 4800   2·3단계: 단지별 상세
   python apt_meta.py --emit                  data/apt-meta/*.json 생성
+  python apt_meta.py --import-csv 단지_기본정보.csv   K-apt 엑셀(CSV 저장)로 부대복리시설·승강기·최고층 등 보강
+  KAKAO_REST_KEY=… python apt_meta.py --geocode --budget 20000   도로명주소 → 좌표 (카카오 로컬)
+
+API에 없는 것(부대복리시설·승강기·최고층·지하주차·좌표)은 extra 테이블에 따로 두고
+emit 때 합친다. 단지코드(kapt_code)로 정확히 붙으므로 이름 매칭이 필요 없다.
 
 산출물
   apt_meta.db            SQLite. 단지 원본 + 수집 진행상황
@@ -198,7 +203,29 @@ CREATE INDEX IF NOT EXISTS ix_complex_sgg ON complex(sgg_code);
 CREATE INDEX IF NOT EXISTS ix_complex_bass ON complex(bass_done);
 CREATE INDEX IF NOT EXISTS ix_complex_dtl ON complex(dtl_done);
 CREATE TABLE IF NOT EXISTS listed (sgg_code TEXT PRIMARY KEY, n INTEGER, at TEXT);
+-- API가 안 주는 것들. K-apt 엑셀(주 1회 갱신) 또는 지오코딩으로 채운다.
+CREATE TABLE IF NOT EXISTS extra (
+  kapt_code   TEXT PRIMARY KEY,
+  fac         TEXT,             -- 부대복리시설 코드(쉼표): comm,pub,play,senior,care,kinder,lib,rest,bike
+  heat        TEXT,             -- 난방방식
+  ev          INTEGER,          -- 승객용 승강기 수
+  top         INTEGER,          -- 최고층
+  park_u      INTEGER,          -- 지하주차대수
+  lat         REAL,
+  lng         REAL,
+  csv_at      TEXT,
+  geo_at      TEXT
+);
 """
+
+# K-apt는 부대복리시설을 자유 텍스트가 아니라 코드값 11종으로 준다. 짧은 코드로 바꿔 싣는다.
+FAC_MAP = [("커뮤니티공간", "comm"), ("주민공동시설", "pub"), ("어린이놀이터", "play"), ("노인정", "senior"),
+           ("보육시설", "care"), ("유치원", "kinder"), ("문고", "lib"), ("휴게시설", "rest"), ("자전거보관소", "bike")]
+
+
+def fac_codes(v: str) -> str:
+    v = v or ""
+    return ",".join(code for ko, code in FAC_MAP if ko in v)
 
 
 def db_open() -> sqlite3.Connection:
@@ -340,14 +367,17 @@ def emit(con: sqlite3.Connection) -> None:
     for sgg in sggs:
         out = []
         for r in con.execute(
-            "SELECT name,umd,households,use_date,subway_stn,subway_min,bus_min,"
-            "park_cnt,builder,dong_cnt FROM complex"
-            " WHERE sgg_code=? AND bass_done=1", (sgg,)
+            "SELECT c.name,c.umd,c.households,c.use_date,c.subway_stn,c.subway_min,c.bus_min,"
+            "c.park_cnt,c.builder,c.dong_cnt,c.kapt_code,c.hall_type,"
+            "x.fac,x.heat,x.ev,x.top,x.park_u,x.lat,x.lng"
+            " FROM complex c LEFT JOIN extra x ON x.kapt_code=c.kapt_code"
+            " WHERE c.sgg_code=? AND c.bass_done=1", (sgg,)
         ):
-            (name, umd, hh, use, stn, smin, bmin, park, builder, dong) = r
+            (name, umd, hh, use, stn, smin, bmin, park, builder, dong,
+             kc, hall, fac, heat, ev, top, park_u, lat, lng) = r
             if not name:
                 continue
-            rec = {"n": name, "d": umd or ""}
+            rec = {"c": kc, "n": name, "d": umd or ""}
             if hh:
                 rec["hh"] = hh                       # 세대수
             if use and len(use) >= 4:
@@ -364,6 +394,21 @@ def emit(con: sqlite3.Connection) -> None:
                 rec["dc"] = dong
             if builder:
                 rec["bd"] = builder                  # 시공사
+            if hall and hall not in ("기타", ""):
+                rec["cor"] = hall                    # 복도유형 (계단식·복도식·혼합식)
+            # ── extra (K-apt 엑셀·지오코딩) ──
+            if fac:
+                rec["fac"] = fac.split(",")
+            if heat:
+                rec["heat"] = heat
+            if ev:
+                rec["ev"] = ev
+            if top:
+                rec["top"] = top
+            if park_u and park:
+                rec["pku"] = round(min(park_u / park, 1.0), 2)   # 지하주차 비율
+            if lat and lng:
+                rec["lat"], rec["lng"] = round(lat, 6), round(lng, 6)
             out.append(rec)
         if not out:
             continue
@@ -372,6 +417,86 @@ def emit(con: sqlite3.Connection) -> None:
             json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
         total += len(out)
     print(f"[산출] {len(sggs)}개 시군구 · 단지 {total:,}개 → {OUT_DIR}", flush=True)
+
+
+# ── K-apt 엑셀 보강 ───────────────────────────────────────────────────────────
+def import_csv(con: sqlite3.Connection, path: str) -> None:
+    """K-apt '단지 기본정보' 엑셀을 CSV로 저장한 파일. 1행 안내문, 2행 헤더.
+    단지코드로 붙이므로 이름 매칭이 없다 — API 목록과 같은 의무관리대상 단지 집합이다."""
+    import csv
+    raw = open(path, "rb").read()
+    try:
+        txt = raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        txt = raw.decode("cp949")
+    rows = list(csv.reader(txt.splitlines()))
+    # 헤더 = 값이 든 칸이 가장 많은 행 (안내문 행은 칸은 많아도 값은 하나뿐)
+    hi = max(range(min(5, len(rows))), key=lambda i: sum(1 for c in rows[i] if c.strip()))
+    hdr = [h.strip() for h in rows[hi]]
+
+    def col(*names: str) -> int:
+        for n in names:
+            if n in hdr:
+                return hdr.index(n)
+        return -1
+    ic, ifac, iheat, iev, itop, ipu = (col("단지코드"), col("부대복리시설"), col("난방방식"),
+                                       col("승강기(승객용)"), col("최고층수"), col("지하주차대수"))
+    if ic < 0:
+        sys.exit(f"'단지코드' 열이 없습니다. 헤더: {hdr[:12]}")
+    known = {r[0] for r in con.execute("SELECT kapt_code FROM complex")}
+    today = time.strftime("%Y-%m-%d")
+    n = hit = 0
+
+    def cell(r: list[str], i: int) -> str:
+        return r[i].strip() if 0 <= i < len(r) else ""
+    for r in rows[hi + 1:]:
+        kc = cell(r, ic)
+        if not kc:
+            continue
+        n += 1
+        if kc in known:
+            hit += 1
+        con.execute(
+            "INSERT INTO extra(kapt_code,fac,heat,ev,top,park_u,csv_at) VALUES(?,?,?,?,?,?,?)"
+            " ON CONFLICT(kapt_code) DO UPDATE SET fac=excluded.fac,heat=excluded.heat,"
+            " ev=excluded.ev,top=excluded.top,park_u=excluded.park_u,csv_at=excluded.csv_at",
+            (kc, fac_codes(cell(r, ifac)), cell(r, iheat), to_int(cell(r, iev)),
+             to_int(cell(r, itop)), to_int(cell(r, ipu)), today))
+    con.commit()
+    print(f"[엑셀] {n:,}개 단지 읽음 · API 목록과 일치 {hit:,}개 → extra", flush=True)
+
+
+def geocode(con: sqlite3.Connection, key: str, budget: int) -> None:
+    """도로명주소 → 위경도 (카카오 로컬). 이미 좌표 있는 단지는 건너뛴다."""
+    rows = con.execute(
+        "SELECT c.kapt_code, c.road_addr FROM complex c LEFT JOIN extra x ON x.kapt_code=c.kapt_code"
+        " WHERE c.road_addr!='' AND (x.lat IS NULL)").fetchall()
+    print(f"[좌표] 대상 {len(rows):,}개 · 이번 실행 {min(budget, len(rows)):,}개", flush=True)
+    today = time.strftime("%Y-%m-%d")
+    ok = miss = 0
+    for i, (kc, addr) in enumerate(rows[:budget], 1):
+        r = requests.get("https://dapi.kakao.com/v2/local/search/address.json",
+                         params={"query": addr}, headers={"Authorization": "KakaoAK " + key}, timeout=TIMEOUT)
+        if r.status_code == 429:
+            time.sleep(2)
+            continue
+        if r.status_code != 200:
+            sys.exit(f"카카오 {r.status_code}: {r.text[:200]}")
+        docs = r.json().get("documents") or []
+        if docs:
+            lat, lng = float(docs[0]["y"]), float(docs[0]["x"])   # x가 경도, y가 위도
+            con.execute("INSERT INTO extra(kapt_code,lat,lng,geo_at) VALUES(?,?,?,?)"
+                        " ON CONFLICT(kapt_code) DO UPDATE SET lat=excluded.lat,lng=excluded.lng,geo_at=excluded.geo_at",
+                        (kc, lat, lng, today))
+            ok += 1
+        else:
+            miss += 1
+        if i % 500 == 0:
+            con.commit()
+            print(f"  {i}/{min(budget, len(rows))}", flush=True)
+        time.sleep(0.03)
+    con.commit()
+    print(f"[좌표] 성공 {ok:,} · 주소 못 찾음 {miss:,}", flush=True)
 
 
 # ── 진단 ────────────────────────────────────────────────────────────────────
@@ -443,6 +568,8 @@ def main() -> None:
     ap.add_argument("--sgg", nargs="*", help="특정 시군구코드만")
     ap.add_argument("--emit", action="store_true")
     ap.add_argument("--probe", action="store_true")
+    ap.add_argument("--import-csv", metavar="FILE", help="K-apt 단지 기본정보 CSV로 extra 보강")
+    ap.add_argument("--geocode", action="store_true", help="도로명주소 지오코딩 (KAKAO_REST_KEY)")
     a = ap.parse_args()
 
     if not a.key and (a.stage or a.probe):
@@ -454,13 +581,20 @@ def main() -> None:
         return
 
     con = db_open()
+    if a.import_csv:
+        import_csv(con, a.import_csv)
+    if a.geocode:
+        kk = os.environ.get("KAKAO_REST_KEY", "").strip()
+        if not kk:
+            sys.exit("KAKAO_REST_KEY 환경변수가 없습니다.")
+        geocode(con, kk, a.budget)
     if a.stage == "list":
         stage_list(con, a.key, a.sgg)
     elif a.stage == "info":
         stage_info(con, a.key, a.budget)
     if a.emit:
         emit(con)
-    if not (a.stage or a.emit):
+    if not (a.stage or a.emit or a.import_csv or a.geocode):
         ap.print_help()
 
 
