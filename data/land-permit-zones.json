@@ -1,0 +1,43 @@
+{
+  "updated": "2026-08-30",
+  "note": "토지거래허가구역. 규제지역(투기과열지구)과 별개 제도이며 지정 주체·기간·대상이 다르다. 현재는 두 목록이 사실상 겹치지만 같은 것으로 취급하면 안 된다 — 만료일이 따로 있고 해제도 따로 된다.",
+  "verify": "지정·해제가 수시로 바뀐다. 만료일(to)이 지난 항목은 화면에서 자동으로 빠지지만, 신규 지정은 사람이 갱신해야 한다.",
+  "rule": {
+    "useYears": 2,
+    "moveInMonths": 4,
+    "summary": "허가를 받아 주택을 사면 4개월 안에 입주해 2년간 실거주해야 한다. 전세를 낀 매수(갭투자)는 원칙적으로 불가하다.",
+    "penalty": "무허가 거래는 2년 이하 징역 또는 토지가격의 30% 이하 벌금. 이용의무 위반은 3개월 이행기간 뒤 취득가액의 10% 범위에서 매년 이행강제금.",
+    "deferral": {
+      "since": "2026-05-29",
+      "summary": "세입자가 살고 있는 집을 살 때 실거주 의무를 미룰 수 있다. 매수인은 2026-05-12 이후 계속 무주택이어야 하고, 매도인은 2026-05-12 기준 그 집을 임대 중이어야 한다. 유예는 그 임대차의 최초 종료 시점까지이고 늦어도 2028-05-11까지는 입주해야 한다.",
+      "deadline": "2028-05-11"
+    }
+  },
+  "areaNote": "허가 대상 기준면적은 법정 기준(주거지역 60㎡ 초과)을 지자체가 최대 10%까지 낮출 수 있다. 아파트 대지지분은 60㎡를 넘지 않는 경우가 많아 이 기준이 실제 적용 여부를 가른다. 공고에서 확인된 값만 minArea에 적었고, 없으면 null이다 — 단정하지 말고 관할 시군구 확인을 안내할 것.",
+  "sources": [
+    { "title": "토지거래허가 제도 안내 (서울부동산정보광장)", "url": "https://land.seoul.go.kr/land/other/contractGuide.do" },
+    { "title": "토지거래허가구역 (국토교통부)", "url": "https://www.molit.go.kr/policy/stable/sta_e_05.jsp" },
+    { "title": "동탄·기흥·구리 토지거래허가구역 신규 지정", "url": "https://www.cbci.co.kr/news/articleView.html?idxno=585495" },
+    { "title": "토허제 실거주 의무 유예 시행", "url": "https://www.munhwa.com/article/11592249" }
+  ],
+  "zones": [
+    { "sido": "서울특별시", "sgg": "*", "from": "2025-10-20", "to": null, "target": "용도 제한 없음", "minArea": null, "label": "서울 25개 자치구 전역" },
+
+    { "sido": "경기도", "sgg": "과천시",        "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "광명시",        "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "의왕시",        "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "하남시",        "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "성남시 수정구",  "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "성남시 중원구",  "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "성남시 분당구",  "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "수원시 장안구",  "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "수원시 팔달구",  "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "수원시 영통구",  "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "안양시 동안구",  "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+    { "sido": "경기도", "sgg": "용인시 수지구",  "from": "2025-10-20", "to": null, "target": null, "minArea": null },
+
+    { "sido": "경기도", "sgg": "화성시 동탄구",  "from": "2026-07-05", "to": "2027-12-31", "target": "5개 층 이상 공동주택(아파트)", "minArea": 6, "label": "55.52㎢" },
+    { "sido": "경기도", "sgg": "용인시 기흥구",  "from": "2026-07-05", "to": "2027-12-31", "target": "5개 층 이상 공동주택(아파트)", "minArea": 6, "label": "81.64㎢" },
+    { "sido": "경기도", "sgg": "구리시",        "from": "2026-07-05", "to": "2027-12-31", "target": "5개 층 이상 공동주택(아파트)", "minArea": 6, "label": "33.34㎢" }
+  ]
+}
