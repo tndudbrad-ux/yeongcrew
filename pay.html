@@ -12,10 +12,9 @@
 <meta property="og:description" content="취득세·보유세·전세 리스크·매수 신호등을 한 장으로. 4,900원, 결제 즉시 발급.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://boobi.ai.kr/pay.html">
-<meta property="og:image" content="https://boobi.ai.kr/og-boobi.png">
+<meta property="og:image" content="https://boobi.ai.kr/report-preview.webp">
 <meta property="og:site_name" content="부비 - 부동산 비서">
 <meta property="og:locale" content="ko_KR">
-<meta name="robots" content="noindex">
 <style>
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
 @import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
@@ -54,10 +53,10 @@ main{padding:36px 0 70px}
 }
 
 /* ── 상품 영역 ── */
-.prod{display:grid;grid-template-columns:230px 1fr;gap:28px;padding:30px 30px;align-items:center;margin-bottom:22px}
-.prod .shot{position:relative;border-radius:20px;padding:26px 18px;text-align:center;background:linear-gradient(150deg,#F4FBFF 0%,#EFF9F8 100%);border:1px solid rgba(61,139,253,.16);overflow:hidden}
+.prod{display:grid;grid-template-columns:300px 1fr;gap:28px;padding:30px 30px;align-items:center;margin-bottom:22px}
+.prod .shot{position:relative;border-radius:20px;padding:14px 14px 18px;text-align:center;background:linear-gradient(150deg,#F4FBFF 0%,#EFF9F8 100%);border:1px solid rgba(61,139,253,.16);overflow:hidden}
 .prod .shot::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 78% 4%,rgba(61,139,253,.16),transparent 62%),radial-gradient(60% 50% at 8% 96%,rgba(42,193,188,.20),transparent 62%);pointer-events:none}
-.prod .shot img{width:96px;height:96px;object-fit:contain;filter:drop-shadow(0 10px 22px rgba(42,193,188,.42));position:relative;z-index:1}
+.prod .shot img{width:100%;height:auto;display:block;border-radius:12px;position:relative;z-index:1}
 .prod .shot .pdf{position:relative;z-index:1;margin-top:12px;display:inline-block;padding:5px 13px;border-radius:999px;background:linear-gradient(115deg,#26C6B9,#3D8BFD 60%,#8B6CF6);color:#fff;font-size:.74rem;font-weight:800;letter-spacing:.02em}
 .prod h1{font-size:1.5rem;font-weight:700;letter-spacing:-.025em;word-break:keep-all;margin-bottom:8px}
 .prod .lead{font-size:.94rem;color:var(--sub);word-break:keep-all;margin-bottom:16px}
@@ -103,7 +102,7 @@ button.go:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
 .agreelink a{color:var(--blue);text-decoration:underline}
 footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
 footer a{color:#B9DCD9;margin:0 8px}
-@media(max-width:700px){nav.gnb{display:none}.prod{grid-template-columns:1fr;padding:24px 20px;gap:20px}.sec{padding:22px 20px}.prod h1{font-size:1.3rem}}
+@media(max-width:820px){nav.gnb{display:none}.prod{grid-template-columns:1fr;padding:24px 20px;gap:20px}.sec{padding:22px 20px}.prod h1{font-size:1.3rem}}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css?v=3">
 </head>
@@ -126,8 +125,8 @@ footer a{color:#B9DCD9;margin:0 8px}
 <!-- ── 상품 ── -->
 <section class="glass prod">
   <div class="shot">
-    <img src="/boobi-ring-3d.png" alt="부비 집 종합 리포트 PDF">
-    <div class="pdf">PDF 리포트</div>
+    <img src="/report-preview.webp" width="1200" height="900" alt="부비 집 종합 리포트 PDF 샘플 — 표지의 신호등 결론과 내지의 세금·대출 한도·전세 리스크 항목">
+    <div class="pdf">A4 PDF · 6페이지</div>
   </div>
   <div>
     <h1>집 종합 리포트 PDF</h1>
