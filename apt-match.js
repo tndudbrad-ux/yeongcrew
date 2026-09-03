@@ -46,10 +46,9 @@
       v[pre + n] = 1; }
     return v;
   }
-  function ratio(a, b) {
-    if (a === b) return 1;
-    function g(s) { var o = {}, n = 0; for (var i = 0; i < s.length - 1; i++) { var k = s.slice(i, i + 2); if (!o[k]) { o[k] = 1; n++; } } return { o: o, n: n }; }
-    var A = g(a), B = g(b); if (!A.n || !B.n) return 0;
+  function grams(s) { var o = {}, n = 0; for (var i = 0; i < s.length - 1; i++) { var k = s.slice(i, i + 2); if (!o[k]) { o[k] = 1; n++; } } return { o: o, n: n }; }
+  function ratioG(A, B) {   /* 2-gram 유사도 — 양쪽 다 미리 만든 gram 집합 */
+    if (!A.n || !B.n) return 0;
     var hit = 0; for (var k in A.o) if (B.o[k]) hit++;
     return 2 * hit / (A.n + B.n);
   }
@@ -60,30 +59,42 @@
              lat: r.lat != null ? r.lat : null, lng: r.lng != null ? r.lng : null,
              pk: (r.pk && r.hh) ? Math.round(r.pk / r.hh * 100) / 100 : null, kn: r.n };
   }
-  /* arr: K-apt 단지 배열, rows: 그 시군구 실거래 행 → { metaKey(실거래 동,이름) → meta } */
+  /* arr: K-apt 단지 배열, rows: 그 시군구 실거래 행 → { metaKey(실거래 동,이름) → meta }
+     서울 25개 구 5,700단지에 2.6초가 걸리던 것을, 단지별 정규화·변형·2-gram 을 한 번만 만들고
+     ① 정확 일치는 해시로 바로 찾도록 바꿔 수십 ms 로 줄였다. */
   function indexMeta(arr, rows) {
     var out = {};
     if (!Array.isArray(arr) || !arr.length) return out;
-    var idx = {};
-    function put(k, r) { if (k) (idx[k] = idx[k] || []).push(r); }
-    for (var i = 0; i < arr.length; i++) { var r = arr[i]; if (!r || !r.n) continue; put(dongKey(r.d), r); }
+    var idx = {}, exact = {};                       /* dongKey → [rec],  dongKey|variant → rec */
+    for (var i = 0; i < arr.length; i++) {
+      var r = arr[i]; if (!r || !r.n) continue;
+      var dk = dongKey(r.d), nn = norm(r.n);
+      var rec = { r: r, nn: nn, ns: numseq(r.n), g: null };
+      (idx[dk] = idx[dk] || []).push(rec);
+      var vs = variants(r.n, r.d);
+      for (var x in vs) { var ek = dk + '|' + x; if (!exact[ek] || (r.hh || 0) > (exact[ek].r.hh || 0)) exact[ek] = rec; }
+    }
     var seen = {};
     for (var j = 0; j < (rows || []).length; j++) {
       var d = rows[j]; if (d.type && d.type !== 'apt') continue;
       var key = metaKey(d.dong, d.name); if (seen[key]) continue; seen[key] = 1;
       var parts = String(d.dong || '').trim().split(/\s+/);
-      var tries = [dongKey(d.dong), dongKey(parts[parts.length - 1]), dongKey(parts[0])], cand = [], dd = {};
-      for (var t = 0; t < tries.length; t++) { var L = idx[tries[t]] || []; for (var q = 0; q < L.length; q++) if (!dd[L[q].c || L[q].n]) { dd[L[q].c || L[q].n] = 1; cand.push(L[q]); } }
-      if (!cand.length) continue;
-      var V = variants(d.name, d.dong), N = numseq(d.name), m = null;
-      for (var a = 0; a < cand.length && !m; a++) { var kv = variants(cand[a].n, cand[a].d); for (var x in V) if (kv[x]) { m = cand[a]; break; } }
+      var tries = [dongKey(d.dong), dongKey(parts[parts.length - 1]), dongKey(parts[0])];
+      var V = variants(d.name, d.dong), m = null;
+      /* ① 정규화 일치 (동 접두 흡수 변형 포함) */
+      for (var t = 0; t < tries.length && !m; t++) for (var x in V) { var hit = exact[tries[t] + '|' + x]; if (hit) { m = hit; break; } }
       if (!m) {
-        var safe = cand.filter(function (k) { return numseq(k.n) === N; });
-        var subs = safe.filter(function (k) { var kn = norm(k.n); for (var x in V) if (x.length >= 3 && (kn.indexOf(x) >= 0 || x.indexOf(kn) >= 0)) return true; return false; });
-        if (subs.length === 1) m = subs[0];
-        else { var best = null, bs = 0; for (var b = 0; b < safe.length; b++) { var rr = ratio(norm(d.name), norm(safe[b].n)); if (rr > bs) { bs = rr; best = safe[b]; } } if (bs >= 0.78) m = best; }
+        /* ② 포함 / ③ 2-gram — 숫자열이 같은 후보에만 */
+        var N = numseq(d.name), dn = norm(d.name), safe = [], dd = {};
+        for (var t2 = 0; t2 < tries.length; t2++) { var L = idx[tries[t2]] || []; for (var q = 0; q < L.length; q++) { var c = L[q]; var id = c.r.c || c.nn; if (!dd[id] && c.ns === N) { dd[id] = 1; safe.push(c); } } }
+        if (safe.length) {
+          var subs = [];
+          for (var a = 0; a < safe.length; a++) { var kn = safe[a].nn; for (var x2 in V) if (x2.length >= 3 && (kn.indexOf(x2) >= 0 || x2.indexOf(kn) >= 0)) { subs.push(safe[a]); break; } }
+          if (subs.length === 1) m = subs[0];
+          else { var G = grams(dn), best = null, bs = 0; for (var b = 0; b < safe.length; b++) { if (!safe[b].g) safe[b].g = grams(safe[b].nn); var rr = ratioG(G, safe[b].g); if (rr > bs) { bs = rr; best = safe[b]; } } if (bs >= 0.78) m = best; }
+        }
       }
-      if (m) out[key] = toMeta(m);
+      if (m) out[key] = toMeta(m.r);
     }
     return out;
   }
@@ -398,11 +409,18 @@
 
     /* 조건이 하나도 없으면 전부 'full' — 예산 내 전체 */
     return {
-      conds: condOut,
+      conds: condOut, stats: ctx.stats,
       full: full, relax: relax, relaxable: relaxable, unknown: unknown,
       counts: { units: order.length, full: full.length, unknown: unknown.length, excluded: excluded },
       metaCoverage: order.length ? order.filter(function (u) { return u.meta; }).length / order.length : 0
     };
+  }
+
+  /* 단지 하나에 조건 하나 — 칩 미리보기('켜면 N곳')는 run 을 칩마다 다시 돌리지 않고
+     현재 결과의 full 목록에 이 함수를 한 번씩만 건다. 5,700단지 × 10칩이 1초를 넘던 것이 수십 ms 로 준다. */
+  function test(u, key, level, ctx) {
+    var def = CMAP[key]; if (!def) return { v: 'unknown', fact: null };
+    return def.test(u, level || 0, ctx) || { v: 'unknown', fact: null };
   }
 
   /* 칩 미리보기용 — 조건 집합별 '전부 충족' 수만 빠르게 */
@@ -422,5 +440,5 @@
   }
 
   root.BoobiMatch = { CONDS: CONDS, run: run, countFull: countFull, availability: availability,
-                      buildStats: buildStats, metaKey: metaKey, norm: norm, dongKey: dongKey, indexMeta: indexMeta };
+                      buildStats: buildStats, metaKey: metaKey, norm: norm, dongKey: dongKey, indexMeta: indexMeta, test: test };
 })(typeof window !== 'undefined' ? window : globalThis);

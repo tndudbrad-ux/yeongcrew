@@ -533,7 +533,7 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 
 <script src="/apt-budget.js?v=2"></script>
 <script src="/apt-score.js?v=2"></script>
-<script src="/apt-match.js?v=2"></script>
+<script src="/apt-match.js?v=3"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
@@ -629,9 +629,18 @@ function allRows(){ var out=[]; S.codes.forEach(function(c){ (DATA.listings[c]||
 function metaIndex(){ var m={}; S.codes.forEach(function(c){ var u=DATA.meta[c]||{}; for(var k in u) m[k]=u[k]; }); return m; }
 
 /* ── ② 조건 구름 ─────────────────────────────────────────────────────── */
+/* 정비사업 매칭은 단지마다 구역 전체(1,000여 개)를 훑어서 5,700단지면 1초가 넘는다.
+   단지 키로 한 번만 계산해 두고, 지역 통계(평당가·거래 상위)도 지역이 바뀔 때만 다시 만든다. */
+var CACHE={redev:{}, statsKey:'', stats:null};
+function redevOfCached(u){
+  var k=u.sido+'|'+u.sgg+'|'+u.key;
+  if(!(k in CACHE.redev)) CACHE.redev[k]=window.AptScore?AptScore.redevMatch(u,DATA.redev):null;
+  return CACHE.redev[k];
+}
 function matchCtx(){
-  return { thisYear:new Date().getFullYear(), kids:S.kids, work:S.work, hasGeo:false,
-           redevOf:function(u){ return window.AptScore?AptScore.redevMatch(u,DATA.redev):null; } };
+  var sk=S.codes.slice().sort().join(',');
+  if(CACHE.statsKey!==sk){ CACHE.statsKey=sk; CACHE.stats=BoobiMatch.buildStats(allRows()); }
+  return { thisYear:new Date().getFullYear(), kids:S.kids, work:S.work, hasGeo:false, stats:CACHE.stats, redevOf:redevOfCached };
 }
 function condList(){ return Object.keys(S.conds).map(function(k){ return {key:k,level:S.conds[k]}; }); }
 function buildCloud(){
@@ -653,14 +662,14 @@ function buildCloud(){
   paintCloudCounts(rows,base);
 }
 function paintCloudCounts(rows,base){
-  var cur=BoobiMatch.run({cands:rows, all:rows, metaIndex:metaIndex(), budget:0, conds:condList(), ctx:matchCtx()}).counts.full;
-  $('condLive').innerHTML='<span>'+(condList().length?'조건 '+condList().length+'개':'조건 없음')+'</span><span><b>'+fmtN(base)+'</b> <span class="arrow">→</span> <b>'+fmtN(cur)+'</b>곳</span>';
-  /* 각 칩: 지금 조건에 이걸 더 켜면 몇 곳인지 */
+  var ctx=matchCtx();
+  var res=BoobiMatch.run({cands:rows, all:rows, metaIndex:metaIndex(), budget:0, conds:condList(), ctx:ctx});
+  $('condLive').innerHTML='<span>'+(condList().length?'조건 '+condList().length+'개':'조건 없음')+'</span><span><b>'+fmtN(base)+'</b> <span class="arrow">→</span> <b>'+fmtN(res.counts.full)+'</b>곳</span>';
+  /* 각 칩: 지금 조건에 이걸 더 켜면 몇 곳인지 — run 을 칩마다 돌리지 않고 지금 '전부 충족' 목록에 조건 하나만 더 건다 */
   [].forEach.call($('cloud').querySelectorAll('.cond:not(.soon)'),function(b){
     var k=b.dataset.k, n=b.querySelector('.n');
     if(S.conds[k]!=null){ n.textContent='켜짐'; return; }
-    var c=condList().concat([{key:k,level:0}]);
-    var v=BoobiMatch.run({cands:rows, all:rows, metaIndex:metaIndex(), budget:0, conds:c, ctx:matchCtx()}).counts.full;
+    var v=0; for(var i=0;i<res.full.length;i++){ if(BoobiMatch.test(res.full[i],k,0,ctx).v==='pass') v++; }
     n.textContent='켜면 '+fmtN(v)+'곳';
   });
 }
