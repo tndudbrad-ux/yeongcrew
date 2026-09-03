@@ -117,6 +117,8 @@ footer a{color:#B9DCD9;margin:0 8px}
 .regbadge{margin-top:9px;font-size:.85rem;font-weight:500;border-radius:12px;padding:11px 14px;line-height:1.6}
 .regbadge.on{background:#FFF4F4;border:1px solid #F7D4D4;color:#B23B3B}
 .regbadge.off{background:#F1FBF9;border:1px solid #C9EBE5;color:#1E7A6E}
+.regbadge.lta{background:#FFF8EC;border:1px solid #F5E2BE;color:#8A5A16}
+.regbadge.lta span{display:block;margin-top:5px;font-weight:400;font-size:.82rem;line-height:1.6}
 .bres{background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));border:1.5px solid rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;backdrop-filter:blur(14px);border-radius:18px;padding:22px 24px;color:#0D2A29;margin-top:20px}
 .bres .lab{font-size:.78rem;font-weight:600;color:#547471;margin-bottom:4px}
 .bres .big{font-size:2.15rem;font-weight:700;letter-spacing:-.03em;line-height:1.15;
@@ -576,9 +578,11 @@ function boot(){
   return Promise.all([
     fetch('/data/regions.json').then(r=>r.json()),
     fetch('/data/growth.json').then(r=>r.json()),
-    fetch('/data/listings/index.json').then(r=>r.json())
+    fetch('/data/listings/index.json').then(r=>r.json()),
+    /* 토지거래허가구역은 규제지역과 별개 제도다. 없으면 조용히 건너뛴다. */
+    fetch('/data/land-permit-zones.json').then(r=>r.ok?r.json():null).catch(function(){return null;})
   ]).then(function(v){
-    DATA.regions=v[0]; DATA.growth=v[1]; DATA.index=v[2]; DATA.listings=[]; DATA.code={};
+    DATA.regions=v[0]; DATA.growth=v[1]; DATA.index=v[2]; DATA.lta=v[3]; DATA.listings=[]; DATA.code={};
     Object.keys(DATA.regions).forEach(function(full){
       DATA.regions[full].forEach(function(g){ DATA.code[full+'|'+g.name]=g.code; });
     });
@@ -639,6 +643,33 @@ function splitArea(txt){
   return {sido:FULL[txt.slice(0,i)]||txt.slice(0,i), sgg:txt.slice(i+1)};
 }
 function isCapital(sido){ return CAPITAL.indexOf(sido)>=0; }
+/* ── 토지거래허가구역 판정 ──────────────────────────────────────────────
+   규제지역(LTV·DSR)과는 완전히 다른 제도다. 여기 걸리면 관할 시군구 허가를 받아야
+   사고, 허가받은 목적대로 2년간 실거주해야 한다 — 전세 낀 매수가 원칙적으로 막힌다.
+   대출 한도만 보고 "살 수 있다"고 안내하면 안 되는 이유다. */
+function ltaZone(sido,sgg){
+  var L=DATA.lta; if(!L||!L.zones) return null;
+  var today=new Date().toISOString().slice(0,10);
+  for(var i=0;i<L.zones.length;i++){
+    var z=L.zones[i];
+    if(z.sido!==sido) continue;
+    if(z.sgg!=='*' && z.sgg!==sgg) continue;
+    if(z.from && today<z.from) continue;
+    if(z.to && today>z.to) continue;      /* 만료된 지정은 자동으로 빠진다 */
+    return z;
+  }
+  return null;
+}
+function ltaBadgeHtml(sido,sgg){
+  var z=ltaZone(sido,sgg); if(!z) return '';
+  var R=(DATA.lta&&DATA.lta.rule)||{};
+  var period=z.to?('~ '+z.to.replace(/-/g,'.')+'까지'):'해제 시까지';
+  return '<div class="regbadge lta">📋 <b>토지거래허가구역</b> ('+period+')<br>'
+    +'<span>매수하려면 관할 시군구 <b>허가</b>가 필요하고, 허가 뒤 '+(R.moveInMonths||4)+'개월 안에 입주해 '
+    +'<b>'+(R.useYears||2)+'년간 실거주</b>해야 해요. <b>전세를 낀 매수는 원칙적으로 안 됩니다.</b><br>'
+    +(z.target?('대상: '+esc(z.target)+' · '):'')
+    +'기준면적과 허가 대상 여부는 관할 시군구 공고를 꼭 확인하세요.</span></div>';
+}
 function isRegulated(sido,sgg){
   return sido==='서울특별시' || (sido==='경기도' && REG_GG.indexOf(sgg)>=0);
 }
@@ -904,6 +935,7 @@ function renderBudget(){
    +'<div class="wrow"><span class="k">→ 셋 중 가장 낮은 값이 대출 한도</span><span class="v">'+readMan(R.loan)+'</span></div></div>';
   if(R.regulated) h+='<div class="regbadge on">🔴 <b>규제지역</b> — LTV '+Math.round(R.ltvR*100)+'%, 만기 30년, 6개월 내 전입 의무'+(segVal('fOwn')==='one'?' · <b>유주택자는 주택구입 주담대가 불가</b>합니다':'')+'</div>';
   else h+='<div class="regbadge off">🟢 비규제지역 — '+(R.capital?'수도권이라 스트레스 금리 3.0%p와 6억 한도는 그대로 적용돼요':'스트레스 금리 0.75%p (2026년 말까지)')+'</div>';
+  h+=ltaBadgeHtml(R.area.sido,R.area.sgg);
   if(R.bind==='dsr'){
     var fixed=solveBudget({cash:R.cash,income:+document.getElementById('fIncome').value,
       monthlyDebt:(+document.getElementById('fDebt').value||0),sido:R.area.sido,sgg:R.area.sgg,
@@ -1370,7 +1402,8 @@ document.getElementById('fRes').addEventListener('click',function(e){
 /* 정비사업 통계 — 인가일까지 통째로 들고 있어야 "조합설립(2022.09)" 같은 근거를 댈 수 있다.
    서울·부산·인천 세 곳에 데이터가 있으므로 셋 다 받아 합친다. */
 var REDEV={state:'idle',rows:[]};
-var REDEV_FILES=['/data/redev-seoul.json','/data/redev-busan.json','/data/redev-incheon.json'];
+var REDEV_FILES=['/data/redev-seoul.json','/data/redev-busan.json',
+  '/data/redev-incheon.json','/data/redev-gyeonggi.json'];
 function loadRedev(){
   if(REDEV.state!=='idle') return;
   REDEV.state='loading';
@@ -1394,11 +1427,14 @@ function loadRedev(){
   }).catch(function(){ REDEV.state='done'; });
 }
 function redevInfo(d){
-  if(!REDEV.rows.length||d.sido!=='서울특별시') return null;
+  /* 예전엔 서울만 통과시켜서, 받아둔 부산 345곳·인천 144곳을 화면에서 쓰지 않았다.
+     시군 비교는 apt-score의 sameSgg에 맡긴다 — 경기는 '안양시', 실거래는 '안양시 동안구'다. */
+  if(!REDEV.rows.length) return null;
   var dong=String(d.dong||''); if(!dong) return null;
   var core=dong.replace(/\d+가$/,'');
+  var same=(window.AptScore&&AptScore.sameSgg)||function(a,b){return !a||!b||a===b;};
   var hit=REDEV.rows.filter(function(r){
-    if(r.gu!==d.sgg) return false;
+    if(!same(r.gu,d.sgg)) return false;
     return r.addr.indexOf(dong)>=0||(core&&core.length>2&&r.addr.indexOf(core)>=0);
   });
   return hit.length?{n:hit.length,first:hit[0]}:null;

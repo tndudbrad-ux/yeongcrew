@@ -152,6 +152,15 @@
     return (+y[0] - +x[0]) * 12 + (+y[1] - +x[1]);
   }
 
+  /* 시군 비교. 서울·부산·인천은 자치구 단위('강남구')라 그대로 맞지만,
+     경기는 시 단위('안양시')로 오는데 실거래 시군구는 '안양시 동안구'다.
+     한쪽이 다른 쪽으로 시작하면 같은 시군으로 본다. */
+  function sameSgg(a, b) {
+    if (!a || !b) return true;
+    a = String(a).replace(/\s/g, ''); b = String(b).replace(/\s/g, '');
+    return a === b || b.indexOf(a) === 0 || a.indexOf(b) === 0;
+  }
+
   /* ══ 정비사업 매칭 ══
      같은 법정동의 구역들을 찾고, 단지명이 구역명과 직접 맞으면 훨씬 강한 근거로 본다. */
   function redevMatch(d, redevRows) {
@@ -161,7 +170,7 @@
     var hit = [];
     for (var i = 0; i < redevRows.length; i++) {
       var r = redevRows[i];
-      if (r.gu && d.sgg && r.gu !== d.sgg) continue;
+      if (!sameSgg(r.gu, d.sgg)) continue;
       var addr = String(r.addr || '');
       if (addr.indexOf(dong) >= 0 || (core.length > 2 && addr.indexOf(core) >= 0)) hit.push(r);
     }
@@ -401,7 +410,7 @@
   root.AptScore = {
     FACTORS: FACTORS, PENDING: PENDING, INVEST_W: INVEST_W,
     brandOf: brandOf, stageRank: stageRank, stageDate: stageDate,
-    tradeStatus: tradeStatus, redevNotice: redevNotice,
+    tradeStatus: tradeStatus, redevNotice: redevNotice, sameSgg: sameSgg,
     redevMatch: redevMatch, buildStats: buildStats, rank: rank
   };
 })(typeof window !== 'undefined' ? window : this);
