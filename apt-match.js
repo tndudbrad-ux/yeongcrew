@@ -19,12 +19,15 @@
   /* ── 단지명 정규화 — 실거래(국토부)와 K-apt 단지명은 표기가 달라서 정규화 후 동|이름으로 붙인다 ── */
   var ROMAN = { 'Ⅰ': '1', 'Ⅱ': '2', 'Ⅲ': '3', 'Ⅳ': '4', 'Ⅴ': '5', 'Ⅵ': '6', 'Ⅶ': '7', 'Ⅷ': '8', 'Ⅸ': '9', 'Ⅹ': '10' };
   var ALIAS = [['skview', 'sk뷰'], ['e편한세상', '이편한세상'], ['e-편한세상', '이편한세상'], ['g밸리', '지밸리']];
-  function norm(s) {
-    s = String(s || '').replace(/맨숀/g, '맨션');
+  var NORM_MEMO = {};
+  function norm(s0) {
+    var s = String(s0 || ''); var hit = NORM_MEMO[s]; if (hit !== undefined) return hit;
+    var raw = s;
+    s = s.replace(/맨숀/g, '맨션');
     for (var k in ROMAN) s = s.split(k).join(ROMAN[k]);
     s = s.replace(/[()\[\]{}]/g, '').replace(/[\s\-·.,'"~_]/g, '').toLowerCase();
     for (var i = 0; i < ALIAS.length; i++) s = s.split(ALIAS[i][0]).join(ALIAS[i][1]);
-    return s.replace(/(아파트|apt)$/, '').replace(/(단지|차)$/, '');
+    return (NORM_MEMO[raw] = s.replace(/(아파트|apt)$/, '').replace(/(단지|차)$/, ''));
   }
   function dongKey(d) { return norm(d).replace(/(동|가|리)$/, ''); }
   function metaKey(dong, name) { return dongKey(dong) + '|' + norm(name); }

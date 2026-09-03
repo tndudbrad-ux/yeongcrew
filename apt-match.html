@@ -533,7 +533,7 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 
 <script src="/apt-budget.js?v=2"></script>
 <script src="/apt-score.js?v=2"></script>
-<script src="/apt-match.js?v=3"></script>
+<script src="/apt-match.js?v=4"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
@@ -566,7 +566,7 @@ function loadRedev(){
     var out=[];
     docs.forEach(function(doc){ if(!doc||!doc.fields||!doc.rows) return; var F={}; doc.fields.forEach(function(k,i){F[k]=i;});
       doc.rows.forEach(function(r){ var o={}; for(var k in F) o[k]=r[F[k]]; o.gu=o.gu||''; o.addr=o.addr||''; o.nm=o.nm||''; o.stage=o.stage||''; out.push(o); }); });
-    DATA.redev=out;
+    DATA.redev=out; REDEV_BY_SGG=null; CACHE.redev={};
   });
 }
 
@@ -612,18 +612,32 @@ $('areaNext').onclick=function(){
 };
 
 /* 시군구 여러 개를 병렬로. 실패는 캐싱하지 않는다 — 한 번 실패가 세션 내내 "0건"으로 굳으면 안 된다. */
+/* 서울 전체는 25개 구 × (실거래 + 단지 메타) 50개 파일이다. 받는 건 병렬로, 무거운 매칭(indexMeta)은
+   구 하나 끝날 때마다 화면에 한 번 양보해서 "얼었다"는 느낌을 없앤다. 진행 상황은 버튼에 쓴다. */
+function yieldUI(){ return new Promise(function(r){ setTimeout(r,0); }); }
 function loadRegion(codes){
-  return Promise.all(codes.map(function(code){
-    if(DATA.listings[code]) return Promise.resolve();
+  var btn=$('areaNext'), done=0, todo=codes.filter(function(c){return !DATA.listings[c];});
+  var raw={};
+  return Promise.all(todo.map(function(code){
     var rg=DATA.index.regions[code]||{};
     return Promise.all([
       fetch('/data/listings/'+code+'.json').then(function(r){ if(!r.ok) throw new Error('listings '+code); return r.json(); }),
       fetch('/data/apt-meta/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;})
     ]).then(function(v){
       DATA.listings[code]=v[0].map(function(x,i){ return {id:code+'-'+i,type:x.t,name:x.n,dong:x.d,area:x.a,buildYear:x.y,floor:x.f,price:x.p,dealYm:x.m,sido:rg.sido,sgg:rg.sgg,sggCode:code}; });
-      DATA.meta[code]=BoobiMatch.indexMeta(v[1], DATA.listings[code]);
+      raw[code]=v[1]; done++;
+      if(btn&&todo.length>3) btn.textContent='불러오는 중… '+done+'/'+todo.length;
     });
-  }));
+  })).then(function(){
+    var i=0;
+    function step(){
+      if(i>=todo.length) return Promise.resolve();
+      var code=todo[i++]; DATA.meta[code]=BoobiMatch.indexMeta(raw[code], DATA.listings[code]);
+      if(btn&&todo.length>3) btn.textContent='단지 정보 붙이는 중… '+i+'/'+todo.length;
+      return (i%3===0)?yieldUI().then(step):step();
+    }
+    return step();
+  });
 }
 function allRows(){ var out=[]; S.codes.forEach(function(c){ (DATA.listings[c]||[]).forEach(function(d){out.push(d);}); }); return out; }
 function metaIndex(){ var m={}; S.codes.forEach(function(c){ var u=DATA.meta[c]||{}; for(var k in u) m[k]=u[k]; }); return m; }
@@ -632,9 +646,18 @@ function metaIndex(){ var m={}; S.codes.forEach(function(c){ var u=DATA.meta[c]|
 /* 정비사업 매칭은 단지마다 구역 전체(1,000여 개)를 훑어서 5,700단지면 1초가 넘는다.
    단지 키로 한 번만 계산해 두고, 지역 통계(평당가·거래 상위)도 지역이 바뀔 때만 다시 만든다. */
 var CACHE={redev:{}, statsKey:'', stats:null};
+/* 정비사업 구역을 시군구별로 미리 묶어 두면 단지마다 전국 구역을 훑지 않아도 된다 */
+var REDEV_BY_SGG=null;
+function redevRowsFor(sgg){
+  if(!REDEV_BY_SGG){ REDEV_BY_SGG={}; DATA.redev.forEach(function(r){ var g=String(r.gu||''); (REDEV_BY_SGG[g]=REDEV_BY_SGG[g]||[]).push(r); }); }
+  var k='_'+sgg; if(REDEV_BY_SGG[k]) return REDEV_BY_SGG[k];
+  var out=[]; for(var g in REDEV_BY_SGG){ if(g.charAt(0)==='_') continue; if(window.AptScore&&AptScore.sameSgg(g,sgg)) out=out.concat(REDEV_BY_SGG[g]); }
+  return (REDEV_BY_SGG[k]=out);
+}
 function redevOfCached(u){
   var k=u.sido+'|'+u.sgg+'|'+u.key;
-  if(!(k in CACHE.redev)) CACHE.redev[k]=window.AptScore?AptScore.redevMatch(u,DATA.redev):null;
+  if(!DATA.redev.length||!window.AptScore) return null;   /* 아직 안 왔으면 캐시에 남기지 않는다 */
+  if(!(k in CACHE.redev)){ var rows=redevRowsFor(u.sgg); CACHE.redev[k]=rows.length?AptScore.redevMatch(u,rows):null; }
   return CACHE.redev[k];
 }
 function matchCtx(){
