@@ -481,36 +481,70 @@ def import_csv(con: sqlite3.Connection, path: str) -> None:
 
 
 def geocode(con: sqlite3.Connection, key: str, budget: int) -> None:
-    """도로명주소 → 위경도 (카카오 로컬). 이미 좌표 있는 단지는 건너뛴다."""
+    """도로명주소 → 위경도 (카카오 로컬).
+
+    주의할 것 세 가지.
+      · 한 번 시도한 단지는 실패해도 다시 안 건드린다(geo_at 을 남긴다). 안 그러면
+        주소가 안 잡히는 몇 백 개를 매일 다시 때려서 할당량만 태운다.
+      · 429/네트워크 오류는 그 주소를 건너뛰는 게 아니라 쉬었다 다시 친다.
+      · 중간에 죽어도 여태 받은 건 남도록 자주 커밋한다.
+    도로명주소로 안 잡히면 '시군구 + 단지명'으로 장소 검색을 한 번 더 해본다.
+    """
     rows = con.execute(
-        "SELECT c.kapt_code, c.road_addr FROM complex c LEFT JOIN extra x ON x.kapt_code=c.kapt_code"
-        " WHERE c.road_addr!='' AND (x.lat IS NULL)").fetchall()
-    print(f"[좌표] 대상 {len(rows):,}개 · 이번 실행 {min(budget, len(rows)):,}개", flush=True)
+        "SELECT c.kapt_code, c.road_addr, c.name, c.sgg FROM complex c"
+        " LEFT JOIN extra x ON x.kapt_code=c.kapt_code"
+        " WHERE c.road_addr!='' AND x.lat IS NULL AND x.geo_at IS NULL").fetchall()
+    todo = rows[:budget]
+    print(f"[좌표] 남은 대상 {len(rows):,}개 · 이번 실행 {len(todo):,}개", flush=True)
     today = time.strftime("%Y-%m-%d")
+    hdr = {"Authorization": "KakaoAK " + key}
+
+    def call(url: str, params: dict):
+        """429·일시 오류는 쉬었다 다시. 5번 실패하면 None."""
+        for attempt in range(5):
+            try:
+                r = requests.get(url, params=params, headers=hdr, timeout=TIMEOUT)
+            except Exception:
+                time.sleep(1 + attempt)
+                continue
+            if r.status_code == 200:
+                return r.json()
+            if r.status_code == 429:            # 초당 한도 — 잠깐 쉰다
+                time.sleep(1 + attempt)
+                continue
+            if r.status_code in (401, 403):     # 키가 틀렸다. 더 해봐야 소용없다
+                raise ApiError(f"카카오 인증 실패 {r.status_code}: {r.text[:200]}")
+            time.sleep(0.5 * (attempt + 1))
+        return None
+
     ok = miss = 0
-    for i, (kc, addr) in enumerate(rows[:budget], 1):
-        r = requests.get("https://dapi.kakao.com/v2/local/search/address.json",
-                         params={"query": addr}, headers={"Authorization": "KakaoAK " + key}, timeout=TIMEOUT)
-        if r.status_code == 429:
-            time.sleep(2)
-            continue
-        if r.status_code != 200:
-            sys.exit(f"카카오 {r.status_code}: {r.text[:200]}")
-        docs = r.json().get("documents") or []
+    for i, (kc, addr, name, sgg) in enumerate(todo, 1):
+        j = call("https://dapi.kakao.com/v2/local/search/address.json", {"query": addr})
+        docs = (j or {}).get("documents") or []
+        if not docs and name:                   # 도로명이 안 잡히면 단지명으로 한 번 더
+            j = call("https://dapi.kakao.com/v2/local/search/keyword.json",
+                     {"query": f"{sgg or ''} {name}".strip(), "size": 1})
+            docs = (j or {}).get("documents") or []
         if docs:
             lat, lng = float(docs[0]["y"]), float(docs[0]["x"])   # x가 경도, y가 위도
-            con.execute("INSERT INTO extra(kapt_code,lat,lng,geo_at) VALUES(?,?,?,?)"
-                        " ON CONFLICT(kapt_code) DO UPDATE SET lat=excluded.lat,lng=excluded.lng,geo_at=excluded.geo_at",
-                        (kc, lat, lng, today))
+            con.execute(
+                "INSERT INTO extra(kapt_code,lat,lng,geo_at) VALUES(?,?,?,?)"
+                " ON CONFLICT(kapt_code) DO UPDATE SET lat=excluded.lat,lng=excluded.lng,geo_at=excluded.geo_at",
+                (kc, round(lat, 6), round(lng, 6), today))
             ok += 1
         else:
+            # 못 찾았다는 사실도 남긴다 — 내일 또 때리지 않게
+            con.execute("INSERT INTO extra(kapt_code,geo_at) VALUES(?,?)"
+                        " ON CONFLICT(kapt_code) DO UPDATE SET geo_at=excluded.geo_at", (kc, today))
             miss += 1
-        if i % 500 == 0:
+        if i % 300 == 0:
             con.commit()
-            print(f"  {i}/{min(budget, len(rows))}", flush=True)
-        time.sleep(0.03)
+            print(f"  {i}/{len(todo)} · 성공 {ok:,} 실패 {miss:,}", flush=True)
+        time.sleep(0.035)
     con.commit()
-    print(f"[좌표] 성공 {ok:,} · 주소 못 찾음 {miss:,}", flush=True)
+    done = con.execute("SELECT COUNT(*) FROM extra WHERE lat IS NOT NULL").fetchone()[0]
+    total = con.execute("SELECT COUNT(*) FROM complex").fetchone()[0]
+    print(f"[좌표] 이번 실행 성공 {ok:,} · 못 찾음 {miss:,} — 누적 {done:,}/{total:,}", flush=True)
 
 
 # ── 학교 (학교알리미) ────────────────────────────────────────────────────────
