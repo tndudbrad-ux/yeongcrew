@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-03T13:15:37.783Z",
+  "updatedAt": "2026-09-04T01:35:04.994Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 등 수동 큐레이션)",
-  "count": 50,
+  "count": 49,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,21 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "SH-gukmin-imdae-2026",
-      "provider": "SH",
-      "ltype": "국민임대",
-      "name": "2026년 국민임대주택 입주자 모집",
-      "region": "서울",
-      "units": 1973,
-      "target": "무주택세대구성원 · 주택형별 소득·자산 기준 충족(선순위는 청약통장 24회 이상)",
-      "rcritStart": "2026-08-31",
-      "rcritEnd": "2026-09-03",
-      "winnerDate": "2027-02-15",
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=308340&multi_itm_seq=2",
-      "note": "공고 8/20 · 공가입주자 409·예비입주자 1,564 · 선순위 인터넷청약 8/31~9/3 · 후순위 9/16 · 서류심사대상자 발표 10/12",
-      "_src": "manual-curated"
-    },
     {
       "id": "SH-jangjeon2-8cha",
       "provider": "SH",
