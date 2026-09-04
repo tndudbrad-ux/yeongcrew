@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sqlite3
 import sys
@@ -204,6 +205,19 @@ CREATE INDEX IF NOT EXISTS ix_complex_bass ON complex(bass_done);
 CREATE INDEX IF NOT EXISTS ix_complex_dtl ON complex(dtl_done);
 CREATE TABLE IF NOT EXISTS listed (sgg_code TEXT PRIMARY KEY, n INTEGER, at TEXT);
 -- API가 안 주는 것들. K-apt 엑셀(주 1회 갱신) 또는 지오코딩으로 채운다.
+-- 학교알리미 공시. 좌표가 들어 있어서 초품아(단지↔초등학교 거리) 판정에 그대로 쓴다.
+CREATE TABLE IF NOT EXISTS school (
+  code      TEXT PRIMARY KEY,
+  sgg_code  TEXT NOT NULL,
+  name      TEXT,
+  kind      TEXT,             -- e 초 · m 중 · h 고
+  hs_type   TEXT,             -- g 일반 · a 자율 · s 특목 · v 특성화
+  private   INTEGER,
+  lat       REAL,
+  lng       REAL,
+  addr      TEXT
+);
+CREATE INDEX IF NOT EXISTS ix_school_sgg ON school(sgg_code);
 CREATE TABLE IF NOT EXISTS extra (
   kapt_code   TEXT PRIMARY KEY,
   fac         TEXT,             -- 부대복리시설 코드(쉼표): comm,pub,play,senior,care,kinder,lib,rest,bike
@@ -499,6 +513,104 @@ def geocode(con: sqlite3.Connection, key: str, budget: int) -> None:
     print(f"[좌표] 성공 {ok:,} · 주소 못 찾음 {miss:,}", flush=True)
 
 
+# ── 학교 (학교알리미) ────────────────────────────────────────────────────────
+SIDO_CODE = {
+    "서울특별시": "11", "부산광역시": "26", "대구광역시": "27", "인천광역시": "28",
+    "전남광주통합특별시": "12", "대전광역시": "30", "울산광역시": "31", "세종특별자치시": "36",
+    "경기도": "41", "강원특별자치도": "51", "충청북도": "43", "충청남도": "44",
+    "전북특별자치도": "52", "경상북도": "47", "경상남도": "48", "제주특별자치도": "50",
+}
+SCHOOL_API = "https://www.schoolinfo.go.kr/openApi.do"
+KIND = {"02": "e", "03": "m", "04": "h"}
+HS_TYPE = {"일반고등학교": "g", "자율고등학교": "a", "특수목적고등학교": "s", "특성화고등학교": "v"}
+SCHOOL_DIR = os.path.join(ROOT, "data", "schools")
+
+
+def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) -> None:
+    """시군구 × 학교급으로 돌면서 학교 목록·좌표를 받는다. sggCode 없이 시도 전체 조회는 거부된다."""
+    regions = json.load(open(REGIONS_PATH, encoding="utf-8"))
+    targets = sidos or list(regions)
+    total, fails = 0, []
+    for sido in targets:
+        sc = SIDO_CODE.get(sido)
+        if not sc or sido not in regions:
+            print(f"건너뜀(시도코드 없음): {sido}", flush=True)
+            continue
+        n = 0
+        for g in regions[sido]:
+            for k in ("02", "03", "04"):
+                try:
+                    r = requests.get(SCHOOL_API, params={
+                        "apiKey": key, "apiType": 0, "sidoCode": sc,
+                        "sggCode": g["code"], "schulKndCode": k}, timeout=TIMEOUT)
+                    j = r.json()
+                except Exception as e:
+                    fails.append(f'{g["code"]}/{k}: {e}')
+                    continue
+                if j.get("resultCode") != "success":
+                    fails.append(f'{g["code"]}/{k}: {j.get("resultMsg")}')
+                    continue
+                for o in j.get("list") or []:
+                    if o.get("ABSCH_YN") == "Y":      # 폐교
+                        continue
+                    lat, lng = o.get("LTTUD"), o.get("LGTUD")
+                    if not lat or not lng:
+                        continue
+                    con.execute(
+                        "INSERT OR REPLACE INTO school"
+                        "(code,sgg_code,name,kind,hs_type,private,lat,lng,addr)"
+                        " VALUES(?,?,?,?,?,?,?,?,?)",
+                        (o.get("SCHUL_CODE"), g["code"], o.get("SCHUL_NM"), KIND[k],
+                         HS_TYPE.get(o.get("HS_KND_SC_NM") or "") if k == "04" else None,
+                         1 if o.get("FOND_SC_CODE") == "사립" else 0,
+                         round(float(lat), 6), round(float(lng), 6),
+                         (o.get("SCHUL_RDNMA") or "").strip()))
+                    n += 1
+                time.sleep(0.05)
+            con.commit()
+        print(f"{sido:<10} {len(regions[sido])}개 시군구 · {n:,}개교", flush=True)
+        total += n
+    con.commit()
+    print(f"[학교] 합계 {total:,}개교 · 실패 {len(fails)}건", flush=True)
+    for f in fails[:10]:
+        print("   ", f)
+
+
+def emit_schools(con: sqlite3.Connection) -> None:
+    """시군구별 파일. 구 경계에 붙은 단지가 옆 구 학교를 놓치지 않도록
+       그 구 학교들의 사각형을 2.5km 넓혀서 걸치는 학교를 모두 담는다."""
+    rows = con.execute("SELECT sgg_code,code,name,kind,hs_type,private,lat,lng FROM school").fetchall()
+    if not rows:
+        print("[학교] 데이터가 없습니다 — 먼저 --schools 로 수집하세요.", flush=True)
+        return
+    os.makedirs(SCHOOL_DIR, exist_ok=True)
+    PAD_LAT = 2.5 / 111.0                      # 위도 1도 ≈ 111km
+    by_sgg: dict[str, list] = {}
+    for r in rows:
+        by_sgg.setdefault(r[0], []).append(r)
+    total = 0
+    for sgg, own in by_sgg.items():
+        la = [r[6] for r in own]
+        lo = [r[7] for r in own]
+        pad_lng = 2.5 / (111.0 * max(0.2, abs(math.cos(math.radians(sum(la) / len(la))))))
+        lo1, lo2 = min(lo) - pad_lng, max(lo) + pad_lng
+        la1, la2 = min(la) - PAD_LAT, max(la) + PAD_LAT
+        out = []
+        for r in rows:
+            if not (la1 <= r[6] <= la2 and lo1 <= r[7] <= lo2):
+                continue
+            rec = {"c": r[1], "n": r[2], "k": r[3], "lat": r[6], "lng": r[7]}
+            if r[4]:
+                rec["t"] = r[4]
+            if r[5]:
+                rec["p"] = 1
+            out.append(rec)
+        with open(os.path.join(SCHOOL_DIR, f"{sgg}.json"), "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
+        total += len(out)
+    print(f"[학교] {len(by_sgg)}개 시군구 파일 · 연 {total:,}건(인접 구 포함) → {SCHOOL_DIR}", flush=True)
+
+
 # ── 진단 ────────────────────────────────────────────────────────────────────
 def probe(key: str) -> None:
     """인증키가 살아있는지, 필드명이 코드와 맞는지 원시 XML로 확인한다."""
@@ -570,6 +682,8 @@ def main() -> None:
     ap.add_argument("--probe", action="store_true")
     ap.add_argument("--import-csv", metavar="FILE", help="K-apt 단지 기본정보 CSV로 extra 보강")
     ap.add_argument("--geocode", action="store_true", help="도로명주소 지오코딩 (KAKAO_REST_KEY)")
+    ap.add_argument("--schools", action="store_true", help="학교알리미 학교 목록·좌표 수집 (SCHOOLINFO_KEY)")
+    ap.add_argument("--sido", nargs="*", help="--schools 대상 시도명 (비우면 전국)")
     a = ap.parse_args()
 
     if not a.key and (a.stage or a.probe):
@@ -581,6 +695,11 @@ def main() -> None:
         return
 
     con = db_open()
+    if a.schools:
+        sk = os.environ.get("SCHOOLINFO_KEY", "").strip()
+        if not sk:
+            sys.exit("SCHOOLINFO_KEY 환경변수가 없습니다.")
+        fetch_schools(con, sk, a.sido)
     if a.import_csv:
         import_csv(con, a.import_csv)
     if a.geocode:
@@ -594,7 +713,8 @@ def main() -> None:
         stage_info(con, a.key, a.budget)
     if a.emit:
         emit(con)
-    if not (a.stage or a.emit or a.import_csv or a.geocode):
+        emit_schools(con)
+    if not (a.stage or a.emit or a.import_csv or a.geocode or a.schools):
         ap.print_help()
 
 
