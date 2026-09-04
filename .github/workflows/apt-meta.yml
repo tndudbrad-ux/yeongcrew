@@ -16,9 +16,14 @@ on:
           - probe     # 인증키·필드명 확인용. 원시 XML만 출력하고 끝
           - list      # 단지코드 목록만
           - emit      # 재수집 없이 JSON만 다시 생성
+          - geocode   # 도로명주소 → 좌표 (KAKAO_REST_KEY). 초품아·직주근접·역세권이 여기서 열린다
+          - schools   # 학교알리미 학교 목록·좌표 (SCHOOLINFO_KEY). 학교는 잘 안 바뀌어서 가끔만
       budget:
         description: '상세기능당 이번 실행 호출 수 (한도 5000)'
         default: '4800'
+      sido:
+        description: "stage=schools 일 때만. 비우면 전국 (예: 서울특별시 경기도)"
+        default: ''
 
 permissions:
   contents: write
@@ -68,6 +73,26 @@ jobs:
           APT_KEY: ${{ secrets.APT_KEY }}
         run: python tools/apt_meta.py --stage info --budget ${{ inputs.budget || 4800 }}
 
+      # 좌표가 있어야 초품아(단지↔초등학교 거리)·직주근접·역세권 실측이 켜진다.
+      # 카카오 로컬 무료 한도가 하루 10만건이라 22,000건은 한 번에 다 받는다.
+      - name: 좌표 (지오코딩)
+        if: inputs.stage == 'geocode' || inputs.stage == 'daily' || github.event_name == 'schedule'
+        continue-on-error: true
+        env:
+          KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}
+        run: |
+          if [ -z "$KAKAO_REST_KEY" ]; then
+            echo "KAKAO_REST_KEY 시크릿이 없어 건너뜁니다 (좌표 없이도 나머지는 돕니다)"
+            exit 0
+          fi
+          python tools/apt_meta.py --geocode --budget 90000
+
+      - name: 학교 (학교알리미)
+        if: inputs.stage == 'schools'
+        env:
+          SCHOOLINFO_KEY: ${{ secrets.SCHOOLINFO_KEY }}
+        run: python tools/apt_meta.py --schools ${{ inputs.sido }}
+
       - name: JSON 산출
         if: inputs.stage != 'probe'
         env:
@@ -80,7 +105,7 @@ jobs:
           gzip -9 -c tools/apt_meta.db > tools/apt_meta.db.gz
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A data/apt-meta tools/apt_meta.db.gz
+          git add -A data/apt-meta data/schools tools/apt_meta.db.gz
           if git diff --cached --quiet; then
             echo "변경 없음"
             exit 0
