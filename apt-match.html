@@ -539,13 +539,13 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 
 <script src="/apt-budget.js?v=2"></script>
 <script src="/apt-score.js?v=2"></script>
-<script src="/apt-match.js?v=4"></script>
+<script src="/apt-match.js?v=5"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
    흐름: 지역 → 조건 → 면적 → (출퇴근지) → (자녀) → 주택수 → 현금 → 소득 → 결과
    ═══════════════════════════════════════════════════════════════════════ */
-var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},redev:[]};
+var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},schools:{},redev:[]};
 var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0};
 var $=function(id){return document.getElementById(id);};
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -628,10 +628,11 @@ function loadRegion(codes){
     var rg=DATA.index.regions[code]||{};
     return Promise.all([
       fetch('/data/listings/'+code+'.json').then(function(r){ if(!r.ok) throw new Error('listings '+code); return r.json(); }),
-      fetch('/data/apt-meta/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;})
+      fetch('/data/apt-meta/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;}),
+      fetch('/data/schools/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;})
     ]).then(function(v){
       DATA.listings[code]=v[0].map(function(x,i){ return {id:code+'-'+i,type:x.t,name:x.n,dong:x.d,area:x.a,buildYear:x.y,floor:x.f,price:x.p,dealYm:x.m,sido:rg.sido,sgg:rg.sgg,sggCode:code}; });
-      raw[code]=v[1]; done++;
+      raw[code]=v[1]; DATA.schools[code]=v[2]||null; done++;
       if(btn&&todo.length>3) btn.textContent='불러오는 중… '+done+'/'+todo.length;
     });
   })).then(function(){
@@ -651,7 +652,7 @@ function metaIndex(){ var m={}; S.codes.forEach(function(c){ var u=DATA.meta[c]|
 /* ── ② 조건 구름 ─────────────────────────────────────────────────────── */
 /* 정비사업 매칭은 단지마다 구역 전체(1,000여 개)를 훑어서 5,700단지면 1초가 넘는다.
    단지 키로 한 번만 계산해 두고, 지역 통계(평당가·거래 상위)도 지역이 바뀔 때만 다시 만든다. */
-var CACHE={redev:{}, statsKey:'', stats:null};
+var CACHE={redev:{}, statsKey:'', stats:null, geoKey:'', schools:[], hasGeo:false};
 /* 정비사업 구역을 시군구별로 미리 묶어 두면 단지마다 전국 구역을 훑지 않아도 된다 */
 var REDEV_BY_SGG=null;
 function redevRowsFor(sgg){
@@ -669,7 +670,14 @@ function redevOfCached(u){
 function matchCtx(){
   var sk=S.codes.slice().sort().join(',');
   if(CACHE.statsKey!==sk){ CACHE.statsKey=sk; CACHE.stats=BoobiMatch.buildStats(allRows()); }
-  return { thisYear:new Date().getFullYear(), kids:S.kids, work:S.work, hasGeo:false, stats:CACHE.stats, redevOf:redevOfCached };
+  if(CACHE.geoKey!==sk){ CACHE.geoKey=sk;
+    var sc=[]; S.codes.forEach(function(c){ (DATA.schools[c]||[]).forEach(function(x){sc.push(x);}); });
+    CACHE.schools=sc;
+    var m=metaIndex(), n=0, g=0; for(var k in m){ n++; if(m[k].lat!=null) g++; }
+    CACHE.hasGeo = n>0 && g/n >= 0.3;    /* 좌표가 3할도 안 붙었으면 아직 못 쓴다 */
+  }
+  return { thisYear:new Date().getFullYear(), kids:S.kids, work:S.work, hasGeo:CACHE.hasGeo,
+           schools:CACHE.schools, stats:CACHE.stats, redevOf:redevOfCached };
 }
 function condList(){ return Object.keys(S.conds).map(function(k){ return {key:k,level:S.conds[k]}; }); }
 function buildCloud(){
@@ -716,13 +724,64 @@ pickOpt('intOpt','v',function(v){ $('fInt').value=+v?v:''; });
 $('fInt').oninput=function(){ var v=this.value; [].forEach.call($('intOpt').querySelectorAll('button'),function(b){ b.classList.toggle('on', b.dataset.v===(v===''?'0':v)); }); };
 
 /* 출퇴근지 — 좌표가 아직 없으니 업무지구 칩으로 이름만 받아둔다. 카카오 키가 붙으면 자유 입력을 지오코딩한다. */
-var WORK_HUBS=['강남역·테헤란로','여의도','광화문·시청','판교테크노밸리','구로디지털단지','마곡','상암','잠실','수원 삼성디지털시티','기흥·화성 삼성반도체','용인 반도체 국가산단','평택 고덕','동탄테크노밸리','대전 둔산','대덕연구단지','송도'];
+var WORK_HUBS=[
+  ['강남역·테헤란로',37.4979,127.0276],['여의도',37.5219,126.9245],['광화문·시청',37.5709,126.9769],
+  ['판교테크노밸리',37.4020,127.1086],['구로디지털단지',37.4853,126.9014],['마곡',37.5601,126.8256],
+  ['상암',37.5796,126.8895],['잠실',37.5133,127.1000],['수원 삼성디지털시티',37.2565,127.0525],
+  ['기흥·화성 삼성반도체',37.2210,127.0770],['용인 반도체 국가산단',37.1520,127.2470],
+  ['평택 고덕',37.0470,127.0300],['동탄테크노밸리',37.2010,127.1080],['대전 둔산',36.3510,127.3780],
+  ['대덕연구단지',36.3900,127.3650],['송도',37.3830,126.6560]];
+/* 카카오 JS 키가 박히면 자유 입력도 좌표로 바꾼다. 없으면 칩(좌표 내장)만 판정된다. */
+var KAKAO_JS_KEY='';
+function loadKakao(){
+  if(!KAKAO_JS_KEY) return Promise.resolve(null);
+  if(window.__kakaoP) return window.__kakaoP;
+  return (window.__kakaoP=new Promise(function(res){
+    var sc=document.createElement('script');
+    sc.src='https://dapi.kakao.com/v2/maps/sdk.js?appkey='+KAKAO_JS_KEY+'&libraries=services&autoload=false';
+    sc.onload=function(){ kakao.maps.load(function(){ res(kakao.maps.services); }); };
+    sc.onerror=function(){ res(null); };
+    document.head.appendChild(sc);
+  }));
+}
+function geocodeWork(q){
+  return loadKakao().then(function(svc){
+    if(!svc) return null;
+    return new Promise(function(res){
+      new svc.Places().keywordSearch(q,function(d,st){
+        if(st===svc.Status.OK&&d.length) return res({name:d[0].place_name,lat:+d[0].y,lng:+d[0].x});
+        new svc.Geocoder().addressSearch(q,function(a,s2){
+          res(s2===svc.Status.OK&&a.length?{name:q,lat:+a[0].y,lng:+a[0].x}:null);
+        });
+      });
+    });
+  }).catch(function(){ return null; });
+}
 (function(){
-  var row=$('workHubs');
-  WORK_HUBS.forEach(function(n){ var b=document.createElement('button'); b.type='button'; b.className='rChip'; b.textContent=n;
-    b.onclick=function(){ $('workInput').value=n; S.work={name:n}; [].forEach.call(row.children,function(x){x.classList.remove('on');}); b.classList.add('on'); }; row.appendChild(b); });
-  $('workInput').oninput=function(){ S.work=this.value.trim()?{name:this.value.trim()}:null; [].forEach.call(row.children,function(x){x.classList.remove('on');}); };
-  $('workNote').textContent='지금은 이름만 받아둬요. 단지 좌표가 붙으면 통근시간 판정이 열려요 — 그 전까진 이 조건은 "미확인"으로 표시돼요.';
+  var row=$('workHubs'), note=$('workNote'), timer=null;
+  function say(t){ note.textContent=t; }
+  WORK_HUBS.forEach(function(h){
+    var b=document.createElement('button'); b.type='button'; b.className='rChip'; b.textContent=h[0];
+    b.onclick=function(){ $('workInput').value=h[0]; S.work={name:h[0],lat:h[1],lng:h[2]};
+      [].forEach.call(row.children,function(x){x.classList.remove('on');}); b.classList.add('on');
+      say('✓ '+h[0]+' 기준으로 통근시간을 계산해요.'); };
+    row.appendChild(b);
+  });
+  $('workInput').oninput=function(){
+    var v=this.value.trim();
+    [].forEach.call(row.children,function(x){x.classList.remove('on');});
+    S.work=v?{name:v}:null;
+    clearTimeout(timer); if(!v){ say(''); return; }
+    var hub=WORK_HUBS.filter(function(h){ return h[0]===v; })[0];
+    if(hub){ S.work={name:hub[0],lat:hub[1],lng:hub[2]}; say('✓ '+hub[0]+' 기준으로 통근시간을 계산해요.'); return; }
+    if(!KAKAO_JS_KEY){ say('아래 업무지구 중에서 고르시면 통근시간이 계산돼요. 직접 입력한 곳은 아직 위치를 못 찾아요.'); return; }
+    say('위치 찾는 중…');
+    timer=setTimeout(function(){ geocodeWork(v).then(function(w){
+      if(!w){ say('그 이름으로 위치를 못 찾았어요. 역 이름이나 동 이름으로 적어보세요.'); return; }
+      S.work=w; say('✓ '+w.name+' 기준으로 통근시간을 계산해요.');
+    }); },500);
+  };
+  say(KAKAO_JS_KEY?'':'아래 업무지구 중에서 고르시면 통근시간이 계산돼요.');
 })();
 
 /* ── 위저드 이동 ───────────────────────────────────────────────────── */

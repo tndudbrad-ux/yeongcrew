@@ -230,7 +230,7 @@
       key: 'commute', icon: '💼', label: '직주근접',
       desc: '출퇴근지까지 대중교통 (거리 기반 추정)',
       ladder: [{ t: '30분 이내', m: 30 }, { t: '45분', m: 45 }, { t: '60분', m: 60 }],
-      needs: ['geo', 'work'],
+      needs: ['geo'],   /* 출퇴근지는 이 조건을 켠 뒤에 묻는다 — 안 고르면 test 가 unknown 을 낸다 */
       test: function (c, lv, ctx) {
         var m = c.meta, w = ctx.work;
         if (!m || m.lat == null || !w || w.lat == null) return { v: 'unknown', fact: null };
@@ -241,8 +241,8 @@
     },
     {
       key: 'school', icon: '🏫', label: '학군',
-      desc: '자녀 단계에 따라 초품아 또는 중학교 진학 실적',
-      ladder: [{ t: '초등 500m / 상위 30%', e: 500, p: 0.30 }, { t: '초등 800m / 상위 50%', e: 800, p: 0.50 }],
+      desc: '자녀 단계에 맞는 학교까지 걸어가는 거리 (진학 실적은 준비 중)',
+      ladder: [{ t: '도보 500m 이내', e: 500, p: 0.30 }, { t: '800m 이내', e: 800, p: 0.50 }],
       needs: ['geo', 'schools'],
       test: function (c, lv, ctx) {
         var m = c.meta; if (!m || m.lat == null || !ctx.schools) return { v: 'unknown', fact: null };
@@ -255,10 +255,19 @@
         var teen = ctx.kids === '중고등학생';
         if (!teen) {
           if (!elem) return { v: 'unknown', fact: null };
-          return { v: ed <= L.e ? 'pass' : 'fail', fact: elem.n.replace('서울', '') + ' ' + Math.round(ed) + 'm' + (ed <= 300 ? ' · 초품아' : '') };
+          return { v: ed <= L.e ? 'pass' : 'fail', fact: elem.n + ' ' + Math.round(ed) + 'm' + (ed <= 300 ? ' · 초품아' : '') };
         }
-        /* 중고등: 반경 1.5km 중학교 특목고·자사고 진학률 — 진로 데이터(ctx.progress)가 붙어야 판정 */
-        if (!ctx.progress) return { v: 'unknown', fact: elem ? '초등 ' + Math.round(ed) + 'm · 중학 진학 실적 데이터 준비중' : null };
+        /* 중고등: 진학 실적(ctx.progress)이 붙기 전까지는 가장 가까운 중학교까지의 통학거리로 본다.
+           "학군이 좋다"고 말하지 않고 잰 것만 말한다. */
+        if (!ctx.progress) {
+          var mid = null, md = 1e12;
+          for (var q = 0; q < ctx.schools.length; q++) {
+            var t = ctx.schools[q]; if (t.k !== 'm') continue;
+            var dd = haversine(m.lat, m.lng, t.lat, t.lng); if (dd < md) { md = dd; mid = t; }
+          }
+          if (!mid) return { v: 'unknown', fact: null };
+          return { v: md <= L.e ? 'pass' : 'fail', fact: mid.n + ' ' + Math.round(md) + 'm (진학 실적은 아직 못 봐요)' };
+        }
         var rates = [];
         for (var j = 0; j < ctx.schools.length; j++) {
           var ms = ctx.schools[j]; if (ms.k !== 'm') continue;
