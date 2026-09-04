@@ -151,7 +151,14 @@ function solveNetBudget(inp,o){
   R.pay=monthlyPay(loan,inp.rate,G.years);
   return R;
 }
-function readMan(v){ v=Math.round(v); var eok=Math.floor(v/10000), man=v%10000, s=''; if(eok>0){s=eok.toLocaleString('ko-KR')+'억'; if(man>=1000)s+=' '+Math.round(man/1000)+'천';}else{s=man.toLocaleString('ko-KR')+'만원';} return s; }
+function readMan(v){
+  /* 9,500만원을 '10천'이라고 쓰던 버그가 있었다 — 천 단위가 10이 되면 억으로 올린다. */
+  v=Math.round(v);
+  var eok=Math.floor(v/10000), man=v%10000, ch=Math.round(man/1000);
+  if(ch>=10){ eok+=1; ch=0; }
+  if(eok>0) return eok.toLocaleString('ko-KR')+'억'+(ch>0?' '+ch+'천':'');
+  return man.toLocaleString('ko-KR')+'만원';
+}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
 function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
