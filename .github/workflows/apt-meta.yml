@@ -5,6 +5,11 @@ name: 단지 메타 수집
 on:
   schedule:
     - cron: '30 20 * * *'   # UTC 20:30 = KST 05:30 (실거래 갱신과 안 겹치게)
+  # 깃허브 'Run workflow' 폼이 이 저장소에서 자꾸 렌더링에 실패한다.
+  # 그럴 때 .github/run-now 를 아무렇게나 고쳐서 커밋하면 전체(목록·상세·좌표·학교)가 한 번 돈다.
+  push:
+    paths:
+      - '.github/run-now'
   workflow_dispatch:
     inputs:
       stage:
@@ -62,13 +67,13 @@ jobs:
         run: python tools/apt_meta.py --probe
 
       - name: 단지코드 목록
-        if: inputs.stage == 'list' || inputs.stage == 'daily' || github.event_name == 'schedule'
+        if: inputs.stage == 'list' || inputs.stage == 'daily' || github.event_name == 'schedule' || github.event_name == 'push'
         env:
           APT_KEY: ${{ secrets.APT_KEY }}
         run: python tools/apt_meta.py --stage list
 
       - name: 단지별 기본·상세 정보
-        if: inputs.stage == 'daily' || github.event_name == 'schedule'
+        if: inputs.stage == 'daily' || github.event_name == 'schedule' || github.event_name == 'push'
         env:
           APT_KEY: ${{ secrets.APT_KEY }}
         run: python tools/apt_meta.py --stage info --budget ${{ inputs.budget || 4800 }}
@@ -76,7 +81,7 @@ jobs:
       # 좌표가 있어야 초품아(단지↔초등학교 거리)·직주근접·역세권 실측이 켜진다.
       # 카카오 로컬 무료 한도가 하루 10만건이라 22,000건은 한 번에 다 받는다.
       - name: 좌표 (지오코딩)
-        if: inputs.stage == 'geocode' || inputs.stage == 'daily' || github.event_name == 'schedule'
+        if: inputs.stage == 'geocode' || inputs.stage == 'daily' || github.event_name == 'schedule' || github.event_name == 'push'
         continue-on-error: true
         env:
           KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}
@@ -88,7 +93,7 @@ jobs:
           python tools/apt_meta.py --geocode --budget 90000
 
       - name: 학교 (학교알리미)
-        if: inputs.stage == 'schools'
+        if: inputs.stage == 'schools' || github.event_name == 'push'
         env:
           SCHOOLINFO_KEY: ${{ secrets.SCHOOLINFO_KEY }}
         run: python tools/apt_meta.py --schools ${{ inputs.sido }}
