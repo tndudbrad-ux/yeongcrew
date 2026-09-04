@@ -20,6 +20,7 @@
   python apt_meta.py --emit                  data/apt-meta/*.json 생성
   python apt_meta.py --import-csv 단지_기본정보.csv   K-apt 엑셀(CSV 저장)로 부대복리시설·승강기·최고층 등 보강
   KAKAO_REST_KEY=… python apt_meta.py --geocode --budget 20000   도로명주소 → 좌표 (카카오 로컬)
+  python apt_meta.py --progress --sido 서울특별시 경기도 인천광역시   중학교 특목·자사 진학률
 
 API에 없는 것(부대복리시설·승강기·최고층·지하주차·좌표)은 extra 테이블에 따로 두고
 emit 때 합친다. 단지코드(kapt_code)로 정확히 붙으므로 이름 매칭이 필요 없다.
@@ -35,6 +36,7 @@ import argparse
 import json
 import math
 import os
+import re
 import sqlite3
 import sys
 import time
@@ -218,6 +220,18 @@ CREATE TABLE IF NOT EXISTS school (
   addr      TEXT
 );
 CREATE INDEX IF NOT EXISTS ix_school_sgg ON school(sgg_code);
+-- 중학교 졸업생의 진로 현황(공시항목 06, 매년 11월). 학교알리미 웹 공시에만 있고
+-- OpenAPI에는 없어서 공시 페이지에서 직접 읽는다. 학교 code는 school.code와 같은 축.
+CREATE TABLE IF NOT EXISTS progress (
+  code      TEXT PRIMARY KEY,
+  year      TEXT,
+  grad      INTEGER,          -- 졸업생 수(진로 합계)
+  sci       INTEGER,          -- 과학고
+  fl        INTEGER,          -- 외고·국제고
+  aut       INTEGER,          -- 자율형사립고
+  rate      REAL,             -- (과학고+외고국제고+자사고) / 졸업생
+  got_at    TEXT
+);
 CREATE TABLE IF NOT EXISTS extra (
   kapt_code   TEXT PRIMARY KEY,
   fac         TEXT,             -- 부대복리시설 코드(쉼표): comm,pub,play,senior,care,kinder,lib,rest,bike
@@ -610,6 +624,118 @@ def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) ->
         print("   ", f)
 
 
+# ── 중학교 진학 실적 ────────────────────────────────────────────────────────
+# "졸업생의 진로 현황"(공시항목 06)은 OpenAPI가 주지 않는다. 학교알리미 웹 공시에만
+# 있어서 지역별 공시정보 화면이 쓰는 두 요청을 그대로 흉내낸다.
+#   ① selectSchoolListLocation.do  시군구 → 중학교 목록(SHL_IDF_CD)
+#   ② Pneipp_b06_s0p.do            학교 → 진로 표(EUC-KR HTML 조각)
+# 공시는 매년 11월이라 올해 것은 11월 전까지 비어 있다. 그래서 최신 완료 연도를 쓴다.
+SI_LIST = "https://www.schoolinfo.go.kr/ei/ss/pneiss_a05_s0/selectSchoolListLocation.do"
+SI_ITEM = "https://www.schoolinfo.go.kr/ei/pp/Pneipp_b06_s0p.do"
+SI_HOME = "https://www.schoolinfo.go.kr/ei/ss/pneiss_a05_s0.do"
+TAG_RE = re.compile(r"<[^>]+>")
+ROW_RE = re.compile(r"<tr[^>]*>(.*?)</tr>", re.S | re.I)
+CELL_RE = re.compile(r"<t[hd][^>]*>(.*?)</t[hd]>", re.S | re.I)
+# 학군 신호로 세는 진로. 마이스터고·예체능고는 진학 난이도가 아니라 진로 성격이라 뺀다.
+ELITE = {"과학고": "sci", "외고국제고": "fl", "자율형사립고": "aut"}
+
+
+def _cells(html: str, row: str) -> list[str]:
+    return [TAG_RE.sub("", c).replace("&nbsp;", " ").strip()
+            for c in CELL_RE.findall(row)]
+
+
+def parse_progress(html: str) -> dict | None:
+    """진로 표 첫 블록(항목명 줄 + 인원 줄)을 항목명으로 읽는다.
+       열 순서가 바뀌어도 이름으로 붙으므로 조용히 어긋나지 않는다."""
+    rows = ROW_RE.findall(html)
+    for i, row in enumerate(rows[:-1]):
+        head = _cells(html, row)
+        if not head or "일반고" not in head[0]:
+            continue
+        vals = _cells(html, rows[i + 1])
+        if len(vals) != len(head):
+            continue
+        try:
+            nums = [int(v.replace(",", "") or 0) for v in vals]
+        except ValueError:
+            continue
+        out = {"grad": sum(nums), "sci": 0, "fl": 0, "aut": 0}
+        for label, n in zip(head, nums):
+            for want, key in ELITE.items():
+                if want in label.replace(" ", ""):
+                    out[key] = n
+        if out["grad"] <= 0:
+            return None
+        out["rate"] = round((out["sci"] + out["fl"] + out["aut"]) / out["grad"], 4)
+        return out
+    return None
+
+
+def fetch_progress(con: sqlite3.Connection, sidos: list[str] | None, year: str) -> None:
+    regions = json.load(open(REGIONS_PATH, encoding="utf-8"))
+    targets = sidos or list(regions)
+    ses = requests.Session()
+    ses.headers["User-Agent"] = "Mozilla/5.0 (boobi apt-meta)"
+    try:
+        ses.get(SI_HOME, timeout=TIMEOUT)          # 세션 쿠키
+    except Exception as e:
+        print(f"[진학] 학교알리미 접속 실패: {e}", flush=True)
+        return
+    done = {r[0] for r in con.execute(
+        "SELECT code FROM progress WHERE year=?", (year,)).fetchall()}
+    total, blank, fails = 0, 0, []
+    for sido in targets:
+        sc = SIDO_CODE.get(sido)
+        if not sc or sido not in regions:
+            continue
+        n = 0
+        for g in regions[sido]:
+            body = [("HG_JONGRYU_GB", "03"),
+                    ("SIDO_CODE", sc + "00000000"),
+                    ("SIGUNGU_CODE", g["code"] + "00000"),
+                    ("SULRIP_GB", "1"), ("SULRIP_GB", "2"), ("SULRIP_GB", "3"),
+                    ("GS_HANGMOK_CD", "06"), ("PNF_YR", year), ("JG_HANGMOK_CD", "52")]
+            try:
+                lst = ses.post(SI_LIST, data=body, timeout=TIMEOUT).json().get("schoolList") or []
+            except Exception as e:
+                fails.append(f'{g["code"]} 목록: {e}')
+                continue
+            for s in lst:
+                # 웹 공시 코드(B10…)와 OpenAPI 코드(S01…)는 앞 3자만 다르고 뒤가 같다.
+                code = "S01" + (s.get("SHL_CD") or "")[3:]
+                if not s.get("SHL_IDF_CD") or code in done:
+                    continue
+                q = {"GS_HANGMOK_CD": "06", "GS_BURYU_CD": "JG040", "JG_BURYU_CD": "JG130",
+                     "JG_HANGMOK_CD": "52", "JG_GUBUN": "1", "GS_TYPE": "Y",
+                     "LOAD_TYPE": "single", "JG_YEAR": year, "JG_YEAR2": year,
+                     "CHOSEN_JG_YEAR": year, "PRE_JG_YEAR": year,
+                     "SHL_IDF_CD": s["SHL_IDF_CD"]}
+                try:
+                    r = ses.get(SI_ITEM, params=q, timeout=TIMEOUT)
+                    p = parse_progress(r.content.decode("euc-kr", "replace"))
+                except Exception as e:
+                    fails.append(f'{s.get("SHL_NM")}: {e}')
+                    p = None
+                time.sleep(0.1)            # 남의 공시 화면이다. 천천히 두드린다.
+                if not p:
+                    blank += 1
+                    continue
+                con.execute(
+                    "INSERT OR REPLACE INTO progress"
+                    "(code,year,grad,sci,fl,aut,rate,got_at) VALUES(?,?,?,?,?,?,?,?)",
+                    (code, year, p["grad"], p["sci"], p["fl"], p["aut"], p["rate"],
+                     time.strftime("%Y-%m-%d")))
+                n += 1
+            con.commit()
+        print(f"{sido:<10} 중학교 {n:,}곳", flush=True)
+        total += n
+    con.commit()
+    print(f"[진학] {year} 공시 · {total:,}곳 저장 · 공시없음 {blank:,} · 실패 {len(fails)}", flush=True)
+    for f in fails[:10]:
+        print("   ", f)
+
+
 def emit_schools(con: sqlite3.Connection) -> None:
     """시군구별 파일. 구 경계에 붙은 단지가 옆 구 학교를 놓치지 않도록
        그 구 학교들의 사각형을 2.5km 넓혀서 걸치는 학교를 모두 담는다."""
@@ -617,6 +743,8 @@ def emit_schools(con: sqlite3.Connection) -> None:
     if not rows:
         print("[학교] 데이터가 없습니다 — 먼저 --schools 로 수집하세요.", flush=True)
         return
+    pr = {r[0]: (r[1], r[2]) for r in con.execute(
+        "SELECT code,rate,grad FROM progress").fetchall()}
     os.makedirs(SCHOOL_DIR, exist_ok=True)
     PAD_LAT = 2.5 / 111.0                      # 위도 1도 ≈ 111km
     by_sgg: dict[str, list] = {}
@@ -638,6 +766,8 @@ def emit_schools(con: sqlite3.Connection) -> None:
                 rec["t"] = r[4]
             if r[5]:
                 rec["p"] = 1
+            if r[3] == "m" and r[1] in pr:
+                rec["pr"], rec["gd"] = pr[r[1]]      # 특목·자사 진학률, 졸업생 수
             out.append(rec)
         with open(os.path.join(SCHOOL_DIR, f"{sgg}.json"), "w", encoding="utf-8") as f:
             json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
@@ -717,7 +847,11 @@ def main() -> None:
     ap.add_argument("--import-csv", metavar="FILE", help="K-apt 단지 기본정보 CSV로 extra 보강")
     ap.add_argument("--geocode", action="store_true", help="도로명주소 지오코딩 (KAKAO_REST_KEY)")
     ap.add_argument("--schools", action="store_true", help="학교알리미 학교 목록·좌표 수집 (SCHOOLINFO_KEY)")
-    ap.add_argument("--sido", nargs="*", help="--schools 대상 시도명 (비우면 전국)")
+    ap.add_argument("--sido", nargs="*", help="--schools/--progress 대상 시도명 (비우면 전국)")
+    ap.add_argument("--progress", action="store_true",
+                    help="중학교 졸업생의 진로 현황 수집 (학교알리미 공시, 키 불필요)")
+    ap.add_argument("--progress-year", default="",
+                    help="공시년도 (비우면 직전 완료 연도 자동)")
     a = ap.parse_args()
 
     if not a.key and (a.stage or a.probe):
@@ -734,6 +868,10 @@ def main() -> None:
         if not sk:
             sys.exit("SCHOOLINFO_KEY 환경변수가 없습니다.")
         fetch_schools(con, sk, a.sido)
+    if a.progress:
+        # 진로 현황은 매년 11월 공시라 그 전에는 올해 것이 비어 있다.
+        y = a.progress_year or str(time.localtime().tm_year - (0 if time.localtime().tm_mon >= 12 else 1))
+        fetch_progress(con, a.sido, y)
     if a.import_csv:
         import_csv(con, a.import_csv)
     if a.geocode:
@@ -748,7 +886,7 @@ def main() -> None:
     if a.emit:
         emit(con)
         emit_schools(con)
-    if not (a.stage or a.emit or a.import_csv or a.geocode or a.schools):
+    if not (a.stage or a.emit or a.import_csv or a.geocode or a.schools or a.progress):
         ap.print_help()
 
 
