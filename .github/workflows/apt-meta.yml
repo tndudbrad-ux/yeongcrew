@@ -23,6 +23,7 @@ on:
           - emit      # 재수집 없이 JSON만 다시 생성
           - geocode   # 도로명주소 → 좌표 (KAKAO_REST_KEY). 초품아·직주근접·역세권이 여기서 열린다
           - schools   # 학교알리미 학교 목록·좌표 (SCHOOLINFO_KEY). 학교는 잘 안 바뀌어서 가끔만
+          - progress  # 중학교 졸업생의 진로 현황(특목·자사 진학률). 공시가 연 1회라 11월 이후에만 바뀐다
       budget:
         description: '상세기능당 이번 실행 호출 수 (한도 5000)'
         default: '4800'
@@ -96,7 +97,14 @@ jobs:
         if: inputs.stage == 'schools' || github.event_name == 'push'
         env:
           SCHOOLINFO_KEY: ${{ secrets.SCHOOLINFO_KEY }}
-        run: python tools/apt_meta.py --schools ${{ inputs.sido }}
+        run: python tools/apt_meta.py --schools ${{ inputs.sido && format('--sido {0}', inputs.sido) || '' }}
+
+      # 진학 실적은 OpenAPI에 없어서 학교알리미 공시 화면이 쓰는 요청을 그대로 부른다.
+      # 인증키가 필요 없는 대신 남의 웹 화면이라, 실패해도 나머지를 막지 않게 둔다.
+      - name: 중학교 진학 실적 (학교알리미 공시)
+        if: inputs.stage == 'progress' || github.event_name == 'push'
+        continue-on-error: true
+        run: python tools/apt_meta.py --progress ${{ inputs.sido && format('--sido {0}', inputs.sido) || '' }}
 
       - name: JSON 산출
         if: inputs.stage != 'probe'
