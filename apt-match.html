@@ -291,9 +291,6 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .rChip.on{border-color:transparent;background:#EAF3FE;color:#2A7DE8;font-weight:600}
 .rChip.all{border-style:solid;border-color:#3D8BFD;color:#2A7DE8;font-weight:600}
 .rChip.all.on{background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;border-color:transparent}
-.liveBox{margin-top:16px;padding:12px 15px;border-radius:12px;background:#F4F8FF;border:1px solid #DCE8FB;font-size:.86rem;color:var(--sub);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.liveBox b{color:#2A7DE8;font-weight:700;font-variant-numeric:tabular-nums}
-.liveBox .arrow{color:#8AA5A2}
 
 .cloud{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .cond{border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:10px 13px;cursor:pointer;font-family:inherit;text-align:left;transition:.14s;color:var(--forest);display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -303,8 +300,6 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .cond .t{font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:6px;white-space:nowrap}
 .cond .t em{font-style:normal;font-size:.72rem;color:#2A7DE8;font-weight:500;background:#fff;padding:1px 6px;border-radius:5px;border:1px solid #DCE8FB}
 .cond .d{font-size:.72rem;color:var(--sub);line-height:1.4}
-.cond .n{font-size:.7rem;color:#8AA5A2;font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums}
-.cond.on .n{color:#2A7DE8}
 .cond .soonTag{font-size:.66rem;color:#8AA5A2;border:1px dashed #C9D6E6;border-radius:5px;padding:1px 5px;margin-left:auto}
 
 .condBar{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 6px}
@@ -412,16 +407,14 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
   <p class="wqS">광역시·도를 고르고, <b>전체</b>를 누르면 그 안 모든 구에서 찾아요. 구를 여러 개 골라도 돼요.</p>
   <div class="regionRow" id="sidoRow"></div>
   <div class="regionRow" id="sggRow" style="margin-top:12px"></div>
-  <div class="liveBox" id="areaLive" style="display:none"></div>
   <div class="wnav"><button type="button" class="go" id="areaNext" disabled>다음</button></div>
 </section>
 
 <!-- ② 조건 -->
 <section class="wq" data-k="conds">
   <h3 class="wqT">꼭 맞아야 하는 조건을 골라주세요</h3>
-  <p class="wqS">고를수록 목록이 줄어요. 숫자를 보면서 고르세요. 안 고르면 예산 안 전체를 보여드려요.</p>
+  <p class="wqS">여러 개 골라도 돼요. 결과에서 <b>전부 충족 / 하나만 풀면</b>으로 나눠서 보여드려요. 안 고르면 예산 안 전체를 보여드려요.</p>
   <div class="cloud" id="cloud"></div>
-  <div class="liveBox" id="condLive"></div>
   <p class="qHead" style="margin-top:12px" id="soonNote"></p>
   <div class="wnav"><button type="button" class="go wnext">다음</button></div>
 </section>
@@ -539,14 +532,14 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 
 <script src="/apt-budget.js?v=2"></script>
 <script src="/apt-score.js?v=2"></script>
-<script src="/apt-match.js?v=5"></script>
+<script src="/apt-match.js?v=6"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
    흐름: 지역 → 조건 → 면적 → (출퇴근지) → (자녀) → 주택수 → 현금 → 소득 → 결과
    ═══════════════════════════════════════════════════════════════════════ */
 var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},schools:{},redev:[]};
-var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0};
+var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0,loadP:null};
 var $=function(id){return document.getElementById(id);};
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
@@ -604,44 +597,42 @@ function paintSgg(){
     if(b.classList.contains('all')){ b.classList.toggle('on',S.all); return; }
     b.style.display=S.all?'none':''; b.classList.toggle('on',S.codes.indexOf(b.dataset.code)>=0);
   });
-  var n=0; S.codes.forEach(function(c){ var r=DATA.index.regions[c]; if(r) n+=r.n; });
-  var live=$('areaLive');
-  if(S.codes.length){ live.style.display=''; live.innerHTML='<span>'+esc(S.all?(SHORT[S.sido]+' 전체 '+S.codes.length+'개 시군구'):S.codes.length+'개 시군구')+'</span><span>실거래 <b>'+fmtN(n)+'</b>건</span>'; }
-  else live.style.display='none';
   $('areaNext').disabled=!S.codes.length;
 }
+/* 실거래·단지 데이터는 여기서 받기 시작하되 기다리지 않는다. 남은 질문 대여섯 개를 답하는 동안
+   뒤에서 다 받힌다. 결과를 낼 때만 이 약속을 기다린다(goMatch). */
 $('areaNext').onclick=function(){
   ga('match_area',{sido:S.sido,all:S.all,n:S.codes.length});
-  $('areaNext').disabled=true; $('areaNext').textContent='불러오는 중…';
-  loadRegion(S.codes).then(function(){ $('areaNext').disabled=false; $('areaNext').textContent='다음'; buildCloud(); go('conds'); })
-  .catch(function(){ $('areaNext').disabled=false; $('areaNext').textContent='다시 시도'; alert('실거래 데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.'); });
+  S.loadP=loadRegion(S.codes);
+  S.loadP.catch(function(){});      /* 여기서 삼키고, 실제 처리는 결과 낼 때 한 번만 */
+  buildCloud(); go('conds');
 };
 
 /* 시군구 여러 개를 병렬로. 실패는 캐싱하지 않는다 — 한 번 실패가 세션 내내 "0건"으로 굳으면 안 된다. */
-/* 서울 전체는 25개 구 × (실거래 + 단지 메타) 50개 파일이다. 받는 건 병렬로, 무거운 매칭(indexMeta)은
-   구 하나 끝날 때마다 화면에 한 번 양보해서 "얼었다"는 느낌을 없앤다. 진행 상황은 버튼에 쓴다. */
-function yieldUI(){ return new Promise(function(r){ setTimeout(r,0); }); }
+/* 서울 전체는 25개 구 × (실거래 + 단지 메타 + 학교) 75개 파일이다. 받는 건 병렬로, 무거운 매칭(indexMeta)은
+   구 하나 끝날 때마다 화면에 한 번 양보한다 — 유저가 다음 질문에 답하는 동안 뒤에서 도는 일이라
+   화면이 걸리면 안 된다. */
 function loadRegion(codes){
-  var btn=$('areaNext'), done=0, todo=codes.filter(function(c){return !DATA.listings[c];});
-  var raw={};
+  var todo=codes.filter(function(c){return !DATA.listings[c];});
+  var got={};
+  /* 1) 받아오기는 병렬(네트워크가 알아서 겹친다). 2) 무거운 가공은 구 하나 끝날 때마다 화면에 양보한다.
+     유저는 이 동안 조건 칩을 누르고 있다 — 한 덩어리로 돌리면 그 클릭이 1초씩 밀린다. */
   return Promise.all(todo.map(function(code){
-    var rg=DATA.index.regions[code]||{};
     return Promise.all([
       fetch('/data/listings/'+code+'.json').then(function(r){ if(!r.ok) throw new Error('listings '+code); return r.json(); }),
       fetch('/data/apt-meta/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;}),
       fetch('/data/schools/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;})
-    ]).then(function(v){
-      DATA.listings[code]=v[0].map(function(x,i){ return {id:code+'-'+i,type:x.t,name:x.n,dong:x.d,area:x.a,buildYear:x.y,floor:x.f,price:x.p,dealYm:x.m,sido:rg.sido,sgg:rg.sgg,sggCode:code}; });
-      raw[code]=v[1]; DATA.schools[code]=v[2]||null; done++;
-      if(btn&&todo.length>3) btn.textContent='불러오는 중… '+done+'/'+todo.length;
-    });
+    ]).then(function(v){ got[code]=v; });
   })).then(function(){
     var i=0;
     function step(){
       if(i>=todo.length) return Promise.resolve();
-      var code=todo[i++]; DATA.meta[code]=BoobiMatch.indexMeta(raw[code], DATA.listings[code]);
-      if(btn&&todo.length>3) btn.textContent='단지 정보 붙이는 중… '+i+'/'+todo.length;
-      return (i%3===0)?yieldUI().then(step):step();
+      var code=todo[i++], rg=DATA.index.regions[code]||{}, v=got[code];
+      DATA.listings[code]=v[0].map(function(x,j){ return {id:code+'-'+j,type:x.t,name:x.n,dong:x.d,area:x.a,buildYear:x.y,floor:x.f,price:x.p,dealYm:x.m,sido:rg.sido,sgg:rg.sgg,sggCode:code}; });
+      DATA.meta[code]=BoobiMatch.indexMeta(v[1], DATA.listings[code]);
+      DATA.schools[code]=v[2]||null;
+      got[code]=null;
+      return new Promise(function(r){ setTimeout(r,0); }).then(step);
     }
     return step();
   });
@@ -680,37 +671,30 @@ function matchCtx(){
            schools:CACHE.schools, stats:CACHE.stats, redevOf:redevOfCached };
 }
 function condList(){ return Object.keys(S.conds).map(function(k){ return {key:k,level:S.conds[k]}; }); }
+/* 고르는 동안에는 아무것도 세지 않는다. 답만 기억해 두고 계산은 결과에서 한 번에 한다.
+   숫자가 줄어드는 걸 보여주려고 칩마다 전체 판정을 다시 돌리던 게 이 화면을 무겁게 만들었다.
+   아직 데이터 자체가 없는 조건(공원·조용함)만 잠근다 — 이건 지역 선택과 무관한 사실이라 미리 안다. */
+var NO_DATA={park:1, quiet:1};
 function buildCloud(){
-  var avail=BoobiMatch.availability(matchCtx(), 1);
-  var rows=allRows().filter(function(d){return d.type==='apt';});
-  var base=BoobiMatch.run({cands:rows, all:rows, metaIndex:metaIndex(), budget:0, conds:[], ctx:matchCtx()}).counts.units;
   var cloud=$('cloud'); cloud.innerHTML='';
   var soon=[];
-  avail.forEach(function(c){
-    if(c.key==='size') return;
-    var b=document.createElement('button'); b.type='button'; b.className='cond'+(c.ready?'':' soon')+(S.conds[c.key]!=null?' on':''); b.dataset.k=c.key;
-    b.innerHTML='<span class="t">'+c.icon+' '+esc(c.label)+' <em>'+esc(c.ladder[0])+'</em>'+(c.ready?'':'<span class="soonTag">곧 열려요</span>')+'</span>'
-      +'<span class="d">'+esc(c.desc)+'</span><span class="n" data-n="'+c.key+'"></span>';
-    if(!c.ready){ soon.push(c.label); b.disabled=true; }
-    else b.onclick=function(){ if(S.conds[c.key]!=null) delete S.conds[c.key]; else S.conds[c.key]=0; b.classList.toggle('on'); paintCloudCounts(rows,base); };
+  BoobiMatch.CONDS.forEach(function(c){
+    if(c.key==='size') return;                 /* 면적은 칩이 아니라 다음 단계에서 따로 묻는다 */
+    var locked=!!NO_DATA[c.key];
+    var b=document.createElement('button'); b.type='button';
+    b.className='cond'+(locked?' soon':'')+(S.conds[c.key]!=null?' on':''); b.dataset.k=c.key;
+    b.innerHTML='<span class="t">'+c.icon+' '+esc(c.label)+' <em>'+esc(c.ladder[0].t)+'</em>'
+      +(locked?'<span class="soonTag">곧 열려요</span>':'')+'</span>'
+      +'<span class="d">'+esc(c.desc)+'</span>';
+    if(locked){ soon.push(c.label); b.disabled=true; }
+    else b.onclick=function(){
+      if(S.conds[c.key]!=null) delete S.conds[c.key]; else S.conds[c.key]=0;
+      b.classList.toggle('on');
+    };
     cloud.appendChild(b);
   });
-  $('soonNote').textContent=soon.length?'※ '+soon.join(' · ')+'은 단지 좌표를 붙이는 중이라 아직 못 걸어요. 추정으로 채우면 근거가 사실이 아니게 되니까요.':'';
-  paintCloudCounts(rows,base);
+  $('soonNote').textContent=soon.length?'※ '+soon.join(' · ')+'은 아직 쓸 데이터가 없어서 못 걸어요. 추정으로 채우면 근거가 사실이 아니게 되니까요.':'';
 }
-function paintCloudCounts(rows,base){
-  var ctx=matchCtx();
-  var res=BoobiMatch.run({cands:rows, all:rows, metaIndex:metaIndex(), budget:0, conds:condList(), ctx:ctx});
-  $('condLive').innerHTML='<span>'+(condList().length?'조건 '+condList().length+'개':'조건 없음')+'</span><span><b>'+fmtN(base)+'</b> <span class="arrow">→</span> <b>'+fmtN(res.counts.full)+'</b>곳</span>';
-  /* 각 칩: 지금 조건에 이걸 더 켜면 몇 곳인지 — run 을 칩마다 돌리지 않고 지금 '전부 충족' 목록에 조건 하나만 더 건다 */
-  [].forEach.call($('cloud').querySelectorAll('.cond:not(.soon)'),function(b){
-    var k=b.dataset.k, n=b.querySelector('.n');
-    if(S.conds[k]!=null){ n.textContent='켜짐'; return; }
-    var v=0; for(var i=0;i<res.full.length;i++){ if(BoobiMatch.test(res.full[i],k,0,ctx).v==='pass') v++; }
-    n.textContent='켜면 '+fmtN(v)+'곳';
-  });
-}
-
 /* ── ③ 면적 · ④ 후속 · ⑤ 주택수 ───────────────────────────────────── */
 function pickOpt(wrapId,attr,cb){
   var w=$(wrapId); [].forEach.call(w.querySelectorAll('button'),function(b){ b.onclick=function(){ [].forEach.call(w.querySelectorAll('button'),function(x){x.classList.remove('on');}); b.classList.add('on'); cb(b.dataset[attr]); }; });
@@ -832,12 +816,18 @@ function budgetOf(row){ var key=row.sido+'|'+isRegulated(row.sido,row.sgg); retu
 $('goMatch').onclick=function(){
   var cash=+$('fCash').value, income=+$('fIncome').value;
   if(!cash&&cash!==0||!income){ alert('보유 현금과 연소득을 입력해주세요'); return; }
-  var B=computeBudgets();
-  ga('match_run',{sido:S.sido,all:S.all,conds:Object.keys(S.conds).join(','),size:S.sizeLv,budget_man:Math.round(B.max)});
-  $('wizBox').style.display='none'; $('resultBox').style.display='';
-  renderBudget(B); renderMatch();
-  $('resultBox').scrollIntoView({behavior:'smooth',block:'start'});
-  loadGate();
+  var btn=this; btn.disabled=true; btn.textContent='맞춰보는 중…';
+  (S.loadP||Promise.resolve()).then(function(){
+    var B=computeBudgets();
+    ga('match_run',{sido:S.sido,all:S.all,conds:Object.keys(S.conds).join(','),size:S.sizeLv,budget_man:Math.round(B.max)});
+    $('wizBox').style.display='none'; $('resultBox').style.display='';
+    renderBudget(B); renderMatch();
+    $('resultBox').scrollIntoView({behavior:'smooth',block:'start'});
+    loadGate();
+  }).catch(function(){
+    alert('실거래 데이터를 불러오지 못했어요. 잠시 후 다시 눌러주세요.');
+    S.loadP=loadRegion(S.codes); S.loadP.catch(function(){});
+  }).then(function(){ btn.disabled=false; btn.textContent='내 조건에 맞는 집 보기'; });
 };
 function renderBudget(B){
   var R=B.any, ownLabel=S.own==='none'?(S.first?'생애최초':'무주택'):(S.own==='one'?'1주택':'다주택');
