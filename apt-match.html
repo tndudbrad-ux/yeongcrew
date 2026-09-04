@@ -532,7 +532,7 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 
 <script src="/apt-budget.js?v=2"></script>
 <script src="/apt-score.js?v=2"></script>
-<script src="/apt-match.js?v=6"></script>
+<script src="/apt-match.js?v=7"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
@@ -664,11 +664,23 @@ function matchCtx(){
   if(CACHE.geoKey!==sk){ CACHE.geoKey=sk;
     var sc=[]; S.codes.forEach(function(c){ (DATA.schools[c]||[]).forEach(function(x){sc.push(x);}); });
     CACHE.schools=sc;
+    /* 중학교 진학 공시(pr=특목·자사 진학률, gd=졸업생 수). 기준선은 절대값이 아니라
+       "이 지역 중학교 중 상위 몇 %"로 잡는다. 강남 30%와 지방 30%는 다른 숫자여야 한다. */
+    var prog={}, rates=[];
+    sc.forEach(function(x){ if(x.k==='m'&&x.pr!=null){ prog[x.c]={r:x.pr,g:x.gd||1}; rates.push(x.pr); } });
+    rates.sort(function(a,b){ return b-a; });
+    CACHE.progress = rates.length ? prog : null;
+    CACHE.progCut = function(p){
+      if(!rates.length) return null;
+      var v = rates[Math.min(rates.length-1, Math.max(0, Math.ceil(p*rates.length)-1))];
+      return v > 0 ? v : null;             /* 다들 0%면 줄 세울 기준이 없다 */
+    };
     var m=metaIndex(), n=0, g=0; for(var k in m){ n++; if(m[k].lat!=null) g++; }
     CACHE.hasGeo = n>0 && g/n >= 0.3;    /* 좌표가 3할도 안 붙었으면 아직 못 쓴다 */
   }
   return { thisYear:new Date().getFullYear(), kids:S.kids, work:S.work, hasGeo:CACHE.hasGeo,
-           schools:CACHE.schools, stats:CACHE.stats, redevOf:redevOfCached };
+           schools:CACHE.schools, progress:CACHE.progress, progressCut:CACHE.progCut,
+           stats:CACHE.stats, redevOf:redevOfCached };
 }
 function condList(){ return Object.keys(S.conds).map(function(k){ return {key:k,level:S.conds[k]}; }); }
 /* 고르는 동안에는 아무것도 세지 않는다. 답만 기억해 두고 계산은 결과에서 한 번에 한다.

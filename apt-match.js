@@ -241,8 +241,9 @@
     },
     {
       key: 'school', icon: '🏫', label: '학군',
-      desc: '자녀 단계에 맞는 학교까지 걸어가는 거리 (진학 실적은 준비 중)',
-      ladder: [{ t: '도보 500m 이내', e: 500, p: 0.30 }, { t: '800m 이내', e: 800, p: 0.50 }],
+      desc: '초등은 통학 거리, 중고등은 둘레 중학교의 특목·자사고 진학률',
+      ladder: [{ t: '초 500m · 중 상위 30%', e: 500, p: 0.30 },
+               { t: '초 800m · 중 상위 50%', e: 800, p: 0.50 }],
       needs: ['geo', 'schools'],
       test: function (c, lv, ctx) {
         var m = c.meta; if (!m || m.lat == null || !ctx.schools) return { v: 'unknown', fact: null };
@@ -257,28 +258,36 @@
           if (!elem) return { v: 'unknown', fact: null };
           return { v: ed <= L.e ? 'pass' : 'fail', fact: elem.n + ' ' + Math.round(ed) + 'm' + (ed <= 300 ? ' · 초품아' : '') };
         }
-        /* 중고등: 진학 실적(ctx.progress)이 붙기 전까지는 가장 가까운 중학교까지의 통학거리로 본다.
-           "학군이 좋다"고 말하지 않고 잰 것만 말한다. */
-        if (!ctx.progress) {
-          var mid = null, md = 1e12;
-          for (var q = 0; q < ctx.schools.length; q++) {
-            var t = ctx.schools[q]; if (t.k !== 'm') continue;
-            var dd = haversine(m.lat, m.lng, t.lat, t.lng); if (dd < md) { md = dd; mid = t; }
+        /* 중고등: 반경 1.5km 중학교들의 특목·자사고 진학률(학교알리미 공시)을
+           졸업생 수로 가중평균한다. 작은 학교 한 곳이 동네를 대표하지 않도록. */
+        var cut = ctx.progressCut ? ctx.progressCut(L.p) : null;
+        if (ctx.progress && cut != null) {
+          var num = 0, den = 0, near = 0, best = null, br = -1;
+          for (var j = 0; j < ctx.schools.length; j++) {
+            var ms = ctx.schools[j]; if (ms.k !== 'm') continue;
+            if (haversine(m.lat, m.lng, ms.lat, ms.lng) > 1500) continue;
+            var p = ctx.progress[ms.c]; if (!p) continue;
+            near++; num += p.r * p.g; den += p.g;
+            if (p.r > br) { br = p.r; best = ms; }
           }
-          if (!mid) return { v: 'unknown', fact: null };
-          return { v: md <= L.e ? 'pass' : 'fail', fact: mid.n + ' ' + Math.round(md) + 'm (진학 실적은 아직 못 봐요)' };
+          if (den > 0) {
+            var avg = num / den;
+            return {
+              v: avg >= cut ? 'pass' : 'fail',
+              fact: '둘레 중학교 ' + near + '곳 특목·자사고 진학률 ' + (avg * 100).toFixed(1) + '%'
+                    + (best && br > 0 ? ' · ' + best.n + ' ' + (br * 100).toFixed(1) + '%' : '')
+            };
+          }
         }
-        var rates = [];
-        for (var j = 0; j < ctx.schools.length; j++) {
-          var ms = ctx.schools[j]; if (ms.k !== 'm') continue;
-          if (haversine(m.lat, m.lng, ms.lat, ms.lng) > 1500) continue;
-          var p = ctx.progress[ms.c]; if (p && p.rate != null) rates.push(p.rate);
+        /* 진학 공시가 아직 안 붙은 지역이면 통학거리로만 본다.
+           "학군이 좋다"고 말하지 않고 잰 것만 말한다. */
+        var mid = null, md = 1e12;
+        for (var q = 0; q < ctx.schools.length; q++) {
+          var t = ctx.schools[q]; if (t.k !== 'm') continue;
+          var dd = haversine(m.lat, m.lng, t.lat, t.lng); if (dd < md) { md = dd; mid = t; }
         }
-        if (!rates.length) return { v: 'unknown', fact: null };
-        var avg = rates.reduce(function (a, b) { return a + b; }, 0) / rates.length;
-        var cut = ctx.progressCut ? ctx.progressCut[L.p] : null;
-        if (cut == null) return { v: 'unknown', fact: null };
-        return { v: avg >= cut ? 'pass' : 'fail', fact: '반경 1.5km 중학교 ' + rates.length + '곳 특목고·자사고 진학률 ' + (avg * 100).toFixed(1) + '% (공시)' };
+        if (!mid) return { v: 'unknown', fact: null };
+        return { v: md <= L.e ? 'pass' : 'fail', fact: mid.n + ' ' + Math.round(md) + 'm (진학 실적은 아직 못 봐요)' };
       }
     },
     {
