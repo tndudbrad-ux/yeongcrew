@@ -1,1 +1,5 @@
 tools/apt_meta.db
+
+# 파이썬 컴파일 캐시 (apt_meta.py 실행 시 생김)
+__pycache__/
+*.pyc
