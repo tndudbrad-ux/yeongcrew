@@ -93,8 +93,9 @@ jobs:
           fi
           python tools/apt_meta.py --geocode --budget 90000
 
+      # 학교 목록·좌표는 거의 안 바뀌는데 7분 넘게 걸린다. 필요할 때만 돌린다.
       - name: 학교 (학교알리미)
-        if: inputs.stage == 'schools' || github.event_name == 'push'
+        if: inputs.stage == 'schools'
         env:
           SCHOOLINFO_KEY: ${{ secrets.SCHOOLINFO_KEY }}
         run: python tools/apt_meta.py --schools ${{ inputs.sido && format('--sido {0}', inputs.sido) || '' }}
