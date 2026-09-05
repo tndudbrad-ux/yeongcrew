@@ -293,7 +293,11 @@
     {
       key: 'crowd', icon: '🪑', label: '학급 과밀',
       desc: '자녀가 다닐 학교의 학급당 학생수 (학교알리미 공시)',
-      ladder: [{ t: '24명 이하', n: 24 }, { t: '27명 이하', n: 27 }, { t: '30명 이하', n: 30 }],
+      /* 초등과 중등은 분포가 아예 다르다 (서울 중앙값 초 19.6명 · 중 24.6명).
+         한 기준으로 묶으면 초등에선 거의 다 통과해 조건 구실을 못 한다. */
+      ladder: [{ t: '초 20명 · 중 24명 이하', e: 20, m: 24 },
+               { t: '초 23명 · 중 27명', e: 23, m: 27 },
+               { t: '초 26명 · 중 30명', e: 26, m: 30 }],
       needs: ['geo', 'schools'],
       test: function (c, lv, ctx) {
         var m = c.meta; if (!m || m.lat == null || !ctx.schools) return { v: 'unknown', fact: null };
@@ -307,7 +311,8 @@
           var d = haversine(m.lat, m.lng, s.lat, s.lng); if (d < bd) { bd = d; best = s; }
         }
         if (!best) return { v: 'unknown', fact: null };
-        return { v: best.cp <= this.ladder[lv].n ? 'pass' : 'fail',
+        var cut = want === 'm' ? this.ladder[lv].m : this.ladder[lv].e;
+        return { v: best.cp <= cut ? 'pass' : 'fail',
                  fact: best.n + ' 학급당 ' + best.cp.toFixed(1) + '명' };
       }
     },
