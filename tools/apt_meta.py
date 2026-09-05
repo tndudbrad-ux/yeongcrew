@@ -645,6 +645,74 @@ def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) ->
         print("   ", f)
 
 
+# ── 직주근접 허브 ──────────────────────────────────────────────────────────
+# '어디로 출퇴근하세요?' 화면의 기본 칩. 반도체 벨트(삼성·SK하이닉스)를 특히 촘촘히 둔다.
+# 좌표가 적힌 곳은 지역 이름이라 POI 검색이 안 맞아서 손으로 박은 값이고,
+# q 가 적힌 곳은 실제 사업장이라 카카오에서 받아온다 — 눈대중으로 찍지 않는다.
+HUBS = [
+    ("강남역·테헤란로", None, 37.4979, 127.0276),
+    ("여의도", None, 37.5219, 126.9245),
+    ("광화문·시청", None, 37.5709, 126.9769),
+    ("판교테크노밸리", None, 37.4020, 127.1086),
+    ("구로디지털단지", None, 37.4853, 126.9014),
+    ("마곡", None, 37.5601, 126.8256),
+    ("상암", None, 37.5796, 126.8895),
+    ("잠실", None, 37.5133, 127.1000),
+    ("동탄테크노밸리", None, 37.2010, 127.1080),
+    ("대전 둔산", None, 36.3510, 127.3780),
+    ("대덕연구단지", None, 36.3900, 127.3650),
+    ("송도", None, 37.3830, 126.6560),
+    # ── 삼성전자·삼성디스플레이
+    ("수원 삼성디지털시티", "삼성전자 수원사업장", None, None),
+    ("기흥 삼성전자", "삼성전자 기흥캠퍼스", None, None),
+    ("화성 삼성전자", "삼성전자 화성캠퍼스", None, None),
+    ("평택 삼성전자", "삼성전자 평택캠퍼스", None, None),
+    ("아산·탕정 삼성디스플레이", "삼성디스플레이 아산캠퍼스", None, None),
+    ("온양 삼성전자", "삼성전자 온양캠퍼스", None, None),
+    # ── SK하이닉스
+    ("이천 SK하이닉스", "SK하이닉스 이천캠퍼스", None, None),
+    ("청주 SK하이닉스", "SK하이닉스 청주캠퍼스", None, None),
+    ("용인 SK하이닉스 클러스터", "용인 반도체클러스터 일반산업단지", None, None),
+    ("용인 삼성 국가산단", "용인 첨단시스템반도체 국가산업단지", None, None),
+]
+HUB_PATH = os.path.join(ROOT, "data", "work-hubs.json")
+
+
+def fetch_hubs(key: str) -> None:
+    hdr = {"Authorization": "KakaoAK " + key}
+    out, miss = [], []
+    for name, q, lat, lng in HUBS:
+        if q:
+            j = None
+            for attempt in range(4):
+                try:
+                    r = requests.get("https://dapi.kakao.com/v2/local/search/keyword.json",
+                                     params={"query": q, "size": 1}, headers=hdr, timeout=TIMEOUT)
+                except Exception:
+                    time.sleep(1 + attempt); continue
+                if r.status_code == 200:
+                    j = r.json(); break
+                if r.status_code in (401, 403):
+                    raise ApiError(f"카카오 인증 실패 {r.status_code}")
+                time.sleep(1 + attempt)
+            docs = (j or {}).get("documents") or []
+            if not docs:
+                miss.append(f"{name} ← {q}")
+                continue
+            d = docs[0]
+            lat, lng = round(float(d["y"]), 6), round(float(d["x"]), 6)
+            print(f"  {name:<24} {d.get('place_name','')} · "
+                  f"{d.get('road_address_name') or d.get('address_name','')} · {lat},{lng}", flush=True)
+        out.append({"n": name, "lat": lat, "lng": lng})
+        time.sleep(0.15)
+    if miss:
+        print("[허브] 못 찾음: " + ", ".join(miss), flush=True)
+    os.makedirs(os.path.dirname(HUB_PATH), exist_ok=True)
+    with open(HUB_PATH, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
+    print(f"[허브] {len(out)}곳 → {HUB_PATH}", flush=True)
+
+
 # ── 학급 과밀 (학급당 학생수) ───────────────────────────────────────────────
 # 학교알리미 OpenAPI apiType=09 '학년별·학급별 학생수'. 학년별 학급수·학생수를 주므로
 # 일반학급만 합쳐서 학급당 학생수를 낸다. 특수·순회학급은 인원이 적어 평균을 끌어내려서 뺀다.
@@ -971,6 +1039,8 @@ def main() -> None:
     ap.add_argument("--geocode", action="store_true", help="도로명주소 지오코딩 (KAKAO_REST_KEY)")
     ap.add_argument("--schools", action="store_true", help="학교알리미 학교 목록·좌표 수집 (SCHOOLINFO_KEY)")
     ap.add_argument("--sido", nargs="*", help="--schools/--progress 대상 시도명 (비우면 전국)")
+    ap.add_argument("--hubs", action="store_true",
+                    help="직주근접 허브 좌표 수집 → data/work-hubs.json (KAKAO_REST_KEY)")
     ap.add_argument("--crowd", action="store_true",
                     help="학급당 학생수 수집 (학교알리미 OpenAPI apiType=09)")
     ap.add_argument("--crowd-year", default="", help="공시연도 (비우면 올해)")
@@ -994,6 +1064,11 @@ def main() -> None:
         if not sk:
             sys.exit("SCHOOLINFO_KEY 환경변수가 없습니다.")
         fetch_schools(con, sk, a.sido)
+    if a.hubs:
+        kk = os.environ.get("KAKAO_REST_KEY", "").strip()
+        if not kk:
+            sys.exit("KAKAO_REST_KEY 환경변수가 없습니다.")
+        fetch_hubs(kk)
     if a.crowd:
         sk = os.environ.get("SCHOOLINFO_KEY", "").strip()
         if not sk:
@@ -1018,7 +1093,7 @@ def main() -> None:
         emit(con)
         emit_schools(con)
     if not (a.stage or a.emit or a.import_csv or a.geocode or a.schools
-            or a.progress or a.crowd):
+            or a.progress or a.crowd or a.hubs):
         ap.print_help()
 
 
