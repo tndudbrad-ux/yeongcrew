@@ -640,6 +640,15 @@ CELL_RE = re.compile(r"<t[hd][^>]*>(.*?)</t[hd]>", re.S | re.I)
 ELITE = {"과학고": "sci", "외고국제고": "fl", "자율형사립고": "aut"}
 
 
+def decode_html(raw: bytes) -> str:
+    """학교알리미는 EUC-KR로 준다. 혹시 UTF-8로 바뀌어도 조용히 깨지지 않게 둘 다 본다."""
+    for enc in ("euc-kr", "utf-8"):
+        t = raw.decode(enc, "replace")
+        if "일반고" in t:
+            return t
+    return raw.decode("euc-kr", "replace")
+
+
 def _cells(html: str, row: str) -> list[str]:
     return [TAG_RE.sub("", c).replace("&nbsp;", " ").strip()
             for c in CELL_RE.findall(row)]
@@ -676,7 +685,15 @@ def fetch_progress(con: sqlite3.Connection, sidos: list[str] | None, year: str) 
     regions = json.load(open(REGIONS_PATH, encoding="utf-8"))
     targets = sidos or list(regions)
     ses = requests.Session()
-    ses.headers["User-Agent"] = "Mozilla/5.0 (boobi apt-meta)"
+    # 브라우저에서는 잘 되는데 러너에서만 빈 표가 온 적이 있다. 앞단 방화벽이
+    # 낯선 User-Agent를 걸러낸 것으로 보고, 실제 브라우저와 같은 헤더로 요청한다.
+    ses.headers.update({
+        "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                       " (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "ko-KR,ko;q=0.9,en;q=0.8",
+        "Referer": SI_HOME,
+    })
     try:
         ses.get(SI_HOME, timeout=TIMEOUT)          # 세션 쿠키
     except Exception as e:
@@ -713,13 +730,26 @@ def fetch_progress(con: sqlite3.Connection, sidos: list[str] | None, year: str) 
                      "SHL_IDF_CD": s["SHL_IDF_CD"]}
                 try:
                     r = ses.get(SI_ITEM, params=q, timeout=TIMEOUT)
-                    p = parse_progress(r.content.decode("euc-kr", "replace"))
+                    p = parse_progress(decode_html(r.content))
                 except Exception as e:
                     fails.append(f'{s.get("SHL_NM")}: {e}')
-                    p = None
+                    r, p = None, None
                 time.sleep(0.1)            # 남의 공시 화면이다. 천천히 두드린다.
                 if not p:
                     blank += 1
+                    # 전부 빈 표로 돌아오면 파싱이 아니라 응답 자체가 다른 것이다.
+                    # 무슨 페이지를 받았는지 한 번 찍고, 초반에 다 비면 일찍 멈춘다.
+                    if blank == 1 and r is not None:
+                        body = TAG_RE.sub(" ", decode_html(r.content))
+                        print(f'[진학] 첫 빈 응답 — HTTP {r.status_code} ·'
+                              f' {r.headers.get("Content-Type")} · {len(r.content):,}바이트',
+                              flush=True)
+                        print("       " + " ".join(body.split())[:300], flush=True)
+                    if total == 0 and blank >= 30:
+                        print("[진학] 처음 30곳이 모두 빈 표라 중단합니다 — 응답 형태가 바뀐 듯합니다.",
+                              flush=True)
+                        con.commit()
+                        return
                     continue
                 con.execute(
                     "INSERT OR REPLACE INTO progress"
