@@ -21,6 +21,7 @@
   python apt_meta.py --import-csv 단지_기본정보.csv   K-apt 엑셀(CSV 저장)로 부대복리시설·승강기·최고층 등 보강
   KAKAO_REST_KEY=… python apt_meta.py --geocode --budget 20000   도로명주소 → 좌표 (카카오 로컬)
   python apt_meta.py --progress --sido 서울특별시 경기도 인천광역시   중학교 특목·자사 진학률
+  SCHOOLINFO_KEY=… python apt_meta.py --crowd   학급당 학생수(과밀)
 
 API에 없는 것(부대복리시설·승강기·최고층·지하주차·좌표)은 extra 테이블에 따로 두고
 emit 때 합친다. 단지코드(kapt_code)로 정확히 붙으므로 이름 매칭이 필요 없다.
@@ -222,6 +223,14 @@ CREATE TABLE IF NOT EXISTS school (
 CREATE INDEX IF NOT EXISTS ix_school_sgg ON school(sgg_code);
 -- 중학교 졸업생의 진로 현황(공시항목 06, 매년 11월). 학교알리미 웹 공시에만 있고
 -- OpenAPI에는 없어서 공시 페이지에서 직접 읽는다. 학교 code는 school.code와 같은 축.
+CREATE TABLE IF NOT EXISTS crowd (
+  code      TEXT PRIMARY KEY,
+  year      TEXT,
+  students  INTEGER,          -- 일반학급 학생수(계)
+  classes   INTEGER,          -- 일반학급 학급수(계)
+  per_class REAL,             -- 학급당 학생수
+  got_at    TEXT
+);
 CREATE TABLE IF NOT EXISTS progress (
   code      TEXT PRIMARY KEY,
   year      TEXT,
@@ -624,6 +633,57 @@ def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) ->
         print("   ", f)
 
 
+# ── 학급 과밀 (학급당 학생수) ───────────────────────────────────────────────
+# 학교알리미 OpenAPI apiType=09 '학년별·학급별 학생수'. 학년별 학급수·학생수를 주므로
+# 일반학급만 합쳐서 학급당 학생수를 낸다. 특수·순회학급은 인원이 적어 평균을 끌어내려서 뺀다.
+# 출처표시 조건 — 화면에 '학교알리미 공시'라고 밝히고 쓴다.
+def fetch_crowd(con: sqlite3.Connection, key: str, sidos: list[str] | None,
+                year: str) -> None:
+    regions = json.load(open(REGIONS_PATH, encoding="utf-8"))
+    targets = sidos or list(regions)
+    total, skipped, fails = 0, 0, []
+    for sido in targets:
+        sc = SIDO_CODE.get(sido)
+        if not sc or sido not in regions:
+            continue
+        n = 0
+        for g in regions[sido]:
+            for k in ("02", "03"):                 # 초등 · 중등
+                try:
+                    j = requests.get(SCHOOL_API, params={
+                        "apiKey": key, "apiType": "09", "pbanYr": year,
+                        "sidoCode": sc, "sggCode": g["code"],
+                        "schulKndCode": k}, timeout=TIMEOUT).json()
+                except Exception as e:
+                    fails.append(f'{g["code"]}/{k}: {e}')
+                    continue
+                if j.get("resultCode") != "success":
+                    fails.append(f'{g["code"]}/{k}: {j.get("resultMsg")}')
+                    continue
+                for o in j.get("list") or []:
+                    if o.get("PBAN_EXCP_YN") == "Y":        # 공시 제외 학교
+                        continue
+                    cls = sum(to_int(str(o.get(f"COL_C{i}") or 0)) for i in range(1, 7))
+                    stu = sum(to_int(str(o.get(f"COL_S{i}") or 0)) for i in range(1, 7))
+                    if cls <= 0 or stu <= 0:
+                        skipped += 1
+                        continue
+                    con.execute(
+                        "INSERT OR REPLACE INTO crowd"
+                        "(code,year,students,classes,per_class,got_at) VALUES(?,?,?,?,?,?)",
+                        (o.get("SCHUL_CODE"), year, stu, cls, round(stu / cls, 1),
+                         time.strftime("%Y-%m-%d")))
+                    n += 1
+                time.sleep(0.05)
+            con.commit()
+        print(f"{sido:<10} {n:,}개교", flush=True)
+        total += n
+    con.commit()
+    print(f"[과밀] {year} 공시 · {total:,}개교 · 학급수 0 {skipped:,} · 실패 {len(fails)}", flush=True)
+    for f in fails[:10]:
+        print("   ", f)
+
+
 # ── 중학교 진학 실적 ────────────────────────────────────────────────────────
 # "졸업생의 진로 현황"(공시항목 06)은 OpenAPI가 주지 않는다. 학교알리미 웹 공시에만
 # 있어서 지역별 공시정보 화면이 쓰는 두 요청을 그대로 흉내낸다.
@@ -740,11 +800,15 @@ def fetch_progress(con: sqlite3.Connection, sidos: list[str] | None, year: str) 
                     # 전부 빈 표로 돌아오면 파싱이 아니라 응답 자체가 다른 것이다.
                     # 무슨 페이지를 받았는지 한 번 찍고, 초반에 다 비면 일찍 멈춘다.
                     if blank == 1 and r is not None:
-                        body = TAG_RE.sub(" ", decode_html(r.content))
+                        t = decode_html(r.content)
+                        i = t.find("일반고")
                         print(f'[진학] 첫 빈 응답 — HTTP {r.status_code} ·'
-                              f' {r.headers.get("Content-Type")} · {len(r.content):,}바이트',
-                              flush=True)
-                        print("       " + " ".join(body.split())[:300], flush=True)
+                              f' {r.headers.get("Content-Type")} · {len(r.content):,}바이트'
+                              f' · <tr> {len(ROW_RE.findall(t))}개'
+                              f' · 일반고 {i} · 캡차 {"숫자를 입력" in t}', flush=True)
+                        if i >= 0:
+                            print("       " + " ".join(t[max(0, i - 400):i + 400].split()),
+                                  flush=True)
                     if total == 0 and blank >= 30:
                         print("[진학] 처음 30곳이 모두 빈 표라 중단합니다 — 응답 형태가 바뀐 듯합니다.",
                               flush=True)
@@ -775,6 +839,8 @@ def emit_schools(con: sqlite3.Connection) -> None:
         return
     pr = {r[0]: (r[1], r[2]) for r in con.execute(
         "SELECT code,rate,grad FROM progress").fetchall()}
+    cp = {r[0]: r[1] for r in con.execute(
+        "SELECT code,per_class FROM crowd").fetchall()}
     os.makedirs(SCHOOL_DIR, exist_ok=True)
     PAD_LAT = 2.5 / 111.0                      # 위도 1도 ≈ 111km
     by_sgg: dict[str, list] = {}
@@ -798,6 +864,8 @@ def emit_schools(con: sqlite3.Connection) -> None:
                 rec["p"] = 1
             if r[3] == "m" and r[1] in pr:
                 rec["pr"], rec["gd"] = pr[r[1]]      # 특목·자사 진학률, 졸업생 수
+            if r[1] in cp:
+                rec["cp"] = cp[r[1]]                 # 학급당 학생수
             out.append(rec)
         with open(os.path.join(SCHOOL_DIR, f"{sgg}.json"), "w", encoding="utf-8") as f:
             json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
@@ -878,6 +946,9 @@ def main() -> None:
     ap.add_argument("--geocode", action="store_true", help="도로명주소 지오코딩 (KAKAO_REST_KEY)")
     ap.add_argument("--schools", action="store_true", help="학교알리미 학교 목록·좌표 수집 (SCHOOLINFO_KEY)")
     ap.add_argument("--sido", nargs="*", help="--schools/--progress 대상 시도명 (비우면 전국)")
+    ap.add_argument("--crowd", action="store_true",
+                    help="학급당 학생수 수집 (학교알리미 OpenAPI apiType=09)")
+    ap.add_argument("--crowd-year", default="", help="공시연도 (비우면 올해)")
     ap.add_argument("--progress", action="store_true",
                     help="중학교 졸업생의 진로 현황 수집 (학교알리미 공시, 키 불필요)")
     ap.add_argument("--progress-year", default="",
@@ -898,6 +969,11 @@ def main() -> None:
         if not sk:
             sys.exit("SCHOOLINFO_KEY 환경변수가 없습니다.")
         fetch_schools(con, sk, a.sido)
+    if a.crowd:
+        sk = os.environ.get("SCHOOLINFO_KEY", "").strip()
+        if not sk:
+            sys.exit("SCHOOLINFO_KEY 환경변수가 없습니다.")
+        fetch_crowd(con, sk, a.sido, a.crowd_year or str(time.localtime().tm_year))
     if a.progress:
         # 진로 현황은 매년 11월 공시라 그 전에는 올해 것이 비어 있다.
         y = a.progress_year or str(time.localtime().tm_year - (0 if time.localtime().tm_mon >= 12 else 1))
@@ -916,7 +992,8 @@ def main() -> None:
     if a.emit:
         emit(con)
         emit_schools(con)
-    if not (a.stage or a.emit or a.import_csv or a.geocode or a.schools or a.progress):
+    if not (a.stage or a.emit or a.import_csv or a.geocode or a.schools
+            or a.progress or a.crowd):
         ap.print_help()
 
 
