@@ -442,9 +442,9 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 </section>
 
 <!-- ④b 자녀 (학군 골랐을 때) -->
-<section class="wq" data-k="kids" data-cond="school">
+<section class="wq" data-k="kids" data-cond="school,crowd">
   <h3 class="wqT">자녀는 어느 단계인가요?</h3>
-  <p class="wqS">'학군'을 고르셔서 여쭤봐요. 초품아를 볼지, 중학교 진학 실적을 볼지 갈려요.</p>
+  <p class="wqS">'학군'·'학급 과밀'을 고르셔서 여쭤봐요. 초등학교를 볼지 중학교를 볼지 갈려요.</p>
   <div class="wopt" id="kidsOpt">
     <button type="button" data-v="영유아"><b>영유아 · 예정</b><em>어린이집·초등학교 거리를 봐요</em></button>
     <button type="button" data-v="초등학생" class="on"><b>초등학생</b><em>초등학교 거리 · 초품아</em></button>
@@ -532,7 +532,7 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 
 <script src="/apt-budget.js?v=2"></script>
 <script src="/apt-score.js?v=2"></script>
-<script src="/apt-match.js?v=7"></script>
+<script src="/apt-match.js?v=8"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
@@ -783,7 +783,9 @@ function geocodeWork(q){
 
 /* ── 위저드 이동 ───────────────────────────────────────────────────── */
 var ORDER=['area','conds','size','work','kids','own','cash','income'];
-function visible(){ return ORDER.filter(function(k){ var s=document.querySelector('.wq[data-k="'+k+'"]'); var need=s.dataset.cond; return !need||S.conds[need]!=null; }); }
+/* data-cond 에 여러 조건을 쉼표로 적을 수 있다 — 하나라도 골랐으면 그 질문을 묻는다. */
+function visible(){ return ORDER.filter(function(k){ var s=document.querySelector('.wq[data-k="'+k+'"]'); var need=s.dataset.cond;
+  return !need||need.split(',').some(function(c){ return S.conds[c.trim()]!=null; }); }); }
 var cur='area';
 function go(k){
   var list=visible(); if(list.indexOf(k)<0){ k=list[0]; }

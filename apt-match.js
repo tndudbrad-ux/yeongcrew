@@ -291,6 +291,27 @@
       }
     },
     {
+      key: 'crowd', icon: '🪑', label: '학급 과밀',
+      desc: '자녀가 다닐 학교의 학급당 학생수 (학교알리미 공시)',
+      ladder: [{ t: '24명 이하', n: 24 }, { t: '27명 이하', n: 27 }, { t: '30명 이하', n: 30 }],
+      needs: ['geo', 'schools'],
+      test: function (c, lv, ctx) {
+        var m = c.meta; if (!m || m.lat == null || !ctx.schools) return { v: 'unknown', fact: null };
+        /* 배정될 확률이 가장 높은 학교 = 가장 가까운 같은 학교급.
+           평균을 내면 어느 학교 얘기인지 알 수 없어서, 한 곳을 짚고 이름을 말한다. */
+        var want = ctx.kids === '중고등학생' ? 'm' : 'e';
+        var best = null, bd = 1e12;
+        for (var i = 0; i < ctx.schools.length; i++) {
+          var s = ctx.schools[i];
+          if (s.k !== want || s.cp == null) continue;
+          var d = haversine(m.lat, m.lng, s.lat, s.lng); if (d < bd) { bd = d; best = s; }
+        }
+        if (!best) return { v: 'unknown', fact: null };
+        return { v: best.cp <= this.ladder[lv].n ? 'pass' : 'fail',
+                 fact: best.n + ' 학급당 ' + best.cp.toFixed(1) + '명' };
+      }
+    },
+    {
       key: 'park', icon: '🌳', label: '공원',
       desc: '가장 가까운 도시공원',
       ladder: [{ t: '500m 이내', m: 500 }, { t: '800m', m: 800 }, { t: '1.2km', m: 1200 }],
