@@ -104,8 +104,17 @@ var COSTS={
   stamp:[[10000,0],[100000,15],[Infinity,35]], /* 인지세: 주택 1억 이하 면제, ~10억 15만, 초과 35만 */
   legal:40,                           /* 법무사 보수·등기 실비 (대략) */
   bond:{base:0.70, low:0.026, high:0.031, cut:60000, discount:0.12}, /* 국민주택채권: 시가표준액≈매매가 70%, 매입률 2.6~3.1%, 즉시 매도 할인손 ~12% */
-  moveDefault:150                     /* 포장이사 기본값 (3~4인, 수도권) */
+  moveDefault:150,                    /* 포장이사 기본값 (3~4인, 수도권) */
+  /* 입주청소 — 공급 평당 1.2~1.5만원이 시세(신축은 1.8만까지). 중간값 1.3만원으로 잡고
+     전용면적에서 공급면적을 되짚어 5만원 단위로 반올림한다.
+     전용 84㎡ → 45만 (시세 40~51만), 전용 59㎡ → 30만 (29~36만). */
+  clean:{ perPy:1.3, supplyRatio:1.33, min:25, max:80, fallbackArea:84 }
 };
+function cleanFee(area){
+  var c=COSTS.clean, a=(area>0?area:c.fallbackArea);
+  var py=a/3.3058*c.supplyRatio;
+  return Math.round(Math.max(c.min,Math.min(c.max,py*c.perPy))/5)*5;
+}
 function acqBaseRate(eok){ if(eok<=6) return 1; if(eok<=9) return eok*2/3-3; return 3; }
 /* own: none(무주택→1주택 취득) | one(1주택→갈아타기: 일시적 2주택 가정, 1주택 세율) | multi(3주택 이상 취득 가정) */
 function acqTax(price,o){
@@ -134,7 +143,9 @@ function legalFee(price){
 function sideCosts(price,o){
   var tax=acqTax(price,o), br=brokerFee(price), lg=legalFee(price);
   var move=(o.move==null||isNaN(o.move))?COSTS.moveDefault:o.move, interior=o.interior||0;
-  return {tax:tax, broker:br, legal:lg, move:move, interior:interior, total:tax.total+br.total+lg.total+move+interior};
+  var clean=(o.clean==null||isNaN(o.clean))?cleanFee(o.area):o.clean;
+  return {tax:tax, broker:br, legal:lg, move:move, clean:clean, interior:interior,
+          total:tax.total+br.total+lg.total+move+clean+interior};
 }
 /* 매매가 P + 부대비용(P) ≤ 현금 + 대출(P) 를 만족하는 최대 P.
    대출(P)은 solveBudget과 같은 LTV·DSR·절대한도 식 — 규제 수치는 그대로다. */
