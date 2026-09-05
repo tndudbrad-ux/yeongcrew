@@ -801,13 +801,13 @@ def fetch_progress(con: sqlite3.Connection, sidos: list[str] | None, year: str) 
                     # 무슨 페이지를 받았는지 한 번 찍고, 초반에 다 비면 일찍 멈춘다.
                     if blank == 1 and r is not None:
                         t = decode_html(r.content)
-                        i = t.find("일반고")
+                        rws = ROW_RE.findall(t)
                         print(f'[진학] 첫 빈 응답 — HTTP {r.status_code} ·'
                               f' {r.headers.get("Content-Type")} · {len(r.content):,}바이트'
-                              f' · <tr> {len(ROW_RE.findall(t))}개'
-                              f' · 일반고 {i} · 캡차 {"숫자를 입력" in t}', flush=True)
-                        if i >= 0:
-                            print("       " + " ".join(t[max(0, i - 400):i + 400].split()),
+                              f' · <table> {t.count("<table")}개 · <tr> {len(rws)}개', flush=True)
+                        for ri, rw in enumerate(rws):
+                            cs = _cells(t, rw)
+                            print(f'   행{ri} ({len(cs)}칸) ' + " ".join(" | ".join(cs).split())[:160],
                                   flush=True)
                     if total == 0 and blank >= 30:
                         print("[진학] 처음 30곳이 모두 빈 표라 중단합니다 — 응답 형태가 바뀐 듯합니다.",
