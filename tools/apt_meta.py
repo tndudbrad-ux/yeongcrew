@@ -221,8 +221,6 @@ CREATE TABLE IF NOT EXISTS school (
   addr      TEXT
 );
 CREATE INDEX IF NOT EXISTS ix_school_sgg ON school(sgg_code);
--- 중학교 졸업생의 진로 현황(공시항목 06, 매년 11월). 학교알리미 웹 공시에만 있고
--- OpenAPI에는 없어서 공시 페이지에서 직접 읽는다. 학교 code는 school.code와 같은 축.
 CREATE TABLE IF NOT EXISTS crowd (
   code      TEXT PRIMARY KEY,
   year      TEXT,
@@ -231,8 +229,15 @@ CREATE TABLE IF NOT EXISTS crowd (
   per_class REAL,             -- 학급당 학생수
   got_at    TEXT
 );
+-- 중학교 졸업생의 진로 현황(공시항목 06, 매년 11월). 학교알리미 웹 공시에만 있고
+-- OpenAPI에는 없어서 공시 페이지에서 직접 읽는다.
+-- 웹 공시 코드(SHL_CD)와 OpenAPI 코드(SCHUL_CODE)는 앞 3자가 시도마다 다르고
+-- (서울 S01·부산 S02·경기 S09 …) 뒤 7자만 같다. 그래서 code 를 그대로 두고
+-- emit 때 (시군구, 뒤 7자) 와 (시군구, 학교명) 으로 붙인다.
 CREATE TABLE IF NOT EXISTS progress (
   code      TEXT PRIMARY KEY,
+  sgg       TEXT,
+  name      TEXT,
   year      TEXT,
   grad      INTEGER,          -- 졸업생 수(진로 합계)
   sci       INTEGER,          -- 과학고
@@ -268,6 +273,13 @@ def fac_codes(v: str) -> str:
 def db_open() -> sqlite3.Connection:
     con = sqlite3.connect(DB_PATH, check_same_thread=False)
     con.executescript(SCHEMA)
+    # progress 는 한때 서울에서만 맞는 코드로 저장돼 있었다. 옛 표가 남아 있으면 버린다.
+    cols = {r[1] for r in con.execute("PRAGMA table_info(progress)").fetchall()}
+    if cols and "sgg" not in cols:
+        con.execute("DROP TABLE progress")
+        con.executescript(SCHEMA)
+        con.commit()
+        print("[진학] 옛 표를 버리고 다시 받습니다 (시도별 코드 체계 반영)", flush=True)
     return con
 
 
@@ -786,9 +798,8 @@ def fetch_progress(con: sqlite3.Connection, sidos: list[str] | None, year: str) 
                 fails.append(f'{g["code"]} 목록: {e}')
                 continue
             for s in lst:
-                # 웹 공시 코드(B10…)와 OpenAPI 코드(S01…)는 앞 3자만 다르고 뒤가 같다.
-                code = "S01" + (s.get("SHL_CD") or "")[3:]
-                if not s.get("SHL_IDF_CD") or code in done:
+                code = s.get("SHL_CD") or ""
+                if not s.get("SHL_IDF_CD") or not code or code in done:
                     continue
                 q = {"GS_HANGMOK_CD": "06", "GS_BURYU_CD": "JG040", "JG_BURYU_CD": "JG130",
                      "JG_HANGMOK_CD": "52", "JG_GUBUN": "1", "GS_TYPE": "Y",
@@ -824,9 +835,10 @@ def fetch_progress(con: sqlite3.Connection, sidos: list[str] | None, year: str) 
                     continue
                 con.execute(
                     "INSERT OR REPLACE INTO progress"
-                    "(code,year,grad,sci,fl,aut,rate,got_at) VALUES(?,?,?,?,?,?,?,?)",
-                    (code, year, p["grad"], p["sci"], p["fl"], p["aut"], p["rate"],
-                     time.strftime("%Y-%m-%d")))
+                    "(code,sgg,name,year,grad,sci,fl,aut,rate,got_at)"
+                    " VALUES(?,?,?,?,?,?,?,?,?,?)",
+                    (code, g["code"], s.get("SHL_NM"), year, p["grad"], p["sci"],
+                     p["fl"], p["aut"], p["rate"], time.strftime("%Y-%m-%d")))
                 n += 1
             con.commit()
         print(f"{sido:<10} 중학교 {n:,}곳", flush=True)
@@ -844,8 +856,12 @@ def emit_schools(con: sqlite3.Connection) -> None:
     if not rows:
         print("[학교] 데이터가 없습니다 — 먼저 --schools 로 수집하세요.", flush=True)
         return
-    pr = {r[0]: (r[1], r[2]) for r in con.execute(
-        "SELECT code,rate,grad FROM progress").fetchall()}
+    pr = {}
+    for code, sgg, nm, rate, grad in con.execute(
+            "SELECT code,sgg,name,rate,grad FROM progress").fetchall():
+        pr[(sgg, code[3:])] = (rate, grad)      # 시군구 + 코드 뒤 7자
+        if nm:
+            pr[(sgg, nm)] = (rate, grad)        # 못 붙으면 이름으로
     cp = {r[0]: r[1] for r in con.execute(
         "SELECT code,per_class FROM crowd").fetchall()}
     os.makedirs(SCHOOL_DIR, exist_ok=True)
@@ -869,8 +885,10 @@ def emit_schools(con: sqlite3.Connection) -> None:
                 rec["t"] = r[4]
             if r[5]:
                 rec["p"] = 1
-            if r[3] == "m" and r[1] in pr:
-                rec["pr"], rec["gd"] = pr[r[1]]      # 특목·자사 진학률, 졸업생 수
+            if r[3] == "m":
+                hit = pr.get((r[0], r[1][3:])) or pr.get((r[0], r[2]))
+                if hit:
+                    rec["pr"], rec["gd"] = hit       # 특목·자사 진학률, 졸업생 수
             if r[1] in cp:
                 rec["cp"] = cp[r[1]]                 # 학급당 학생수
             out.append(rec)
