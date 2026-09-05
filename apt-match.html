@@ -763,13 +763,26 @@ function geocodeWork(q){
 (function(){
   var row=$('workHubs'), note=$('workNote'), timer=null;
   function say(t){ note.textContent=t; }
-  WORK_HUBS.forEach(function(h){
-    var b=document.createElement('button'); b.type='button'; b.className='rChip'; b.textContent=h[0];
-    b.onclick=function(){ $('workInput').value=h[0]; S.work={name:h[0],lat:h[1],lng:h[2]};
-      [].forEach.call(row.children,function(x){x.classList.remove('on');}); b.classList.add('on');
-      say('✓ '+h[0]+' 기준으로 통근시간을 계산해요.'); };
-    row.appendChild(b);
-  });
+  function drawHubs(){
+    row.innerHTML='';
+    WORK_HUBS.forEach(function(h){
+      var b=document.createElement('button'); b.type='button'; b.className='rChip'; b.textContent=h[0];
+      b.onclick=function(){ $('workInput').value=h[0]; S.work={name:h[0],lat:h[1],lng:h[2]};
+        [].forEach.call(row.children,function(x){x.classList.remove('on');}); b.classList.add('on');
+        say('✓ '+h[0]+' 기준으로 통근시간을 계산해요.'); };
+      row.appendChild(b);
+    });
+  }
+  drawHubs();
+  /* 허브 좌표는 카카오에서 받아 data/work-hubs.json 에 넣어 둔다.
+     못 받아오면 위에 박아둔 목록으로 그냥 돌아간다 — 화면이 비지 않게. */
+  fetch('/data/work-hubs.json',{cache:'no-cache'}).then(function(r){ return r.ok?r.json():null; })
+    .then(function(j){
+      if(!j||!j.length) return;
+      WORK_HUBS=j.filter(function(x){ return x.lat!=null&&x.lng!=null; })
+                 .map(function(x){ return [x.n,x.lat,x.lng]; });
+      if(WORK_HUBS.length) drawHubs();
+    }).catch(function(){});
   $('workInput').oninput=function(){
     var v=this.value.trim();
     [].forEach.call(row.children,function(x){x.classList.remove('on');});
