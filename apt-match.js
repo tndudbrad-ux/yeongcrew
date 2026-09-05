@@ -110,6 +110,11 @@
   }
   function walkMin(m) { return Math.round(m * 1.3 / 67); }
 
+  /* 학급당 학생수(학교알리미 공시). 이건 조건이 아니라 근거다 —
+     "학급 과밀 24명 이하인 집을 찾아줘"라고 말하는 사람은 없고,
+     학군을 본 김에 그 학교가 몇 명짜리 교실인지 궁금할 뿐이다. */
+  function crowdOf(s) { return (s && s.cp != null) ? ' · 학급당 ' + s.cp.toFixed(1) + '명' : ''; }
+
   var TIER1 = ['삼성물산', '현대건설', '현대산업개발', 'hdc현대산업개발', 'gs건설', '대우건설', '대림산업', 'dl이앤씨',
                '포스코이앤씨', '포스코건설', '롯데건설', 'sk에코플랜트', '에스케이에코플랜트', '한화건설', '호반건설'];
   var TIER1_NAME = ['디에이치', '아크로', '래미안', '자이', '힐스테이트', '푸르지오', '아이파크', '롯데캐슬', '더샵', '이편한세상', '써밋', '르엘', '트리마제'];
@@ -241,7 +246,7 @@
     },
     {
       key: 'school', icon: '🏫', label: '학군',
-      desc: '초등은 통학 거리, 중고등은 둘레 중학교의 특목·자사고 진학률',
+      desc: '초등은 통학 거리, 중고등은 둘레 중학교의 특목·자사고 진학률 (학급 과밀도 같이 봐요)',
       ladder: [{ t: '초 500m · 중 상위 30%', e: 500, p: 0.30 },
                { t: '초 800m · 중 상위 50%', e: 800, p: 0.50 }],
       needs: ['geo', 'schools'],
@@ -256,26 +261,31 @@
         var teen = ctx.kids === '중고등학생';
         if (!teen) {
           if (!elem) return { v: 'unknown', fact: null };
-          return { v: ed <= L.e ? 'pass' : 'fail', fact: elem.n + ' ' + Math.round(ed) + 'm' + (ed <= 300 ? ' · 초품아' : '') };
+          return { v: ed <= L.e ? 'pass' : 'fail',
+                   fact: elem.n + ' ' + Math.round(ed) + 'm' + (ed <= 300 ? ' · 초품아' : '') + crowdOf(elem) };
         }
         /* 중고등: 반경 1.5km 중학교들의 특목·자사고 진학률(학교알리미 공시)을
            졸업생 수로 가중평균한다. 작은 학교 한 곳이 동네를 대표하지 않도록. */
         var cut = ctx.progressCut ? ctx.progressCut(L.p) : null;
         if (ctx.progress && cut != null) {
-          var num = 0, den = 0, near = 0, best = null, br = -1;
+          var num = 0, den = 0, near = 0, pick = null, pd = 1e12, pr = null;
           for (var j = 0; j < ctx.schools.length; j++) {
             var ms = ctx.schools[j]; if (ms.k !== 'm') continue;
-            if (haversine(m.lat, m.lng, ms.lat, ms.lng) > 1500) continue;
+            var mdist = haversine(m.lat, m.lng, ms.lat, ms.lng);
+            if (mdist > 1500) continue;
             var p = ctx.progress[ms.c]; if (!p) continue;
             near++; num += p.r * p.g; den += p.g;
-            if (p.r > br) { br = p.r; best = ms; }
+            /* 대표로 짚는 학교는 진학률 1등이 아니라 가장 가까운 곳 —
+               실제로 배정될 가능성이 높은 학교라야 근거가 된다. */
+            if (mdist < pd) { pd = mdist; pick = ms; pr = p; }
           }
           if (den > 0) {
             var avg = num / den;
             return {
               v: avg >= cut ? 'pass' : 'fail',
               fact: '둘레 중학교 ' + near + '곳 특목·자사고 진학률 ' + (avg * 100).toFixed(1) + '%'
-                    + (best && br > 0 ? ' · ' + best.n + ' ' + (br * 100).toFixed(1) + '%' : '')
+                    + (pick ? ' · 가장 가까운 ' + pick.n + ' ' + (pr.r * 100).toFixed(1) + '%'
+                              + crowdOf(pick) : '')
             };
           }
         }
@@ -287,33 +297,8 @@
           var dd = haversine(m.lat, m.lng, t.lat, t.lng); if (dd < md) { md = dd; mid = t; }
         }
         if (!mid) return { v: 'unknown', fact: null };
-        return { v: md <= L.e ? 'pass' : 'fail', fact: mid.n + ' ' + Math.round(md) + 'm (진학 실적은 아직 못 봐요)' };
-      }
-    },
-    {
-      key: 'crowd', icon: '🪑', label: '학급 과밀',
-      desc: '자녀가 다닐 학교의 학급당 학생수 (학교알리미 공시)',
-      /* 초등과 중등은 분포가 아예 다르다 (서울 중앙값 초 19.6명 · 중 24.6명).
-         한 기준으로 묶으면 초등에선 거의 다 통과해 조건 구실을 못 한다. */
-      ladder: [{ t: '초 20명 · 중 24명 이하', e: 20, m: 24 },
-               { t: '초 23명 · 중 27명', e: 23, m: 27 },
-               { t: '초 26명 · 중 30명', e: 26, m: 30 }],
-      needs: ['geo', 'schools'],
-      test: function (c, lv, ctx) {
-        var m = c.meta; if (!m || m.lat == null || !ctx.schools) return { v: 'unknown', fact: null };
-        /* 배정될 확률이 가장 높은 학교 = 가장 가까운 같은 학교급.
-           평균을 내면 어느 학교 얘기인지 알 수 없어서, 한 곳을 짚고 이름을 말한다. */
-        var want = ctx.kids === '중고등학생' ? 'm' : 'e';
-        var best = null, bd = 1e12;
-        for (var i = 0; i < ctx.schools.length; i++) {
-          var s = ctx.schools[i];
-          if (s.k !== want || s.cp == null) continue;
-          var d = haversine(m.lat, m.lng, s.lat, s.lng); if (d < bd) { bd = d; best = s; }
-        }
-        if (!best) return { v: 'unknown', fact: null };
-        var cut = want === 'm' ? this.ladder[lv].m : this.ladder[lv].e;
-        return { v: best.cp <= cut ? 'pass' : 'fail',
-                 fact: best.n + ' 학급당 ' + best.cp.toFixed(1) + '명' };
+        return { v: md <= L.e ? 'pass' : 'fail',
+                 fact: mid.n + ' ' + Math.round(md) + 'm' + crowdOf(mid) + ' (진학 실적은 아직 못 봐요)' };
       }
     },
     {

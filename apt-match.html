@@ -315,6 +315,11 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .secH .sub{font-size:.78rem;color:var(--sub);font-weight:400}
 .mcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:9px}
 .mcard .nm{font-size:.97rem;font-weight:600;letter-spacing:-.02em;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.mcard .nmL{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:3px;border-bottom:1.5px solid transparent}
+.mcard .nmL:hover,.mcard .nmL:focus-visible{color:#2A7DE8;border-bottom-color:#3D8BFD}
+.mcard .nmGo{font-size:.72em;color:#8AA5A2;font-weight:600}
+.mcard .nmL:hover .nmGo,.mcard .nmL:focus-visible .nmGo{color:#3D8BFD}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .mcard .lo{font-size:.78rem;color:var(--sub);margin:2px 0 8px}
 .mcard .pr{font-size:1.05rem;font-weight:700;letter-spacing:-.02em;background:linear-gradient(115deg,#1FB8AE,#3D8BFD 60%,#8B6CF6);-webkit-background-clip:text;background-clip:text;color:transparent}
 .mcard ul{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px}
@@ -442,9 +447,9 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 </section>
 
 <!-- ④b 자녀 (학군 골랐을 때) -->
-<section class="wq" data-k="kids" data-cond="school,crowd">
+<section class="wq" data-k="kids" data-cond="school">
   <h3 class="wqT">자녀는 어느 단계인가요?</h3>
-  <p class="wqS">'학군'·'학급 과밀'을 고르셔서 여쭤봐요. 초등학교를 볼지 중학교를 볼지 갈려요.</p>
+  <p class="wqS">'학군'을 고르셔서 여쭤봐요. 초품아를 볼지, 중학교 진학 실적을 볼지 갈려요.</p>
   <div class="wopt" id="kidsOpt">
     <button type="button" data-v="영유아"><b>영유아 · 예정</b><em>어린이집·초등학교 거리를 봐요</em></button>
     <button type="button" data-v="초등학생" class="on"><b>초등학생</b><em>초등학교 거리 · 초품아</em></button>
@@ -532,7 +537,7 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 
 <script src="/apt-budget.js?v=2"></script>
 <script src="/apt-score.js?v=2"></script>
-<script src="/apt-match.js?v=8"></script>
+<script src="/apt-match.js?v=9"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
@@ -932,7 +937,13 @@ window.setLevel=function(key,lv){
 function cardHtml(u){
   var b=budgetOf(u), gap=b?u.price-b.price:0;
   var reg=isRegulated(u.sido,u.sgg), lta=ltaZone(u.sido,u.sgg);
-  var h='<div class="mcard"><div class="nm">'+esc(u.name)+' <span class="tg">'+esc(SHORT[u.sido]||u.sido)+' '+esc(u.sgg)+' '+esc(u.dong)+'</span>'
+  /* 단지명은 네이버 검색으로 — 시세·매물·사진은 우리가 가진 게 아니라서
+     추측으로 채우는 대신 바로 확인하러 갈 수 있게 한다. 지역까지 넣어야 동명이인이 안 걸린다. */
+  var q=encodeURIComponent((SHORT[u.sido]||u.sido)+' '+u.sgg+' '+u.dong+' '+u.name+' 아파트');
+  var h='<div class="mcard"><div class="nm">'
+    +'<a class="nmL" href="https://search.naver.com/search.naver?query='+q+'" target="_blank" rel="noopener noreferrer">'
+    +esc(u.name)+'<span class="nmGo" aria-hidden="true">↗</span><span class="sr">네이버에서 검색 (새 창)</span></a>'
+    +' <span class="tg">'+esc(SHORT[u.sido]||u.sido)+' '+esc(u.sgg)+' '+esc(u.dong)+'</span>'
     +(S.codes.length>1?'<span class="tg" style="'+(reg?'background:#FFF4F4;color:#B23B3B':'background:#F1FBF9;color:#1E7A6E')+'">'+(reg?'규제':'비규제')+(b?' · 예산 '+readMan(b.price):'')+'</span>':'')
     +(lta?'<span class="tg" style="background:#FFF8EC;color:#8A5A16">토허구역</span>':'')+'</div>';
   h+='<div class="lo">전용 '+u.area+'㎡ ('+Math.round(u.area/3.3058)+'평) · '+(u.buildYear?u.buildYear+'년 준공 · ':'')+esc(String(u.dealYm||'').replace('-','.'))+' 거래'+(u.meta&&u.meta.hh?' · '+fmtN(u.meta.hh)+'세대':'')+'</div>';
