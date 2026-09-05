@@ -23,6 +23,7 @@ on:
           - emit      # 재수집 없이 JSON만 다시 생성
           - geocode   # 도로명주소 → 좌표 (KAKAO_REST_KEY). 초품아·직주근접·역세권이 여기서 열린다
           - schools   # 학교알리미 학교 목록·좌표 (SCHOOLINFO_KEY). 학교는 잘 안 바뀌어서 가끔만
+          - hubs      # 직주근접 허브 좌표 (반도체 사업장 등)
           - crowd     # 학급당 학생수(과밀). OpenAPI apiType=09
           - progress  # 중학교 졸업생의 진로 현황(특목·자사 진학률). 공시가 연 1회라 11월 이후에만 바뀐다
       budget:
@@ -94,6 +95,16 @@ jobs:
           fi
           python tools/apt_meta.py --geocode --budget 90000
 
+      # 직주근접 허브 좌표 — 22곳이라 몇 초면 끝난다. 반도체 사업장이 늘면 여기만 고친다.
+      - name: 직주근접 허브 좌표
+        if: inputs.stage == 'hubs' || github.event_name == 'push'
+        continue-on-error: true
+        env:
+          KAKAO_REST_KEY: ${{ secrets.KAKAO_REST_KEY }}
+        run: |
+          if [ -z "$KAKAO_REST_KEY" ]; then echo "KAKAO_REST_KEY 없음 — 건너뜁니다"; exit 0; fi
+          python tools/apt_meta.py --hubs
+
       # 학교 목록·좌표는 거의 안 바뀌는데 7분 넘게 걸린다. 필요할 때만 돌린다.
       - name: 학교 (학교알리미)
         if: inputs.stage == 'schools'
@@ -128,7 +139,7 @@ jobs:
           gzip -9 -c tools/apt_meta.db > tools/apt_meta.db.gz
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A data/apt-meta data/schools tools/apt_meta.db.gz
+          git add -A data/apt-meta data/schools data/work-hubs.json tools/apt_meta.db.gz
           if git diff --cached --quiet; then
             echo "변경 없음"
             exit 0
