@@ -880,6 +880,11 @@ function renderBudget(B){
 }
 
 var lastRes=null;
+/* 무료는 1곳까지. 조건을 세운 값이 진짜인지 한 곳으로 확인하고, 나머지는 프리미엄. */
+var FREE_CANDS=1;
+function isPaid(){ return !!(window.bbPremium && bbPremium.is()); }
+/* 이용권 확인이 늦게 끝나면 그때 한 번 다시 그린다 */
+document.addEventListener('bb-premium', function(){ if(lastRes) renderMatch(); });
 function candidates(){
   return allRows().filter(function(d){ if(d.type!=='apt') return false; var b=budgetOf(d); if(!b) return false; return d.price<=b.price*1.10 && d.price>=b.price*0.40; });
 }
@@ -898,11 +903,24 @@ function renderMatch(){
   $('ladderBox').innerHTML='';
 
   var out=$('matchOut'), h='';
-  var n=res.counts.full, condN=res.conds.length;
+  var n=res.counts.full, condN=res.conds.length, locked=0;
+  /* free = 아직 공짜로 보여줄 수 있는 칸 수. null 이면 이용권이 있어 제한 없음 */
+  var free = isPaid() ? null : FREE_CANDS;
   if(n>0){
     h+='<div class="secH">✅ '+(condN?'조건 '+condN+'개 전부 충족':'예산 안 아파트')+' <span class="cnt">'+fmtN(n)+'곳</span>'+(n>8?'<span class="sub">예산 가까운 순</span>':'')+'</div>';
-    h+=res.full.slice(0,8).map(cardHtml).join('');
-    if(n>8) h+='<button type="button" class="showMore" onclick="showAll(this)">'+fmtN(n-8)+'곳 더 보기</button>';
+    if(free===null){                       /* 이용권 있음 — 전부 */
+      h+=res.full.slice(0,8).map(cardHtml).join('');
+      if(n>8) h+='<button type="button" class="showMore" onclick="showAll(this)">'+fmtN(n-8)+'곳 더 보기</button>';
+    } else {
+      var show=Math.min(free,n);
+      h+=res.full.slice(0,show).map(cardHtml).join('');
+      free-=show;
+      if(n>show){
+        h+='<div class="bbTease" aria-hidden="true">'+res.full.slice(show,show+2).map(cardHtml).join('')+'</div>';
+        locked=n-show+res.unknown.length;
+        h+=wallHtml(locked, '고르신 조건에 다 맞는 곳이 <b>'+fmtN(n)+'곳</b> 나왔어요.');
+      }
+    }
   } else {
     h+=zeroHtml(res);
   }
@@ -912,10 +930,25 @@ function renderMatch(){
   }
   if(res.unknown.length){
     h+='<div class="secH">🔍 데이터 미확인 <span class="cnt">'+fmtN(res.unknown.length)+'곳</span><span class="sub">확인된 조건은 다 맞는데 일부가 공시에 없어요</span></div>';
-    h+=res.unknown.slice(0,4).map(cardHtml).join('');
-    if(res.unknown.length>4) h+='<p class="hintline">K-apt는 의무관리대상(300세대 이상 등)만 공시해서 소규모 단지는 커뮤니티·주차를 확인할 수 없어요.</p>';
+    var un=res.unknown.length;
+    if(free===null){
+      h+=res.unknown.slice(0,4).map(cardHtml).join('');
+      if(un>4) h+='<p class="hintline">K-apt는 의무관리대상(300세대 이상 등)만 공시해서 소규모 단지는 커뮤니티·주차를 확인할 수 없어요.</p>';
+    } else if(locked>0){
+      /* 위에서 이미 페이월을 세웠다 — 여기서 또 세우지 않고 흐리게만 */
+      h+='<div class="bbTease" aria-hidden="true">'+res.unknown.slice(0,2).map(cardHtml).join('')+'</div>';
+    } else {
+      var showU=Math.min(free,un);
+      h+=res.unknown.slice(0,showU).map(cardHtml).join('');
+      if(un>showU){
+        h+='<div class="bbTease" aria-hidden="true">'+res.unknown.slice(showU,showU+2).map(cardHtml).join('')+'</div>';
+        locked=un-showU;
+        h+=wallHtml(locked, '확인된 조건은 다 맞는 곳이 <b>'+fmtN(un)+'곳</b> 더 있어요.');
+      }
+    }
   }
   out.innerHTML=h;
+  if(locked>0 && window.gtag){ try{ gtag('event','view_paywall',{page:location.pathname,locked:locked}); }catch(x){} }
 }
 window.showAll=function(btn){ var res=lastRes; btn.outerHTML=res.full.slice(8).map(cardHtml).join(''); };
 window.relaxOne=function(key){
@@ -934,6 +967,11 @@ window.setLevel=function(key,lv){
   renderMatch();
 };
 
+function wallHtml(n, lead){
+  if(!window.bbPremium) return '';
+  return bbPremium.wall({count:n, unit:'개 단지',
+    desc: lead+'<br>한 번 결제하면 전체 목록과 부비의 모든 유료 기능이 계속 열려요.'});
+}
 function cardHtml(u){
   var b=budgetOf(u), gap=b?u.price-b.price:0;
   var reg=isRegulated(u.sido,u.sgg), lta=ltaZone(u.sido,u.sgg);
@@ -1003,6 +1041,7 @@ var gateLoaded=false;
 function loadGate(){ if(gateLoaded) return; gateLoaded=true; var sc=document.createElement('script'); sc.src='/boobi-login-gate.js?v=3'; sc.defer=true; document.body.appendChild(sc); }
 </script>
 <script src="/hwon-auth.js" defer></script>
+<script src="/boobi-premium.js?v=3" defer></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"조건 매칭 내집찾기","url":"https://boobi.ai.kr/apt-match.html","description":"역세권·학군·커뮤니티·신축·주차 등 조건을 고르면 국토부 실거래에서 전부 충족하는 아파트만 보여주는 무료 서비스","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://boobi.ai.kr"}}</script>
 </body>
 </html>
