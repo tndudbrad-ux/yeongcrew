@@ -696,8 +696,8 @@ SI_HOME = "https://www.schoolinfo.go.kr/ei/ss/pneiss_a05_s0.do"
 TAG_RE = re.compile(r"<[^>]+>")
 ROW_RE = re.compile(r"<tr[^>]*>(.*?)</tr>", re.S | re.I)
 CELL_RE = re.compile(r"<t[hd][^>]*>(.*?)</t[hd]>", re.S | re.I)
-# 학군 신호로 세는 진로. 마이스터고·예체능고는 진학 난이도가 아니라 진로 성격이라 뺀다.
-ELITE = {"과학고": "sci", "외고국제고": "fl", "자율형사립고": "aut"}
+# 학군 신호로 세는 진로는 과학고·외고국제고·자율형사립고 셋.
+# 마이스터고·예체능고는 진학 난이도가 아니라 진로 성격이라 뺀다.
 
 
 def decode_html(raw: bytes) -> str:
@@ -715,29 +715,36 @@ def _cells(html: str, row: str) -> list[str]:
 
 
 def parse_progress(html: str) -> dict | None:
-    """진로 표 첫 블록(항목명 줄 + 인원 줄)을 항목명으로 읽는다.
-       열 순서가 바뀌어도 이름으로 붙으므로 조용히 어긋나지 않는다."""
-    rows = ROW_RE.findall(html)
-    for i, row in enumerate(rows[:-1]):
-        head = _cells(html, row)
-        if not head or "일반고" not in head[0]:
-            continue
-        vals = _cells(html, rows[i + 1])
-        if len(vals) != len(head):
+    """'졸업생의 진로 현황' 표에서 합계 행을 읽는다.
+
+    머리글이 3단으로 병합돼 있어 이름-값 매칭이 안 된다. 대신 합계 행의 17칸이
+    아래 순서로 고정돼 있고, 표 스스로 두 개의 항등식을 갖고 있다.
+
+      0 졸업자 1 일반고 2 특성화고 3 과학고 4 외고국제고 5 예고체고 6 마이스터고
+      7 특목소계 8 자율형사립고 9 자율형공립고 10 자율소계 11 기타 12 진학자계
+      13 취업자 14 대안교육기관 15 무직·미상
+
+      진학자계 = 일반고 + 특성화고 + 특목소계 + 자율소계 + 기타
+      졸업자   = 진학자계 + 취업자 + 대안 + 무직·미상
+
+    둘 다 맞을 때만 값을 쓴다. 열이 하나라도 밀리면 항등식이 깨지므로,
+    표가 바뀌면 틀린 숫자를 내는 대신 조용히 비운다.
+    """
+    for row in ROW_RE.findall(html):
+        cs = _cells(html, row)
+        if len(cs) != 17 or cs[0].replace(" ", "") != "합계":
             continue
         try:
-            nums = [int(v.replace(",", "") or 0) for v in vals]
+            v = [int((c or "0").replace(",", "").strip() or 0) for c in cs[1:]]
         except ValueError:
             continue
-        out = {"grad": sum(nums), "sci": 0, "fl": 0, "aut": 0}
-        for label, n in zip(head, nums):
-            for want, key in ELITE.items():
-                if want in label.replace(" ", ""):
-                    out[key] = n
-        if out["grad"] <= 0:
-            return None
-        out["rate"] = round((out["sci"] + out["fl"] + out["aut"]) / out["grad"], 4)
-        return out
+        if v[12] != v[1] + v[2] + v[7] + v[10] + v[11]:
+            continue
+        if v[0] != v[12] + v[13] + v[14] + v[15] or v[0] <= 0:
+            continue
+        sci, fl, aut = v[3], v[4], v[8]
+        return {"grad": v[0], "sci": sci, "fl": fl, "aut": aut,
+                "rate": round((sci + fl + aut) / v[0], 4)}
     return None
 
 
