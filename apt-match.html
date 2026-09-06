@@ -367,6 +367,10 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .wchips{display:flex;flex-wrap:wrap;gap:6px}
 .wchips button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:6px 11px;font-size:.8rem;cursor:pointer;font-family:inherit;color:var(--sub);white-space:nowrap}
 .wchips button.on{border-color:#3D8BFD;color:#2A7DE8;font-weight:600;background:#EAF3FE}
+.wsubL{font-size:.82rem;font-weight:600;color:var(--forest);margin:13px 0 7px}
+.wsubL em{font-style:normal;font-weight:400;color:var(--sub);font-size:.76rem;margin-left:4px}
+.wsubL:first-of-type{margin-top:10px}
+input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
 .wrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}
 .wrow .f{margin:0;flex:1 1 150px;min-width:0}
 .bres .brk{flex-wrap:wrap}
@@ -487,18 +491,34 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
   <input class="f wbig" id="fIncome" type="number" inputmode="numeric" placeholder="예: 7000">
   <p class="wqUnit">만원 단위 · 7천만원이면 <b>7000</b></p>
   <div class="wsub">
-    <div class="wsubT">부대비용은 예산에서 미리 빼요 <em>— 취득세·중개보수·등기비·입주청소는 자동, 이사·인테리어는 여기서</em></div>
+    <div class="wsubT">부대비용은 예산에서 미리 빼요 <em>— 취득세·중개보수·등기비는 자동. 아래는 <b>비워두면 시세로 계산</b>해요</em></div>
+
+    <div class="wsubL">인테리어</div>
     <div class="wchips" id="intOpt">
-      <button type="button" data-v="0" class="on">인테리어 안 해요</button>
+      <button type="button" data-v="0" class="on">안 해요</button>
       <button type="button" data-v="500">도배·장판 500</button>
       <button type="button" data-v="2000">부분 2,000</button>
       <button type="button" data-v="5000">전체 5,000</button>
     </div>
-    <div class="wrow">
-      <input class="f" id="fInt" type="number" inputmode="numeric" placeholder="인테리어 (만원)">
-      <input class="f" id="fMove" type="number" inputmode="numeric" placeholder="이사비 (비우면 150)">
-      <input class="f" id="fClean" type="number" inputmode="numeric" placeholder="입주청소 (비우면 면적별)">
+    <input class="f wcost" id="fInt" type="number" inputmode="numeric" placeholder="직접 입력 (만원)">
+
+    <div class="wsubL">이사비 <em>포장이사 비수기·평일 시세</em></div>
+    <div class="wchips" id="moveOpt">
+      <button type="button" data-v="50">원룸 50</button>
+      <button type="button" data-v="80">20평대 80</button>
+      <button type="button" data-v="130">30평대 130</button>
+      <button type="button" data-v="180">40평대↑ 180</button>
     </div>
+    <input class="f wcost" id="fMove" type="number" inputmode="numeric" placeholder="비우면 150만원 (30평대 기준)">
+
+    <div class="wsubL">입주청소 <em>공급 평당 1.3만원</em></div>
+    <div class="wchips" id="cleanOpt">
+      <button type="button" data-v="30">24평 30</button>
+      <button type="button" data-v="45">34평 45</button>
+      <button type="button" data-v="50">40평 50</button>
+      <button type="button" data-v="60">46평 60</button>
+    </div>
+    <input class="f wcost" id="fClean" type="number" inputmode="numeric" placeholder="비우면 고르신 면적으로 자동 계산">
   </div>
   <details class="adv" style="margin-top:14px"><summary>매달 갚는 돈 · 저축 · 금리 (선택)</summary>
     <input class="f" id="fDebt" type="number" inputmode="numeric" placeholder="월 상환액 (신용대출·할부·학자금) — 없으면 0" style="margin-top:10px">
@@ -722,9 +742,21 @@ pickOpt('sizeOpt','lv',function(v){ S.sizeLv=+v; setTimeout(function(){ next(); 
 pickOpt('kidsOpt','v',function(v){ S.kids=v; setTimeout(function(){ next(); },140); });
 pickOpt('ownOpt','v',function(v){ S.own=v; $('firstWrap').style.display=v==='none'?'':'none'; $('ownNav').style.display=''; if(v!=='none'){ S.first=false; $('fFirst').checked=false; } });
 $('fFirst').onchange=function(){ S.first=this.checked; };
-/* 인테리어 칩 ↔ 직접 입력: 칩을 누르면 숫자가 들어가고, 숫자를 고치면 칩 선택이 풀린다 */
-pickOpt('intOpt','v',function(v){ $('fInt').value=+v?v:''; });
-$('fInt').oninput=function(){ var v=this.value; [].forEach.call($('intOpt').querySelectorAll('button'),function(b){ b.classList.toggle('on', b.dataset.v===(v===''?'0':v)); }); };
+/* 부대비용 칩 ↔ 직접 입력: 칩을 누르면 숫자가 들어가고, 숫자를 고치면 칩 선택이 풀린다.
+   시세를 모르는 사람은 칩으로 고르고, 견적을 받아본 사람은 직접 적고,
+   아무것도 안 하면 시세(이사 150 · 청소는 면적별)로 계산한다. */
+function costChips(optId, inputId, blankVal){
+  pickOpt(optId,'v',function(v){ $(inputId).value=+v?v:''; });
+  $(inputId).oninput=function(){
+    var v=this.value;
+    [].forEach.call($(optId).querySelectorAll('button'),function(b){
+      b.classList.toggle('on', b.dataset.v===(v===''?blankVal:v));
+    });
+  };
+}
+costChips('intOpt','fInt','0');
+costChips('moveOpt','fMove','');
+costChips('cleanOpt','fClean','');
 
 /* 출퇴근지 — 좌표가 아직 없으니 업무지구 칩으로 이름만 받아둔다. 카카오 키가 붙으면 자유 입력을 지오코딩한다. */
 var WORK_HUBS=[
