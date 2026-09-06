@@ -43,7 +43,20 @@ document.head.appendChild(hcss);
 link=document.createElement('a'); link.href='/account.html'; link.id='hwAuthLink'; link.className='hwLoginBtn'; link.textContent='로그인';
 wr.appendChild(link);
 var bar=document.createElement('nav'); bar.id='hwNavRow';
-var inner=document.createElement('div'); inner.className='wrap'; inner.id='hwNavRowIn';
+var inner=document.createElement('div'); inner.id='hwNavRowIn';
+/* 탭 줄의 좌우 폭은 '로고가 들어있는 줄'에서 그대로 베껴 온다.
+   전에는 페이지의 .wrap 클래스를 빌려 썼는데, 그 클래스에 본문용 세로 패딩이
+   걸린 페이지(임장 체크리스트: padding:0 0 120px)에서는 그 여백이 헤더 안으로
+   들어와 탭이 잘리고 헤더 아래가 텅 비었다. 이제 클래스를 안 쓰고 값만 읽는다. */
+(function(){
+  var firstRow=hd&&hd.querySelector('.inner,.wrap');
+  var cs=firstRow?getComputedStyle(firstRow):null;
+  inner.style.maxWidth=(cs&&cs.maxWidth!=='none')?cs.maxWidth:'880px';
+  inner.style.paddingLeft=(cs&&parseFloat(cs.paddingLeft)>0)?cs.paddingLeft:'22px';
+  inner.style.paddingRight=(cs&&parseFloat(cs.paddingRight)>0)?cs.paddingRight:'22px';
+  inner.style.marginLeft='auto'; inner.style.marginRight='auto';
+  inner.style.paddingTop='0'; inner.style.paddingBottom='0';
+})();
 items.forEach(function(it){
 var a=document.createElement('a'); a.href=it[0]; a.textContent=it[1];
 var slug=it[0].replace(/^\//,'').replace(/\.html$/,'');
