@@ -77,6 +77,34 @@ p{font-size:.9rem;color:#547471;margin-top:8px;word-break:keep-all}
   var provName = prov==='naver' ? '네이버' : '카카오';
   document.getElementById('kTitle').textContent = provName+' 계정으로 들어가는 중…';
 
+  /* 부비 안드로이드 앱에서 시작한 로그인이면 여기서 로그인하지 않는다.
+     앱이 rt=/app-login?n=<난스> 로 표시를 남겨두고 브라우저를 열었으므로,
+     토큰을 딥링크로 앱에 돌려주고 마무리는 앱이 한다. */
+  var appm = rt.match(/^\/app-login(?:\?n=([A-Za-z0-9_-]{1,64}))?$/);
+  if (appm) { backToApp(appm[1] || ''); return; }
+
+  function backToApp(nonce){
+    var deep = 'boobi://auth?n=' + encodeURIComponent(nonce)
+      + (h.t ? '&t=' + encodeURIComponent(h.t) : '')
+      + (h.e ? '&e=' + encodeURIComponent(h.e) : '')
+      + (h.link ? '&link=1' : '') + (h['new'] ? '&new=1' : '');
+
+    document.getElementById('kTitle').textContent = '부비 앱으로 돌아가는 중…';
+    document.getElementById('kDesc').textContent = '창이 바뀌지 않으면 아래 버튼을 눌러주세요.';
+
+    /* 브라우저가 자동 전환을 막는 경우가 있어, 버튼을 반드시 함께 남긴다. */
+    setTimeout(function(){
+      document.getElementById('kBar').style.display='none';
+      document.getElementById('kAct').innerHTML =
+        '<a class="kbtn" id="kBack">부비 앱으로 돌아가기</a>' +
+        '<span class="kmini">앱이 열리지 않으면 앱을 직접 열어 다시 시도해 주세요.</span>';
+      var b = document.getElementById('kBack');
+      if (b) b.setAttribute('href', deep);
+    }, 900);
+
+    try { location.replace(deep); } catch(e){ try { location.href = deep; } catch(e2){} }
+  }
+
   function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
   function err(msg){
     document.getElementById('kBar').style.display='none';
