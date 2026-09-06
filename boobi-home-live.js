@@ -104,22 +104,39 @@ function ga(n, p) { if (window.gtag) { try { gtag('event', n, p || {}); } catch 
       .replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ')
       .trim();
   }
-  function source(url) {
+  /* 언론사명은 API가 source 로 이미 준다. URL 추출은 그게 없을 때만 쓰는 최후수단 —
+     기사 링크가 구글뉴스 RSS 라서 URL 에서 뽑으면 'news' 같은 쓰레기가 나온다. */
+  function pressFromUrl(url) {
     try {
-      var h = new URL(url).hostname.replace(/^www\./, '');
+      var h = new URL(url).hostname.replace(/^(www|news|n|m|amp)\./, '');
+      if (/(^|\.)google\./.test(h)) return '';
       return h.split('.')[0];
     } catch (e) { return ''; }
   }
+  function press(it) {
+    return clean(it.source || it.press || it.publisher || it.pressName || '') || pressFromUrl(it.link || it.originallink || it.url || '');
+  }
+  /* API 는 pub 을 epoch ms(숫자)로 준다. 문자열 날짜도 같이 받아준다. */
   function when(v) {
-    if (!v) return '';
-    var d = new Date(v);
-    if (isNaN(d)) return '';
+    if (v === 0 || v == null || v === '') return '';
+    var d = (typeof v === 'number' || /^\d{10,}$/.test(String(v))) ? new Date(Number(v)) : new Date(v);
+    if (isNaN(d.getTime())) return '';
     var diff = Math.round((Date.now() - d.getTime()) / 60000);
+    if (diff < 0) return '방금';
     if (diff < 1) return '방금';
     if (diff < 60) return diff + '분 전';
     if (diff < 1440) return Math.floor(diff / 60) + '시간 전';
-    return Math.floor(diff / 1440) + '일 전';
+    var days = Math.floor(diff / 1440);
+    if (days <= 7) return days + '일 전';
+    /* 오래된 기사는 날짜로 (188일 전 같은 표기 방지). 해가 넘어갔으면 연도까지. */
+    var k = new Date(d.getTime() + 9 * 3600 * 1000);
+    var nowK = new Date(Date.now() + 9 * 3600 * 1000);
+    if (k.getUTCFullYear() !== nowK.getUTCFullYear()) {
+      return k.getUTCFullYear() + '. ' + (k.getUTCMonth() + 1) + '. ' + k.getUTCDate() + '.';
+    }
+    return (k.getUTCMonth() + 1) + '월 ' + k.getUTCDate() + '일';
   }
+  function pubOf(it) { return it.pub || it.pubDate || it.date || it.publishedAt || it.isoDate || 0; }
   function skel() {
     list.innerHTML = '<div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div><div class="newsSkel"></div>';
   }
@@ -132,10 +149,13 @@ function ga(n, p) { if (window.gtag) { try { gtag('event', n, p || {}); } catch 
 
   function render(items) {
     if (!items.length) { fail('지금은 가져올 기사가 없어요.'); return; }
+    items = items.slice().sort(function (a, b) {          /* '오늘의 기사'니까 최신순 */
+      return (new Date(pubOf(b)).getTime() || 0) - (new Date(pubOf(a)).getTime() || 0);
+    });
     var h = items.map(function (it, i) {
       var title = clean(it.title || it.headline || '');
       var url = it.link || it.originallink || it.url || '';
-      var meta = [source(url), when(it.pubDate || it.date || it.publishedAt)].filter(Boolean).join(' · ');
+      var meta = [press(it), when(pubOf(it))].filter(Boolean).join(' · ');
       if (!title) return '';
       return '<a class="newsItem' + (i >= SHOW ? ' newsHidden' : '') + '"'
         + (url ? ' href="' + esc(url) + '" target="_blank" rel="noopener"' : '')
