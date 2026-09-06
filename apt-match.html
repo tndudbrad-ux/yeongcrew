@@ -972,9 +972,9 @@ function loanLabels(){
   var pay=Math.max.apply(null,vals.map(function(v){return v.pay||0;}));
   var lo=Math.min.apply(null,vals.map(function(v){return v.price;}));
   var hi=Math.max.apply(null,vals.map(function(v){return v.price;}));
-  $('loanAmt').textContent=readMan(loan)+' 대출';
   var yrs=(vals[0]&&vals[0].years)||30;
-  $('loanPay').textContent=loan>0?('월 '+fmtN(Math.round(pay))+'만원 · '+yrs+'년 기준'):'대출 없이 살 수 있는 집';
+  $('loanAmt').textContent=loan>0?(readMan(loan)+' 대출'):'대출 없이';
+  $('loanPay').textContent=loan>0?('월 '+fmtN(Math.round(pay))+'만원 · '+yrs+'년 기준'):'현금으로만';
   $('loanMaxLbl').textContent='한도 '+readMan(maxL);
   var full=Math.max.apply(null,vals.map(function(v){return v.fullPrice==null?v.price:v.fullPrice;}));
   $('loanBudget').innerHTML='이 대출로 볼 수 있는 집은 <b>'+(lo===hi?readMan(hi):readMan(lo)+' ~ '+readMan(hi))+'</b>'
