@@ -106,6 +106,28 @@ main{padding:26px 0 60px}
 button.act{cursor:pointer;font-family:inherit;line-height:inherit}
 .acts.done .act{font-size:.78rem;padding:6px 11px;font-weight:600}
 @media(max-width:520px){.btns{flex-direction:column}.act{text-align:center}}
+/* 지역·자격 필터 — 흰 글래스 칩, 활성은 민트→블루 그라데이션 */
+.filters{margin-top:14px;display:flex;flex-direction:column;gap:9px;padding:13px 15px;border-radius:15px;
+ background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.13),transparent 55%),
+  radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.15),transparent 55%),
+  linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));
+ border:1.5px solid rgba(255,255,255,.95);box-shadow:0 10px 30px rgba(13,42,41,.08),inset 0 1px 0 #fff;
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.frow{display:flex;align-items:flex-start;gap:9px}
+.flab{flex:0 0 auto;font-size:.75rem;font-weight:800;color:#8AA5A2;padding-top:7px;min-width:26px;white-space:nowrap}
+.fchips{display:flex;gap:6px;flex-wrap:wrap;min-width:0}
+.fchip{font-family:inherit;font-size:.78rem;font-weight:700;color:#547471;background:rgba(255,255,255,.75);
+ border:1.5px solid rgba(255,255,255,.95);box-shadow:0 2px 8px rgba(13,42,41,.06),inset 0 1px 0 #fff;
+ padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:color .15s,box-shadow .15s}
+.fchip:hover{color:#0D2A29;box-shadow:0 4px 12px rgba(13,42,41,.11),inset 0 1px 0 #fff}
+.fchip.on{color:#fff;border-color:transparent;font-weight:800;
+ background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);box-shadow:0 6px 16px rgba(61,139,253,.28)}
+.fchip:focus-visible{outline:2px solid #3D8BFD;outline-offset:2px}
+.fnote{font-size:.76rem;color:#8AA5A2;line-height:1.55;word-break:keep-all;margin-top:1px}
+.fnote b{color:#2F6BC4;font-weight:700}
+.qtags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.qtag{font-size:.68rem;font-weight:800;padding:3px 8px;border-radius:20px;background:#EAF3FE;color:#2F6BC4}
+@media(max-width:520px){.frow{flex-direction:column;gap:5px}.flab{padding-top:0}}
 /* 공고 유형별 자격 안내 모달 — 흰 글래스 + 민트·블루 글로우 */
 #cyQual{position:fixed;inset:0;z-index:9995;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(240,250,249,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 #cyQual.open{display:flex}
@@ -173,6 +195,12 @@ footer a{color:#B9DCD9;margin:0 8px}
 <span><i style="background:var(--cTax)"></i>세금</span>
 </div>
 
+<div class="filters">
+<div class="frow"><span class="flab">지역</span><div class="fchips" id="fRegion"></div></div>
+<div class="frow"><span class="flab">자격</span><div class="fchips" id="fQual"></div></div>
+<div class="fnote" id="fNote"></div>
+</div>
+
 <div class="cal">
 <div class="dow"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div>
 <div class="grid" id="grid"></div>
@@ -201,7 +229,97 @@ var TYPE_LABEL={holiday:'공휴일',rate:'금리',cheongyak:'청약',lease:'임�
 
 function ymd(d){var m=('0'+(d.getMonth()+1)).slice(-2),dd=('0'+d.getDate()).slice(-2);return d.getFullYear()+'-'+m+'-'+dd;}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
-function byDate(){var m={};EVENTS.forEach(function(e){(m[e.date]=m[e.date]||[]).push(e);});return m;}
+/* ── 지역 표기 통일 ────────────────────────────────────────
+   같은 서울인데 데이터마다 '서울'·'서울특별시'·'서울 은평구 …'로 들어온다.
+   LH는 '경기도'·'인천광역시 외'까지 섞여 있어 시·도 17개로 눌러 담는다. */
+var R_ALIAS=[['서울특별시','서울'],['서울','서울'],['경기도','경기'],['경기','경기'],
+['인천광역시','인천'],['인천','인천'],['부산광역시','부산'],['부산','부산'],
+['대구광역시','대구'],['대구','대구'],['광주광역시','광주'],['광주','광주'],
+['대전광역시','대전'],['대전','대전'],['울산광역시','울산'],['울산','울산'],
+['세종특별자치시','세종'],['세종','세종'],['강원특별자치도','강원'],['강원도','강원'],['강원','강원'],
+['충청북도','충북'],['충북','충북'],['충청남도','충남'],['충남','충남'],
+['전북특별자치도','전북'],['전라북도','전북'],['전북','전북'],['전라남도','전남'],['전남','전남'],
+['경상북도','경북'],['경북','경북'],['경상남도','경남'],['경남','경남'],
+['제주특별자치도','제주'],['제주','제주']];
+var SIDO_ORDER=['서울','경기','인천','부산','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주'];
+function normRegion(v){
+  var t=String(v==null?'':v).trim(); if(!t) return '';
+  for(var i=0;i<R_ALIAS.length;i++){ if(t.indexOf(R_ALIAS[i][0])===0) return R_ALIAS[i][1]; }
+  for(var j=0;j<R_ALIAS.length;j++){ if(t.indexOf(R_ALIAS[j][0])>=0) return R_ALIAS[j][1]; }
+  return '';
+}
+
+/* ── 임대 공고 자격 분류 ───────────────────────────────────
+   자격은 별도 필드로 안 온다. 공고 제목·대상 문구에서 먼저 찾고,
+   거기에 안 적힌 공고는 주택 유형이 정해주는 공급 대상으로 채운다.
+   (행복주택은 청년·신혼, 영구임대는 고령·취약계층이 주 공급 대상)
+   어디까지나 모아보기용 분류이므로, 최종 자격은 공고문이 기준이다. */
+var QUALS=[
+ {k:'youth', label:'청년',      re:/청년|대학생|기숙사|쉐어|셰어|사회초년/},
+ {k:'newly', label:'신혼·신생아', re:/신혼|신생아|예비부부|한부모/},
+ {k:'senior',label:'고령자',     re:/고령|노인|시니어/},
+ {k:'multi', label:'다자녀',     re:/다자녀|다둥이/},
+ {k:'vuln',  label:'장애인·취약', re:/장애|수급자|취약계층|국가유공|보훈|아동복지/}];
+var LT_DEFAULT={'행복주택':['youth','newly'],'통합공공임대':['youth','newly','senior'],
+ '영구임대':['senior','vuln'],'공공기숙사':['youth'],'청년안심주택':['youth']};
+function qualLabel(k){ for(var i=0;i<QUALS.length;i++){ if(QUALS[i].k===k) return QUALS[i].label; } return k; }
+function qualsOf(it){
+  var blob=[it.name||'',it.target||'',it.note||''].join(' ');
+  var hits=[];
+  QUALS.forEach(function(q){ if(q.re.test(blob)) hits.push(q.k); });
+  if(!hits.length) hits=(LT_DEFAULT[it.ltype||'']||[]).slice();
+  return hits;
+}
+
+/* ── 필터 상태 ───────────────────────────────────────────
+   공휴일·금리·세금은 전국 공통이라 필터와 무관하게 늘 남긴다.
+   자격을 고르면 임대 공고만 보는 화면이 된다(청약엔 해당 없음). */
+var FIL={region:'',qual:''};
+function visible(e){
+  if(e.type==='holiday'||e.type==='rate'||e.type==='tax') return true;
+  if(FIL.qual){ if(e.type!=='lease') return false;
+    if(!e.quals || e.quals.indexOf(FIL.qual)<0) return false; }
+  if(FIL.region){ if(e.sido!==FIL.region) return false; }
+  return true;
+}
+
+function buildFilters(){
+  var have={}; EVENTS.forEach(function(e){ if(e.sido) have[e.sido]=1; });
+  var regions=SIDO_ORDER.filter(function(r){ return have[r]; });
+  var qHave={}; EVENTS.forEach(function(e){ (e.quals||[]).forEach(function(k){ qHave[k]=1; }); });
+
+  function chips(host,list,cur,key){
+    var h='<button type="button" class="fchip'+(cur?'':' on')+'" data-'+key+'="">전체</button>';
+    list.forEach(function(o){
+      h+='<button type="button" class="fchip'+(cur===o.v?' on':'')+'" data-'+key+'="'+o.v+'">'+esc(o.t)+'</button>';
+    });
+    host.innerHTML=h;
+  }
+  chips(document.getElementById('fRegion'), regions.map(function(r){return {v:r,t:r};}), FIL.region, 'region');
+  chips(document.getElementById('fQual'),
+        QUALS.filter(function(q){return qHave[q.k];}).map(function(q){return {v:q.k,t:q.label};}), FIL.qual, 'qual');
+
+  var n=document.getElementById('fNote');
+  n.innerHTML = FIL.qual
+    ? '지금은 <b>'+esc(qualLabel(FIL.qual))+'</b> 대상 <b>임대 공고</b>만 보고 있어요. 자격은 공고 제목과 주택 유형으로 분류한 참고값이라, 신청 전에 공고문을 꼭 확인하세요.'
+    : '임대 공고는 자격별로, 청약·임대는 지역별로 모아볼 수 있어요. 공휴일·금리·세금 일정은 전국 공통이라 항상 표시돼요.';
+}
+
+function onChip(ev){
+  var b=ev.target.closest?ev.target.closest('.fchip'):null; if(!b) return;
+  if(b.hasAttribute('data-region')) FIL.region=b.getAttribute('data-region');
+  else if(b.hasAttribute('data-qual')) FIL.qual=b.getAttribute('data-qual');
+  else return;
+  buildFilters(); render();
+  try{
+    var q=[]; if(FIL.region) q.push('region='+encodeURIComponent(FIL.region));
+    if(FIL.qual) q.push('qual='+FIL.qual);
+    history.replaceState(null,'',location.pathname+(q.length?'?'+q.join('&'):''));
+  }catch(e){}
+  if(window.gtag){try{gtag('event','calendar_filter',{region:FIL.region||'all',qual:FIL.qual||'all'});}catch(e){}}
+}
+
+function byDate(){var m={};EVENTS.forEach(function(e){if(!visible(e))return;(m[e.date]=m[e.date]||[]).push(e);});return m;}
 
 function render(){
 var y=cur.getFullYear(), mo=cur.getMonth();
@@ -226,10 +344,13 @@ if(i>=34 && new Date(start.getFullYear(),start.getMonth(),start.getDate()+i+1).g
 }
 g.innerHTML=h;
 
-var monthEvs=EVENTS.filter(function(e){var p=e.date.split('-');return +p[0]===y && +p[1]===mo+1;})
+var monthEvs=EVENTS.filter(function(e){if(!visible(e))return false;var p=e.date.split('-');return +p[0]===y && +p[1]===mo+1;})
 .sort(function(a,b){return a.date<b.date?-1:(a.date>b.date?1:0);});
 var lb=document.getElementById('listBox');
-if(!monthEvs.length){ lb.innerHTML='<div class="empty">이 달에는 등록된 일정이 없어요.</div>'; return; }
+if(!monthEvs.length){
+lb.innerHTML='<div class="empty">'+((FIL.region||FIL.qual)
+ ?'이 달에는 조건에 맞는 일정이 없어요. 위에서 <b>전체</b>를 눌러 모두 보거나 다른 달을 확인해보세요.'
+ :'이 달에는 등록된 일정이 없어요.')+'</div>'; return; }
 var lh='', seen={};
 monthEvs.forEach(function(e){
 var p=e.date.split('-'), dt=new Date(+p[0],+p[1]-1,+p[2]);
@@ -238,6 +359,7 @@ var anchor = seen[e.date] ? '' : ' id="li-'+e.date+'"'; seen[e.date]=1;
 lh+='<div class="li" data-date="'+e.date+'"'+anchor+'><div class="d"><b>'+(+p[2])+'</b><span>'+dw+'</span></div>'+
 '<div style="min-width:0;flex:1"><div class="t"><span class="tag '+e.type+'">'+TYPE_LABEL[e.type]+'</span>'+esc(e.title)+'</div>'+
 (e.desc?'<div class="s">'+esc(e.desc)+'</div>':'')+
+(e.quals&&e.quals.length?'<div class="qtags">'+e.quals.map(function(k){return '<span class="qtag">'+esc(qualLabel(k))+'</span>';}).join('')+'</div>':'')+
 (e.type==='cheongyak'?actionHTML(e):(e.type==='tax'?taxActionHTML(e):(e.type==='lease'?leaseActionHTML(e):'')))+'</div></div>';
 });
 lb.innerHTML=lh;
@@ -249,7 +371,7 @@ function addCheongyak(items){
 var nm=it.name||'', short=nm.length>11?nm.slice(0,11)+'…':nm;
 var sid=it.id||('cy-'+nm.replace(/[^가-힣a-zA-Z0-9]/g,'').slice(0,24));
 (window.__cyShare=window.__cyShare||{})[sid]=it; // 공유 카드용 원본 데이터
-var meta={fullName:nm,region:it.region||'',htype:it.type||'',url:it.url||'',
+var meta={fullName:nm,region:it.region||'',sido:normRegion(it.region),htype:it.type||'',url:it.url||'',
 start:it.rcritStart||'',end:it.rcritEnd||it.rcritStart||'',winner:it.winnerDate||'',
 hot:!!it.hot,margin:it.margin||'',hnote:it.note||'',sid:sid};
 function push(date,label,kind){
@@ -266,19 +388,45 @@ if(it.winnerDate) push(it.winnerDate,'당첨발표','winner');
 }
 
 // 임대공고(rental-data.json) → 임대 이벤트. 캘린더 수동 임대 이벤트와 날짜+종류로 중복 제거.
+function rentalKey(it){   /* [정정공고]가 붙은 것과 원본은 같은 공고다 */
+  var nm=String(it.name||'').replace(/\[정정공고\]/g,'').replace(/\s+/g,' ').trim();
+  return (normRegion(it.region)||'')+'|'+nm;
+}
 function addRental(items){
-var leaseKeys={};
-EVENTS.forEach(function(e){ if(e.type==='lease') leaseKeys[e.date+'|'+(e.kind||'')]=1; });
+/* 예전에는 '날짜+종류'로 묶어버려서, 같은 날 마감인 공고 23건이 캘린더에 1건으로만 보였다.
+   이제는 공고 단위로 구분하고, 정정공고/원본 중복만 정정공고 쪽을 남긴다. */
+var pick={};
 (items||[]).forEach(function(it){
-var nm=it.name||'', short=nm.length>13?nm.slice(0,13)+'…':nm;
-var meta={fullName:nm,region:it.region||'',htype:it.ltype||'',url:it.url||'',
+  var k=rentalKey(it), prev=pick[k];
+  if(!prev){ pick[k]=it; return; }
+  var isFix=/\[정정공고\]/.test(it.name||''), prevFix=/\[정정공고\]/.test(prev.name||'');
+  if(isFix && !prevFix) pick[k]=it;
+});
+var uniq=[]; for(var k2 in pick) uniq.push(pick[k2]);
+
+/* 캘린더에 손으로 넣어둔 임대 일정과 같은 공고면 자동 수집분은 건너뛴다 (제목 앞부분으로 판단) */
+var manual=[];
+EVENTS.forEach(function(e){ if(e.type==='lease') manual.push({date:e.date,kind:e.kind||'',t:String(e.title||'').replace(/\s+/g,'').slice(0,6)}); });
+function clashesManual(it,date,kind){
+  var t=String(it.name||'').replace(/\s+/g,'').slice(0,6);
+  return manual.some(function(m){ return m.date===date && m.kind===kind && m.t && t && m.t===t; });
+}
+
+var pushed={};
+uniq.forEach(function(it){
+/* '[정정공고]'는 공고 이름이 아니라 상태 표시라, 13자짜리 캘린더 칸을 그걸로 다 잡아먹는다 */
+var nm=String(it.name||'').replace(/\[정정공고\]/g,'').replace(/\s+/g,' ').trim();
+var short=nm.length>13?nm.slice(0,13)+'…':nm;
+var meta={fullName:nm,region:it.region||'',sido:normRegion(it.region),quals:qualsOf(it),htype:it.ltype||'',url:it.url||'',
 start:it.rcritStart||'',end:it.rcritEnd||it.rcritStart||'',winner:it.winnerDate||'',hot:!!it.hot};
 function push(date,label,kind){
-if(!date) return; var k=date+'|'+kind; if(leaseKeys[k]) return;
+if(!date) return;
+var k=date+'|'+kind+'|'+rentalKey(it); if(pushed[k]) return;
+if(clashesManual(it,date,kind)) return;
 var e={date:date,type:'lease',title:(meta.hot?'🔥':'')+short+' '+label,
 desc:(it.region||'')+' · '+(it.ltype||'')+' · '+nm,kind:kind};
 for(var p in meta) e[p]=meta[p];
-EVENTS.push(e); leaseKeys[k]=1;
+EVENTS.push(e); pushed[k]=1;
 }
 if(it.rcritStart) push(it.rcritStart,'접수시작','start');
 if(it.rcritEnd && it.rcritEnd!==it.rcritStart) push(it.rcritEnd,'접수마감','end');
@@ -554,6 +702,14 @@ var feat=(res[2].items||[]).filter(function(f){return !seen[f.id];});
 addCheongyak(feat); // 확정차익 선별 줍줍 먼저 (hot 표시)
 addCheongyak(res[1].items);
 addRental((res[3]||{}).items); // 임대공고 자동수집(HUG·LH·SH) → 임대 이벤트
+try{                                   /* 공유된 링크로 들어오면 필터를 그대로 재현 */
+var sp=new URLSearchParams(location.search);
+var r=sp.get('region')||''; if(SIDO_ORDER.indexOf(r)>=0) FIL.region=r;
+var q=sp.get('qual')||''; if(QUALS.some(function(x){return x.k===q;})) FIL.qual=q;
+}catch(e){}
+buildFilters();
+document.getElementById('fRegion').addEventListener('click',onChip);
+document.getElementById('fQual').addEventListener('click',onChip);
 render();
 if(window.gtag){try{gtag('event','view_calendar',{events:EVENTS.length});}catch(e){}}
 });
