@@ -162,6 +162,18 @@ function solveNetBudget(inp,o){
   R.pay=monthlyPay(loan,inp.rate,G.years);
   return R;
 }
+/* 대출을 한도까지 안 쓰고 얼마만 쓸지 정했을 때, 살 수 있는 최대 매매가.
+   solveNetBudget과 같은 식(P + 부대비용(P) ≤ 현금 + 대출)인데 대출액이 고정이다.
+   규제 한도(LTV·DSR·절대한도)는 solveNetBudget에서 이미 걸러진 값을 넘겨받는다. */
+function priceForLoan(cash, loan, cap, o){
+  var best=0, costs=sideCosts(0,o);
+  for(var p=0; p<=cap; p+=500){
+    var c=sideCosts(p,o);
+    if(cash+loan >= p+c.total){ best=p; costs=c; }
+    else if(p>0) break;
+  }
+  return { price:best, costs:costs, loan:loan, need:best+costs.total };
+}
 function readMan(v){
   /* 9,500만원을 '10천'이라고 쓰던 버그가 있었다 — 천 단위가 10이 되면 억으로 올린다. */
   v=Math.round(v);

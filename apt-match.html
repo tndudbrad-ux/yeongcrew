@@ -371,6 +371,16 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .wchips{display:flex;flex-wrap:wrap;gap:6px}
 .wchips button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:6px 11px;font-size:.8rem;cursor:pointer;font-family:inherit;color:var(--sub);white-space:nowrap}
 .wchips button.on{border-color:#3D8BFD;color:#2A7DE8;font-weight:600;background:#EAF3FE}
+.loanBox{margin:12px 0 4px}
+.loanHead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:14px 0 8px;font-size:.86rem;color:var(--sub)}
+.loanHead #loanAmt{font-size:1.05rem;font-weight:800;color:#2A7DE8;letter-spacing:-.02em}
+#loanRange{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:999px;background:linear-gradient(90deg,#26C6B9,#3D8BFD);outline:none;cursor:pointer}
+#loanRange::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid #3D8BFD;box-shadow:0 3px 10px rgba(61,139,253,.35);cursor:grab}
+#loanRange::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid #3D8BFD;box-shadow:0 3px 10px rgba(61,139,253,.35);cursor:grab}
+#loanRange:active::-webkit-slider-thumb{cursor:grabbing}
+.loanEnds{display:flex;justify-content:space-between;font-size:.75rem;color:#8AA5A2;margin-top:7px}
+.loanBudget{margin-top:10px;font-size:.85rem;color:var(--forest);line-height:1.55;word-break:keep-all}
+.loanBudget b{color:#2A7DE8;font-weight:700}
 .chk{display:flex;align-items:flex-start;gap:9px;margin-top:14px;padding:11px 13px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;font-size:.88rem;color:var(--forest);line-height:1.5}
 .chk:has(input:checked){border-color:#3D8BFD;background:#EAF3FE}
 .chk input{width:17px;height:17px;margin:1px 0 0;accent-color:#3D8BFD;flex:0 0 auto;cursor:pointer}
@@ -548,6 +558,15 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
 
 <div class="tool-box" id="resultBox" style="display:none">
   <div id="budgetOut"></div>
+  <div class="loanBox">
+    <label class="chk" for="loanOn"><input type="checkbox" id="loanOn"><span><b>대출을 덜 받고 볼래요</b> <em>— 한도까지 다 쓰지 않는 경우</em></span></label>
+    <div id="loanCtl" style="display:none">
+      <div class="loanHead"><span id="loanAmt"></span><span id="loanPay"></span></div>
+      <input type="range" id="loanRange" min="0" max="100" step="5" value="100" aria-label="받을 대출 비율">
+      <div class="loanEnds"><span>안 받기</span><span id="loanMaxLbl"></span></div>
+      <div class="loanBudget" id="loanBudget"></div>
+    </div>
+  </div>
   <div id="condBar" class="condBar"></div>
   <div id="ladderBox"></div>
   <div id="matchOut"></div>
@@ -574,7 +593,7 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
 <span style="font-size:.75rem;color:#5D8683">상호 원대시투 · 대표 정수영 · 사업자등록번호 102-32-62074 · 서울특별시 동작구 만양로 75 · tndud.brad@gmail.com</span>
 </div></footer>
 
-<script src="/apt-budget.js?v=3"></script>
+<script src="/apt-budget.js?v=4"></script>
 <script src="/apt-score.js?v=2"></script>
 <script src="/apt-match.js?v=10"></script>
 <script>
@@ -583,7 +602,7 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
    흐름: 지역 → 조건 → 면적 → (출퇴근지) → (자녀) → 주택수 → 현금 → 소득 → 결과
    ═══════════════════════════════════════════════════════════════════════ */
 var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},schools:{},redev:[]};
-var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0,corp:0,loadP:null};
+var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0,corp:0,loanPct:100,loadP:null};
 var $=function(id){return document.getElementById(id);};
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
@@ -915,11 +934,68 @@ function computeBudgets(){
   S.codes.forEach(function(c){
     var rg=DATA.index.regions[c]; if(!rg) return;
     var reg=isRegulated(rg.sido,rg.sgg), key=rg.sido+'|'+reg;
-    if(!S.budgetBy[key]) S.budgetBy[key]=solveNetBudget({cash:cash,income:income,monthlyDebt:debt,sido:rg.sido,sgg:rg.sgg,owner:owner,rateType:'mix',rate:rate}, costOpt(reg,S.sizeLv===0));
+    if(!S.budgetBy[key]){
+      var opt=costOpt(reg,S.sizeLv===0);
+      var b=solveNetBudget({cash:cash,income:income,monthlyDebt:debt,sido:rg.sido,sgg:rg.sgg,owner:owner,rateType:'mix',rate:rate}, opt);
+      b.opt=opt; b.maxLoan=b.loan; b.capPrice=b.price; b.fullPrice=b.price; b.fullCosts=b.costs;
+      S.budgetBy[key]=b;
+    }
     S.budgetBy[key].cash=cash;
   });
   var vals=Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k];});
   return { max:Math.max.apply(null,vals.map(function(v){return v.price;})), min:Math.min.apply(null,vals.map(function(v){return v.price;})), any:vals[0], split:vals.length>1 };
+}
+/* ── 대출 조절 ────────────────────────────────────────────────────────
+   한도까지 다 받고 싶지 않은 사람이 있다. 규제 한도로 구한 최대 대출을 100%로 두고,
+   슬라이더로 실제 쓸 금액을 정하면 그 돈으로 살 수 있는 집만 다시 보여준다.
+   드래그 중에는 숫자만 바꾸고, 손을 뗐을 때(change) 목록을 다시 계산한다 —
+   매 픽셀마다 전체 매칭을 돌리면 화면이 얼어붙는다. */
+function applyLoanPct(){
+  var pct=S.loanPct/100;
+  Object.keys(S.budgetBy).forEach(function(k){
+    var b=S.budgetBy[k];
+    if(b.maxLoan==null){ b.maxLoan=b.loan; b.capPrice=b.price; b.fullPrice=b.price; }
+    if(pct>=1){ b.price=b.fullPrice; b.loan=b.maxLoan; b.costs=b.fullCosts||b.costs; b.need=b.price+b.costs.total; }
+    else {
+      var loan=Math.round(b.maxLoan*pct/500)*500;
+      var r=priceForLoan(b.cash, loan, b.capPrice, b.opt);
+      b.price=r.price; b.loan=loan; b.costs=r.costs; b.need=r.need;
+    }
+    b.pay=monthlyPay(b.loan, b.rate||RULES.baseRate, b.years||30);
+  });
+}
+function loanLabels(){
+  var vals=Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k];});
+  if(!vals.length) return;
+  var loan=Math.max.apply(null,vals.map(function(v){return v.loan;}));
+  var maxL=Math.max.apply(null,vals.map(function(v){return v.maxLoan==null?v.loan:v.maxLoan;}));
+  var pay=Math.max.apply(null,vals.map(function(v){return v.pay||0;}));
+  var lo=Math.min.apply(null,vals.map(function(v){return v.price;}));
+  var hi=Math.max.apply(null,vals.map(function(v){return v.price;}));
+  $('loanAmt').textContent=readMan(loan)+' 대출';
+  var yrs=(vals[0]&&vals[0].years)||30;
+  $('loanPay').textContent=loan>0?('월 '+fmtN(Math.round(pay))+'만원 · '+yrs+'년 기준'):'대출 없이 살 수 있는 집';
+  $('loanMaxLbl').textContent='한도 '+readMan(maxL);
+  var full=Math.max.apply(null,vals.map(function(v){return v.fullPrice==null?v.price:v.fullPrice;}));
+  $('loanBudget').innerHTML='이 대출로 볼 수 있는 집은 <b>'+(lo===hi?readMan(hi):readMan(lo)+' ~ '+readMan(hi))+'</b>'
+    +(hi<full?' <span style="color:var(--sub)">— 한도를 다 쓰면 '+readMan(full)+'까지</span>':'');
+}
+$('loanOn').onchange=function(){
+  $('loanCtl').style.display=this.checked?'':'none';
+  if(!this.checked && S.loanPct!==100){ S.loanPct=100; $('loanRange').value=100; applyLoanPct(); loanLabels(); renderBudget(budgetSummary()); renderMatch(); }
+  else loanLabels();
+};
+$('loanRange').oninput=function(){ S.loanPct=+this.value; applyLoanPct(); loanLabels(); };
+$('loanRange').onchange=function(){
+  S.loanPct=+this.value; applyLoanPct(); loanLabels();
+  renderBudget(budgetSummary()); renderMatch();
+  ga('loan_adjust',{pct:S.loanPct});
+};
+function budgetSummary(){
+  var vals=Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k];});
+  return { max:Math.max.apply(null,vals.map(function(v){return v.price;})),
+           min:Math.min.apply(null,vals.map(function(v){return v.price;})),
+           any:vals[0], split:vals.length>1 };
 }
 function budgetOf(row){ var key=row.sido+'|'+isRegulated(row.sido,row.sgg); return S.budgetBy[key]||null; }
 
@@ -931,6 +1007,8 @@ $('goMatch').onclick=function(){
   (S.loadP||Promise.resolve()).then(function(){
     var B=computeBudgets();
     ga('match_run',{sido:S.sido,all:S.all,conds:Object.keys(S.conds).join(','),size:S.sizeLv,budget_man:Math.round(B.max)});
+    S.loanPct=100; $('loanOn').checked=false; $('loanCtl').style.display='none'; $('loanRange').value=100;
+    loanLabels();
     $('wizBox').style.display='none'; $('resultBox').style.display='';
     renderBudget(B); renderMatch();
     $('resultBox').scrollIntoView({behavior:'smooth',block:'start'});
@@ -949,7 +1027,7 @@ function renderBudget(B){
   else h+='<div class="big">'+readMan(R.price)+'</div>';
   h+='<div class="brk"><div><div class="k">보유 현금'+(S.corp?' + 사내대출':'')+'</div><div class="v">'+readMan(R.cash)
     +(S.corp?'<small style="display:block;font-size:.7rem;font-weight:500;color:var(--sub);margin-top:2px">현금 '+readMan(R.cash-S.corp)+' · 사내 '+readMan(S.corp)+'</small>':'')+'</div></div>'
-    +'<div><div class="k">대출 가능</div><div class="v">'+readMan(B.split?Math.max.apply(null,Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].loan;})):R.loan)+'</div></div>'
+    +'<div><div class="k">'+(S.loanPct<100?'받을 대출':'대출 가능')+'</div><div class="v">'+readMan(B.split?Math.max.apply(null,Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].loan;})):R.loan)+'</div></div>'
     +'<div><div class="k">LTV('+ownLabel+')</div><div class="v">'+Math.round(R.ltvR*100)+'%'+(B.split?'~':'')+'</div></div>'
     +'<div><div class="k">부대비용</div><div class="v" style="color:#B23B3B">−'+readFine(C.total)+'</div></div></div>';
   /* 부대비용 내역 — 대출 한도만 보면 살 수 있어 보이던 집이 왜 빠지는지 보여준다 */
