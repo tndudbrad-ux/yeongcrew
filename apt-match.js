@@ -258,7 +258,9 @@
           var s = ctx.schools[i]; if (s.k !== 'e') continue;
           var d = haversine(m.lat, m.lng, s.lat, s.lng); if (d < ed) { ed = d; elem = s; }
         }
-        var teen = ctx.kids === '중고등학생';
+        /* 아이가 없어도 학군은 집값을 받친다. 그 경우엔 통학거리가 아니라
+           동네 중학교 진학 실적만 본다 — 중고등 자녀와 같은 판정. */
+        var teen = ctx.kids === '중고등학생' || ctx.kids === '자산가치';
         if (!teen) {
           if (!elem) return { v: 'unknown', fact: null };
           return { v: ed <= L.e ? 'pass' : 'fail',
