@@ -371,6 +371,12 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .wchips{display:flex;flex-wrap:wrap;gap:6px}
 .wchips button{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:6px 11px;font-size:.8rem;cursor:pointer;font-family:inherit;color:var(--sub);white-space:nowrap}
 .wchips button.on{border-color:#3D8BFD;color:#2A7DE8;font-weight:600;background:#EAF3FE}
+.chk{display:flex;align-items:flex-start;gap:9px;margin-top:14px;padding:11px 13px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;font-size:.88rem;color:var(--forest);line-height:1.5}
+.chk:has(input:checked){border-color:#3D8BFD;background:#EAF3FE}
+.chk input{width:17px;height:17px;margin:1px 0 0;accent-color:#3D8BFD;flex:0 0 auto;cursor:pointer}
+.chk em{font-style:normal;font-weight:400;color:var(--sub);font-size:.82rem}
+.wqNote{font-size:.79rem;color:var(--sub);line-height:1.6;margin-top:8px;word-break:keep-all}
+.wqNote b{color:var(--forest);font-weight:600}
 .wsubL{font-size:.82rem;font-weight:600;color:var(--forest);margin:13px 0 7px}
 .wsubL em{font-style:normal;font-weight:400;color:var(--sub);font-size:.76rem;margin-left:4px}
 .wsubL:first-of-type{margin-top:10px}
@@ -487,6 +493,11 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
   <p class="wqS">예금·주식·전세보증금처럼 실제로 꺼낼 수 있는 돈이요.</p>
   <input class="f wbig" id="fCash" type="number" inputmode="numeric" placeholder="예: 30000">
   <p class="wqUnit">만원 단위 · 3억이면 <b>30000</b></p>
+  <label class="chk" for="fCorpOn"><input type="checkbox" id="fCorpOn"><span><b>사내대출</b>도 쓸 수 있어요 <em>— 회사 주택자금 대출</em></span></label>
+  <div id="corpWrap" style="display:none">
+    <input class="f" id="fCorp" type="number" inputmode="numeric" placeholder="사내대출로 받을 금액 (만원)" style="margin-top:9px">
+    <p class="wqNote" id="corpNote">회사에서 받는 돈이라 은행 한도와 별개로 <b>동원 가능한 자금</b>에 더해요. 다만 <b>주택에 근저당을 잡는 형태면 은행 LTV 한도에 합산</b>되고, 신용 형태여도 매달 갚는 돈은 은행 DSR에 잡힐 수 있어요. 회사·계약마다 다르니 사내 규정을 꼭 확인하세요.</p>
+  </div>
   <div class="wnav"><button type="button" class="go wnext">다음</button></div>
 </section>
 
@@ -572,7 +583,7 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
    흐름: 지역 → 조건 → 면적 → (출퇴근지) → (자녀) → 주택수 → 현금 → 소득 → 결과
    ═══════════════════════════════════════════════════════════════════════ */
 var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},schools:{},redev:[]};
-var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0,loadP:null};
+var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0,corp:0,loadP:null};
 var $=function(id){return document.getElementById(id);};
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
@@ -748,6 +759,26 @@ pickOpt('sizeOpt','lv',function(v){ S.sizeLv=+v; setTimeout(function(){ next(); 
 pickOpt('kidsOpt','v',function(v){ S.kids=v; setTimeout(function(){ next(); },140); });
 pickOpt('ownOpt','v',function(v){ S.own=v; $('firstWrap').style.display=v==='none'?'':'none'; $('ownNav').style.display=''; if(v!=='none'){ S.first=false; $('fFirst').checked=false; } });
 $('fFirst').onchange=function(){ S.first=this.checked; };
+/* 사내대출 — 삼성·하이닉스처럼 사내 주택자금 대출이 있는 회사가 많다.
+   은행 한도와 별개로 조달되는 돈이라 '동원 가능한 자금'에 더하되,
+   LTV·DSR 취급은 회사·계약마다 달라서 단정하지 않고 사실만 알린다. */
+var CORP_NOTE='회사에서 받는 돈이라 은행 한도와 별개로 <b>동원 가능한 자금</b>에 더해요. '
+  +'다만 <b>주택에 근저당을 잡는 형태면 은행 LTV 한도에 합산</b>되고, 신용 형태여도 매달 갚는 돈은 '
+  +'은행 DSR에 잡힐 수 있어요. 회사·계약마다 다르니 사내 규정을 꼭 확인하세요.';
+$('fCorpOn').onchange=function(){
+  $('corpWrap').style.display=this.checked?'':'none';
+  if(!this.checked){ $('fCorp').value=''; $('corpNote').innerHTML=CORP_NOTE; }
+};
+$('fCorp').oninput=function(){
+  var v=+this.value||0, h=CORP_NOTE;
+  if(v>0){
+    /* 사내대출 금리·기간은 회사마다 달라서 예시로만 보여준다 (연 2% · 10년 원리금균등) */
+    var m=Math.round(v*(0.02/12)/(1-Math.pow(1+0.02/12,-120)));
+    h+='<br>예를 들어 <b>연 2% · 10년</b>이면 매달 약 <b>'+m.toLocaleString('ko-KR')+'만원</b>이에요 — '
+      +'아래 <b>매달 갚는 돈</b>에 넣으면 은행 대출 한도에 같이 반영돼요.';
+  }
+  $('corpNote').innerHTML=h;
+};
 /* 부대비용 칩 ↔ 직접 입력: 칩을 누르면 숫자가 들어가고, 숫자를 고치면 칩 선택이 풀린다.
    시세를 모르는 사람은 칩으로 고르고, 견적을 받아본 사람은 직접 적고,
    아무것도 안 하면 시세(이사 150 · 청소는 면적별)로 계산한다. */
@@ -874,7 +905,10 @@ function costOpt(regulated,big,area){
           area:area||SIZE_AREA[S.sizeLv], interior:+$('fInt').value||0};
 }
 function computeBudgets(){
-  var cash=+$('fCash').value, income=+$('fIncome').value, debt=+$('fDebt').value||0, rate=+$('fRate').value||RULES.baseRate;
+  var corp=$('fCorpOn').checked ? (+$('fCorp').value||0) : 0;
+  var cash=(+$('fCash').value||0)+corp;
+  var income=+$('fIncome').value, debt=+$('fDebt').value||0, rate=+$('fRate').value||RULES.baseRate;
+  S.corp=corp;
   var owner=S.own==='none'?(S.first?'first':'none'):'one';
   S.saveMonthly=+$('fSave').value||0;
   S.budgetBy={};
@@ -913,7 +947,8 @@ function renderBudget(B){
   if(R.price<=0) h+='<div class="big" style="font-size:1.4rem">현금이 부대비용('+readMan(C.total)+')에 못 미쳐요</div>';
   else if(B.split) h+='<div class="big">'+readMan(B.min)+' ~ '+readMan(B.max)+'</div>';
   else h+='<div class="big">'+readMan(R.price)+'</div>';
-  h+='<div class="brk"><div><div class="k">보유 현금</div><div class="v">'+readMan(R.cash)+'</div></div>'
+  h+='<div class="brk"><div><div class="k">보유 현금'+(S.corp?' + 사내대출':'')+'</div><div class="v">'+readMan(R.cash)
+    +(S.corp?'<small style="display:block;font-size:.7rem;font-weight:500;color:var(--sub);margin-top:2px">현금 '+readMan(R.cash-S.corp)+' · 사내 '+readMan(S.corp)+'</small>':'')+'</div></div>'
     +'<div><div class="k">대출 가능</div><div class="v">'+readMan(B.split?Math.max.apply(null,Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].loan;})):R.loan)+'</div></div>'
     +'<div><div class="k">LTV('+ownLabel+')</div><div class="v">'+Math.round(R.ltvR*100)+'%'+(B.split?'~':'')+'</div></div>'
     +'<div><div class="k">부대비용</div><div class="v" style="color:#B23B3B">−'+readFine(C.total)+'</div></div></div>';
