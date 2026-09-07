@@ -742,10 +742,13 @@ def fetch_parks(con: sqlite3.Connection, key: str) -> None:
         # 표준데이터마다 header 를 안 주는 것도 있다. 알맹이가 있으면 코드는 따지지 않는다.
         code = str(hdr.get("resultCode", "00" if body else ""))
         if code not in ("00", "0"):
-            print(f"[공원] 응답코드 {code} · {str(hdr.get('resultMsg'))[:80]}", flush=True)
+            print(f"[공원] 응답코드 {code or '(없음)'} · {str(hdr.get('resultMsg'))[:80]}", flush=True)
+            # 껍데기 모양을 짐작하지 않는다 — 실제로 뭐가 왔는지 찍고 판단한다.
+            print(f"       최상위 키: {list(j.keys())[:8]}", flush=True)
+            print("       원문: " + " ".join((r.text or "")[:260].split()), flush=True)
             if page == 1:
-                print("       활용신청이 안 된 키일 수 있습니다 "
-                      "(공공데이터포털 15012890 → 활용신청).", flush=True)
+                print("       코드가 SERVICE_KEY_IS_NOT_REGISTERED 계열이면 "
+                      "공공데이터포털 15012890 에서 활용신청을 하면 됩니다.", flush=True)
             break
         if total is None:
             total = int(_f(body.get("totalCount")))
