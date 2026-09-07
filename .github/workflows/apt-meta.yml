@@ -67,7 +67,7 @@ jobs:
       # 공원. 위경도가 이미 들어있는 표준데이터라 20페이지면 끝난다.
       # 브이월드 WFS 는 액션 러너(해외 IP)에서 접속 자체가 막혀 쓰지 못했다.
       - name: 공원 (전국도시공원정보표준데이터)
-        if: inputs.stage == 'parks' || github.event_name == 'push'
+        if: inputs.stage == 'parks' || github.event_name == 'push' || github.event_name == 'schedule'
         continue-on-error: true
         env:
           APT_KEY: ${{ secrets.APT_KEY }}
