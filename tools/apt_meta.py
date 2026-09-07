@@ -649,78 +649,132 @@ def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) ->
 # 국토계획법상 공원·녹지는 도시계획시설 중 '공간시설'로 묶인다.
 # 레이어 코드와 속성 이름을 추측하지 않는다 — GetCapabilities 로 목록을 받아
 # 실제로 있는 레이어를 고르고, 한 건 찍어서 필드명을 확인한 뒤에 쓴다.
-VW_WFS = "https://api.vworld.kr/req/wfs"
+VW_DATA = "https://api.vworld.kr/req/data"      # 데이터 API 2.0 (JSON)
+VW_WFS = "https://api.vworld.kr/req/wfs"        # WMS/WFS API (GML·JSON)
+VW_SEARCH = "https://api.vworld.kr/req/search"  # 응답이 작아서 '키가 살아있나' 확인용
 VW_DOMAINS = ["boobi.ai.kr", "localhost", ""]
 
+# 도시계획시설 레이어 후보. 어느 게 '공간시설(공원·녹지·광장)'인지는
+# 이름 짐작으로 정하지 않고 실제 응답의 속성값에 공원이 있는지로 고른다.
+VW_CANDS = ["LT_C_UPISUQ151", "LT_C_UPISUQ152", "LT_C_UPISUQ153", "LT_C_UPISUQ154",
+            "LT_C_UPISUQ155", "LT_C_UPISUQ156", "LT_C_UPISUQ157", "LT_C_UPISUQ158",
+            "LT_C_UPISUQ159", "LT_C_UPISUQ161", "LT_C_UPISUQ171"]
+# 서울 서초·강남 일대 (반포한강공원·양재시민의숲이 걸리는 범위)
+VW_BOX = "126.98,37.47,127.06,37.52"
 
-def vw_get(key: str, params: dict, domain: str):
-    q = dict(params); q["KEY"] = key
+
+def vw_get(url: str, key: str, params: dict, domain: str):
+    q = dict(params)
+    q["key" if url != VW_WFS else "KEY"] = key
     if domain:
-        q["DOMAIN"] = domain
+        q["domain" if url != VW_WFS else "DOMAIN"] = domain
     try:
-        r = requests.get(VW_WFS, params=q, timeout=TIMEOUT)
-        return r
+        return requests.get(url, params=q, timeout=TIMEOUT)
     except Exception as e:
-        print(f"   요청 실패({domain or '도메인없음'}): {e}", flush=True)
+        print(f"      요청 실패: {type(e).__name__} {str(e)[:90]}", flush=True)
         return None
 
 
+def _vw_show(lay: str, feats: list) -> None:
+    """속성 이름을 추측하지 않으려고 첫 건의 키·값을 통째로 찍는다."""
+    g = feats[0].get("geometry") or {}
+    print(f"   ✅ {lay}  {len(feats)}건 · geom={g.get('type')}", flush=True)
+    for k, v in list((feats[0].get("properties") or {}).items())[:24]:
+        print(f"        {k} = {str(v)[:50]}", flush=True)
+    for i, f in enumerate(feats[1:], 2):
+        p = f.get("properties") or {}
+        txt = " / ".join(f"{k}={str(v)[:24]}" for k, v in list(p.items())[:6])
+        print(f"        [{i}] {txt}", flush=True)
+
+
 def parks_probe(key: str) -> None:
-    """어느 도메인 값이 통하는지 + 공원 레이어 코드 + 속성 이름을 한 번에 확인한다."""
-    caps = None
+    """공원 레이어와 속성 이름을 실제 응답으로 확정한다.
+
+    GetCapabilities 는 응답이 커서 502가 난다. 그래서
+      1) 검색 API 로 '키가 살아있는지'부터 확인하고 (응답이 작다)
+      2) 데이터 API 2.0(/req/data, JSON)로 후보 레이어를 한 건씩 받아보고
+      3) 그래도 안 되면 WFS 로 같은 걸 시도한다.
+    """
+    # 1) 키 자체가 유효한지. 여기서 막히면 레이어를 아무리 바꿔도 소용없다.
+    print("── 1단계: 키 확인 (검색 API)", flush=True)
+    ok_domain = None
     for d in VW_DOMAINS:
-        r = vw_get(key, {"SERVICE": "WFS", "REQUEST": "GetCapabilities", "VERSION": "1.1.0"}, d)
+        r = vw_get(VW_SEARCH, key, {"service": "search", "request": "search", "version": "2.0",
+                                    "query": "반포한강공원", "type": "place", "size": "1",
+                                    "format": "json", "crs": "EPSG:4326"}, d)
         if r is None:
+            print(f"   DOMAIN={d or '(없음)'}  연결 실패", flush=True)
             continue
-        head = (r.text or "")[:200].replace("\n", " ")
-        ok = r.status_code == 200 and "FeatureType" in (r.text or "")
-        print(f"[공원] DOMAIN={d or '(없음)':<14} HTTP {r.status_code} · {len(r.content):,}바이트 · "
-              f"레이어목록 {'있음' if ok else '없음'}", flush=True)
-        if not ok:
-            print("       " + " ".join(head.split())[:180], flush=True)
-            continue
-        caps = (r.text, d)
-        break
-    if not caps:
-        print("[공원] GetCapabilities 를 못 받았습니다 — 키·도메인 등록을 확인하세요.", flush=True)
-        return
-
-    body, domain = caps
-    names = re.findall(r"<Name>([^<]+)</Name>", body)
-    titles = re.findall(r"<Title>([^<]+)</Title>", body)
-    print(f"[공원] 레이어 {len(names)}종 (DOMAIN={domain or '(없음)'})", flush=True)
-    pairs = list(zip(names, titles + [""] * len(names)))
-    hit = [(n, t) for n, t in pairs if ("공원" in t or "공간시설" in t or "녹지" in t
-                                        or "UPIS" in n.upper())]
-    for n, t in hit[:25]:
-        print(f"   {n:<28} {t}", flush=True)
-    if not hit:
-        print("   공원/공간시설로 보이는 레이어를 못 찾음. 앞 30개를 찍습니다:", flush=True)
-        for n, t in pairs[:30]:
-            print(f"   {n:<28} {t}", flush=True)
-        return
-
-    # 서울 강남 일대 작은 bbox 로 한 건만 받아 속성 이름을 본다
-    for n, t in hit[:4]:
-        r = vw_get(key, {"SERVICE": "WFS", "REQUEST": "GetFeature", "VERSION": "1.1.0",
-                         "TYPENAME": n, "BBOX": "127.02,37.48,127.08,37.53",
-                         "SRSNAME": "EPSG:4326", "OUTPUT": "application/json",
-                         "MAXFEATURES": "2"}, domain)
-        if r is None:
-            continue
+        st = ""
         try:
-            j = r.json()
+            st = ((r.json().get("response") or {}).get("status") or "")
         except Exception:
-            print(f"   [{n}] JSON 아님 · HTTP {r.status_code} · "
-                  + " ".join((r.text or "")[:160].split()), flush=True)
-            continue
-        feats = j.get("features") or []
-        print(f"   [{n}] {t} → {len(feats)}건", flush=True)
-        if feats:
-            pr = feats[0].get("properties") or {}
-            for k, v in list(pr.items())[:20]:
-                print(f"       {k} = {str(v)[:40]}", flush=True)
-            print(f"       geometry.type = {(feats[0].get('geometry') or {}).get('type')}", flush=True)
+            pass
+        head = " ".join((r.text or "")[:160].split())
+        print(f"   DOMAIN={d or '(없음)'}  HTTP {r.status_code} · status={st or '?'} · {head[:120]}", flush=True)
+        if st in ("OK", "NOT_FOUND") and ok_domain is None:
+            ok_domain = d
+    if ok_domain is None:
+        print("   ⚠️ 검색 API 가 어느 도메인으로도 정상 응답을 안 줬습니다.", flush=True)
+        print("      키 승인 상태(승인대기/반려)와 등록 도메인을 먼저 확인해야 합니다.", flush=True)
+    else:
+        print(f"   → 쓸 수 있는 DOMAIN = {ok_domain or '(없음)'}", flush=True)
+
+    doms = [ok_domain] if ok_domain is not None else VW_DOMAINS
+
+    # 2) 데이터 API 2.0
+    print("── 2단계: 데이터 API 2.0 (/req/data)", flush=True)
+    hit = False
+    for d in doms:
+        for lay in VW_CANDS:
+            r = vw_get(VW_DATA, key, {"service": "data", "request": "GetFeature", "version": "2.0",
+                                      "data": lay, "geomFilter": f"BOX({VW_BOX})",
+                                      "crs": "EPSG:4326", "size": "3", "format": "json",
+                                      "geometry": "false", "attribute": "true"}, d)
+            if r is None:
+                continue
+            try:
+                j = r.json()
+            except Exception:
+                print(f"   {lay}  HTTP {r.status_code} · " + " ".join((r.text or "")[:110].split()), flush=True)
+                continue
+            resp = j.get("response") or {}
+            st = resp.get("status")
+            if st != "OK":
+                err = ((resp.get("error") or {}).get("text") or "")
+                print(f"   {lay}  status={st} {err[:70]}", flush=True)
+                continue
+            feats = (((resp.get("result") or {}).get("featureCollection") or {}).get("features")) or []
+            if not feats:
+                print(f"   {lay}  OK · 0건", flush=True)
+                continue
+            _vw_show(lay, feats)
+            hit = True
+            time.sleep(0.25)
+        if hit:
+            return
+
+    # 3) WFS 로 한 번 더
+    print("── 3단계: WFS (/req/wfs)", flush=True)
+    for d in doms:
+        for lay in VW_CANDS:
+            r = vw_get(VW_WFS, key, {"SERVICE": "WFS", "REQUEST": "GetFeature", "VERSION": "1.1.0",
+                                     "TYPENAME": lay.lower(), "BBOX": VW_BOX,
+                                     "SRSNAME": "EPSG:4326", "OUTPUT": "application/json",
+                                     "MAXFEATURES": "3"}, d)
+            if r is None:
+                continue
+            try:
+                feats = (r.json().get("features")) or []
+            except Exception:
+                print(f"   {lay}  HTTP {r.status_code} · " + " ".join((r.text or "")[:110].split()), flush=True)
+                continue
+            if not feats:
+                print(f"   {lay}  HTTP {r.status_code} · 0건", flush=True)
+                continue
+            _vw_show(lay, feats)
+            return
+    print("[공원] 어떤 방법으로도 공원 레이어를 못 받았습니다.", flush=True)
 
 
 # ── 직주근접 허브 ──────────────────────────────────────────────────────────
