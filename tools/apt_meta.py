@@ -669,7 +669,11 @@ def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) ->
 #   · 공원면적(PARK_AR)과 구분(PARK_SE)이 있어 '근린공원급'을 걸러낼 수 있고
 #   · 「조성이 완료되지 않은 공원은 제외」라 미조성 공원 리스크가 없다
 #   · 단지 메타와 같은 data.go.kr 계정·키를 그대로 쓴다
-PARK_SVC = "https://api.data.go.kr/openapi/tn_pubr_public_cty_park_info_api"
+# 포털이 안내하는 주소는 api.data.go.kr 인데 액션 러너에서 연결이 안 떨어진다.
+# 단지 메타가 쓰는 apis.data.go.kr(신 게이트웨이)로도 같은 경로가 열려 있어서 둘 다 시도한다.
+PARK_HOSTS = ["https://apis.data.go.kr/openapi/tn_pubr_public_cty_park_info_api",
+              "https://api.data.go.kr/openapi/tn_pubr_public_cty_park_info_api",
+              "http://api.data.go.kr/openapi/tn_pubr_public_cty_park_info_api"]
 PARK_ROWS = 1000            # 한 페이지 최대
 PARK_MIN_AREA = 10000.0     # ㎡. 도시공원법상 근린공원 최소 규모
 PARK_SKIP = ("묘지",)       # 면적은 크지만 살기 좋은 이유가 아니다
@@ -697,14 +701,34 @@ def park_point(lat: float, lng: float) -> tuple[float, float] | None:
 def fetch_parks(con: sqlite3.Connection, key: str) -> None:
     """전국도시공원정보표준데이터를 페이지단위로 다 받아 park 표에 넣는다."""
     got = time.strftime("%Y-%m-%d")
+    svc = None                      # 처음 성공한 주소를 계속 쓴다
     page, total, kept, bad_pt, seen = 1, None, 0, 0, 0
+
+    def call(pg: int):
+        """주소 후보를 돌아가며 두 번씩 시도한다. 어느 게 열려 있는지는 해봐야 안다."""
+        nonlocal svc
+        hosts = [svc] if svc else PARK_HOSTS
+        last = None
+        for h in hosts:
+            for attempt in (1, 2):
+                try:
+                    rr = requests.get(h, params={
+                        "serviceKey": key, "pageNo": str(pg),
+                        "numOfRows": str(PARK_ROWS), "type": "json"}, timeout=45)
+                    svc = h
+                    return rr
+                except Exception as e:
+                    last = f"{type(e).__name__} {str(e)[:70]}"
+                    if attempt == 1:
+                        time.sleep(2)
+            if not svc:
+                print(f"   {h.split('//')[1].split('/')[0]} 실패: {last}", flush=True)
+        print(f"[공원] {pg}페이지 요청 실패: {last}", flush=True)
+        return None
+
     while True:
-        try:
-            r = requests.get(PARK_SVC, params={
-                "serviceKey": key, "pageNo": str(page),
-                "numOfRows": str(PARK_ROWS), "type": "json"}, timeout=TIMEOUT)
-        except Exception as e:
-            print(f"[공원] {page}페이지 요청 실패: {type(e).__name__} {str(e)[:80]}", flush=True)
+        r = call(page)
+        if r is None:
             break
         try:
             j = r.json()
@@ -712,16 +736,17 @@ def fetch_parks(con: sqlite3.Connection, key: str) -> None:
             head = " ".join((r.text or "")[:200].split())
             print(f"[공원] JSON 이 아닙니다 (HTTP {r.status_code}) · {head}", flush=True)
             break
-        resp = (j.get("response") or {})
+        resp = (j.get("response") or j)
         hdr = resp.get("header") or {}
-        code = str(hdr.get("resultCode", ""))
+        body = resp.get("body") or {}
+        # 표준데이터마다 header 를 안 주는 것도 있다. 알맹이가 있으면 코드는 따지지 않는다.
+        code = str(hdr.get("resultCode", "00" if body else ""))
         if code not in ("00", "0"):
             print(f"[공원] 응답코드 {code} · {str(hdr.get('resultMsg'))[:80]}", flush=True)
             if page == 1:
                 print("       활용신청이 안 된 키일 수 있습니다 "
                       "(공공데이터포털 15012890 → 활용신청).", flush=True)
             break
-        body = resp.get("body") or {}
         if total is None:
             total = int(_f(body.get("totalCount")))
             print(f"[공원] 전체 {total:,}건", flush=True)
