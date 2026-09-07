@@ -64,6 +64,17 @@ jobs:
             echo "첫 실행 — 새 DB로 시작"
           fi
 
+      # 공원 레이어·필드 확인용. 파서를 추측으로 짜지 않으려고 먼저 응답을 본다.
+      # 답만 빨리 보려고 다른 수집(목록·상세·좌표)보다 앞에 둔다.
+      - name: 공원 레이어 확인 (브이월드)
+        if: inputs.stage == 'parks-probe' || github.event_name == 'push'
+        continue-on-error: true
+        env:
+          VWORLD_KEY: ${{ secrets.VWORLD_KEY }}
+        run: |
+          if [ -z "$VWORLD_KEY" ]; then echo "VWORLD_KEY 없음 — 건너뜁니다"; exit 0; fi
+          python tools/apt_meta.py --parks-probe
+
       - name: 인증키·필드명 확인
         if: inputs.stage == 'probe'
         env:
@@ -95,16 +106,6 @@ jobs:
             exit 0
           fi
           python tools/apt_meta.py --geocode --budget 90000
-
-      # 공원 레이어·필드 확인용. 파서를 추측으로 짜지 않으려고 먼저 응답을 본다.
-      - name: 공원 레이어 확인 (브이월드)
-        if: inputs.stage == 'parks-probe' || github.event_name == 'push'
-        continue-on-error: true
-        env:
-          VWORLD_KEY: ${{ secrets.VWORLD_KEY }}
-        run: |
-          if [ -z "$VWORLD_KEY" ]; then echo "VWORLD_KEY 없음 — 건너뜁니다"; exit 0; fi
-          python tools/apt_meta.py --parks-probe
 
       # 직주근접 허브 좌표 — 22곳이라 몇 초면 끝난다. 반도체 사업장이 늘면 여기만 고친다.
       - name: 직주근접 허브 좌표
