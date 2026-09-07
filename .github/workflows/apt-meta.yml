@@ -23,7 +23,7 @@ on:
           - emit      # 재수집 없이 JSON만 다시 생성
           - geocode   # 도로명주소 → 좌표 (KAKAO_REST_KEY). 초품아·직주근접·역세권이 여기서 열린다
           - schools   # 학교알리미 학교 목록·좌표 (SCHOOLINFO_KEY). 학교는 잘 안 바뀌어서 가끔만
-          - parks-probe # 브이월드 공원 레이어·필드 확인 (VWORLD_KEY)
+          - parks     # 전국도시공원정보표준데이터 (APT_KEY). 연 1~2회 갱신이라 가볍다
           - hubs      # 직주근접 허브 좌표 (반도체 사업장 등)
           - crowd     # 학급당 학생수(과밀). OpenAPI apiType=09
           - progress  # 중학교 졸업생의 진로 현황(특목·자사 진학률). 공시가 연 1회라 11월 이후에만 바뀐다
@@ -64,16 +64,14 @@ jobs:
             echo "첫 실행 — 새 DB로 시작"
           fi
 
-      # 공원 레이어·필드 확인용. 파서를 추측으로 짜지 않으려고 먼저 응답을 본다.
-      # 답만 빨리 보려고 다른 수집(목록·상세·좌표)보다 앞에 둔다.
-      - name: 공원 레이어 확인 (브이월드)
-        if: inputs.stage == 'parks-probe' || github.event_name == 'push'
+      # 공원. 위경도가 이미 들어있는 표준데이터라 20페이지면 끝난다.
+      # 브이월드 WFS 는 액션 러너(해외 IP)에서 접속 자체가 막혀 쓰지 못했다.
+      - name: 공원 (전국도시공원정보표준데이터)
+        if: inputs.stage == 'parks' || github.event_name == 'push'
         continue-on-error: true
         env:
-          VWORLD_KEY: ${{ secrets.VWORLD_KEY }}
-        run: |
-          if [ -z "$VWORLD_KEY" ]; then echo "VWORLD_KEY 없음 — 건너뜁니다"; exit 0; fi
-          python tools/apt_meta.py --parks-probe
+          APT_KEY: ${{ secrets.APT_KEY }}
+        run: python tools/apt_meta.py --parks
 
       - name: 인증키·필드명 확인
         if: inputs.stage == 'probe'
@@ -151,7 +149,7 @@ jobs:
           gzip -9 -c tools/apt_meta.db > tools/apt_meta.db.gz
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A data/apt-meta data/schools data/work-hubs.json tools/apt_meta.db.gz
+          git add -A data/apt-meta data/schools data/parks data/work-hubs.json tools/apt_meta.db.gz
           if git diff --cached --quiet; then
             echo "변경 없음"
             exit 0
