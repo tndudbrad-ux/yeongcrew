@@ -22,6 +22,7 @@
   KAKAO_REST_KEY=… python apt_meta.py --geocode --budget 20000   도로명주소 → 좌표 (카카오 로컬)
   python apt_meta.py --progress --sido 서울특별시 경기도 인천광역시   중학교 특목·자사 진학률
   SCHOOLINFO_KEY=… python apt_meta.py --crowd   학급당 학생수(과밀)
+  python apt_meta.py --parks                 전국도시공원정보표준데이터 (APT_KEY)
 
 API에 없는 것(부대복리시설·승강기·최고층·지하주차·좌표)은 extra 테이블에 따로 두고
 emit 때 합친다. 단지코드(kapt_code)로 정확히 붙으므로 이름 매칭이 필요 없다.
@@ -29,6 +30,8 @@ emit 때 합친다. 단지코드(kapt_code)로 정확히 붙으므로 이름 매
 산출물
   apt_meta.db            SQLite. 단지 원본 + 수집 진행상황
   data/apt-meta/{시군구코드}.json   앱/웹이 읽는 단지 메타
+  data/schools/{시군구코드}.json   학교(초·중·고) 좌표·진학률·과밀
+  data/parks/{시군구코드}.json     1만㎡ 이상 도시공원 좌표·면적
 """
 
 from __future__ import annotations
@@ -244,6 +247,18 @@ CREATE TABLE IF NOT EXISTS progress (
   fl        INTEGER,          -- 외고·국제고
   aut       INTEGER,          -- 자율형사립고
   rate      REAL,             -- (과학고+외고국제고+자사고) / 졸업생
+  got_at    TEXT
+);
+-- 전국도시공원정보표준데이터(공공데이터포털). 위경도가 이미 들어 있고,
+-- 조성이 끝난 공원만 실린다 — '계획만 있고 없는 공원'을 걸러낼 필요가 없다.
+CREATE TABLE IF NOT EXISTS park (
+  mno       TEXT PRIMARY KEY,   -- 관리번호
+  name      TEXT,
+  se        TEXT,               -- 공원구분 (근린공원·어린이공원·소공원·체육공원…)
+  addr      TEXT,
+  lat       REAL,
+  lng       REAL,
+  area      REAL,               -- ㎡
   got_at    TEXT
 );
 CREATE TABLE IF NOT EXISTS extra (
@@ -593,6 +608,7 @@ SCHOOL_API = "https://www.schoolinfo.go.kr/openApi.do"
 KIND = {"02": "e", "03": "m", "04": "h"}
 HS_TYPE = {"일반고등학교": "g", "자율고등학교": "a", "특수목적고등학교": "s", "특성화고등학교": "v"}
 SCHOOL_DIR = os.path.join(ROOT, "data", "schools")
+PARK_DIR = os.path.join(ROOT, "data", "parks")
 
 
 def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) -> None:
@@ -645,136 +661,150 @@ def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) ->
         print("   ", f)
 
 
-# ── 공원 (브이월드 WFS) ─────────────────────────────────────────────────────
-# 국토계획법상 공원·녹지는 도시계획시설 중 '공간시설'로 묶인다.
-# 레이어 코드와 속성 이름을 추측하지 않는다 — GetCapabilities 로 목록을 받아
-# 실제로 있는 레이어를 고르고, 한 건 찍어서 필드명을 확인한 뒤에 쓴다.
-VW_DATA = "https://api.vworld.kr/req/data"      # 데이터 API 2.0 (JSON)
-VW_WFS = "https://api.vworld.kr/req/wfs"        # WMS/WFS API (GML·JSON)
-VW_SEARCH = "https://api.vworld.kr/req/search"  # 응답이 작아서 '키가 살아있나' 확인용
-VW_DOMAINS = ["boobi.ai.kr", "localhost", ""]
-
-# 도시계획시설 레이어 후보. 어느 게 '공간시설(공원·녹지·광장)'인지는
-# 이름 짐작으로 정하지 않고 실제 응답의 속성값에 공원이 있는지로 고른다.
-VW_CANDS = ["LT_C_UPISUQ151", "LT_C_UPISUQ152", "LT_C_UPISUQ153", "LT_C_UPISUQ154",
-            "LT_C_UPISUQ155", "LT_C_UPISUQ156", "LT_C_UPISUQ157", "LT_C_UPISUQ158",
-            "LT_C_UPISUQ159", "LT_C_UPISUQ161", "LT_C_UPISUQ171"]
-# 서울 서초·강남 일대 (반포한강공원·양재시민의숲이 걸리는 범위)
-VW_BOX = "126.98,37.47,127.06,37.52"
+# ── 공원 (공공데이터포털 전국도시공원정보표준데이터) ──────────────
+# 처음엔 브이월드 WFS 로 도시계획시설(공간시설) 레이어를 받으려 했는데,
+# api.vworld.kr 이 깃허브 액션 러너(해외 IP)에서는 검색 API 까지 전부
+# 502 / 연결끊김이라 포기했다. 이쪽이 오히려 낫다:
+#   · 위도·경도가 이미 들어 있어 지오코딩이 필요 없고
+#   · 공원면적(PARK_AR)과 구분(PARK_SE)이 있어 '근린공원급'을 걸러낼 수 있고
+#   · 「조성이 완료되지 않은 공원은 제외」라 미조성 공원 리스크가 없다
+#   · 단지 메타와 같은 data.go.kr 계정·키를 그대로 쓴다
+PARK_SVC = "https://api.data.go.kr/openapi/tn_pubr_public_cty_park_info_api"
+PARK_ROWS = 1000            # 한 페이지 최대
+PARK_MIN_AREA = 10000.0     # ㎡. 도시공원법상 근린공원 최소 규모
+PARK_SKIP = ("묘지",)       # 면적은 크지만 살기 좋은 이유가 아니다
 
 
-def vw_get(url: str, key: str, params: dict, domain: str):
-    q = dict(params)
-    q["key" if url != VW_WFS else "KEY"] = key
-    if domain:
-        q["domain" if url != VW_WFS else "DOMAIN"] = domain
+def _f(v) -> float:
     try:
-        return requests.get(url, params=q, timeout=TIMEOUT)
-    except Exception as e:
-        print(f"      요청 실패: {type(e).__name__} {str(e)[:90]}", flush=True)
-        return None
+        return float(str(v).replace(",", "").strip())
+    except Exception:
+        return 0.0
 
 
-def _vw_show(lay: str, feats: list) -> None:
-    """속성 이름을 추측하지 않으려고 첫 건의 키·값을 통째로 찍는다."""
-    g = feats[0].get("geometry") or {}
-    print(f"   ✅ {lay}  {len(feats)}건 · geom={g.get('type')}", flush=True)
-    for k, v in list((feats[0].get("properties") or {}).items())[:24]:
-        print(f"        {k} = {str(v)[:50]}", flush=True)
-    for i, f in enumerate(feats[1:], 2):
-        p = f.get("properties") or {}
-        txt = " / ".join(f"{k}={str(v)[:24]}" for k, v in list(p.items())[:6])
-        print(f"        [{i}] {txt}", flush=True)
+def park_point(lat: float, lng: float) -> tuple[float, float] | None:
+    """표준데이터는 간혹 위·경도가 바뀌어 들어온다. 한반도 범위로 바로잡고,
+       그래도 밖이면 버린다 — 엉뚱한 좌표 하나가 '집 앞 공원'을 만든다."""
+    def ok(a, b):
+        return 33.0 <= a <= 39.0 and 124.0 <= b <= 132.0
+    if ok(lat, lng):
+        return round(lat, 6), round(lng, 6)
+    if ok(lng, lat):
+        return round(lng, 6), round(lat, 6)
+    return None
 
 
-def parks_probe(key: str) -> None:
-    """공원 레이어와 속성 이름을 실제 응답으로 확정한다.
-
-    GetCapabilities 는 응답이 커서 502가 난다. 그래서
-      1) 검색 API 로 '키가 살아있는지'부터 확인하고 (응답이 작다)
-      2) 데이터 API 2.0(/req/data, JSON)로 후보 레이어를 한 건씩 받아보고
-      3) 그래도 안 되면 WFS 로 같은 걸 시도한다.
-    """
-    # 1) 키 자체가 유효한지. 여기서 막히면 레이어를 아무리 바꿔도 소용없다.
-    print("── 1단계: 키 확인 (검색 API)", flush=True)
-    ok_domain = None
-    for d in VW_DOMAINS:
-        r = vw_get(VW_SEARCH, key, {"service": "search", "request": "search", "version": "2.0",
-                                    "query": "반포한강공원", "type": "place", "size": "1",
-                                    "format": "json", "crs": "EPSG:4326"}, d)
-        if r is None:
-            print(f"   DOMAIN={d or '(없음)'}  연결 실패", flush=True)
-            continue
-        st = ""
+def fetch_parks(con: sqlite3.Connection, key: str) -> None:
+    """전국도시공원정보표준데이터를 페이지단위로 다 받아 park 표에 넣는다."""
+    got = time.strftime("%Y-%m-%d")
+    page, total, kept, bad_pt, seen = 1, None, 0, 0, 0
+    while True:
         try:
-            st = ((r.json().get("response") or {}).get("status") or "")
+            r = requests.get(PARK_SVC, params={
+                "serviceKey": key, "pageNo": str(page),
+                "numOfRows": str(PARK_ROWS), "type": "json"}, timeout=TIMEOUT)
+        except Exception as e:
+            print(f"[공원] {page}페이지 요청 실패: {type(e).__name__} {str(e)[:80]}", flush=True)
+            break
+        try:
+            j = r.json()
         except Exception:
-            pass
-        head = " ".join((r.text or "")[:160].split())
-        print(f"   DOMAIN={d or '(없음)'}  HTTP {r.status_code} · status={st or '?'} · {head[:120]}", flush=True)
-        if st in ("OK", "NOT_FOUND") and ok_domain is None:
-            ok_domain = d
-    if ok_domain is None:
-        print("   ⚠️ 검색 API 가 어느 도메인으로도 정상 응답을 안 줬습니다.", flush=True)
-        print("      키 승인 상태(승인대기/반려)와 등록 도메인을 먼저 확인해야 합니다.", flush=True)
-    else:
-        print(f"   → 쓸 수 있는 DOMAIN = {ok_domain or '(없음)'}", flush=True)
+            head = " ".join((r.text or "")[:200].split())
+            print(f"[공원] JSON 이 아닙니다 (HTTP {r.status_code}) · {head}", flush=True)
+            break
+        resp = (j.get("response") or {})
+        hdr = resp.get("header") or {}
+        code = str(hdr.get("resultCode", ""))
+        if code not in ("00", "0"):
+            print(f"[공원] 응답코드 {code} · {str(hdr.get('resultMsg'))[:80]}", flush=True)
+            if page == 1:
+                print("       활용신청이 안 된 키일 수 있습니다 "
+                      "(공공데이터포털 15012890 → 활용신청).", flush=True)
+            break
+        body = resp.get("body") or {}
+        if total is None:
+            total = int(_f(body.get("totalCount")))
+            print(f"[공원] 전체 {total:,}건", flush=True)
+        items = body.get("items")
+        if isinstance(items, dict):
+            items = items.get("item") or []
+        items = items or []
+        if not items:
+            break
+        rows = []
+        for it in items:
+            seen += 1
+            pt = park_point(_f(it.get("LATITUDE")), _f(it.get("LONGITUDE")))
+            if pt is None:
+                bad_pt += 1
+                continue
+            mno = str(it.get("MANAGE_NO") or "").strip()
+            nm = str(it.get("PARK_NM") or "").strip()
+            if not nm:
+                continue
+            if not mno:
+                mno = f"{nm}@{pt[0]:.5f},{pt[1]:.5f}"
+            rows.append((mno, nm, str(it.get("PARK_SE") or "").strip(),
+                         str(it.get("RDNMADR") or it.get("LNMADR") or "").strip(),
+                         pt[0], pt[1], _f(it.get("PARK_AR")), got))
+        con.executemany(
+            "INSERT OR REPLACE INTO park(mno,name,se,addr,lat,lng,area,got_at)"
+            " VALUES(?,?,?,?,?,?,?,?)", rows)
+        con.commit()
+        kept += len(rows)
+        print(f"   {page}페이지 · {len(items)}건 받아 {len(rows)}건 저장 (누적 {kept:,})", flush=True)
+        if total and seen >= total:
+            break
+        if len(items) < PARK_ROWS:
+            break
+        page += 1
+        time.sleep(0.2)
+    n = con.execute("SELECT COUNT(*) FROM park").fetchone()[0]
+    print(f"[공원] 저장 {n:,}건 · 좌표 이상으로 버린 것 {bad_pt:,}건", flush=True)
+    if n:
+        big = con.execute("SELECT COUNT(*) FROM park WHERE area>=?", (PARK_MIN_AREA,)).fetchone()[0]
+        print(f"       이 중 {PARK_MIN_AREA:,.0f}㎡ 이상 {big:,}건 (실제로 쓰는 것)", flush=True)
+        for se, c in con.execute(
+                "SELECT se,COUNT(*) FROM park WHERE area>=? GROUP BY se ORDER BY 2 DESC LIMIT 8",
+                (PARK_MIN_AREA,)):
+            print(f"       {se or '(미기재)'} {c:,}", flush=True)
 
-    doms = [ok_domain] if ok_domain is not None else VW_DOMAINS
 
-    # 2) 데이터 API 2.0
-    print("── 2단계: 데이터 API 2.0 (/req/data)", flush=True)
-    hit = False
-    for d in doms:
-        for lay in VW_CANDS:
-            r = vw_get(VW_DATA, key, {"service": "data", "request": "GetFeature", "version": "2.0",
-                                      "data": lay, "geomFilter": f"BOX({VW_BOX})",
-                                      "crs": "EPSG:4326", "size": "3", "format": "json",
-                                      "geometry": "false", "attribute": "true"}, d)
-            if r is None:
-                continue
-            try:
-                j = r.json()
-            except Exception:
-                print(f"   {lay}  HTTP {r.status_code} · " + " ".join((r.text or "")[:110].split()), flush=True)
-                continue
-            resp = j.get("response") or {}
-            st = resp.get("status")
-            if st != "OK":
-                err = ((resp.get("error") or {}).get("text") or "")
-                print(f"   {lay}  status={st} {err[:70]}", flush=True)
-                continue
-            feats = (((resp.get("result") or {}).get("featureCollection") or {}).get("features")) or []
-            if not feats:
-                print(f"   {lay}  OK · 0건", flush=True)
-                continue
-            _vw_show(lay, feats)
-            hit = True
-            time.sleep(0.25)
-        if hit:
-            return
-
-    # 3) WFS 로 한 번 더
-    print("── 3단계: WFS (/req/wfs)", flush=True)
-    for d in doms:
-        for lay in VW_CANDS:
-            r = vw_get(VW_WFS, key, {"SERVICE": "WFS", "REQUEST": "GetFeature", "VERSION": "1.1.0",
-                                     "TYPENAME": lay.lower(), "BBOX": VW_BOX,
-                                     "SRSNAME": "EPSG:4326", "OUTPUT": "application/json",
-                                     "MAXFEATURES": "3"}, d)
-            if r is None:
-                continue
-            try:
-                feats = (r.json().get("features")) or []
-            except Exception:
-                print(f"   {lay}  HTTP {r.status_code} · " + " ".join((r.text or "")[:110].split()), flush=True)
-                continue
-            if not feats:
-                print(f"   {lay}  HTTP {r.status_code} · 0건", flush=True)
-                continue
-            _vw_show(lay, feats)
-            return
-    print("[공원] 어떤 방법으로도 공원 레이어를 못 받았습니다.", flush=True)
+def emit_parks(con: sqlite3.Connection) -> None:
+    """시군구별 파일. 학교와 똑같은 방식 — 그 구 단지들의 사각형을 2.5km 넓혀
+       구 경계에 붙은 단지가 옆 구 공원을 놓치지 않게 한다.
+       공원에는 시군구코드가 없고 주소 문자열뿐이라, 주소를 파싱하는 대신
+       단지 좌표로 만든 사각형으로 지리적으로 담는다."""
+    parks = con.execute(
+        "SELECT name,se,lat,lng,area FROM park WHERE area>=?", (PARK_MIN_AREA,)).fetchall()
+    parks = [p for p in parks if not any(k in (p[1] or "") for k in PARK_SKIP)]
+    if not parks:
+        print("[공원] 데이터가 없습니다 — 먼저 --parks 로 수집하세요.", flush=True)
+        return
+    pts = con.execute(
+        "SELECT c.sgg_code, e.lat, e.lng FROM complex c JOIN extra e ON e.kapt_code=c.kapt_code"
+        " WHERE e.lat IS NOT NULL AND e.lng IS NOT NULL").fetchall()
+    if not pts:
+        print("[공원] 단지 좌표가 없어 시군구를 나눠 담을 수 없습니다.", flush=True)
+        return
+    by: dict[str, list] = {}
+    for sgg, la, lo in pts:
+        by.setdefault(sgg, []).append((la, lo))
+    os.makedirs(PARK_DIR, exist_ok=True)
+    PAD_LAT = 2.5 / 111.0
+    total = 0
+    for sgg, own in by.items():
+        la = [p[0] for p in own]
+        lo = [p[1] for p in own]
+        pad_lng = 2.5 / (111.0 * max(0.2, abs(math.cos(math.radians(sum(la) / len(la))))))
+        la1, la2 = min(la) - PAD_LAT, max(la) + PAD_LAT
+        lo1, lo2 = min(lo) - pad_lng, max(lo) + pad_lng
+        out = [{"n": p[0], "se": p[1], "lat": p[2], "lng": p[3], "a": int(p[4])}
+               for p in parks if la1 <= p[2] <= la2 and lo1 <= p[3] <= lo2]
+        with open(os.path.join(PARK_DIR, f"{sgg}.json"), "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
+        total += len(out)
+    print(f"[공원] {len(by)}개 시군구 파일 · 연 {total:,}건(인접 구 포함) → {PARK_DIR}", flush=True)
 
 
 # ── 직주근접 허브 ──────────────────────────────────────────────────────────
@@ -1172,8 +1202,8 @@ def main() -> None:
     ap.add_argument("--geocode", action="store_true", help="도로명주소 지오코딩 (KAKAO_REST_KEY)")
     ap.add_argument("--schools", action="store_true", help="학교알리미 학교 목록·좌표 수집 (SCHOOLINFO_KEY)")
     ap.add_argument("--sido", nargs="*", help="--schools/--progress 대상 시도명 (비우면 전국)")
-    ap.add_argument("--parks-probe", action="store_true",
-                    help="브이월드 공원 레이어·필드 확인 (VWORLD_KEY)")
+    ap.add_argument("--parks", action="store_true",
+                    help="전국도시공원정보표준데이터 수집 → data/parks/*.json (APT_KEY)")
     ap.add_argument("--hubs", action="store_true",
                     help="직주근접 허브 좌표 수집 → data/work-hubs.json (KAKAO_REST_KEY)")
     ap.add_argument("--crowd", action="store_true",
@@ -1185,7 +1215,7 @@ def main() -> None:
                     help="공시년도 (비우면 직전 완료 연도 자동)")
     a = ap.parse_args()
 
-    if not a.key and (a.stage or a.probe):
+    if not a.key and (a.stage or a.probe or a.parks):
         sys.exit("인증키가 없습니다. --key 또는 APT_KEY 환경변수를 지정하세요.")
     a.key = clean_key(a.key)
 
@@ -1199,11 +1229,10 @@ def main() -> None:
         if not sk:
             sys.exit("SCHOOLINFO_KEY 환경변수가 없습니다.")
         fetch_schools(con, sk, a.sido)
-    if a.parks_probe:
-        vk = os.environ.get("VWORLD_KEY", "").strip()
-        if not vk:
-            sys.exit("VWORLD_KEY 환경변수가 없습니다.")
-        parks_probe(vk)
+    if a.parks:
+        if not a.key:
+            sys.exit("APT_KEY 가 없습니다 (공공데이터포털 인증키).")
+        fetch_parks(con, a.key)
     if a.hubs:
         kk = os.environ.get("KAKAO_REST_KEY", "").strip()
         if not kk:
@@ -1232,8 +1261,9 @@ def main() -> None:
     if a.emit:
         emit(con)
         emit_schools(con)
+        emit_parks(con)
     if not (a.stage or a.emit or a.import_csv or a.geocode or a.schools
-            or a.progress or a.crowd or a.hubs or a.parks_probe):
+            or a.progress or a.crowd or a.hubs or a.parks):
         ap.print_help()
 
 
