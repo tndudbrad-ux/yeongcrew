@@ -698,32 +698,71 @@ def park_point(lat: float, lng: float) -> tuple[float, float] | None:
     return None
 
 
-def fetch_parks(con: sqlite3.Connection, key: str) -> None:
+def _park_ways(key: str, raw: str) -> list:
+    """(설명, 주소, 키를 싣는 방법) 후보.
+
+    표준데이터 게이트웨이는 단지 메타가 쓰는 /1613000/ 과 문지기가 다르다.
+    같은 키라도 Decoding 형(+ / =)을 requests 가 다시 인코딩해서 넣으면
+    '등록되지 않은 서비스키'로 튕기는 사례가 있어서, 시크릿에 담긴
+    원문(보통 Encoding 형)을 손대지 않고 그대로 붙이는 방법도 같이 시도한다.
+    키 값 자체는 로그에 절대 찍지 않는다.
+    """
+    ways = []
+    for h in PARK_HOSTS:
+        host = h.split("//")[1].split("/")[0]
+        ways.append((f"{host} · 디코딩키", h, "decoded"))
+        if raw and raw != key:
+            ways.append((f"{host} · 원문키그대로", h, "raw"))
+    return ways
+
+
+def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
     """전국도시공원정보표준데이터를 페이지단위로 다 받아 park 표에 넣는다."""
     got = time.strftime("%Y-%m-%d")
-    svc = None                      # 처음 성공한 주소를 계속 쓴다
+    ways = _park_ways(key, raw)
+    good = None                     # 처음 통한 방법을 계속 쓴다
     page, total, kept, bad_pt, seen = 1, None, 0, 0, 0
 
+    def shoot(way, pg: int):
+        label, h, mode = way
+        q = {"pageNo": str(pg), "numOfRows": str(PARK_ROWS), "type": "json"}
+        if mode == "decoded":
+            return requests.get(h, params={"serviceKey": key, **q}, timeout=45)
+        # 원문을 그대로 — requests 가 %2B 를 %252B 로 다시 감싸지 않게 URL에 직접 붙인다
+        tail = "&".join(f"{k}={v}" for k, v in q.items())
+        return requests.get(f"{h}?serviceKey={raw}&{tail}", timeout=45)
+
+    def alive(rr) -> bool:
+        """뚫린 방법인지 — 인증 거부(20·30번대)면 아니다."""
+        try:
+            t = rr.text or ""
+        except Exception:
+            return False
+        return "SERVICE_KEY_IS" not in t and "SERVICE ACCESS DENIED" not in t.upper()
+
     def call(pg: int):
-        """주소 후보를 돌아가며 두 번씩 시도한다. 어느 게 열려 있는지는 해봐야 안다."""
-        nonlocal svc
-        hosts = [svc] if svc else PARK_HOSTS
+        nonlocal good
+        cands = [good] if good else ways
         last = None
-        for h in hosts:
+        for w in cands:
             for attempt in (1, 2):
                 try:
-                    rr = requests.get(h, params={
-                        "serviceKey": key, "pageNo": str(pg),
-                        "numOfRows": str(PARK_ROWS), "type": "json"}, timeout=45)
-                    svc = h
-                    return rr
+                    rr = shoot(w, pg)
                 except Exception as e:
-                    last = f"{type(e).__name__} {str(e)[:70]}"
+                    last = f"{type(e).__name__} {str(e)[:60]}"
                     if attempt == 1:
                         time.sleep(2)
-            if not svc:
-                print(f"   {h.split('//')[1].split('/')[0]} 실패: {last}", flush=True)
-        print(f"[공원] {pg}페이지 요청 실패: {last}", flush=True)
+                    continue
+                if good or alive(rr):
+                    if not good:
+                        print(f"[공원] 통한 방법: {w[0]}", flush=True)
+                    good = w
+                    return rr
+                last = " ".join((rr.text or "")[:110].split())
+                break                       # 인증 거부는 재시도해도 같다
+            if not good:
+                print(f"   ✗ {w[0]} · {last}", flush=True)
+        print(f"[공원] {pg}페이지 실패 — 어느 방법으로도 못 뚫었습니다.", flush=True)
         return None
 
     while True:
@@ -1260,7 +1299,7 @@ def main() -> None:
     if a.parks:
         if not a.key:
             sys.exit("APT_KEY 가 없습니다 (공공데이터포털 인증키).")
-        fetch_parks(con, a.key)
+        fetch_parks(con, a.key, (os.environ.get("APT_KEY", "") or "").strip())
     if a.hubs:
         kk = os.environ.get("KAKAO_REST_KEY", "").strip()
         if not kk:
