@@ -671,9 +671,12 @@ def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) ->
 #   · 단지 메타와 같은 data.go.kr 계정·키를 그대로 쓴다
 # 포털이 안내하는 주소는 api.data.go.kr 인데 액션 러너에서 연결이 안 떨어진다.
 # 단지 메타가 쓰는 apis.data.go.kr(신 게이트웨이)로도 같은 경로가 열려 있어서 둘 다 시도한다.
-PARK_HOSTS = ["https://apis.data.go.kr/openapi/tn_pubr_public_cty_park_info_api",
-              "https://api.data.go.kr/openapi/tn_pubr_public_cty_park_info_api",
-              "http://api.data.go.kr/openapi/tn_pubr_public_cty_park_info_api"]
+# 실제로 통한 건 api.data.go.kr(문서가 안내하는 주소)이다. apis.data.go.kr 은
+# 서비스는 알지만 이 키를 '등록 안 됨'으로 튕긴다 — 게이트웨이가 다르다.
+# 그래도 후보를 남겨 두는 건, 어느 쪽이 죽어도 나머지로 돌게 하려는 것.
+PARK_HOSTS = ["https://api.data.go.kr/openapi/tn_pubr_public_cty_park_info_api",
+              "http://api.data.go.kr/openapi/tn_pubr_public_cty_park_info_api",
+              "https://apis.data.go.kr/openapi/tn_pubr_public_cty_park_info_api"]
 PARK_ROWS = 1000            # 한 페이지 최대
 PARK_MIN_AREA = 10000.0     # ㎡. 도시공원법상 근린공원 최소 규모
 PARK_SKIP = ("묘지",)       # 면적은 크지만 살기 좋은 이유가 아니다
@@ -714,6 +717,17 @@ def _park_ways(key: str, raw: str) -> list:
         if raw and raw != key:
             ways.append((f"{host} · 원문키그대로", h, "raw"))
     return ways
+
+
+def _pick(it: dict, *names):
+    """응답 키의 대소문자·언더스코어 표기가 문서(LATITUDE)와 실제(latitude)가
+       다른 경우가 흔하다. 이름을 눌러서(소문자·언더스코어 제거) 찾는다."""
+    flat = {k.lower().replace("_", ""): v for k, v in it.items()}
+    for n in names:
+        v = flat.get(n.lower().replace("_", ""))
+        if v not in (None, ""):
+            return v
+    return None
 
 
 def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
@@ -795,7 +809,7 @@ def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
                       "공공데이터포털 15012890 에서 활용신청을 하면 됩니다.", flush=True)
             break
         if total is None:
-            total = int(_f(body.get("totalCount")))
+            total = int(_f(body.get("totalCount") or body.get("totalcount")))
             print(f"[공원] 전체 {total:,}건", flush=True)
         items = body.get("items")
         if isinstance(items, dict):
@@ -803,22 +817,27 @@ def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
         items = items or []
         if not items:
             break
+        if page == 1 and items:
+            # 키 이름을 짐작하지 않는다 — 첫 건의 키를 한 번 찍어 둔다.
+            print(f"   응답 키: {list(items[0].keys())[:22]}", flush=True)
         rows = []
         for it in items:
             seen += 1
-            pt = park_point(_f(it.get("LATITUDE")), _f(it.get("LONGITUDE")))
+            pt = park_point(_f(_pick(it, "LATITUDE", "lat")),
+                            _f(_pick(it, "LONGITUDE", "lot", "lng", "lon")))
             if pt is None:
                 bad_pt += 1
                 continue
-            mno = str(it.get("MANAGE_NO") or "").strip()
-            nm = str(it.get("PARK_NM") or "").strip()
+            nm = str(_pick(it, "PARK_NM", "parkNm") or "").strip()
             if not nm:
                 continue
+            mno = str(_pick(it, "MANAGE_NO", "manageNo") or "").strip()
             if not mno:
                 mno = f"{nm}@{pt[0]:.5f},{pt[1]:.5f}"
-            rows.append((mno, nm, str(it.get("PARK_SE") or "").strip(),
-                         str(it.get("RDNMADR") or it.get("LNMADR") or "").strip(),
-                         pt[0], pt[1], _f(it.get("PARK_AR")), got))
+            rows.append((mno, nm,
+                         str(_pick(it, "PARK_SE", "parkSe") or "").strip(),
+                         str(_pick(it, "RDNMADR", "LNMADR", "rdnmadr", "lnmadr") or "").strip(),
+                         pt[0], pt[1], _f(_pick(it, "PARK_AR", "parkAr")), got))
         con.executemany(
             "INSERT OR REPLACE INTO park(mno,name,se,addr,lat,lng,area,got_at)"
             " VALUES(?,?,?,?,?,?,?,?)", rows)
