@@ -740,26 +740,31 @@ def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
             return False
         return "SERVICE_KEY_IS" not in t and "SERVICE ACCESS DENIED" not in t.upper()
 
+    # data.go.kr 은 같은 IP에서 몰아치면 한동안 연결을 안 받아준다(ConnectTimeout).
+    # 같은 실행 안에서 성급하게 포기하지 말고 간격을 벌려가며 기다린다.
+    BACKOFF = [3, 8, 20, 45, 60]
+
     def call(pg: int):
         nonlocal good
         cands = [good] if good else ways
         last = None
         for w in cands:
-            for attempt in (1, 2):
+            for attempt in range(len(BACKOFF) + 1):
                 try:
                     rr = shoot(w, pg)
                 except Exception as e:
                     last = f"{type(e).__name__} {str(e)[:60]}"
-                    if attempt == 1:
-                        time.sleep(2)
+                    if attempt < len(BACKOFF):
+                        time.sleep(BACKOFF[attempt])
                     continue
                 if good or alive(rr):
                     if not good:
                         print(f"[공원] 통한 방법: {w[0]}", flush=True)
                     good = w
                     return rr
+                # 인증 거부는 기다려도 같다 — 이 방법은 접고 다음 방법으로
                 last = " ".join((rr.text or "")[:110].split())
-                break                       # 인증 거부는 재시도해도 같다
+                break
             if not good:
                 print(f"   ✗ {w[0]} · {last}", flush=True)
         print(f"[공원] {pg}페이지 실패 — 어느 방법으로도 못 뚫었습니다.", flush=True)
