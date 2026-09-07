@@ -305,15 +305,23 @@
     },
     {
       key: 'park', icon: '🌳', label: '공원',
-      desc: '가장 가까운 도시공원',
+      // 어린이공원(1,500㎡)까지 세면 도시에선 전부 통과라 아무 말도 못 한다.
+      // 데이터 자체를 1만㎡(근린공원 최소 규모) 이상으로 걸러서 싣는다.
+      desc: '걸어서 갈 수 있는 근린공원급(1만㎡ 이상)',
       ladder: [{ t: '500m 이내', m: 500 }, { t: '800m', m: 800 }, { t: '1.2km', m: 1200 }],
       needs: ['geo', 'parks'],
       test: function (c, lv, ctx) {
         var m = c.meta; if (!m || m.lat == null || !ctx.parks) return { v: 'unknown', fact: null };
         var best = null, bd = 1e12;
-        for (var i = 0; i < ctx.parks.length; i++) { var p = ctx.parks[i]; var d = haversine(m.lat, m.lng, p.lat, p.lng); if (d < bd) { bd = d; best = p; } }
+        for (var i = 0; i < ctx.parks.length; i++) {
+          var p = ctx.parks[i], d = haversine(m.lat, m.lng, p.lat, p.lng);
+          if (d < bd) { bd = d; best = p; }
+        }
         if (!best) return { v: 'unknown', fact: null };
-        return { v: bd <= this.ladder[lv].m ? 'pass' : 'fail', fact: best.nm + ' ' + Math.round(bd) + 'm' };
+        // 면적은 만㎡ 단위로. '3.2만㎡'가 '32,000㎡'보다 크기가 잡힌다.
+        var ha = best.a ? ' · ' + (best.a / 10000).toFixed(best.a >= 100000 ? 0 : 1) + '만㎡' : '';
+        return { v: bd <= this.ladder[lv].m ? 'pass' : 'fail',
+                 fact: best.n + ' ' + Math.round(bd) + 'm' + ha };
       }
     },
     {

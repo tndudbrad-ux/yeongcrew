@@ -595,13 +595,13 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
 
 <script src="/apt-budget.js?v=4"></script>
 <script src="/apt-score.js?v=2"></script>
-<script src="/apt-match.js?v=10"></script>
+<script src="/apt-match.js?v=11"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
    흐름: 지역 → 조건 → 면적 → (출퇴근지) → (자녀) → 주택수 → 현금 → 소득 → 결과
    ═══════════════════════════════════════════════════════════════════════ */
-var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},schools:{},redev:[]};
+var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},schools:{},parks:{},redev:[]};
 var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0,corp:0,loanPct:100,loadP:null};
 var $=function(id){return document.getElementById(id);};
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -684,7 +684,8 @@ function loadRegion(codes){
     return Promise.all([
       fetch('/data/listings/'+code+'.json').then(function(r){ if(!r.ok) throw new Error('listings '+code); return r.json(); }),
       fetch('/data/apt-meta/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;}),
-      fetch('/data/schools/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;})
+      fetch('/data/schools/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;}),
+      fetch('/data/parks/'+code+'.json').then(function(r){ return r.ok?r.json():null; }).catch(function(){return null;})
     ]).then(function(v){ got[code]=v; });
   })).then(function(){
     var i=0;
@@ -694,6 +695,7 @@ function loadRegion(codes){
       DATA.listings[code]=v[0].map(function(x,j){ return {id:code+'-'+j,type:x.t,name:x.n,dong:x.d,area:x.a,buildYear:x.y,floor:x.f,price:x.p,dealYm:x.m,sido:rg.sido,sgg:rg.sgg,sggCode:code}; });
       DATA.meta[code]=BoobiMatch.indexMeta(v[1], DATA.listings[code]);
       DATA.schools[code]=v[2]||null;
+      DATA.parks[code]=v[3]||null;
       got[code]=null;
       return new Promise(function(r){ setTimeout(r,0); }).then(step);
     }
@@ -706,7 +708,7 @@ function metaIndex(){ var m={}; S.codes.forEach(function(c){ var u=DATA.meta[c]|
 /* ── ② 조건 구름 ─────────────────────────────────────────────────────── */
 /* 정비사업 매칭은 단지마다 구역 전체(1,000여 개)를 훑어서 5,700단지면 1초가 넘는다.
    단지 키로 한 번만 계산해 두고, 지역 통계(평당가·거래 상위)도 지역이 바뀔 때만 다시 만든다. */
-var CACHE={redev:{}, statsKey:'', stats:null, geoKey:'', schools:[], hasGeo:false};
+var CACHE={redev:{}, statsKey:'', stats:null, geoKey:'', schools:[], parks:[], hasGeo:false};
 /* 정비사업 구역을 시군구별로 미리 묶어 두면 단지마다 전국 구역을 훑지 않아도 된다 */
 var REDEV_BY_SGG=null;
 function redevRowsFor(sgg){
@@ -727,6 +729,10 @@ function matchCtx(){
   if(CACHE.geoKey!==sk){ CACHE.geoKey=sk;
     var sc=[]; S.codes.forEach(function(c){ (DATA.schools[c]||[]).forEach(function(x){sc.push(x);}); });
     CACHE.schools=sc;
+    /* 공원은 1만㎡ 이상만 실려 있다(어린이공원·소공원은 뺐다) — '동네에 산책할 데가 있나'를
+       묻는 조건이라 놀이터 크기까지 세면 전부 통과해 버려서 아무 말도 못 하게 된다. */
+    var pk=[]; S.codes.forEach(function(c){ (DATA.parks[c]||[]).forEach(function(x){pk.push(x);}); });
+    CACHE.parks = pk.length ? pk : null;
     /* 중학교 진학 공시(pr=특목·자사 진학률, gd=졸업생 수). 기준선은 절대값이 아니라
        "이 지역 중학교 중 상위 몇 %"로 잡는다. 강남 30%와 지방 30%는 다른 숫자여야 한다. */
     var prog={}, rates=[];
@@ -742,14 +748,14 @@ function matchCtx(){
     CACHE.hasGeo = n>0 && g/n >= 0.3;    /* 좌표가 3할도 안 붙었으면 아직 못 쓴다 */
   }
   return { thisYear:new Date().getFullYear(), kids:S.kids, work:S.work, hasGeo:CACHE.hasGeo,
-           schools:CACHE.schools, progress:CACHE.progress, progressCut:CACHE.progCut,
+           schools:CACHE.schools, parks:CACHE.parks, progress:CACHE.progress, progressCut:CACHE.progCut,
            stats:CACHE.stats, redevOf:redevOfCached };
 }
 function condList(){ return Object.keys(S.conds).map(function(k){ return {key:k,level:S.conds[k]}; }); }
 /* 고르는 동안에는 아무것도 세지 않는다. 답만 기억해 두고 계산은 결과에서 한 번에 한다.
    숫자가 줄어드는 걸 보여주려고 칩마다 전체 판정을 다시 돌리던 게 이 화면을 무겁게 만들었다.
-   아직 데이터 자체가 없는 조건(공원·조용함)만 잠근다 — 이건 지역 선택과 무관한 사실이라 미리 안다. */
-var NO_DATA={park:1, quiet:1};
+   아직 데이터 자체가 없는 조건(조용함)만 잠근다 — 이건 지역 선택과 무관한 사실이라 미리 안다. */
+var NO_DATA={quiet:1};
 function buildCloud(){
   var cloud=$('cloud'); cloud.innerHTML='';
   var soon=[];
