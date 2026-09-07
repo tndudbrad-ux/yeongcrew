@@ -645,6 +645,84 @@ def fetch_schools(con: sqlite3.Connection, key: str, sidos: list[str] | None) ->
         print("   ", f)
 
 
+# ── 공원 (브이월드 WFS) ─────────────────────────────────────────────────────
+# 국토계획법상 공원·녹지는 도시계획시설 중 '공간시설'로 묶인다.
+# 레이어 코드와 속성 이름을 추측하지 않는다 — GetCapabilities 로 목록을 받아
+# 실제로 있는 레이어를 고르고, 한 건 찍어서 필드명을 확인한 뒤에 쓴다.
+VW_WFS = "https://api.vworld.kr/req/wfs"
+VW_DOMAINS = ["boobi.ai.kr", "localhost", ""]
+
+
+def vw_get(key: str, params: dict, domain: str):
+    q = dict(params); q["KEY"] = key
+    if domain:
+        q["DOMAIN"] = domain
+    try:
+        r = requests.get(VW_WFS, params=q, timeout=TIMEOUT)
+        return r
+    except Exception as e:
+        print(f"   요청 실패({domain or '도메인없음'}): {e}", flush=True)
+        return None
+
+
+def parks_probe(key: str) -> None:
+    """어느 도메인 값이 통하는지 + 공원 레이어 코드 + 속성 이름을 한 번에 확인한다."""
+    caps = None
+    for d in VW_DOMAINS:
+        r = vw_get(key, {"SERVICE": "WFS", "REQUEST": "GetCapabilities", "VERSION": "1.1.0"}, d)
+        if r is None:
+            continue
+        head = (r.text or "")[:200].replace("\n", " ")
+        ok = r.status_code == 200 and "FeatureType" in (r.text or "")
+        print(f"[공원] DOMAIN={d or '(없음)':<14} HTTP {r.status_code} · {len(r.content):,}바이트 · "
+              f"레이어목록 {'있음' if ok else '없음'}", flush=True)
+        if not ok:
+            print("       " + " ".join(head.split())[:180], flush=True)
+            continue
+        caps = (r.text, d)
+        break
+    if not caps:
+        print("[공원] GetCapabilities 를 못 받았습니다 — 키·도메인 등록을 확인하세요.", flush=True)
+        return
+
+    body, domain = caps
+    names = re.findall(r"<Name>([^<]+)</Name>", body)
+    titles = re.findall(r"<Title>([^<]+)</Title>", body)
+    print(f"[공원] 레이어 {len(names)}종 (DOMAIN={domain or '(없음)'})", flush=True)
+    pairs = list(zip(names, titles + [""] * len(names)))
+    hit = [(n, t) for n, t in pairs if ("공원" in t or "공간시설" in t or "녹지" in t
+                                        or "UPIS" in n.upper())]
+    for n, t in hit[:25]:
+        print(f"   {n:<28} {t}", flush=True)
+    if not hit:
+        print("   공원/공간시설로 보이는 레이어를 못 찾음. 앞 30개를 찍습니다:", flush=True)
+        for n, t in pairs[:30]:
+            print(f"   {n:<28} {t}", flush=True)
+        return
+
+    # 서울 강남 일대 작은 bbox 로 한 건만 받아 속성 이름을 본다
+    for n, t in hit[:4]:
+        r = vw_get(key, {"SERVICE": "WFS", "REQUEST": "GetFeature", "VERSION": "1.1.0",
+                         "TYPENAME": n, "BBOX": "127.02,37.48,127.08,37.53",
+                         "SRSNAME": "EPSG:4326", "OUTPUT": "application/json",
+                         "MAXFEATURES": "2"}, domain)
+        if r is None:
+            continue
+        try:
+            j = r.json()
+        except Exception:
+            print(f"   [{n}] JSON 아님 · HTTP {r.status_code} · "
+                  + " ".join((r.text or "")[:160].split()), flush=True)
+            continue
+        feats = j.get("features") or []
+        print(f"   [{n}] {t} → {len(feats)}건", flush=True)
+        if feats:
+            pr = feats[0].get("properties") or {}
+            for k, v in list(pr.items())[:20]:
+                print(f"       {k} = {str(v)[:40]}", flush=True)
+            print(f"       geometry.type = {(feats[0].get('geometry') or {}).get('type')}", flush=True)
+
+
 # ── 직주근접 허브 ──────────────────────────────────────────────────────────
 # '어디로 출퇴근하세요?' 화면의 기본 칩. 반도체 벨트(삼성·SK하이닉스)를 특히 촘촘히 둔다.
 # 좌표가 적힌 곳은 지역 이름이라 POI 검색이 안 맞아서 손으로 박은 값이고,
@@ -1040,6 +1118,8 @@ def main() -> None:
     ap.add_argument("--geocode", action="store_true", help="도로명주소 지오코딩 (KAKAO_REST_KEY)")
     ap.add_argument("--schools", action="store_true", help="학교알리미 학교 목록·좌표 수집 (SCHOOLINFO_KEY)")
     ap.add_argument("--sido", nargs="*", help="--schools/--progress 대상 시도명 (비우면 전국)")
+    ap.add_argument("--parks-probe", action="store_true",
+                    help="브이월드 공원 레이어·필드 확인 (VWORLD_KEY)")
     ap.add_argument("--hubs", action="store_true",
                     help="직주근접 허브 좌표 수집 → data/work-hubs.json (KAKAO_REST_KEY)")
     ap.add_argument("--crowd", action="store_true",
@@ -1065,6 +1145,11 @@ def main() -> None:
         if not sk:
             sys.exit("SCHOOLINFO_KEY 환경변수가 없습니다.")
         fetch_schools(con, sk, a.sido)
+    if a.parks_probe:
+        vk = os.environ.get("VWORLD_KEY", "").strip()
+        if not vk:
+            sys.exit("VWORLD_KEY 환경변수가 없습니다.")
+        parks_probe(vk)
     if a.hubs:
         kk = os.environ.get("KAKAO_REST_KEY", "").strip()
         if not kk:
@@ -1094,7 +1179,7 @@ def main() -> None:
         emit(con)
         emit_schools(con)
     if not (a.stage or a.emit or a.import_csv or a.geocode or a.schools
-            or a.progress or a.crowd or a.hubs):
+            or a.progress or a.crowd or a.hubs or a.parks_probe):
         ap.print_help()
 
 
