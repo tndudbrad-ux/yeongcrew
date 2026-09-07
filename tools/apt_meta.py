@@ -261,6 +261,14 @@ CREATE TABLE IF NOT EXISTS park (
   area      REAL,               -- ㎡
   got_at    TEXT
 );
+-- 공원 API 는 깃허브 러너에서 연결이 자주 끊긴다(ConnectTimeout).
+-- 한 번에 다 못 받아도 받은 페이지는 남겨서, 다음 실행이 이어받게 한다.
+CREATE TABLE IF NOT EXISTS park_page (
+  page      INTEGER PRIMARY KEY,
+  n         INTEGER,
+  got_at    TEXT
+);
+CREATE TABLE IF NOT EXISTS park_meta (k TEXT PRIMARY KEY, v TEXT);
 CREATE TABLE IF NOT EXISTS extra (
   kapt_code   TEXT PRIMARY KEY,
   fac         TEXT,             -- 부대복리시설 코드(쉼표): comm,pub,play,senior,care,kinder,lib,rest,bike
@@ -744,7 +752,7 @@ def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
             return requests.get(h, params={"serviceKey": key, **q}, timeout=45)
         # 원문을 그대로 — requests 가 %2B 를 %252B 로 다시 감싸지 않게 URL에 직접 붙인다
         tail = "&".join(f"{k}={v}" for k, v in q.items())
-        return requests.get(f"{h}?serviceKey={raw}&{tail}", timeout=45)
+        return requests.get(f"{h}?serviceKey={raw}&{tail}", timeout=30)
 
     def alive(rr) -> bool:
         """뚫린 방법인지 — 인증 거부(20·30번대)면 아니다."""
@@ -756,7 +764,7 @@ def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
 
     # data.go.kr 은 같은 IP에서 몰아치면 한동안 연결을 안 받아준다(ConnectTimeout).
     # 같은 실행 안에서 성급하게 포기하지 말고 간격을 벌려가며 기다린다.
-    BACKOFF = [3, 8, 20, 45, 60]
+    BACKOFF = [3, 10, 30]
 
     def call(pg: int):
         nonlocal good
@@ -784,10 +792,34 @@ def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
         print(f"[공원] {pg}페이지 실패 — 어느 방법으로도 못 뚫었습니다.", flush=True)
         return None
 
-    while True:
+    done = {r[0] for r in con.execute("SELECT page FROM park_page")}
+    known = con.execute("SELECT v FROM park_meta WHERE k='total'").fetchone()
+    total = int(known[0]) if known else None
+    if total:
+        pages = math.ceil(total / PARK_ROWS)
+        todo = [p for p in range(1, pages + 1) if p not in done]
+        print(f"[공원] 전체 {total:,}건 · {pages}페이지 중 {len(todo)}페이지 남음", flush=True)
+    else:
+        todo = None                     # 총건수를 모르면 1페이지부터 훑는다
+    page = (todo[0] if todo else 1) if todo is not None else 1
+    if todo is not None and not todo:
+        print("[공원] 이미 다 받았습니다.", flush=True)
+
+    miss, shown = 0, False
+    while (todo is None) or todo:
+        if todo is not None:
+            page = todo.pop(0)
         r = call(page)
         if r is None:
-            break
+            miss += 1
+            # 한 페이지 막혔다고 접지 않는다 — 연결이 살아날 수도 있다.
+            if miss >= 3:
+                print("[공원] 연속 3페이지 실패 — 여기까지 저장하고 다음 실행에 이어받습니다.", flush=True)
+                break
+            if todo is None:
+                break
+            continue
+        miss = 0
         try:
             j = r.json()
         except Exception:
@@ -810,16 +842,21 @@ def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
             break
         if total is None:
             total = int(_f(body.get("totalCount") or body.get("totalcount")))
-            print(f"[공원] 전체 {total:,}건", flush=True)
+            con.execute("INSERT OR REPLACE INTO park_meta(k,v) VALUES('total',?)", (str(total),))
+            con.commit()
+            pages = math.ceil(total / PARK_ROWS) if total else 1
+            todo = [p for p in range(2, pages + 1) if p not in done]
+            print(f"[공원] 전체 {total:,}건 · {pages}페이지", flush=True)
         items = body.get("items")
         if isinstance(items, dict):
             items = items.get("item") or []
         items = items or []
         if not items:
             break
-        if page == 1 and items:
-            # 키 이름을 짐작하지 않는다 — 첫 건의 키를 한 번 찍어 둔다.
+        if items and not shown:
+            # 키 이름을 짐작하지 않는다 — 처음 받은 건의 키를 한 번 찍어 둔다.
             print(f"   응답 키: {list(items[0].keys())[:22]}", flush=True)
+            shown = True
         rows = []
         for it in items:
             seen += 1
@@ -841,14 +878,15 @@ def fetch_parks(con: sqlite3.Connection, key: str, raw: str = "") -> None:
         con.executemany(
             "INSERT OR REPLACE INTO park(mno,name,se,addr,lat,lng,area,got_at)"
             " VALUES(?,?,?,?,?,?,?,?)", rows)
+        con.execute("INSERT OR REPLACE INTO park_page(page,n,got_at) VALUES(?,?,?)",
+                    (page, len(rows), got))
         con.commit()
         kept += len(rows)
         print(f"   {page}페이지 · {len(items)}건 받아 {len(rows)}건 저장 (누적 {kept:,})", flush=True)
-        if total and seen >= total:
+        if len(items) < PARK_ROWS and todo is None:
             break
-        if len(items) < PARK_ROWS:
-            break
-        page += 1
+        if todo is None:
+            page += 1
         time.sleep(0.2)
     n = con.execute("SELECT COUNT(*) FROM park").fetchone()[0]
     print(f"[공원] 저장 {n:,}건 · 좌표 이상으로 버린 것 {bad_pt:,}건", flush=True)
