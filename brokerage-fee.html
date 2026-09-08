@@ -25,8 +25,9 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://boobi.ai.kr/og-boobi.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "부동산 중개보수(복비) 계산법과 협상 팁", "description": "매매·전세·월세별 중개보수 상한요율과 계산 방법, 월세 환산보증금 계산식, 중개보수 절약과 협상을 위한 실전 팁을 정리했습니다.", "datePublished": "2026-07-05", "dateModified": "2026-08-30", "author": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr/"}, "publisher": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr/", "logo": {"@type": "ImageObject", "url": "https://boobi.ai.kr/icon-512.png"}}, "mainEntityOfPage": "https://boobi.ai.kr/brokerage-fee.html", "image": "https://boobi.ai.kr/og-boobi.png", "inLanguage": "ko-KR"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "복비(중개보수) 얼마 내야 하나", "description": "거래금액을 넣으면 법정 상한 중개보수를 바로 계산해 주는 복비 계산기와, 매매·전세·월세 상한요율·환산보증금 공식 정리.", "datePublished": "2026-07-05", "dateModified": "2026-08-30", "author": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr/"}, "publisher": {"@type": "Organization", "name": "부비", "url": "https://boobi.ai.kr/", "logo": {"@type": "ImageObject", "url": "https://boobi.ai.kr/icon-512.png"}}, "mainEntityOfPage": "https://boobi.ai.kr/brokerage-fee.html", "image": "https://boobi.ai.kr/og-boobi.png", "inLanguage": "ko-KR"}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://boobi.ai.kr/"}, {"@type": "ListItem", "position": 2, "name": "칼럼", "item": "https://boobi.ai.kr/column.html"}, {"@type": "ListItem", "position": 3, "name": "부동산 중개보수(복비) 계산법과 협상 팁", "item": "https://boobi.ai.kr/brokerage-fee.html"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "복비(중개보수) 계산기", "url": "https://boobi.ai.kr/brokerage-fee.html", "description": "매매·전세·월세 거래금액을 넣으면 법정 상한 중개보수를 계산해 주는 무료 복비 계산기", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "KRW"}, "provider": {"@type": "Organization", "name": "\ubd80\ube44", "url": "https://boobi.ai.kr"}}</script>
 </head>
 <body>
 <header class="site-header">
@@ -47,6 +48,145 @@
 <p class="breadcrumb"><a href="index.html">홈</a> › 내집마련 가이드</p>
 <h1>복비(중개보수) 얼마 내야 하나</h1>
 <p class="meta">2026-07-05 · 내집마련 가이드</p>
+
+<style>
+.bfc{margin:22px 0 30px;padding:26px 26px 22px;border-radius:22px;
+ background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));
+ border:1.5px solid rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#0D2A29}
+.bfc h2{font-size:1.16rem;font-weight:800;letter-spacing:-.025em;margin:0 0 4px;padding:0;color:#0D2A29;word-break:keep-all}
+.bfc h2::before{display:none}
+.bfc .bfcLead{font-size:.88rem;color:#547471;margin:0 0 4px;word-break:keep-all}
+.bfc label.bfcL{display:block;font-size:.85rem;font-weight:700;margin:16px 0 7px;color:#0D2A29}
+.bfc input[type=number]{width:100%;padding:12px 14px;border:1.5px solid #DCEEEC;border-radius:12px;font-size:1rem;background:#fff;color:#0D2A29;font-family:inherit;-moz-appearance:textfield}
+.bfc input[type=number]::-webkit-outer-spin-button,.bfc input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.bfc input[type=number]:focus{outline:none;border-color:#3D8BFD;box-shadow:0 0 0 3px rgba(61,139,253,.15)}
+.bfcSeg{display:flex;gap:8px;flex-wrap:wrap}
+.bfcSeg button{flex:1 1 90px;padding:11px 8px;border:1.5px solid #DCEEEC;background:#fff;border-radius:12px;font-size:.87rem;cursor:pointer;color:#547471;font-family:inherit;transition:.15s;white-space:nowrap}
+.bfcSeg button.on{border-color:#3D8BFD;background:#EAF3FE;color:#2A6FD8;font-weight:800;box-shadow:0 0 10px rgba(61,139,253,.16)}
+.bfcRow2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bfcChk{display:flex;align-items:center;gap:8px;font-size:.86rem;color:#547471;margin:16px 0 0;cursor:pointer}
+.bfcChk input{width:17px;height:17px;accent-color:#3D8BFD}
+.bfcGo{width:100%;margin-top:18px;padding:15px;border:none;border-radius:999px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit;box-shadow:0 8px 20px rgba(61,139,253,.28);transition:.15s;white-space:nowrap}
+.bfcGo:hover{transform:translateY(-1px)}
+.bfcRes{margin-top:18px;background:#fff;border:1.5px solid #DCEEEC;border-radius:16px;padding:20px}
+.bfcRes .bfcCap{font-size:.85rem;color:#547471}
+.bfcRes .bfcBig{font-size:1.72rem;font-weight:800;letter-spacing:-.03em;margin:2px 0 2px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bfcRes .bfcSub{font-size:.85rem;color:#547471}
+.bfcRes table{width:100%;border-collapse:collapse;margin:14px 0 0;font-size:.88rem}
+.bfcRes td{padding:9px 2px;border-bottom:1px solid #EDF3F2;text-align:right;color:#0D2A29}
+.bfcRes td:first-child{text-align:left;color:#547471}
+.bfcRes tr:last-child td{border-bottom:none;font-weight:800}
+.bfcFlag{display:inline-block;margin-top:10px;padding:5px 11px;border-radius:999px;background:#EAF3FE;color:#2A6FD8;font-size:.78rem;font-weight:700}
+.bfc .bfcNote{font-size:.79rem;color:#8AA5A2;margin:14px 0 0;line-height:1.6;word-break:keep-all}
+@media(max-width:620px){.bfc{padding:22px 18px 18px}.bfcRow2{grid-template-columns:1fr}}
+</style>
+<section class="bfc" id="bfCalc">
+<h2>복비 계산기</h2>
+<p class="bfcLead">금액만 넣으면 법정 상한 중개보수가 바로 나옵니다.</p>
+
+<label class="bfcL">거래 유형</label>
+<div class="bfcSeg" id="bfType">
+<button type="button" data-v="sale" class="on">매매·교환</button>
+<button type="button" data-v="jeonse">전세</button>
+<button type="button" data-v="wolse">월세</button>
+</div>
+
+<label class="bfcL">물건 종류</label>
+<div class="bfcSeg" id="bfKind">
+<button type="button" data-v="house" class="on">주택·아파트</button>
+<button type="button" data-v="offi">주거용 오피스텔</button>
+<button type="button" data-v="etc">상가·토지 등</button>
+</div>
+
+<div id="bfBoxSale">
+<label class="bfcL" for="bfPrice">거래금액 (만원)</label>
+<input id="bfPrice" type="number" inputmode="numeric" placeholder="예: 80000 → 8억원">
+</div>
+<div id="bfBoxJeonse" style="display:none">
+<label class="bfcL" for="bfDep">보증금 (만원)</label>
+<input id="bfDep" type="number" inputmode="numeric" placeholder="예: 30000 → 3억원">
+</div>
+<div id="bfBoxWolse" style="display:none">
+<div class="bfcRow2">
+<div><label class="bfcL" for="bfDep2">보증금 (만원)</label><input id="bfDep2" type="number" inputmode="numeric" placeholder="예: 1000"></div>
+<div><label class="bfcL" for="bfMon">월세 (만원)</label><input id="bfMon" type="number" inputmode="numeric" placeholder="예: 50"></div>
+</div>
+</div>
+
+<label class="bfcChk"><input type="checkbox" id="bfVat"> 부가세 10% 별도로 청구받는 경우</label>
+
+<button type="button" class="bfcGo" id="bfGo">중개보수 계산하기</button>
+<div class="bfcRes" id="bfRes" style="display:none"></div>
+<p class="bfcNote">상한요율 기준입니다. 실제 보수는 상한 이내에서 협의로 정하고, 시·도 조례에 따라 달라질 수 있습니다. 위 금액은 <b>한쪽(매수인 또는 임차인)이 내는 금액</b>이며, 상대방도 같은 금액을 각자 부담합니다.</p>
+</section>
+<script>
+(function(){
+  var W=10000;
+  function won(n){return Math.floor(n).toLocaleString('ko-KR');}
+  function num(id){var v=parseFloat(document.getElementById(id).value);return isFinite(v)&&v>0?v:0;}
+  function segVal(id){var b=document.querySelector('#'+id+' button.on');return b?b.dataset.v:'';}
+  document.querySelectorAll('#bfType,#bfKind').forEach(function(seg){
+    seg.addEventListener('click',function(e){
+      var b=e.target.closest('button');if(!b||!seg.contains(b))return;
+      seg.querySelectorAll('button').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      if(seg.id==='bfType'){
+        var v=b.dataset.v;
+        document.getElementById('bfBoxSale').style.display   = v==='sale'  ?'block':'none';
+        document.getElementById('bfBoxJeonse').style.display = v==='jeonse'?'block':'none';
+        document.getElementById('bfBoxWolse').style.display  = v==='wolse' ?'block':'none';
+      }
+      document.getElementById('bfRes').style.display='none';
+    });
+  });
+  var SALE=[[50000000,.006,250000,'5천만원 미만'],[200000000,.005,800000,'5천만~2억원'],[900000000,.004,0,'2억~9억원'],[1200000000,.005,0,'9억~12억원'],[1500000000,.006,0,'12억~15억원'],[Infinity,.007,0,'15억원 이상']];
+  var RENT=[[50000000,.005,200000,'5천만원 미만'],[100000000,.004,300000,'5천만~1억원'],[600000000,.003,0,'1억~6억원'],[1200000000,.004,0,'6억~12억원'],[1500000000,.005,0,'12억~15억원'],[Infinity,.006,0,'15억원 이상']];
+  function band(base,isSale){
+    var t=isSale?SALE:RENT;
+    for(var i=0;i<t.length;i++){ if(base<t[i][0]) return t[i]; }
+    return t[t.length-1];
+  }
+  document.getElementById('bfGo').addEventListener('click',function(){
+    var type=segVal('bfType'), kind=segVal('bfKind'), isSale=(type==='sale');
+    var base=0, baseLabel='거래금액', conv='';
+    if(type==='sale'){ base=num('bfPrice')*W; }
+    else if(type==='jeonse'){ base=num('bfDep')*W; baseLabel='보증금'; }
+    else{
+      var d=num('bfDep2')*W, m=num('bfMon')*W;
+      if(!m){ alert('월세를 입력해 주세요.'); return; }
+      base=d+m*100;
+      conv='보증금 + 월세×100';
+      if(base<50000000){ base=d+m*70; conv='보증금 + 월세×70 (환산액이 5천만원 미만이라 재계산)'; }
+      baseLabel='환산보증금';
+    }
+    if(!base){ alert('금액을 입력해 주세요.'); return; }
+
+    var rate, cap=0, fee, bandName, capped=false;
+    if(kind==='etc'){ rate=.009; fee=base*rate; bandName='상가·토지·업무용 (0.9% 이내 협의)'; }
+    else if(kind==='offi'){ rate=isSale?.005:.004; fee=base*rate; bandName='주거용 오피스텔 (전용 85㎡ 이하)'; }
+    else{ var b=band(base,isSale); rate=b[1]; cap=b[2]; bandName=b[3]; fee=base*rate; if(cap&&fee>cap){fee=cap;capped=true;} }
+
+    var vat=document.getElementById('bfVat').checked, total=vat?fee*1.1:fee;
+    var rows='<tr><td>'+baseLabel+'</td><td>'+won(base)+'원</td></tr>';
+    if(conv) rows+='<tr><td>환산 방식</td><td>'+conv+'</td></tr>';
+    rows+='<tr><td>적용 구간</td><td>'+bandName+'</td></tr>';
+    rows+='<tr><td>상한 요율</td><td>'+(rate*100).toFixed(1)+'%</td></tr>';
+    if(cap) rows+='<tr><td>구간 한도액</td><td>'+won(cap)+'원'+(capped?' (적용됨)':'')+'</td></tr>';
+    rows+='<tr><td>중개보수</td><td>'+won(fee)+'원</td></tr>';
+    if(vat) rows+='<tr><td>부가세 10%</td><td>'+won(total-fee)+'원</td></tr>';
+    rows+='<tr><td>내가 낼 금액</td><td>'+won(total)+'원</td></tr>';
+
+    var el=document.getElementById('bfRes');
+    el.innerHTML='<div class="bfcCap">상한 기준 중개보수</div>'
+      +'<div class="bfcBig">'+won(total)+'원</div>'
+      +'<div class="bfcSub">'+(vat?'부가세 포함':'부가세 별도')+' · 한쪽이 부담하는 금액</div>'
+      +(capped?'<div class="bfcFlag">구간 한도액이 적용돼 요율 계산값보다 낮습니다</div>':'')
+      +(kind==='etc'?'<div class="bfcFlag">법정 상한 없이 0.9% 이내에서 협의로 정합니다</div>':'')
+      +'<table>'+rows+'</table>';
+    el.style.display='block';
+  });
+})();
+</script>
 
 <p>중개보수(흔히 '복비')는 법으로 상한요율이 정해져 있습니다. 상한요율은 '최대 이만큼까지 받을 수 있다'는 뜻이지 고정 요금이 아니므로, 구조를 알면 협상의 여지가 있습니다.</p>
 <h2>중개보수의 기본 구조</h2>
