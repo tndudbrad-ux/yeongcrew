@@ -108,7 +108,10 @@ function wall(opt) {
   opt = opt || {};
   var n = opt.count || 0;
   var unit = opt.unit || '개';
-  var title = opt.title || (n ? '나머지 ' + n + unit + '는 프리미엄에서 볼 수 있어요' : '전체 결과는 프리미엄에서 볼 수 있어요');
+  /* '12곳는' 처럼 안 되게 받침을 보고 조사를 고른다 (곳→은, 개→는) */
+  var last = unit.charCodeAt(unit.length - 1);
+  var josa = (last >= 0xAC00 && last <= 0xD7A3 && (last - 0xAC00) % 28) ? '은' : '는';
+  var title = opt.title || (n ? '나머지 ' + n + unit + josa + ' 프리미엄에서 볼 수 있어요' : '전체 결과는 프리미엄에서 볼 수 있어요');
   var desc = opt.desc || '한 번 결제하면 아파트 찾기 전체 목록은 물론<br>부비의 모든 유료 기능이 계속 열려요.';
   var priceLine = PRICE ? '<div class="bbwPrice">'
     + (LIST > PRICE ? '<span class="was">' + won(LIST) + '</span>' : '')
