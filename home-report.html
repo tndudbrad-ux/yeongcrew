@@ -78,6 +78,21 @@ button.go:hover{transform:translateY(-1px)}
 .todo h3{font-size:1.05rem;font-weight:600;margin-bottom:10px}
 .todo a.act{display:block;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;margin-bottom:8px;font-size:.92rem;transition:.15s}
 .todo a.act:hover{border-color:var(--mint);background:#F3FCFB}
+.flag.bad{background:#FEF2F2;border:1px solid #FCA5A5;color:#B1281B}
+.dgDrop{border:1.5px dashed #BFE0DD;border-radius:14px;background:#F7FDFC;padding:18px 16px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+.dgDrop:hover{border-color:var(--mint);background:#F1FBFA}
+.dgDrop.on{border-style:solid;border-color:var(--mint);background:#EAFAF8}
+.dgDrop b{display:block;font-size:.95rem;font-weight:700;color:#0D2A29;margin-bottom:5px}
+.dgDrop span{display:block;font-size:.79rem;color:#8AA5A2;line-height:1.55;word-break:keep-all}
+.dgDrop:focus-visible{outline:2px solid #3D8BFD;outline-offset:2px}
+.dgStat{font-size:.84rem;margin-top:8px;line-height:1.6;word-break:keep-all;color:#547471}
+.dgStat.ok{color:#1B6B66}
+.dgStat.err{color:#C0342E}
+.rlist .ri{padding:10px 12px;border-radius:10px;margin-top:8px;font-size:.86rem;line-height:1.6}
+.rlist .ri b{display:block;margin-bottom:3px}
+.rlist .ri.high{background:#FEF2F2;border:1px solid #FCA5A5;color:#B1281B}
+.rlist .ri.mid{background:#FFF7ED;border:1px solid #FED7AA;color:#9A5B12}
+.rlist .ri.info{background:#F0F6FF;border:1px solid #CBDDFB;color:#2F6BC4}
 .todo a.act b{color:var(--teal)}
 .note{font-size:.82rem;color:var(--sub);margin-top:8px;font-weight:300}
 .compare{background:#F3FCFB;border:1px dashed #9FD9D5;border-radius:14px;padding:16px 18px;margin-top:22px;font-size:.9rem;line-height:1.7}
@@ -89,6 +104,8 @@ footer a{color:#B9DCD9;margin:0 8px}
 </style>
 <link rel="stylesheet" href="/hwon-ui.css?v=3">
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="/boobi-deunggi.js?v=1" defer></script>
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -106,7 +123,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 <div class="crumb"><a href="/">홈</a> › 집 종합 리포트</div>
 <div class="hero-t">
 <h1>🏠 집 종합 리포트</h1>
-<p>주소와 금액만 넣으면, 이 집의 <b>세금·리스크</b>를 한 장으로. 사도 될지 <b>신호등</b>으로 결론까지 알려드려요.</p>
+<p>주소와 금액을 넣고 <b>등기부등본</b>을 올리면, 이 집의 <b>세금과 권리관계 위험</b>을 한 장으로. 사도 될지 <b>신호등</b>으로 결론까지 알려드려요.</p>
 </div>
 
 <div class="tool-box">
@@ -135,6 +152,14 @@ footer a{color:#B9DCD9;margin:0 8px}
 <label class="f">이 집 시세 / 매매가 (만원) <span style="font-weight:400;color:var(--sub)">— 전세가율 계산용 (모르면 비워두세요)</span></label>
 <input class="f" id="mkt" type="number" placeholder="예: 25000 (2.5억)">
 </div>
+
+<label class="f">등기부등본 (PDF) <span style="font-weight:400;color:var(--sub)">— 올리면 위험등기까지 확인해드려요 (선택)</span></label>
+<div class="dgDrop" id="dgDrop" role="button" tabindex="0" aria-label="등기부등본 PDF 올리기">
+<input type="file" id="dgFile" accept="application/pdf,.pdf" hidden>
+<b>📄 등기부등본 PDF 올리기</b>
+<span><a href="http://www.iros.go.kr" target="_blank" rel="noopener" style="color:#3D8BFD;font-weight:600">인터넷등기소</a>에서 700원에 뗄 수 있어요 · 파일은 브라우저 안에서만 읽고 <b>서버로 보내지 않아요</b></span>
+</div>
+<div class="dgStat" id="dgStat"></div>
 
 <button class="go" onclick="makeReport()">부비 리포트 받기</button>
 </div>
@@ -256,6 +281,61 @@ function estPropertyTax(gongsiMan){
   return base+urban+edu;
 }
 function lamp(x){return x==='g'?'🟢':x==='y'?'🟡':'🔴';}
+
+/* ── 등기부등본 PDF 판독 ────────────────────────────────
+   파일은 브라우저 밖으로 나가지 않는다 (pdf.js가 로컬에서 텍스트만 뽑음). */
+var DG=null;   /* {a:분석결과, name:파일명} */
+(function(){
+  var drop=document.getElementById('dgDrop'), inp=document.getElementById('dgFile'), st=document.getElementById('dgStat');
+  if(!drop||!inp) return;
+  function say(cls,msg){ st.className='dgStat '+(cls||''); st.innerHTML=msg; }
+  drop.addEventListener('click',function(){ inp.click(); });
+  drop.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); inp.click(); } });
+  drop.addEventListener('dragover',function(e){ e.preventDefault(); drop.classList.add('on'); });
+  drop.addEventListener('dragleave',function(){ if(!DG) drop.classList.remove('on'); });
+  drop.addEventListener('drop',function(e){ e.preventDefault(); if(e.dataTransfer.files[0]) load(e.dataTransfer.files[0]); });
+  inp.addEventListener('change',function(){ if(inp.files[0]) load(inp.files[0]); });
+
+  function load(f){
+    DG=null; drop.classList.remove('on');
+    if(!/\.pdf$/i.test(f.name) && f.type!=='application/pdf'){ say('err','PDF 파일만 읽을 수 있어요.'); return; }
+    if(!window.bbDeunggi){ say('err','판독기를 불러오지 못했어요. 새로고침 후 다시 시도해주세요.'); return; }
+    say('','📄 '+f.name.replace(/[<>]/g,'')+' 읽는 중…');
+    bbDeunggi.extract(f).then(function(text){
+      var a=bbDeunggi.analyze(text);
+      if(!a.valid){
+        say('err','등기부 내용을 읽지 못했어요. 인터넷등기소에서 받은 <b>PDF 원본</b>인지 확인해주세요 — 사진이나 스캔 이미지는 글자를 읽을 수 없어요.');
+        return;
+      }
+      DG={a:a,name:f.name};
+      drop.classList.add('on');
+      say('ok','✅ 등기부를 읽었어요 — 위험등기 '+(a.flags.length?('<b>'+a.flags.length+'건</b>'):'없음')
+        +(a.mortCnt?(' · 근저당 '+a.mortCnt+'건'):'')+'. 아래 버튼을 눌러 리포트를 받으세요.');
+    }).catch(function(e){
+      say('err','파일을 읽지 못했어요 ('+((e&&e.message)||e)+')');
+    });
+  }
+})();
+
+/* 위험등기 목록 카드 */
+function dgFlagsHTML(a){
+  if(!a.flags.length){
+    return '<div class="flag ok">신탁·압류·가압류·가처분·경매개시·임차권등기·가등기 키워드가 발견되지 않았어요.'
+      +(a.hasMalso?'':' <b>말소사항 포함</b>으로 다시 떼어 재확인을 권해요.')+'</div>';
+  }
+  return '<div class="rlist">'+a.flags.map(function(f){
+    return '<div class="ri '+f[0]+'"><b>'+f[1]+'</b>'+f[2]+'</div>';
+  }).join('')+'</div>';
+}
+/* 등기부를 안 올렸을 때 — 무엇을 못 봤는지 분명히 말한다 */
+function dgMissingHTML(kind){
+  var basis = kind==='buy' ? '세금(취득세·보유세)만 보고' : '보증금과 시세 비율만 보고';
+  return '<div class="rcard"><h3>📄 권리관계 (등기부) — 아직 확인 못 했어요</h3>'
+    +'<div class="flag warn">등기부등본을 안 올리셔서 <b>근저당·신탁·압류·가압류·경매개시 같은 권리관계는 보지 못했어요.</b> '
+    +'위 신호등은 '+basis+' 낸 결론이라, 이 집의 진짜 위험은 아직 판정되지 않은 상태예요.<br><br>'
+    +'<a href="http://www.iros.go.kr" target="_blank" rel="noopener" style="color:#3D8BFD;font-weight:700">인터넷등기소</a>에서 <b>700원</b>에 떼서 올리면 함께 판정해드려요. '
+    +'발급할 때 <b>말소사항 포함</b>으로 받으시면 더 정확해요.</div></div>';
+}
 function makeReport(){
   var d=segVal('deal'); var el=document.getElementById('rep'); el.classList.add('show');
   var addr=document.getElementById('addr').value || '입력한 주소';
@@ -289,11 +369,46 @@ function makeReport(){
       +'<table><tr><td>연 재산세 (추정)</td><td>약 '+won(propTax)+'</td></tr>'
       +'<tr><td>종부세</td><td>'+(jongbu?'대상 가능 ⚠️':'해당 없음(공시 12억 이하)')+'</td></tr></table>';
 
+    /* ── 권리관계(등기부) — 세금보다 먼저 사람을 다치게 하는 쪽이라 신호등을 덮어쓴다 ── */
+    var dgCard='';
+    if(DG){
+      var A=DG.a, lv=bbDeunggi.level(A), mort=A.mortMan;
+      if(lv==='high'){ sig='r'; verdict='계약 전에 반드시 풀어야 할 등기가 있어요'; }
+      else if(lv==='mid' && sig!=='r'){ sig='y'; verdict='살 수 있지만 — 등기부에 확인할 게 있어요'; }
+      else if(lv==='none' && sig==='g'){ verdict='살 만해요 — 세금·등기부 모두 특이사항 없어요'; }
+
+      var mortBox='';
+      if(mort>0){
+        var mr=Math.round(mort/price*100);
+        mortBox='<table><tr><td>근저당 '+A.mortCnt+'건 · 채권최고액 합계</td><td>'+won(mort)+'</td></tr>'
+          +'<tr><td>매매가 대비</td><td>'+mr+'%</td></tr></table>';
+        if(mort>=price){
+          sig='r'; verdict='위험 — 잡힌 빚이 집값보다 커요';
+          mortBox+='<div class="flag bad">채권최고액이 <b>매매가를 넘습니다.</b> 잔금으로 대출을 다 갚고 근저당을 말소하지 못할 수 있어요. 계약 전에 <b>실제 대출 잔액</b>과 말소 계획을 반드시 확인하세요.</div>';
+        } else if(mort>=price*0.8){
+          if(sig!=='r'){ sig='y'; verdict='살 수 있지만 — 근저당이 많아요'; }
+          mortBox+='<div class="flag warn">채권최고액이 매매가의 <b>80%를 넘어요.</b> 잔금일에 전액 상환·말소되는지 확인하고, 계약서 특약에 명시하세요.</div>';
+        } else {
+          mortBox+='<div class="flag ok">근저당은 매도인의 대출이에요. <b>잔금일에 상환하고 말소</b>하는 조건을 특약에 넣으면 됩니다. (채권최고액은 실제 대출액의 통상 110~130%로 잡혀요)</div>';
+        }
+      } else {
+        mortBox='<div class="flag ok">채권최고액 기재가 없어요. 대출이 잡히지 않은 집일 가능성이 높아요.</div>';
+      }
+      if(A.own.joint) mortBox+='<div class="flag warn">👥 <b>공동소유</b>로 보여요. 계약할 때 <b>공유자 전원</b>의 동의와 서명이 필요해요.</div>';
+      dgCard='<div class="rcard"><h3>📄 권리관계 (등기부)</h3>'+mortBox+dgFlagsHTML(A)
+        +'<div class="note" style="margin-top:10px">'+String(DG.name).replace(/[<>&"]/g,'')+' 판독 결과예요. 말소사항이 포함된 발급본에서는 이미 해소된 권리가 잡힐 수 있어요 — 최종 확인은 등기부 원문으로 하세요.</div></div>';
+    }
+
     html+='<div class="signal '+sig+'"><div class="lamp">'+lamp(sig)+'</div><div class="verdict">'+verdict+'</div><div class="sub">'+addr+'</div></div>';
+    html+=dgCard||dgMissingHTML('buy');
     html+='<div class="rcard"><h3>🧾 살 때 세금 (취득세)</h3>'+acqBox+'</div>';
     html+='<div class="rcard"><h3>🏠 가지고 있을 때 (보유세)</h3>'+holdBox+'</div>';
     if(flags.length){ html+='<div class="rcard"><h3>⚠️ 체크 포인트</h3>'+flags.map(function(f){return '<div class="flag warn">'+f+'</div>';}).join('')+'</div>'; }
     html+='<div class="todo"><h3>✅ 지금 할 일</h3>'
+      +((DG && bbDeunggi.level(DG.a)==='high')
+        ? '<a class="act" href="/experts.html" style="border-color:#FCA5A5;background:#FEF2F2">▪ <b>먼저 이 등기부터 확인하세요</b> — 잔금 전 말소가 가능한지, 계약해도 되는지 전문가에게 →</a>'
+        : '')
+      +(DG?'':'<a class="act" href="http://www.iros.go.kr" target="_blank" rel="noopener">▪ <b>등기부등본 떼기</b> — 700원, 올리면 권리관계까지 판정 →</a>')
       +'<a class="act" href="/acquisition-tax.html">▪ <b>취득세 정밀 계산</b> — 다주택·조정지역까지 정확히 →</a>'
       +'<a class="act" href="/capital-gains-tax.html">▪ <b>나중에 팔 때 양도세</b> 미리 보기 →</a>'
       +'<a class="act" href="/loan-calculator.html">▪ <b>대출·DSR</b>로 자금 계획 세우기 →</a>'
@@ -304,22 +419,54 @@ function makeReport(){
     var dep=+document.getElementById('deposit').value;
     if(!dep){alert('보증금을 입력해주세요');return;}
     var mkt=+document.getElementById('mkt').value;
-    var sig, verdict, ratioTxt='';
+    var A=DG?DG.a:null;
+    var senior=A?A.mortMan:0;          /* 선순위 근저당 채권최고액 (만원) */
+    var sig, verdict, ratioTxt='', ratioCls='warn';
+
+    /* 등기부가 있으면 '전세가율'이 아니라 (선순위 빚 + 내 보증금) ÷ 시세 로 본다.
+       진짜 위험은 내 보증금 크기가 아니라 내 앞에 얼마가 잡혀 있느냐다. */
     if(mkt>0){
-      var ratio=Math.round(dep/mkt*100);
-      ratioTxt='전세가율 <b>'+ratio+'%</b> (보증금 '+won(dep)+' / 시세 '+won(mkt)+')';
-      if(ratio<=70){sig='g';verdict='비교적 안전한 편 — 그래도 등기부는 꼭';}
-      else if(ratio<=80){sig='y';verdict='주의 — 전세가율이 다소 높아요';}
-      else {sig='r';verdict='위험 — 깡통전세 가능성, 등기부 필수 확인';}
+      var burden=Math.round((dep+senior)/mkt*100);
+      if(A){
+        ratioTxt='<b>부채비율 '+burden+'%</b> = (선순위 근저당 '+won(senior)+' + 내 보증금 '+won(dep)+') ÷ 시세 '+won(mkt);
+      } else {
+        ratioTxt='전세가율 <b>'+burden+'%</b> (보증금 '+won(dep)+' / 시세 '+won(mkt)+')';
+      }
+      if(burden<=70){ sig='g'; ratioCls='ok'; verdict=A?'비교적 안전한 편이에요':'비교적 안전한 편 — 그래도 등기부는 꼭'; }
+      else if(burden<=80){ sig='y'; verdict='주의 — 내 앞의 빚과 보증금이 시세의 70%를 넘어요'; }
+      else { sig='r'; verdict='위험 — 경매로 넘어가면 보증금을 다 못 받을 수 있어요'; }
     } else {
-      sig='y'; verdict='시세를 몰라 판정 보류 — 등기부부터 확인하세요';
-      ratioTxt='시세를 입력하면 전세가율로 위험도를 판정해드려요.';
+      sig='y'; verdict='시세를 몰라 판정 보류';
+      ratioTxt='이 집 시세를 입력하면 위험도를 계산해드려요.';
     }
+
+    /* 위험등기는 비율보다 우선한다 */
+    var dgCard='';
+    if(A){
+      var lv=bbDeunggi.level(A);
+      if(lv==='high'){ sig='r'; verdict='계약하기 전에 반드시 확인해야 할 등기가 있어요'; }
+      else if(lv==='mid' && sig!=='r'){ sig='y'; verdict='들어갈 수 있지만 — 등기부에 확인할 게 있어요'; }
+      var sd=A.seniorDate;
+      var sdBox = sd
+        ? '<div class="flag warn">등기부상 <b>최선순위 담보권 설정일은 '+sd.toISOString().slice(0,10)+'</b>이에요. 이 날짜보다 내 대항력(전입신고 다음날)이 늦으면 경매 시 순위가 밀려요.</div>'
+        : '<div class="flag ok">선순위 담보권(근저당 등) 설정일이 발견되지 않았어요. <b>잔금일 당일</b>에 전입신고와 확정일자를 처리하면 대항력·우선변제권을 확보해요.</div>';
+      if(A.own.trust) sdBox+='<div class="flag bad">🏦 등기상 소유자가 <b>신탁회사</b>일 수 있어요. 집주인(위탁자)과 그냥 계약하면 무효가 될 수 있으니, 신탁원부에서 임대 권한과 신탁사·우선수익자 동의를 반드시 확인하세요.</div>';
+      dgCard='<div class="rcard"><h3>📄 권리관계 (등기부)</h3>'+sdBox+dgFlagsHTML(A)
+        +'<div class="note" style="margin-top:10px">'+String(DG.name).replace(/[<>&"]/g,'')+' 판독 결과예요. 말소사항이 포함된 발급본에서는 이미 해소된 권리가 잡힐 수 있어요 — 최종 확인은 등기부 원문으로 하세요.</div></div>';
+    }
+
     html+='<div class="signal '+sig+'"><div class="lamp">'+lamp(sig)+'</div><div class="verdict">'+verdict+'</div><div class="sub">'+addr+'</div></div>';
-    html+='<div class="rcard"><h3>🔍 전세 안전도</h3><div class="flag '+(sig==='g'?'ok':'warn')+'">'+ratioTxt+'</div>'
-      +'<div class="note" style="margin-top:10px">전세가율이 80%를 넘으면 집값이 떨어졌을 때 보증금을 못 돌려받을 위험(깡통전세)이 커져요. 하지만 <b>진짜 위험은 등기부의 근저당·선순위</b>에 있어요 — 아래에서 꼭 확인하세요.</div></div>';
+    html+='<div class="rcard"><h3>🔍 보증금 안전도</h3><div class="flag '+ratioCls+'">'+ratioTxt+'</div>'
+      +'<div class="note" style="margin-top:10px">'
+      +(A
+        ? '경매로 넘어가면 <b>선순위 근저당이 먼저</b> 배당받고 남는 돈에서 내 보증금이 나와요. 그래서 내 보증금만 볼 게 아니라 <b>앞에 잡힌 빚까지 더해서</b> 시세와 비교해야 해요. 80%를 넘으면 전액 회수가 어려운 구간이에요.'
+        : '전세가율이 80%를 넘으면 집값이 떨어졌을 때 보증금을 못 돌려받을 위험이 커져요. 다만 <b>진짜 위험은 등기부의 근저당·선순위</b>에 있어요 — 등기부를 올리면 그것까지 합해서 계산해드려요.')
+      +'</div></div>';
+    html+=dgCard||dgMissingHTML('rent');
     html+='<div class="todo"><h3>✅ 지금 할 일</h3>'
-      +'<a class="act" href="/jeonse-safety-check.html">▪ <b>등기부 자동조회 전세사기 진단</b> — 근저당·압류·신탁·보증보험까지 (가장 중요!) →</a>'
+      +(DG
+        ? '<a class="act" href="/jeonse-safety-check.html">▪ <b>전세사기 정밀진단</b> — 보증보험 3사 가심사·대항력·최우선변제까지 →</a>'
+        : '<a class="act" href="/jeonse-safety-check.html">▪ <b>등기부 자동조회 전세사기 진단</b> — 근저당·압류·신탁·보증보험까지 (가장 중요!) →</a>')
       +'<a class="act" href="/jeonse-fraud.html">▪ 전세사기 <b>유형·예방법</b> 익히기 →</a>'
       +'<a class="act" href="/jeonse-contract.html">▪ 계약 전 <b>체크리스트 10가지</b> →</a>'
       +'<a class="act" href="/rental-care.html">▪ 입주 <b>하자 점검</b> 체크리스트 →</a>'
