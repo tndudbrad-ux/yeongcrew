@@ -225,8 +225,13 @@ st.textContent=
 'body.boobi-unlocked .boobiGateWall{display:none}';
 document.head.appendChild(st);
 }
+/* 카카오·네이버는 리다이렉트 로그인이라 복귀 시 wall()이 실행되지 않는다.
+ * 떠나기 전 남긴 표식으로 복귀 해제도 집계한다. */
+var APK='bbArtGatePending';
+function artPending(){ var v=null; try{ v=sessionStorage.getItem(APK); sessionStorage.removeItem(APK); }catch(x){} return v===location.pathname; }
 function unlock(){
-if(walled&&window.gtag){try{gtag('event','gate_unlocked',{page:location.pathname,type:'article'});}catch(x){}}
+var pend=artPending();
+if((walled||pend)&&window.gtag){try{gtag('event','gate_unlocked',{page:location.pathname,type:'article'});}catch(x){}}
 document.body.classList.add('boobi-unlocked'); }
 function wall(){
 if(walled) return;
@@ -251,7 +256,8 @@ wl.innerHTML='<div class="lk">🔒</div><h3>로그인하면 이어서 읽을 수
 '</div>'+
 '<div class="boobiGateNote">지금은 무료예요 · 로그인만 하면 전체 공개</div>';
 rest.parentNode.insertBefore(wl, rest.nextSibling);
-function gclick(m){ if(window.gtag){try{gtag('event','gate_login_click',{page:location.pathname,type:'article',method:m});}catch(x){}} }
+function gclick(m){ if(window.gtag){try{gtag('event','gate_login_click',{page:location.pathname,type:'article',method:m});}catch(x){}}
+if(m==='kakao'||m==='naver'){try{sessionStorage.setItem(APK, location.pathname);}catch(x){}} }
 document.getElementById('boobiGateKk').onclick=function(){
 gclick('kakao'); if(window.hwonAuth) hwonAuth.signInKakao(); };
 document.getElementById('boobiGateNv').onclick=function(){

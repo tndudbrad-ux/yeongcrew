@@ -15,6 +15,11 @@ if(![].some.call(document.scripts,function(s){return /hwon-auth\.js/.test(s.src|
 }
 
 function ga(n,p){ if(window.gtag){ try{ p=p||{}; p.page=location.pathname; gtag('event',n,p); }catch(e){} } }
+/* 카카오·네이버는 전체 페이지 리다이렉트라 복귀 시 gate 객체가 사라진다.
+ * 떠나기 전 표식을 남겨, 돌아와 로그인이 확인되면 gate_unlocked를 찍는다. */
+var PK='bbGatePending';
+function markPending(){ try{ sessionStorage.setItem(PK, location.pathname); }catch(e){} }
+function takePending(){ var v=null; try{ v=sessionStorage.getItem(PK); sessionStorage.removeItem(PK); }catch(e){} return v===location.pathname; }
 
 var css=document.createElement('style');
 css.textContent=
@@ -53,11 +58,13 @@ function show(){
   if(!shownOnce){ shownOnce=true; ga('gate_shown'); }
   document.getElementById('bbGateKk').onclick=function(){
     ga('gate_login_click',{method:'kakao'});
+    markPending();
     if(window.hwonAuth&&hwonAuth.signInKakao) hwonAuth.signInKakao();
     else location.href='/account.html';
   };
   document.getElementById('bbGateNv').onclick=function(){
     ga('gate_login_click',{method:'naver'});
+    markPending();
     if(window.hwonAuth&&hwonAuth.signInNaver) hwonAuth.signInNaver();
     else location.href='/account.html';
   };
@@ -87,6 +94,6 @@ document.addEventListener('click',function(e){
 },true);
 
 document.addEventListener('hwon-auth',function(e){
-  if(e.detail){ if(gate){ ga('gate_unlocked'); } hide(); }
+  if(e.detail){ var pend=takePending(); if(gate||pend){ ga('gate_unlocked'); } hide(); }
 });
 })();
