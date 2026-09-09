@@ -94,7 +94,7 @@ function ga(n, p) { if (window.gtag) { try { gtag('event', n, p || {}); } catch 
   var chips = document.getElementById('newsChips');
   if (!list) return;
 
-  var SHOW = 6;              /* 처음 보여줄 개수 */
+  var SHOW = 3;              /* 처음 보여줄 개수 */
   var cache = {};            /* 주제별 캐시 — 칩을 다시 눌러도 재요청 안 함 */
 
   function clean(t) {
