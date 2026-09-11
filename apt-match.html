@@ -304,7 +304,27 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .cond .t{font-size:.9rem;font-weight:600;display:flex;align-items:center;gap:6px;white-space:nowrap}
 .cond .t em{font-style:normal;font-size:.72rem;color:#2A7DE8;font-weight:500;background:#fff;padding:1px 6px;border-radius:5px;border:1px solid #DCE8FB}
 .cond .d{font-size:.72rem;color:var(--sub);line-height:1.4}
+.basis{margin-top:18px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:0 14px}
+.basis summary{cursor:pointer;padding:12px 0;font-size:.85rem;font-weight:600;color:#2A7DE8;list-style:none}
+.basis summary::-webkit-details-marker{display:none}
+.basis summary:before{content:'▸ ';font-size:.8rem}
+.basis[open] summary:before{content:'▾ '}
+.basis ul{margin:0 0 6px;padding:0 0 0 2px;list-style:none}
+.basis li{padding:9px 0;border-top:1px solid var(--line);font-size:.82rem;color:var(--forest)}
+.basis li b{font-weight:700}
+.basis li span{display:block;white-space:pre-line;margin-top:4px;font-size:.75rem;color:var(--sub);line-height:1.6}
+.basis p{margin:0;padding:10px 0 13px;border-top:1px solid var(--line);font-size:.74rem;color:var(--sub);line-height:1.6}
 .cond .soonTag{font-size:.66rem;color:#8AA5A2;border:1px dashed #C9D6E6;border-radius:5px;padding:1px 5px;margin-left:auto}
+/* 판정 기준 설명 — 마우스를 올리거나(데스크톱) 탭하면(모바일) 펼쳐진다 */
+.qm{margin-left:auto;flex:none;width:17px;height:17px;border-radius:50%;border:1px solid #C9D6E6;background:#fff;
+    color:#547471;font-size:.66rem;font-weight:700;line-height:15px;text-align:center;cursor:help;position:relative;padding:0}
+.qm:hover,.qm:focus{border-color:#3D8BFD;color:#3D8BFD;outline:none}
+.qm .tip{display:none;position:absolute;right:-6px;top:24px;z-index:40;width:min(280px,72vw);
+    white-space:pre-line;text-align:left;font-size:.72rem;font-weight:400;line-height:1.62;color:#0D2A29;
+    background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(255,255,255,.9));
+    border:1.5px solid rgba(255,255,255,.95);border-radius:12px;padding:11px 13px;
+    box-shadow:0 14px 40px rgba(13,42,41,.16),inset 0 1px 0 #fff;backdrop-filter:blur(14px);cursor:default}
+.qm:hover .tip,.qm:focus .tip{display:block}
 
 .condBar{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 6px}
 .condBar button{border:1.5px solid #DCE8FB;background:#EAF3FE;color:#2A7DE8;border-radius:16px;padding:6px 11px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
@@ -595,7 +615,7 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
 
 <script src="/apt-budget.js?v=4"></script>
 <script src="/apt-score.js?v=4"></script>
-<script src="/apt-match.js?v=12"></script>
+<script src="/apt-match.js?v=13"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
@@ -765,10 +785,14 @@ function buildCloud(){
     var b=document.createElement('button'); b.type='button';
     b.className='cond'+(locked?' soon':'')+(S.conds[c.key]!=null?' on':''); b.dataset.k=c.key;
     b.innerHTML='<span class="t">'+c.icon+' '+esc(c.label)+' <em>'+esc(c.ladder[0].t)+'</em>'
-      +(locked?'<span class="soonTag">곧 열려요</span>':'')+'</span>'
+      +(locked?'<span class="soonTag">곧 열려요</span>'
+        :(c.help?'<span class="qm" role="button" tabindex="0" aria-label="'+esc(c.label)+' 판정 기준">?'
+                +'<span class="tip">'+esc(c.help)+'</span></span>':''))+'</span>'
       +'<span class="d">'+esc(c.desc)+'</span>';
     if(locked){ soon.push(c.label); b.disabled=true; }
-    else b.onclick=function(){
+    else b.onclick=function(e){
+      /* ? 를 누른 건 '설명 좀 보자'이지 '이 조건 걸자'가 아니다 */
+      if(e&&e.target&&e.target.closest&&e.target.closest('.qm')) return;
       if(S.conds[c.key]!=null) delete S.conds[c.key]; else S.conds[c.key]=0;
       b.classList.toggle('on');
     };
@@ -1125,8 +1149,25 @@ function renderMatch(){
       }
     }
   }
+  /* 고른 조건이 각각 무엇으로 판정됐는지 결과 아래에 그대로 밝힌다.
+     화면에 근거 한 줄만 보이면 "나머지는 안 본 건가" 싶어지기 때문이다. */
+  h+=basisHtml();
   out.innerHTML=h;
   if(locked>0 && window.gtag){ try{ gtag('event','view_paywall',{page:location.pathname,locked:locked}); }catch(x){} }
+}
+function basisHtml(){
+  var keys=Object.keys(S.conds); if(!keys.length) return '';
+  var li=keys.map(function(k){
+    var c=BoobiMatch.CONDS.filter(function(x){return x.key===k;})[0]; if(!c) return '';
+    var lv=S.conds[k]||0;
+    return '<li><b>'+c.icon+' '+esc(c.label)+'</b> — '+esc(c.ladder[lv].t)
+      +'<span>'+esc(c.help||c.desc)+'</span></li>';
+  }).filter(Boolean).join('');
+  if(!li) return '';
+  return '<details class="basis"><summary>이 결과는 무엇을 보고 판정했나요? ('+keys.length+'개 조건)</summary>'
+    +'<ul>'+li+'</ul>'
+    +'<p>전부 국토부 실거래(최근 12개월)·K-apt 단지 공시·학교알리미·정비사업 통계·전국도시공원 표준데이터에서 '
+    +'확인된 사실입니다. 거리는 직선거리 기반 추정이고, 가격이 오른다는 예측이 아닙니다.</p></details>';
 }
 window.showAll=function(btn){ var res=lastRes; btn.outerHTML=res.full.slice(8).map(cardHtml).join(''); };
 window.relaxOne=function(key){

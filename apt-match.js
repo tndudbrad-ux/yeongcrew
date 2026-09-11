@@ -200,7 +200,13 @@
     },
     {
       key: 'asset', icon: '📈', label: '자산가치',
-      desc: '정비사업·거래량·동네 시세·단지 규모로 봐요 — 상승을 약속하지 않아요',
+      desc: '정비사업·거래량·동네 시세·단지 규모로 봐요',
+      help: '네 가지를 각각 확인해서 몇 개나 해당하는지로 봅니다.\n'
+          + '① 정비사업 — 그 법정동에 재개발·재건축 구역이 있는지 (서울·부산·인천 정비사업 통계)\n'
+          + '② 동네 시세 — 그 법정동 평당가가 같은 구 안에서 상위 30%인지 (국토부 실거래 12개월)\n'
+          + '③ 거래량 — 그 단지가 최근 1년 실거래 상위 30%인지. 호가만 있고 안 팔리는 단지를 걸러냅니다\n'
+          + '④ 단지 규모 — 1,000세대 이상인지 (전국 상위 12%). 한 칸 풀면 500세대로 내려갑니다\n'
+          + '넷 다 국토부·지자체 공시에서 확인된 사실만 씁니다. 가격이 오른다는 예측이 아닙니다.',
       /* 단지 규모(세대수)를 네 번째 신호로 둔다. 거래량과 겹쳐 보이지만 성격이 다르다 —
          거래량은 12개월 표본이라 해마다 흔들리고, 세대수는 바뀌지 않는 구조값이다.
          팔고 싶을 때 팔리느냐(호가만 있고 거래가 없는 단지가 실제로 많다), 관리비가
@@ -218,8 +224,14 @@
         if (S.liquidTop && S.liquidTop[c.name + '|' + c.dong]) { hits.push('liquid'); why.push('최근 1년 거래 상위 30%'); }
         var hh = c.meta && c.meta.hh;
         if (hh && hh >= L.hh) { hits.push('scale'); why.push(fmt(hh) + '세대 대단지'); }
-        return { v: hits.length >= L.n ? 'pass' : 'fail',
-                 fact: why.length ? why.join(' · ') : '정비사업·시세·거래량·규모 어느 것도 해당 없음' };
+        /* 걸린 것만 보여주면 "나머지는 안 본 건가" 싶다. 못 걸린 항목도 이름만 붙여
+           네 가지를 다 확인했다는 게 화면에서 보이게 한다. */
+        var NAMES = { redev: '정비사업', prime: '동네 시세', liquid: '거래량', scale: '단지 규모' };
+        var miss = [];
+        for (var k in NAMES) if (hits.indexOf(k) < 0) miss.push(NAMES[k]);
+        var line = why.map(function (t) { return '✓ ' + t; }).join(' · ');
+        if (miss.length) line += (line ? ' · ' : '') + '✗ ' + miss.join('·');
+        return { v: hits.length >= L.n ? 'pass' : 'fail', fact: line };
       }
     },
     {

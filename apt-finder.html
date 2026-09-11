@@ -1035,7 +1035,8 @@ function renderFinder(){
   h+='<p class="note">국토부 실거래가(아파트·연립다세대·오피스텔 매매) 최근 12개월 · 단지×면적대별 최신 거래. 해제된 거래는 제외했습니다.'
    +((window.__PURPOSE==='invest'&&REDEV.rows.length)?'<br>🏗️ 태그는 <b>서울·부산·인천 정비사업 통계</b>에 등록된 같은 법정동의 구역 수예요. 사업이 진행 중이라는 사실만 알려줄 뿐, 가격 상승을 뜻하지는 않습니다.':'')
    +(ranked?'<br>순서는 '+(window.__PURPOSE==='invest'
-        ? '<b>정비사업 진행 단계·거래 활발도·동네 가격대</b>를 가중 합산한 결과예요.'
+        ? '<b>역세권(2.5)·정비사업(2.0)·대단지(1.5)·신축(1.5)·거래량(1.5)·브랜드(1.2)·동네 시세(1.0)·초품아(1.0)·공원(0.5)</b>'
+          +' 아홉 가지를 괄호 안 가중치로 합산한 결과예요. 값을 모르는 항목은 감점 없이 중간값으로 처리합니다.'
         : '<b>고르신 우선순위</b>(1순위 3배·2순위 2배·3순위 1.5배, 나머지 항목도 0.5배로 반영)로 매긴 점수예요.')
       +' 각 줄의 근거는 국토부 실거래·정비사업 통계에서 확인된 사실만 적었고, 가격이 오른다는 뜻은 아닙니다.':'')
    +'</p></div>';
@@ -1217,7 +1218,7 @@ document.getElementById('fRes').addEventListener('click',function(e){
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://boobi.ai.kr/"}, {"@type": "ListItem", "position": 2, "name": "내 아파트 찾기", "item": "https://boobi.ai.kr/apt-finder.html"}]}</script>
 <script src="/hwon-bot.js" defer></script>
 <!-- 단지명 매칭(indexMeta)을 apt-score 가 쓰므로 먼저 싣는다 -->
-<script src="/apt-match.js?v=12"></script>
+<script src="/apt-match.js?v=13"></script>
 <script src="/apt-score.js?v=4"></script>
 <script>
 /* ══════════════ 매매 설문형 위저드 ══════════════
