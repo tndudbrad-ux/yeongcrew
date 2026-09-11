@@ -246,13 +246,28 @@ async function collectIncheon() {
   if (!rows.length) throw new Error("수집된 행이 0건");
 
   const fields = BASE_FIELDS.concat(["area"]);
+  /* 2026-07-01 인천 행정구역 개편. 제공처가 아직 옛 구 이름으로 준다.
+     옛 이름 그대로 두면 실거래(새 이름)와 구가 안 맞아 그 지역 정비사업이
+     통째로 매칭에서 빠진다 — 실제로 44건이 그렇게 새고 있었다.
+     인천 전용 파일이라 이름만으로 구분해도 다른 시도와 충돌하지 않는다.
+     서구는 검단 지역이 검단구로 갈렸고 중구는 영종도가 영종구로 갈렸으므로,
+     구 이름만으로 뭉뚱그리지 않고 주소(법정동)를 보고 나눈다. */
+  const GEOMDAN = /원당동|당하동|마전동|불로동|오류동|왕길동|금곡동|대곡동|백석동|시천동/;
+  const YEONGJONG = /운서동|중산동|운남동|영종동|덕교동|무의동|을왕동|남북동|삼목도|신불도/;
+  const reGu = (gu, addr) => {
+    if (gu === "서구") return GEOMDAN.test(addr) ? "검단구" : "서해구";
+    if (gu === "중구") return YEONGJONG.test(addr) ? "영종구" : "제물포구";
+    if (gu === "동구") return "제물포구";
+    return gu;
+  };
   const out = rows.map((r) => {
-    const gu = txt(loose(r, "구명", "군구", "자치구"));
+    const gu0 = txt(loose(r, "구명", "군구", "자치구"));
     const nm = txt(loose(r, "구역명"));
     const addr = txt(loose(r, "위치", "소재지"));
     const type = normType(loose(r, "사업유형", "유형"));
     const stage = normStage(loose(r, "진행단계", "추진단계", "단계"));
     const area = dec(loose(r, "면적(제곱미터)", "면적", "구역면적"));
+    const gu = reGu(gu0, addr);
     return [
       gu, nm, addr, "", "", type, stage,
       null, null, null, null,
