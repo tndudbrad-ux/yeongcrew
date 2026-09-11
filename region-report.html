@@ -87,6 +87,47 @@ main{padding:36px 0 70px}
 .region .links a{font-size:.8rem;font-weight:700;color:var(--blue);border:1px solid rgba(61,139,253,.3);padding:5px 11px;border-radius:999px;background:#fff}
 .gulist{display:flex;flex-wrap:wrap;gap:6px;margin:-8px 0 24px}
 .gulist span{font-size:.78rem;color:#8AA5A2;border:1px dashed rgba(138,165,162,.5);padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.5)}
+.gainSec{padding-bottom:22px}
+.gainHero{border-radius:18px;padding:22px 24px 18px;margin-bottom:16px;
+ background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),
+  radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),
+  linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.62));
+ border:1.5px solid rgba(255,255,255,.95);box-shadow:0 10px 30px rgba(13,42,41,.08),inset 0 1px 0 #fff}
+.gainLead{font-size:1.08rem;font-weight:700;color:var(--forest);margin:0 0 18px;word-break:keep-all;line-height:1.6}
+.gainLead b{background:linear-gradient(115deg,#26C6B9,#3D8BFD 55%,#8B6CF6);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+.gainBar{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;margin-bottom:10px}
+.gEnd{flex:0 0 auto;text-align:center}
+.gEnd i{display:block;font-style:normal;font-size:.72rem;font-weight:700;color:var(--faint);margin-bottom:3px;white-space:nowrap}
+.gEnd b{display:block;font-size:1.42rem;font-weight:800;line-height:1.1}
+.gEnd.low b{color:#8AA5A2}
+.gEnd.high b{background:linear-gradient(115deg,#3D8BFD,#8B6CF6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gLine{position:relative;flex:1 1 auto;height:6px;border-radius:999px;min-width:60px;
+ background:linear-gradient(90deg,#D6E4E2,#A9E7E8 35%,#7CC8F0 70%,#3D8BFD)}
+.gGap{position:absolute;left:50%;top:-26px;transform:translateX(-50%);font-size:.8rem;font-weight:800;color:#3D8BFD;
+ background:#fff;border:1px solid rgba(61,139,253,.25);border-radius:999px;padding:3px 12px;white-space:nowrap;box-shadow:0 3px 10px rgba(61,139,253,.14)}
+.gainNote{font-size:.78rem;color:var(--faint);margin:0 0 16px;line-height:1.55;word-break:keep-all}
+.gainKick{font-size:.96rem;line-height:1.75;color:#2E4B49;margin:0;padding-top:14px;border-top:1px dashed rgba(61,139,253,.2);word-break:keep-all}
+.gainKick b{color:var(--forest);font-weight:800}
+.gainGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:11px;margin-bottom:14px}
+.gainCard{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.95);border-radius:15px;padding:16px 17px;box-shadow:0 5px 16px rgba(13,42,41,.05);word-break:keep-all}
+.gNum{display:block;font-size:1.72rem;font-weight:800;line-height:1.1;margin-bottom:8px;
+ background:linear-gradient(115deg,#26C6B9,#3D8BFD 55%,#8B6CF6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gNum em{font-style:normal;font-size:.92rem}
+.gNum.gInf{font-size:2rem}
+.gainCard b{display:block;font-size:.95rem;font-weight:800;color:var(--forest);margin-bottom:5px}
+.gainCard span:not(.gNum){display:block;font-size:.86rem;color:#547471;line-height:1.65}
+.gainCmp{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+ border-radius:14px;padding:14px 18px;background:linear-gradient(135deg,rgba(38,198,185,.12),rgba(61,139,253,.12) 55%,rgba(139,108,246,.12));border:1px solid rgba(61,139,253,.24)}
+.gainCmp>span:first-child{font-size:.95rem;color:#2E4B49;word-break:keep-all}
+.gainCmp b{font-size:1.12rem;font-weight:800;color:#3D8BFD}
+.gPct{font-size:.82rem;font-weight:700;color:#547471;background:rgba(255,255,255,.75);border-radius:999px;padding:5px 13px;white-space:nowrap}
+@media(max-width:560px){
+ .gainHero{padding:18px 16px 16px}
+ .gainBar{gap:7px}
+ .gEnd b{font-size:1.12rem}
+ .gEnd i{font-size:.66rem;white-space:normal}
+ .gGap{font-size:.72rem;padding:2px 9px;top:-24px}
+}
 .rrHero{position:relative;overflow:hidden;border-radius:20px;padding:26px 26px 22px;margin:4px 0 16px;word-break:keep-all;
  background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.20),transparent 55%),
   radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.22),transparent 55%),
@@ -199,6 +240,45 @@ footer a{color:#B9DCD9;margin:0 8px}
       <span class="chip">향후 3년 전망</span>
       <span class="chip">✦ 한 번 결제, 평생 갱신 무료</span>
     </div>
+  </div>
+</section>
+
+<!-- ── 이득 ── -->
+<section class="glass sec gainSec">
+  <h2>19,900원으로 얻는 것</h2>
+
+  <div class="gainHero">
+    <p class="gainLead">같은 동대문구, 같은 전용 84㎡인데 <b>9.7억부터 19.1억까지</b> 있습니다.</p>
+    <div class="gainBar">
+      <span class="gEnd low"><i>회기 신현대</i><b>9.7억</b></span>
+      <span class="gLine" aria-hidden="true"><span class="gGap">9.4억 차이</span></span>
+      <span class="gEnd high"><i>청량리역 롯데캐슬</i><b>19.1억</b></span>
+    </div>
+    <p class="gainNote">동대문구 리포트에 실제로 들어 있는 20개 단지 실거래 중 양끝. 국토부 실거래 기반.</p>
+    <p class="gainKick">어느 동, 어느 단지를 고르느냐로 <b>9억이 갈립니다.</b><br>이 리포트는 그중 지금 봐야 할 동 4순위와 투자가치 1순위 단지를 <b>이름으로 적어서</b> 드립니다.</p>
+  </div>
+
+  <div class="gainGrid">
+    <div class="gainCard">
+      <span class="gNum">15<em>분</em></span>
+      <b>5시간 강의 대신</b>
+      <span>지역 강의 한 편이 5시간입니다. 이건 15분 안에 읽고 바로 임장 동선을 짤 수 있게 썼습니다.</span>
+    </div>
+    <div class="gainCard">
+      <span class="gNum">4<em>순위</em></span>
+      <b>"입지 좋다"로 안 끝냅니다</b>
+      <span>봐야 할 동을 순위로, 투자가치 1순위 단지는 딱 하나로, 몇 년 보유인지까지 적습니다. 판단은 영팀장이 검수합니다.</span>
+    </div>
+    <div class="gainCard">
+      <span class="gNum gInf">∞</span>
+      <b>한 번 결제로 끝</b>
+      <span>실거래가 쌓이고 정비사업 단계가 넘어갈 때마다 갱신본이 올라옵니다. 추가 결제는 없습니다.</span>
+    </div>
+  </div>
+
+  <div class="gainCmp">
+    <span>15억짜리 결정을 내리는 데 쓰는 돈 <b>19,900원</b></span>
+    <span class="gPct">집값의 0.0013%</span>
   </div>
 </section>
 
