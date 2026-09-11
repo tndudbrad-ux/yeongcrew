@@ -330,6 +330,7 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .condBar button{border:1.5px solid #DCE8FB;background:#EAF3FE;color:#2A7DE8;border-radius:16px;padding:6px 11px;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
 .condBar button small{font-weight:500;color:#547471;margin-left:4px}
 .condBar button.add{background:#fff;color:var(--sub);border-style:dashed}
+.condBar button.open{border-color:#3D8BFD;box-shadow:0 0 0 2px rgba(61,139,253,.18)}
 .ladder{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
 .ladder button{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:6px 10px;font-size:.78rem;cursor:pointer;font-family:inherit;color:var(--sub)}
 .ladder button.on{border-color:#3D8BFD;color:#2A7DE8;font-weight:600;background:#EAF3FE}
@@ -622,7 +623,7 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
    흐름: 지역 → 조건 → 면적 → (출퇴근지) → (자녀) → 주택수 → 현금 → 소득 → 결과
    ═══════════════════════════════════════════════════════════════════════ */
 var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},schools:{},parks:{},redev:[]};
-var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0,corp:0,loanPct:100,loadP:null};
+var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,openLadder:null,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0,corp:0,loanPct:100,loadP:null};
 var $=function(id){return document.getElementById(id);};
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function ga(n,p){ if(window.gtag){ try{ gtag('event',n,p||{}); }catch(e){} } }
@@ -1100,9 +1101,16 @@ function renderMatch(){
   var res=lastRes=runMatch();
   /* 조건 바 */
   var bar=$('condBar'); bar.innerHTML='';
-  res.conds.forEach(function(c){ var b=document.createElement('button'); b.type='button'; b.innerHTML=c.icon+' '+esc(c.label)+'<small>'+esc(c.threshold)+'</small>'; b.onclick=function(){ showLadder(c.key); }; bar.appendChild(b); });
+  res.conds.forEach(function(c){ var b=document.createElement('button'); b.type='button';
+    b.dataset.k=c.key;
+    if(c.key===S.openLadder) b.className='open';
+    b.innerHTML=c.icon+' '+esc(c.label)+'<small>'+esc(c.threshold)+'</small>';
+    b.onclick=function(){ showLadder(c.key); }; bar.appendChild(b); });
   var add=document.createElement('button'); add.type='button'; add.className='add'; add.textContent='＋ 조건 바꾸기'; add.onclick=function(){ $('editAns').click(); }; bar.appendChild(add);
-  $('ladderBox').innerHTML='';
+  /* 눈금을 바꿀 때마다 이 줄이 사라지면 30분↔45분↔60분을 오가며 비교할 수가 없다.
+     열어둔 사다리는 결과를 다시 그려도 그대로 열어 둔다. */
+  if(S.openLadder && !res.conds.some(function(c){ return c.key===S.openLadder; })) S.openLadder=null;
+  if(S.openLadder) drawLadder(S.openLadder); else $('ladderBox').innerHTML='';
 
   var out=$('matchOut'), h='';
   var n=res.counts.full, condN=res.conds.length, locked=0;
@@ -1174,15 +1182,27 @@ window.relaxOne=function(key){
   if(key==='size'){ S.sizeLv=Math.min(3,S.sizeLv+1); } else { S.conds[key]=(S.conds[key]||0)+1; }
   ga('match_relax',{key:key}); renderMatch(); $('matchOut').scrollIntoView({behavior:'smooth',block:'start'});
 };
+/* 여닫기만으로 전체 매칭을 다시 돌리지 않는다 — 결과는 그대로고 줄만 열리는 것이다 */
 function showLadder(key){
-  var def=BoobiMatch.CONDS.filter(function(c){return c.key===key;})[0]; if(!def) return;
+  S.openLadder = (S.openLadder===key) ? null : key;   /* 같은 조건을 다시 누르면 접는다 */
+  paintCondBar();
+  if(S.openLadder) drawLadder(S.openLadder); else $('ladderBox').innerHTML='';
+}
+function paintCondBar(){
+  var bar=$('condBar'); if(!bar) return;
+  [].forEach.call(bar.querySelectorAll('button'), function(b){
+    b.classList.toggle('open', !!b.dataset.k && b.dataset.k===S.openLadder);
+  });
+}
+function drawLadder(key){
+  var def=BoobiMatch.CONDS.filter(function(c){return c.key===key;})[0]; if(!def){ $('ladderBox').innerHTML=''; return; }
   var lv=key==='size'?S.sizeLv:(S.conds[key]||0);
   var h='<div class="ladder">'+def.ladder.map(function(l,i){ return '<button type="button" class="'+(i===lv?'on':'')+'" onclick="setLevel(\''+key+'\','+i+')">'+esc(l.t)+'</button>'; }).join('');
   if(key!=='size') h+='<button type="button" onclick="setLevel(\''+key+'\',-1)">✕ 조건 빼기</button>';
   $('ladderBox').innerHTML=h+'</div>';
 }
 window.setLevel=function(key,lv){
-  if(key==='size') S.sizeLv=lv; else if(lv<0) delete S.conds[key]; else S.conds[key]=lv;
+  if(key==='size') S.sizeLv=lv; else if(lv<0){ delete S.conds[key]; S.openLadder=null; } else S.conds[key]=lv;
   renderMatch();
 };
 
