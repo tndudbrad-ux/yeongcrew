@@ -109,6 +109,7 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));   /* m */
   }
   function walkMin(m) { return Math.round(m * 1.3 / 67); }
+  function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }   /* 1152 → 1,152 */
 
   /* 학급당 학생수(학교알리미 공시). 이건 조건이 아니라 근거다 —
      "학급 과밀 24명 이하인 집을 찾아줘"라고 말하는 사람은 없고,
@@ -199,17 +200,26 @@
     },
     {
       key: 'asset', icon: '📈', label: '자산가치',
-      desc: '정비사업·거래량·동네 시세로 봐요 — 상승을 약속하지 않아요',
-      ladder: [{ t: '3가지 중 2개', n: 2 }, { t: '3가지 중 1개', n: 1 }],
+      desc: '정비사업·거래량·동네 시세·단지 규모로 봐요 — 상승을 약속하지 않아요',
+      /* 단지 규모(세대수)를 네 번째 신호로 둔다. 거래량과 겹쳐 보이지만 성격이 다르다 —
+         거래량은 12개월 표본이라 해마다 흔들리고, 세대수는 바뀌지 않는 구조값이다.
+         팔고 싶을 때 팔리느냐(호가만 있고 거래가 없는 단지가 실제로 많다), 관리비가
+         분산되느냐, 그 이름이 동네 시세 기준점이 되느냐가 여기서 갈린다.
+         전국 분포: 1,000세대↑ 상위 12% · 500세대↑ 상위 41% (중앙값 431세대).
+         그래서 기본 칸은 1,000, 한 칸 풀면 500으로 같이 느슨해진다. */
+      ladder: [{ t: '4가지 중 2개', n: 2, hh: 1000 }, { t: '4가지 중 1개', n: 1, hh: 500 }],
       needs: [],
       test: function (c, lv, ctx) {
-        var hits = [], why = [];
+        var hits = [], why = [], L = this.ladder[lv];
         var rd = ctx.redevOf ? ctx.redevOf(c) : null;
         if (rd && rd.n > 0) { hits.push('redev'); why.push(c.dong + ' 정비사업 ' + rd.n + '곳'); }
         var S = ctx.stats || {};
         if (S.dongPyTop && S.dongPyTop[c.dong]) { hits.push('prime'); why.push(c.dong + ' 평당가 구 상위 30%'); }
         if (S.liquidTop && S.liquidTop[c.name + '|' + c.dong]) { hits.push('liquid'); why.push('최근 1년 거래 상위 30%'); }
-        return { v: hits.length >= this.ladder[lv].n ? 'pass' : 'fail', fact: why.length ? why.join(' · ') : '정비사업·시세·거래 어느 것도 해당 없음' };
+        var hh = c.meta && c.meta.hh;
+        if (hh && hh >= L.hh) { hits.push('scale'); why.push(fmt(hh) + '세대 대단지'); }
+        return { v: hits.length >= L.n ? 'pass' : 'fail',
+                 fact: why.length ? why.join(' · ') : '정비사업·시세·거래량·규모 어느 것도 해당 없음' };
       }
     },
     {
