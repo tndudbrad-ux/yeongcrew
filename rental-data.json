@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-11T07:55:56.681Z",
+  "updatedAt": "2026-09-11T13:15:27.750Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 56,
   "schema": {
@@ -61,6 +61,21 @@
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020636&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
+    },
+    {
+      "id": "SH-310178",
+      "provider": "SH",
+      "ltype": "기타",
+      "name": "(재공지)2026년 매력일자리(홈코디 주거상담가 인큐베이팅) 참여자 추가 모집 공고",
+      "region": "서울",
+      "units": null,
+      "target": "자세한 자격은 공고문 확인",
+      "rcritStart": "2026-09-04",
+      "rcritEnd": "2026-09-15",
+      "winnerDate": null,
+      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=310178",
+      "note": "공고 2026-09-11",
+      "_src": "sh-web"
     },
     {
       "id": "LH-2015122300020679",
@@ -840,21 +855,6 @@
       "winnerDate": null,
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=309497",
       "note": "공고 2026-09-02",
-      "_src": "sh-web"
-    },
-    {
-      "id": "SH-309385",
-      "provider": "SH",
-      "ltype": "기타",
-      "name": "2026년 매력일자리(홈코디 주거상담가 인큐베이팅) 참여자 추가 모집 공고",
-      "region": "서울",
-      "units": null,
-      "target": "자세한 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": null,
-      "winnerDate": null,
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=309385",
-      "note": "공고 2026-09-01",
       "_src": "sh-web"
     }
   ]
