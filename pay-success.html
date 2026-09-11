@@ -84,6 +84,21 @@ var q = new URLSearchParams(location.search);
 var paymentKey = q.get('paymentKey');
 var orderId    = q.get('orderId');
 var amount     = q.get('amount');
+var product    = q.get('product') || 'home-report';
+var nextPage   = q.get('next') || '';
+var isRegion   = product.indexOf('region-report-') === 0;
+function unlockRegion(){
+  if(!isRegion) return;
+  try{ localStorage.setItem('bb_unlock_' + product, '1'); }catch(e){}
+  /* 로그인 계정에도 구매 기록 → 다른 기기에서 열람 */
+  function save(u){
+    if(!u) return;
+    var go=function(){ try{ var o={purchases:{}}; o.purchases[product]={orderId:orderId, at:new Date().toISOString()}; firebase.firestore().collection('members').doc(u.uid).set(o,{merge:true}).catch(function(){}); }catch(x){} };
+    if(window.firebase&&firebase.firestore){ go(); return; }
+    var sc=document.createElement('script'); sc.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js'; sc.onload=go; document.head.appendChild(sc);
+  }
+  if(window.hwonUser) save(window.hwonUser); else document.addEventListener('hwon-auth', function(e){ save(e.detail); });
+}
 
 var box = document.getElementById('box');
 var mark = box.querySelector('.mark');
@@ -103,7 +118,7 @@ function fail(title, msg){
   lead.textContent = msg;
   detail.innerHTML =
     '<div class="btns">' +
-      '<a class="btn pri" href="/pay.html">다시 시도하기</a>' +
+      '<a class="btn pri" href="' + (isRegion ? '/region-report.html' : '/pay.html') + '">다시 시도하기</a>' +
       '<a class="btn sec" href="/contact.html">문의하기</a>' +
     '</div>' +
     '<p class="note">주문번호 ' + esc(orderId || '-') + ' — 결제가 실제로 이루어졌는데 이 화면이 보인다면, 이 주문번호와 함께 tndud.brad@gmail.com으로 알려주세요. 확인 후 즉시 처리해 드립니다.</p>';
@@ -130,24 +145,25 @@ if(!paymentKey || !orderId || !amount){
     }else{
       mark.className = 'mark'; mark.textContent = '✓';
       ttl.textContent = '결제가 완료되었습니다';
-      lead.textContent = '구매하신 리포트를 이메일로 보내드릴게요. 발송까지 최대 24시간이 걸릴 수 있습니다.';
+      lead.textContent = isRegion ? '지역 분석 리포트 전문이 열렸습니다. 아래 버튼으로 바로 이어 읽으세요.' : '구매하신 리포트를 이메일로 보내드릴게요. 발송까지 최대 24시간이 걸릴 수 있습니다.';
+      if(isRegion) unlockRegion();
       if(window.gtag){
         try{ gtag('event','purchase',{ transaction_id: orderId, currency:'KRW', value: Number(d.amount || amount),
-          items:[{ item_id:'home-report', item_name: d.orderName || '집 종합 리포트 PDF', price: Number(d.amount || amount), quantity:1 }] }); }catch(x){}
+          items:[{ item_id:product, item_name: d.orderName || (isRegion ? '지역 분석 리포트' : '집 종합 리포트 PDF'), price: Number(d.amount || amount), quantity:1 }] }); }catch(x){}
       }
     }
 
     detail.innerHTML =
       '<table class="rc">' +
         '<tr><th>주문번호</th><td>' + esc(orderId) + '</td></tr>' +
-        '<tr><th>상품</th><td>' + esc(d.orderName || '집 종합 리포트 PDF') + '</td></tr>' +
+        '<tr><th>상품</th><td>' + esc(d.orderName || (isRegion ? '지역 분석 리포트' : '집 종합 리포트 PDF')) + '</td></tr>' +
         '<tr><th>결제 금액</th><td><b>' + Number(d.amount || amount).toLocaleString('ko-KR') + '원</b></td></tr>' +
         (d.method ? '<tr><th>결제 수단</th><td>' + esc(d.method) + '</td></tr>' : '') +
         (d.approvedAt ? '<tr><th>승인 시각</th><td>' + esc(String(d.approvedAt).replace('T',' ').slice(0,19)) + '</td></tr>' : '') +
       '</table>' +
       '<div class="btns">' +
         (d.receiptUrl ? '<a class="btn sec" href="' + esc(d.receiptUrl) + '" target="_blank" rel="noopener">영수증 보기</a>' : '') +
-        '<a class="btn pri" href="/account.html">마이페이지</a>' +
+        (isRegion && nextPage ? '<a class="btn pri" href="' + esc(nextPage) + '">리포트 이어 읽기</a><a class="btn sec" href="/account.html">마이페이지</a>' : '<a class="btn pri" href="/account.html">마이페이지</a>') +
       '</div>' +
       '<p class="note">결제 내역과 영수증은 마이페이지에서 다시 확인할 수 있습니다. 문의: tndud.brad@gmail.com</p>';
   })

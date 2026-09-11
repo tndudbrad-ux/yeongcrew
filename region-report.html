@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지역 분석 리포트 — 부비 AI진단</title>
+<meta name="description" content="한 지역을 생활권 단위로 뜯어 실거래·수급·정비사업·교통을 분석하고, 어느 동의 어떤 단지를 봐야 하는지 결론까지 내주는 부비 지역 분석 리포트. 동대문구 편 19,900원, 성동구 편 준비 중.">
+<link rel="canonical" href="https://boobi.ai.kr/region-report.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="지역 분석 리포트 — 부비">
+<meta name="twitter:description" content="어느 동의 어떤 단지를 봐야 하는지 결론까지. 동대문구 편 19,900원.">
+<meta name="twitter:image" content="https://boobi.ai.kr/og-boobi.png">
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+<meta name="author" content="부비 (원대시투)">
+<meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<meta property="og:title" content="지역 분석 리포트 — 부비 AI진단">
+<meta property="og:description" content="어느 동의 어떤 단지를 봐야 하는지 결론까지. 동대문구 편 19,900원.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://boobi.ai.kr/region-report.html">
+<meta property="og:image" content="https://boobi.ai.kr/og-boobi.png">
+<meta property="og:site_name" content="부비 - 부동산 비서">
+<meta property="og:locale" content="ko_KR">
+<style>
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+@import url("https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.3/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css");
+:root{--mint:#2AC1BC;--blue:#3D8BFD;--purple:#8B6CF6;--teal:#20A6A2;--cream:#FFFFFF;--forest:#0D2A29;--sub:#547471;--faint:#8AA5A2;--line:#DCEEEC;--warn:#E5484D;--glow:rgba(42,193,188,.35)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Wanted Sans Variable','Wanted Sans','Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:var(--cream);color:var(--forest);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:880px;margin:0 auto;padding:0 22px}
+header.top{background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.22rem;font-weight:500;letter-spacing:-.01em}
+.logo .ring{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 14%, rgba(255,255,255,0) 26%),linear-gradient(180deg,#8FE9E4 0%,#2AC1BC 55%,#1B918D 100%);-webkit-mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);mask:radial-gradient(circle, transparent 0 5.5px, #000 6px);box-shadow:0 2px 8px rgba(42,193,188,.35)}
+nav.gnb{display:flex;gap:18px;font-size:.88rem;color:var(--sub)}
+nav.gnb a:hover{color:var(--blue)}
+
+/* 페이지 배경 글로우 */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+ background:radial-gradient(80% 60% at 88% -6%,rgba(61,139,253,.14),transparent 60%),
+            radial-gradient(70% 55% at -8% 12%,rgba(42,193,188,.16),transparent 60%),
+            radial-gradient(60% 50% at 50% 108%,rgba(139,108,246,.10),transparent 60%)}
+
+main{padding:36px 0 70px}
+.crumb{font-size:.84rem;color:var(--sub);margin-bottom:16px}
+.crumb a{color:var(--blue)}
+
+/* ── 글래스 카드 (부비 표준 레시피) ── */
+.glass{
+ background:
+  radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),
+  radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),
+  linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));
+ border:1.5px solid rgba(255,255,255,.95);
+ box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+ color:var(--forest);border-radius:24px;
+}
+
+/* ── 상품 영역 ── */
+.prod{display:grid;grid-template-columns:300px 1fr;gap:28px;padding:30px 30px;align-items:center;margin-bottom:22px}
+.prod .shot{position:relative;border-radius:20px;padding:14px 14px 18px;text-align:center;background:linear-gradient(150deg,#F4FBFF 0%,#EFF9F8 100%);border:1px solid rgba(61,139,253,.16);overflow:hidden}
+.prod .shot::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 78% 4%,rgba(61,139,253,.16),transparent 62%),radial-gradient(60% 50% at 8% 96%,rgba(42,193,188,.20),transparent 62%);pointer-events:none}
+.prod .shot img{width:100%;height:auto;display:block;border-radius:12px;position:relative;z-index:1}
+.prod .shot .pdf{position:relative;z-index:1;margin-top:12px;display:inline-block;padding:5px 13px;border-radius:999px;background:linear-gradient(115deg,#26C6B9,#3D8BFD 60%,#8B6CF6);color:#fff;font-size:.74rem;font-weight:800;letter-spacing:.02em}
+.prod h1{font-size:1.5rem;font-weight:700;letter-spacing:-.025em;word-break:keep-all;margin-bottom:8px}
+.prod .lead{font-size:.94rem;color:var(--sub);word-break:keep-all;margin-bottom:16px}
+.priceRow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.priceRow .was{font-size:1.15rem;font-weight:700;color:#A9BDBB;text-decoration:line-through;letter-spacing:-.02em}
+.priceRow .off{font-size:.72rem;font-weight:800;padding:4px 10px;border-radius:999px;background:linear-gradient(115deg,#26C6B9,#3D8BFD 60%,#8B6CF6);color:#fff;letter-spacing:.01em;white-space:nowrap}
+.priceRow .num{font-size:2.05rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.priceRow .vat{font-size:.82rem;color:var(--faint)}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.chip{font-size:.78rem;font-weight:600;color:#2A6FD8;background:#EAF3FE;border:1px solid rgba(61,139,253,.22);padding:5px 11px;border-radius:999px}
+
+/* ── 지역 카드 ── */
+.regions{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:22px}
+.region{padding:20px 20px 18px;border-radius:20px;text-align:left;cursor:pointer;transition:.15s;position:relative}
+.region.on{outline:2px solid var(--blue);outline-offset:-2px}
+.region.soon{cursor:default;opacity:.8}
+.region .tag{display:inline-block;font-size:.7rem;font-weight:800;padding:3px 9px;border-radius:999px;background:#EAF3FE;color:#2A6FD8;margin-bottom:8px}
+.region .tag.soon{background:#F3F6F5;color:#8AA5A2}
+.region h3{font-size:1.15rem;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+.region p{font-size:.86rem;color:var(--sub);word-break:keep-all;margin-bottom:10px}
+.region .links{display:flex;gap:8px;flex-wrap:wrap}
+.region .links a{font-size:.8rem;font-weight:700;color:var(--blue);border:1px solid rgba(61,139,253,.3);padding:5px 11px;border-radius:999px;background:#fff}
+.gulist{display:flex;flex-wrap:wrap;gap:6px;margin:-8px 0 24px}
+.gulist span{font-size:.78rem;color:#8AA5A2;border:1px dashed rgba(138,165,162,.5);padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.5)}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 18px;font-size:.92rem}
+.toc div{padding:10px 12px;border-radius:12px;background:#F0F6FF;border:1px solid rgba(61,139,253,.14);word-break:keep-all}
+.toc b{display:block;font-size:.8rem;color:#2A6FD8;margin-bottom:2px}
+.diff{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:6px}
+.diff div{padding:14px 16px;border-radius:14px;border:1px solid rgba(13,42,41,.10);background:rgba(255,255,255,.6);font-size:.9rem;word-break:keep-all}
+.diff b{display:block;margin-bottom:4px;font-size:.95rem}
+/* ── 상세/고지 ── */
+.sec{padding:26px 30px;margin-bottom:22px}
+.sec h2{font-size:1.1rem;font-weight:700;letter-spacing:-.02em;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.sec h2::before{content:"";width:9px;height:9px;border-radius:50%;background:linear-gradient(140deg,#2AC1BC,#3D8BFD);box-shadow:0 0 8px rgba(61,139,253,.45)}
+.sec ul{margin:0 0 0 19px;font-size:.93rem}
+.sec li{margin-bottom:7px;word-break:keep-all}
+table.info{width:100%;border-collapse:collapse;font-size:.9rem}
+table.info th{width:132px;text-align:left;vertical-align:top;padding:11px 10px 11px 0;color:var(--sub);font-weight:600;border-bottom:1px solid rgba(127,165,162,.22)}
+table.info td{padding:11px 0;border-bottom:1px solid rgba(127,165,162,.22);word-break:keep-all}
+table.info tr:last-child th,table.info tr:last-child td{border-bottom:none}
+.hl{color:#2A6FD8;font-weight:700}
+.warnbox{margin-top:14px;background:#FFF5F5;border:1px solid #F6CFD0;border-radius:14px;padding:13px 15px;font-size:.87rem;color:#8E3034;word-break:keep-all}
+
+/* ── 결제 영역 ── */
+#payArea{padding:26px 22px 30px}
+#payArea h2{font-size:1.1rem;font-weight:700;margin-bottom:6px;padding:0 8px}
+.buyerBox{padding:0 8px 4px}
+label.f{display:block;font-size:.87rem;font-weight:600;margin:14px 0 6px}
+input.f{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;background:#fff;color:var(--forest);font-family:inherit}
+input.f:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(61,139,253,.15)}
+.hintline{font-size:.8rem;color:var(--faint);margin-top:6px}
+.who{display:flex;align-items:center;gap:9px;font-size:.87rem;color:var(--sub);background:#F3F8FF;border:1px solid rgba(61,139,253,.18);border-radius:12px;padding:10px 13px;margin-top:14px;word-break:keep-all}
+.who b{color:var(--forest)}
+#payment-method,#agreement{margin-top:14px}
+.total{display:flex;justify-content:space-between;align-items:baseline;padding:16px 8px 6px;font-size:.95rem;color:var(--sub)}
+.total b{font-size:1.35rem;font-weight:800;color:var(--forest);letter-spacing:-.02em}
+button.go{width:100%;margin-top:10px;padding:16px;border:none;border-radius:999px;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;font-size:1.05rem;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 8px 20px rgba(61,139,253,.28);transition:.15s}
+button.go:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 12px 26px rgba(61,139,253,.36)}
+button.go:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.msg{display:none;margin-top:12px;font-size:.88rem;padding:11px 14px;border-radius:12px;word-break:keep-all}
+.msg.show{display:block}
+.msg.err{background:#FFF5F5;border:1px solid #F6CFD0;color:#8E3034}
+.agreelink{font-size:.8rem;color:var(--faint);text-align:center;margin-top:12px;padding:0 8px;word-break:keep-all}
+.agreelink a{color:var(--blue);text-decoration:underline}
+footer{background:var(--forest);color:#7FA5A2;padding:34px 0;font-size:.84rem;font-weight:300;text-align:center}
+footer a{color:#B9DCD9;margin:0 8px}
+@media(max-width:820px){nav.gnb{display:none}.prod{grid-template-columns:1fr;padding:24px 20px;gap:20px}.sec{padding:22px 20px}.prod h1{font-size:1.3rem}}
+</style>
+<link rel="stylesheet" href="/hwon-ui.css?v=3">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"부비 지역 분석 리포트 — 동대문구","url":"https://boobi.ai.kr/region-report.html","description":"동대문구 14개 동을 생활권 5개로 나눠 실거래·수급·정비사업·교통을 분석하고 예산대별 매수 전략과 3년 전망까지 담은 디지털 리포트.","image":"https://boobi.ai.kr/og-boobi.png","brand":{"@type":"Brand","name":"부비"},"offers":{"@type":"Offer","url":"https://boobi.ai.kr/region-report.html?region=dongdaemun","price":"19900","priceCurrency":"KRW","availability":"https://schema.org/InStock","seller":{"@type":"Organization","name":"원대시투"}}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "홈", "item": "https://boobi.ai.kr/"}, {"@type": "ListItem", "position": 2, "name": "집 종합 리포트 PDF 구매", "item": "https://boobi.ai.kr/region-report.html"}]}</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="logo" href="/"><img class="logo3d" src="/boobi-ring-3d.png" alt=""><span class="ring"></span><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
+<nav class="gnb">
+<a href="/tools.html">AI진단</a>
+<a href="/calculator.html">계산기</a>
+<a href="/rental-board.html">청년·신혼부부</a>
+<a href="/senior.html">시니어</a>
+<a href="/invest.html">투자</a>
+<a href="/column.html">칼럼</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+<div class="crumb"><a href="/">홈</a> › <a href="/tools.html">AI진단</a> › 지역 분석 리포트</div>
+
+<!-- ── 상품 ── -->
+<section class="glass prod" style="grid-template-columns:1fr">
+  <div>
+    <h1>지역 분석 리포트</h1>
+    <p class="lead">한 지역을 생활권 단위로 뜯어서 실거래·수급·정비사업·교통을 한 번에 보고, "그래서 어느 동의 어떤 단지를 봐야 하는가"까지 결론을 내드립니다. 부비 AI가 결제 시점 기준 최신 데이터로 정리하고, 현장에서 분양·매매를 해온 영팀장이 판단을 검수합니다.</p>
+    <div class="priceRow">
+      <span class="num" id="priceText">19,900원</span>
+      <span class="vat">부가세 포함 · 지역당 1회 구매 · 기간 제한 없이 열람</span>
+    </div>
+    <div class="chips">
+      <span class="chip">결제 즉시 웹에서 열람</span>
+      <span class="chip">한 줄 요약과 순위 결론</span>
+      <span class="chip">상황별 추천 단지</span>
+      <span class="chip">향후 3년 전망</span>
+      <span class="chip">한 번 구매로 갱신본 무료</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── 스펙 · 장점 ── -->
+<section class="glass sec">
+  <h2>이 리포트가 다른 점</h2>
+  <div class="diff">
+    <div><b>한 번 사면 계속 업데이트</b>다른 곳의 지역 강의는 5월에 사고 10월에 또 사야 합니다. 부비 리포트는 지역당 한 번 결제하면 실거래·정비사업 단계가 바뀔 때마다 갱신된 판을 추가 비용 없이 계속 봅니다.</div>
+    <div><b>결론을 냅니다</b>"입지가 좋다"에서 끝나지 않습니다. 어느 동, 어느 단지, 투자가치 1순위, 몇 년 보유인지까지 적고, 그 판단은 영팀장이 검수합니다.</div>
+    <div><b>결제 시점 데이터</b>영상 강의는 촬영한 달에 멈춰 있지만, 이 리포트는 최신 실거래 신고분과 인구·입주물량·정비사업 단계를 기준으로 씁니다.</div>
+    <div><b>15분이면 읽습니다</b>5시간짜리 강의 대신 15분 안에 읽고 바로 임장 동선을 짤 수 있게 만들었습니다. 웹에서 열리니 현장에서 휴대폰으로 다시 봅니다.</div>
+  </div>
+  <div class="toc" style="margin-top:18px">
+    <div><b>한 줄 요약 · 결론</b>지금 이 구에서 봐야 할 동 4순위와 그 근거</div>
+    <div><b>내 상황이라면</b>상권·자금·환경·평형·학군·출퇴근 여섯 상황별 추천 단지</div>
+    <div><b>투자가치 1순위</b>딱 하나 고른 단지와 왜 거래가 적어도 1순위인지</div>
+    <div><b>생활권 분석</b>대표 단지 실거래, 인구 구조, 학군, 교통, 대기 정비사업</div>
+    <div><b>가격 사다리</b>주요 단지 84㎡ 실거래를 한 줄에, 비어 있는 가격대</div>
+    <div><b>수급 결론</b>입주물량·전세·인구로 본 향후 3년 방향</div>
+    <div><b>5년 시간표</b>정비사업·교통 호재를 확실한 것과 아닌 것으로 구분</div>
+    <div><b>예산대별 전략</b>대출 한도 안 월 원리금과 갈아타기 기준</div>
+    <div><b>리스크 · 출처</b>같이 봐야 할 위험, 동네 콘텐츠, 데이터 출처와 한계</div>
+  </div>
+</section>
+
+<!-- ── 지역 선택 ── -->
+<h2 style="font-size:1.15rem;font-weight:800;letter-spacing:-.02em;margin:6px 0 12px">지역별 리포트 <span style="font-size:.82rem;font-weight:600;color:#547471;margin-left:6px">서울 25개 자치구 순차 발행 · 동대문구와 성동구를 먼저 올립니다</span></h2>
+<div class="regions" id="regions">
+  <div class="glass region on" data-region="dongdaemun" role="button" tabindex="0" aria-pressed="true">
+    <span class="tag">2026년 9월 발행</span>
+    <h3>동대문구</h3>
+    <p>청량리역세권·전농답십리·이문휘경·장안·제기용두 5개 생활권. 투자가치 1순위와 2027~2029 전망 결론 포함.</p>
+    <div class="links"><a href="/region-report-dongdaemun.html">무료 미리보기</a></div>
+  </div>
+  <div class="glass region soon" data-region="seongdong" aria-disabled="true">
+    <span class="tag soon">준비 중</span>
+    <h3>성동구</h3>
+    <p>성수·옥수·금호·행당·왕십리. 한강벨트 대장 구의 다음 순서를 정리합니다.</p>
+    <div class="links"><a href="/contact.html">발행 알림 받기</a></div>
+  </div>
+</div>
+<div class="gulist" aria-label="발행 예정 자치구"><span>강남구</span><span>강동구</span><span>강북구</span><span>강서구</span><span>관악구</span><span>광진구</span><span>구로구</span><span>금천구</span><span>노원구</span><span>도봉구</span><span>동작구</span><span>마포구</span><span>서대문구</span><span>서초구</span><span>송파구</span><span>양천구</span><span>영등포구</span><span>용산구</span><span>은평구</span><span>종로구</span><span>중구</span><span>중랑구</span></div>
+
+<section class="glass sec" style="padding:18px 22px"><div class="warnbox" style="margin-top:0">본 리포트는 공개 통계와 실거래 신고 자료를 바탕으로 한 <b>참고 자료</b>이며 투자·법률·세무 자문이 아닙니다. 실거래는 국토부 원본에서 다시 확인하시고, 매수 판단과 결과는 이용자 본인에게 있습니다.</div></section>
+
+<!-- ── 거래 조건 (카드사 심사 필수 고지: 제공기간 + 환불정책) ── -->
+<section class="glass sec">
+  <h2>거래 조건 안내</h2>
+  <table class="info">
+    <tr><th>상품 종류</th><td>디지털 콘텐츠(무형) — 배송되는 실물 상품이 아닙니다</td></tr>
+    <tr><th>판매 가격</th><td><span class="hl">19,900원</span> (부가세 포함, 지역당 1회) — 화면에 표시된 금액과 실제 결제 금액은 동일합니다</td></tr>
+    <tr><th>제공 시기</th><td>결제 승인 <span class="hl">즉시</span> 결제 완료 화면에서 리포트 전문이 열리며, 결제한 이메일로 열람 링크를 보내드립니다</td></tr>
+    <tr><th>제공 방법</th><td>부비 웹사이트 열람 (결제한 기기와 결제한 계정으로 로그인한 기기에서 열립니다)</td></tr>
+    <tr><th>이용 기간</th><td>구매한 지역 리포트는 <span class="hl">기간 제한 없이</span> 열람할 수 있으며, 같은 지역 리포트가 갱신될 때마다 <span class="hl">갱신본도 추가 비용 없이</span> 열립니다 (재구매 불필요)</td></tr>
+    <tr><th>청약철회 · 환불</th><td>리포트 전문을 <span class="hl">열람하기 전</span>에는 언제든 전액 환불됩니다. 「전자상거래 등에서의 소비자보호에 관한 법률」 제17조 제2항에 따라, <b>디지털 콘텐츠의 제공이 개시된 경우에는 청약철회가 제한</b>되며 이 사실을 결제 전 본 화면에 고지합니다. 다만 콘텐츠에 하자가 있거나 표시·광고와 다른 경우에는 제공 개시 이후에도 전액 환불됩니다. 자세한 내용은 <a href="/refund.html" style="color:var(--blue);text-decoration:underline">취소·환불 정책</a>을 확인해 주세요</td></tr>
+    <tr><th>환불 처리 기간</th><td>환불 사유 확인 후 <span class="hl">3영업일 이내</span> 결제수단으로 취소 처리 (카드 승인취소는 카드사 사정에 따라 3~5영업일 추가 소요)</td></tr>
+    <tr><th>문의 · 고객센터</th><td>이메일 tndud.brad@gmail.com · 전화 <span data-bb-tel>(준비 중)</span> · 평일 10:00~18:00</td></tr>
+  </table>
+</section>
+
+<!-- ── 결제 ── -->
+<section class="glass" id="payArea">
+  <h2 id="payTitle">결제하기 — 동대문구 지역 분석 리포트</h2>
+
+  <div class="buyerBox">
+    <div class="who" id="whoBox">
+      <span>📧</span>
+      <span id="whoText">열람 링크를 받으실 이메일을 입력해 주세요. 로그인하고 결제하면 다른 기기에서도 열립니다.</span>
+    </div>
+    <div id="emailWrap">
+      <label class="f" for="buyerEmail">열람 링크 받을 이메일</label>
+      <input class="f" type="email" id="buyerEmail" placeholder="example@email.com" autocomplete="email" inputmode="email">
+      <div class="hintline">이 주소로 열람 링크가 발송됩니다. 정확히 입력해 주세요.</div>
+    </div>
+  </div>
+
+  <div id="payment-method"></div>
+  <div id="agreement"></div>
+
+  <div class="total"><span>총 결제 금액</span><b id="totalText">19,900원</b></div>
+  <button class="go" id="payBtn" type="button" disabled>결제 수단을 불러오는 중…</button>
+  <div class="msg err" id="errMsg"></div>
+
+  <p class="agreelink">결제를 진행하면 <a href="/terms.html">이용약관</a> 및 <a href="/refund.html">취소·환불 정책</a>에 동의하고, 디지털 콘텐츠 제공 개시 후 청약철회가 제한된다는 점을 확인한 것으로 봅니다.</p>
+</section>
+
+</div></main>
+
+<footer><div class="wrap">
+부비 — 부동산 비서<br>
+지역 분석 리포트는 공개 통계와 실거래 신고 자료를 바탕으로 한 참고 자료이며 투자 자문이 아닙니다.<br>© 2026 원대시투 ·
+<a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/terms.html">이용약관</a>·<a href="/refund.html">취소·환불 정책</a>·<a href="/privacy.html">개인정보처리방침</a>
+</div></footer>
+
+<script src="https://js.tosspayments.com/v2/standard"></script>
+<script>
+/* =========================================================
+ * 부비 결제 — 토스페이먼츠 결제위젯 v2
+ * ---------------------------------------------------------
+ * ⚠️ 여기에는 **클라이언트 키만** 들어갑니다.
+ *    시크릿 키는 절대 이 파일에 넣지 마세요 (워커 Secret에만 보관).
+ * ========================================================= */
+
+/* 토스 개발자센터 > 내 개발정보에서 발급받은 **결제위젯 연동 키(gck)** */
+var CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm'; // 심사 통과 후 live_gck_... 로 교체
+var PAY_API    = 'https://boobi-pay.tndud-brad.workers.dev'; // 결제 워커 (신규)
+var REGIONS = { dongdaemun: { id: 'region-report-dongdaemun', name: '동대문구 지역 분석 리포트', page: '/region-report-dongdaemun.html' } };
+var REGION = (new URLSearchParams(location.search).get('region') || 'dongdaemun');
+if(!REGIONS[REGION]) REGION = 'dongdaemun';
+var PRODUCT_ID = REGIONS[REGION].id;
+var AMOUNT     = 19900;            // 화면 표시 금액. 실제 승인 금액은 워커가 가격표로 재검증합니다.
+
+var btn      = document.getElementById('payBtn');
+var errMsg   = document.getElementById('errMsg');
+var emailIn  = document.getElementById('buyerEmail');
+var whoText  = document.getElementById('whoText');
+var widgets  = null;
+var agreed   = false;
+var ready    = false;
+
+function showErr(t){ errMsg.textContent = t; errMsg.classList.add('show'); }
+function clearErr(){ errMsg.classList.remove('show'); }
+function syncBtn(){
+  if(!ready){ btn.disabled = true; return; }
+  btn.disabled = !agreed;
+  btn.textContent = agreed ? (AMOUNT.toLocaleString('ko-KR') + '원 결제하기') : '약관에 동의해 주세요';
+}
+
+/* 로그인 상태면 이메일을 자동으로 채웁니다 (비회원도 구매 가능) */
+function applyUser(u){
+  if(u && u.email){
+    emailIn.value = emailIn.value || u.email;
+    whoText.innerHTML = '<b>' + (u.displayName || u.email) + '</b> 님으로 구매합니다. 리포트는 아래 이메일로 발송됩니다.';
+  }
+}
+document.addEventListener('hwon-auth', function(e){ applyUser(e.detail); });
+[].forEach.call(document.querySelectorAll('.region:not(.soon)'), function(el){ el.addEventListener('click', function(e){ if(e.target.closest('a')) return; document.getElementById('payArea').scrollIntoView({behavior:'smooth',block:'start'}); }); });
+if(location.hash === '#pay'){ setTimeout(function(){ var p=document.getElementById('payArea'); if(p) p.scrollIntoView({block:'start'}); }, 300); }
+if(window.hwonUser) applyUser(window.hwonUser);
+
+/* ── 결제위젯 초기화 ── */
+(async function init(){
+  try{
+    var tossPayments = TossPayments(CLIENT_KEY);
+    /* 단건 결제라 고객 식별이 필요 없으므로 ANONYMOUS를 씁니다.
+       (빌링키/정기결제로 갈 때만 customerKey를 실제 값으로 바꾸세요) */
+    widgets = tossPayments.widgets({ customerKey: TossPayments.ANONYMOUS });
+
+    /* setAmount는 반드시 렌더링 전에 호출해야 합니다 */
+    await widgets.setAmount({ currency: 'KRW', value: AMOUNT });
+
+    await Promise.all([
+      widgets.renderPaymentMethods({ selector: '#payment-method' }),
+      widgets.renderAgreement({ selector: '#agreement' }).then(function(aw){
+        aw.on('agreementStatusChange', function(st){
+          agreed = !!st.agreedRequiredTerms;
+          syncBtn();
+        });
+      })
+    ]);
+
+    ready = true;
+    syncBtn();
+  }catch(e){
+    console.error('widget init fail', e);
+    btn.textContent = '결제 모듈을 불러오지 못했습니다';
+    showErr('결제창을 불러오지 못했습니다. 새로고침 후 다시 시도해 주세요. (' + (e && e.message ? e.message : e) + ')');
+  }
+})();
+
+/* ── 결제 요청 ── */
+btn.addEventListener('click', async function(){
+  clearErr();
+  var email = (emailIn.value || '').trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+    showErr('열람 링크를 받으실 이메일을 정확히 입력해 주세요.');
+    emailIn.focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '주문을 만드는 중…';
+
+  try{
+    /* 1) 서버에 주문을 먼저 만듭니다 — 금액은 서버 가격표에서 정해집니다 */
+    var payload = { productId: PRODUCT_ID, email: email };
+    if(window.hwonUser && window.hwonUser.getIdToken){
+      try{ payload.idToken = await window.hwonUser.getIdToken(); }catch(x){}
+    }
+    var res = await fetch(PAY_API + '/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    var order = await res.json();
+    if(!res.ok || !order.orderId) throw new Error(order.error || '주문 생성에 실패했습니다');
+
+    /* 표시 금액과 서버 금액이 어긋나면 결제하지 않습니다 */
+    if(Number(order.amount) !== AMOUNT) throw new Error('상품 금액이 변경되었습니다. 새로고침 후 다시 시도해 주세요');
+
+    if(window.gtag){ try{ gtag('event','begin_checkout',{currency:'KRW',value:AMOUNT,items:[{item_id:PRODUCT_ID,item_name:order.orderName,price:AMOUNT,quantity:1}]}); }catch(x){} }
+
+    /* 2) 결제창 호출 */
+    await widgets.requestPayment({
+      orderId:    order.orderId,
+      orderName:  order.orderName,
+      successUrl: window.location.origin + '/pay-success.html?product=' + encodeURIComponent(PRODUCT_ID) + '&next=' + encodeURIComponent(REGIONS[REGION].page),
+      failUrl:    window.location.origin + '/pay-fail.html',
+      customerEmail: email
+    });
+  }catch(e){
+    console.error('requestPayment fail', e);
+    var code = e && e.code ? e.code : '';
+    if(code === 'USER_CANCEL'){
+      clearErr();
+    }else{
+      showErr((e && e.message) ? e.message : '결제를 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+    }
+    ready = true;
+    syncBtn();
+  }
+});
+</script>
+<script src="/hwon-auth.js" defer></script>
+<script src="/hwon-ui.js" defer></script>
+<script src="/boobi-reviews.js?v=1" defer></script>
+</body>
+</html>
