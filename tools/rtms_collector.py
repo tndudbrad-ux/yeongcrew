@@ -440,7 +440,40 @@ def shard(listings: list[dict], out_dir: str) -> int:
         json.dump({"updated": date.today().isoformat(), "months": 12,
                    "source": "국토교통부 실거래가 (아파트·연립다세대·오피스텔 매매)",
                    "regions": index}, f, ensure_ascii=False, separators=(",", ":"))
+    price_index(buckets, index, out_dir)
     return len(index)
+
+
+def price_index(buckets: dict, index: dict, out_dir: str) -> None:
+    """시군구별 가격 분위표. 50KB 한 장이라 첫 화면에서 같이 받아도 부담이 없다.
+
+    "서울 사고 싶은데 예산이 안 되는" 유저에게 갈 만한 동네를 대신 짚어주려면
+    고르지 않은 지역의 시세도 알아야 하는데, 256개 파일을 다 받을 수는 없다.
+    아파트만 센다 — 연립·오피스텔을 섞으면 '이 예산으로 살 수 있다'가 왜곡된다.
+    """
+    meta_dir = os.path.join(os.path.dirname(out_dir), "apt-meta")
+    out = {}
+    for code, items in buckets.items():
+        ps = sorted(x["p"] for x in items if x.get("t") == "apt" and x.get("p"))
+        if len(ps) < 20:                     # 표본이 적으면 분위가 의미 없다
+            continue
+        q = [ps[min(len(ps) - 1, int(round(len(ps) * i / 20)))] for i in range(21)]
+        rec = {"sido": index[code]["sido"], "sgg": index[code]["sgg"], "n": len(ps), "q": q}
+        mf = os.path.join(meta_dir, f"{code}.json")
+        if os.path.exists(mf):               # 시군구 중심 좌표 — '가까운 동네' 정렬에 쓴다
+            try:
+                ms = [m for m in json.load(open(mf, encoding="utf-8")) if m.get("lat") is not None]
+                if ms:
+                    rec["lat"] = round(sum(m["lat"] for m in ms) / len(ms), 5)
+                    rec["lng"] = round(sum(m["lng"] for m in ms) / len(ms), 5)
+            except Exception:
+                pass
+        out[code] = rec
+    with open(os.path.join(out_dir, "price-index.json"), "w", encoding="utf-8") as f:
+        json.dump({"updated": date.today().isoformat(),
+                   "note": "시군구별 아파트 매매 실거래 가격 분위(만원). q[i] = 하위 i*5%",
+                   "regions": out}, f, ensure_ascii=False, separators=(",", ":"))
+    print(f"· 가격 분위표 {len(out)}개 시군구 → {out_dir}/price-index.json", flush=True)
 
 
 def glob_json(d: str) -> list[str]:
