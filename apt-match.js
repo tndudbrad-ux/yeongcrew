@@ -111,6 +111,19 @@
   function walkMin(m) { return Math.round(m * 1.3 / 67); }
   function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }   /* 1152 → 1,152 */
 
+  /* 단지에서 가장 가까운 지점. 자산가치(초품아·공원)와 공원 조건이 같이 쓴다. */
+  function nearOf(meta, list, filter) {
+    if (!meta || meta.lat == null || !list || !list.length) return null;
+    var best = null, bd = Infinity;
+    for (var i = 0; i < list.length; i++) {
+      var o = list[i];
+      if (o.lat == null || (filter && !filter(o))) continue;
+      var d = haversine(meta.lat, meta.lng, o.lat, o.lng);
+      if (d < bd) { bd = d; best = o; }
+    }
+    return best ? { o: best, d: bd } : null;
+  }
+
   /* 학급당 학생수(학교알리미 공시). 이건 조건이 아니라 근거다 —
      "학급 과밀 24명 이하인 집을 찾아줘"라고 말하는 사람은 없고,
      학군을 본 김에 그 학교가 몇 명짜리 교실인지 궁금할 뿐이다. */
@@ -200,39 +213,45 @@
     },
     {
       key: 'asset', icon: '📈', label: '자산가치',
-      desc: '정비사업·거래량·동네 시세·단지 규모로 봐요',
-      help: '이 칩은, 다른 칩(역세권·브랜드·신축·학군·공원)이 이미 따로 묻는 걸 빼고\n'
-          + '남은 네 가지를 봅니다.\n'
-          + '① 정비사업 — 그 법정동에 재개발·재건축 구역이 있는지 (서울·부산·인천 정비사업 통계)\n'
-          + '② 동네 시세 — 그 법정동 평당가가 같은 구 안에서 상위 30%인지 (국토부 실거래 12개월)\n'
-          + '③ 거래량 — 그 단지가 최근 1년 실거래 상위 30%인지. 호가만 있고 안 팔리는 단지를 걸러냅니다\n'
-          + '④ 단지 규모 — 1,000세대 이상인지 (전국 상위 12%). 한 칸 풀면 500세대로 내려갑니다\n'
-          + '넷 다 국토부·지자체 공시에서 확인된 사실만 씁니다. 가격이 오른다는 예측이 아닙니다.',
-      /* 단지 규모(세대수)를 네 번째 신호로 둔다. 거래량과 겹쳐 보이지만 성격이 다르다 —
-         거래량은 12개월 표본이라 해마다 흔들리고, 세대수는 바뀌지 않는 구조값이다.
-         팔고 싶을 때 팔리느냐(호가만 있고 거래가 없는 단지가 실제로 많다), 관리비가
-         분산되느냐, 그 이름이 동네 시세 기준점이 되느냐가 여기서 갈린다.
-         전국 분포: 1,000세대↑ 상위 12% · 500세대↑ 상위 41% (중앙값 431세대).
-         그래서 기본 칸은 1,000, 한 칸 풀면 500으로 같이 느슨해진다. */
-      ladder: [{ t: '4가지 중 2개', n: 2, hh: 1000 }, { t: '4가지 중 1개', n: 1, hh: 500 }],
+      /* 현장에서 값이 오를 집을 볼 때 쓰는 말이 '브역대신초공'이다 —
+         브랜드·역세권·대단지·신축·초품아·공(원)세권. 여기에 정비사업과
+         '실제로 팔리느냐(거래량)·동네가 단단하냐(평당가)'를 더한 아홉 가지를
+         전부 세고, 몇 개나 갖췄는지로 본다.
+         다른 칩과 겹치는 건 일부러 그렇게 둔 것이다. 역세권을 따로 고르는 사람은
+         '역 가까운 집'을 원하는 거고, 자산가치를 고르는 사람은 '오를 집'을 원한다.
+         후자에게 "역세권은 따로 누르세요"라고 답하는 건 질문을 못 알아들은 것이다. */
+      desc: '브역대신초공 + 정비사업 — 값을 움직이는 요소를 다 봐요',
+      help: '브랜드 · 역세권 · 대단지 · 신축 · 초품아 · 공원 — 현장에서 말하는 브역대신초공에\n'
+          + '정비사업 · 거래량 · 동네 시세를 더해 아홉 가지를 셉니다.\n'
+          + '몇 개나 갖췄는지가 기준이고, 못 갖춘 항목도 결과에 같이 적습니다.\n'
+          + '전부 국토부·지자체 공시에서 확인된 사실입니다. 가격이 오른다는 예측이 아닙니다.',
+      ladder: [{ t: '9가지 중 5개', n: 5 }, { t: '4개', n: 4 }, { t: '3개', n: 3 }],
       needs: [],
       test: function (c, lv, ctx) {
-        var hits = [], why = [], L = this.ladder[lv];
+        var m = c.meta, hit = [], miss = [];
+        function mark(ok, label, detail) {
+          if (ok) hit.push(detail ? label + ' ' + detail : label);
+          else miss.push(label);
+        }
+        mark(brandTier(m, c.name) === 1, '브랜드', (m && m.bd) ? m.bd.split(',')[0] : '');
+        mark(m && m.sm != null && m.sm <= 10, '역세권', (m && m.sm != null) ? '도보 ' + m.sm + '분' : '');
+        mark(m && m.hh >= 1000, '대단지', (m && m.hh) ? fmt(m.hh) + '세대' : '');
+        var age = c.buildYear ? ctx.thisYear - c.buildYear : null;
+        mark(age != null && age <= 10, '신축', age != null ? age + '년 차' : '');
+        var el = nearOf(m, ctx.schools, function (x) { return x.k === 'e'; });
+        mark(el && el.d <= 500, '초품아', el ? Math.round(el.d) + 'm' : '');
+        var pk = nearOf(m, ctx.parks, null);
+        mark(pk && pk.d <= 500, '공원', pk ? Math.round(pk.d) + 'm' : '');
         var rd = ctx.redevOf ? ctx.redevOf(c) : null;
-        if (rd && rd.n > 0) { hits.push('redev'); why.push(c.dong + ' 정비사업 ' + rd.n + '곳'); }
+        mark(rd && rd.n > 0, '정비사업', rd && rd.n ? rd.n + '곳' : '');
         var S = ctx.stats || {};
-        if (S.dongPyTop && S.dongPyTop[c.dong]) { hits.push('prime'); why.push(c.dong + ' 평당가 구 상위 30%'); }
-        if (S.liquidTop && S.liquidTop[c.name + '|' + c.dong]) { hits.push('liquid'); why.push('최근 1년 거래 상위 30%'); }
-        var hh = c.meta && c.meta.hh;
-        if (hh && hh >= L.hh) { hits.push('scale'); why.push(fmt(hh) + '세대 대단지'); }
-        /* 걸린 것만 보여주면 "나머지는 안 본 건가" 싶다. 못 걸린 항목도 이름만 붙여
-           네 가지를 다 확인했다는 게 화면에서 보이게 한다. */
-        var NAMES = { redev: '정비사업', prime: '동네 시세', liquid: '거래량', scale: '단지 규모' };
-        var miss = [];
-        for (var k in NAMES) if (hits.indexOf(k) < 0) miss.push(NAMES[k]);
-        var line = why.map(function (t) { return '✓ ' + t; }).join(' · ');
-        if (miss.length) line += (line ? ' · ' : '') + '✗ ' + miss.join('·');
-        return { v: hits.length >= L.n ? 'pass' : 'fail', fact: line };
+        mark(!!(S.liquidTop && S.liquidTop[c.name + '|' + c.dong]), '거래량', '');
+        mark(!!(S.dongPyTop && S.dongPyTop[c.dong]), '동네 시세', '');
+
+        var line = hit.length ? '✓ ' + hit.join(' · ') : '';
+        if (miss.length) line += (line ? '  ' : '') + '✗ ' + miss.join('·');
+        return { v: hit.length >= this.ladder[lv].n ? 'pass' : 'fail',
+                 fact: hit.length + '/9 — ' + line };
       }
     },
     {
