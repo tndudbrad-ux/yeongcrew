@@ -129,6 +129,21 @@ footer a{color:#B9DCD9;margin:0 8px}
 .scArw{display:flex;align-items:center;color:#BCD3EF;font-size:1.2rem;font-weight:700;flex:0 0 auto}
 .scFnote{font-size:.79rem;color:#8AA5A2;margin:-14px 0 22px;line-height:1.6}
 
+/* 어떤 AI인가 */
+.scWho{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.95);border-radius:16px;padding:18px 19px;margin-bottom:20px;box-shadow:0 5px 16px rgba(13,42,41,.05)}
+.scWhoT{display:flex;align-items:center;gap:7px;font-size:.92rem;font-weight:800;color:#0D2A29;margin-bottom:10px}
+.scWhoT svg{width:16px;height:16px;flex:0 0 auto}
+.scWhoP{font-size:.89rem;color:#2E4B49;line-height:1.72;margin:0 0 15px}
+.scWhoP b{color:#0D2A29;font-weight:700}
+.scSrc{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:9px;margin-bottom:14px}
+.scS{background:linear-gradient(135deg,rgba(38,198,185,.09),rgba(61,139,253,.09) 60%,rgba(139,108,246,.09));border:1px solid rgba(61,139,253,.18);border-radius:13px;padding:12px 13px}
+.scS .o{display:block;font-size:.72rem;font-weight:700;color:#8AA5A2;margin-bottom:4px;line-height:1.4}
+.scS b{display:block;font-size:.92rem;font-weight:800;color:#0D2A29;line-height:1.4;margin-bottom:4px}
+.scS b em{font-style:normal;background:linear-gradient(115deg,#3D8BFD,#8B6CF6);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.06rem}
+.scS .d{display:block;font-size:.76rem;color:#547471;line-height:1.5}
+.scHon{font-size:.84rem;color:#547471;margin:0;padding-top:13px;border-top:1px dashed #DCEEEC;line-height:1.7}
+.scHon b{color:#3D8BFD;font-weight:700}
+
 /* AI가 대신 하는 일 */
 .scDo{background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.95);border-radius:16px;padding:17px 18px;margin-bottom:20px;box-shadow:0 5px 16px rgba(13,42,41,.05)}
 .scDoT{display:flex;align-items:center;gap:7px;font-size:.88rem;font-weight:800;color:#0D2A29;margin-bottom:12px}
@@ -175,6 +190,18 @@ footer a{color:#B9DCD9;margin:0 8px}
 <div class="scFn out"><span class="cap">내 메일로 오는 건</span><span class="big">2건</span><span class="sub">이유와 입찰가까지 붙여서</span></div>
 </div>
 <p class="scFnote">※ 2026년 9월 둘째 주 실제 선별 결과예요. 물량과 조건에 따라 주마다 달라져요.</p>
+
+<div class="scWho">
+<div class="scWhoT"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#scG)" d="M12 0c.62 6.35 5.03 10.76 12 12-6.97 1.24-11.38 5.65-12 12-.62-6.35-5.03-10.76-12-12C6.97 10.76 11.38 6.35 12 0z"/></svg>어떤 AI인가요?</div>
+<p class="scWhoP">무엇이든 대답하는 범용 챗봇이 아니라, <b>경매 물건 선별 한 가지만 하도록 만든 AI</b>예요. 10주짜리 실전 경매 과정에서 쓰는 판단 기준 — 말소기준권리 판정, 물건 채점, 전용 평단가 정규화, 매도가에서 거꾸로 계산하는 할인율 — 을 그대로 규칙으로 옮겼습니다. 감이나 추측이 아니라 <b>아래 공공 데이터로 확인되는 사실만</b> 근거로 씁니다.</p>
+<div class="scSrc">
+<div class="scS"><span class="o">국토교통부</span><b>실거래가 공개시스템</b><span class="d">아파트·연립다세대 실거래 전량</span></div>
+<div class="scS"><span class="o">K-apt 공동주택관리정보시스템</span><b><em>22,288</em>개 단지</b><span class="d">연식·세대수·주차·관리비</span></div>
+<div class="scS"><span class="o">대한민국 법원</span><b>매각물건명세서</b><span class="d">권리·임차인·비고 원문</span></div>
+<div class="scS"><span class="o">공공데이터포털</span><b>data.go.kr</b><span class="d">정비사업·공공임대 공고</span></div>
+</div>
+<p class="scHon"><b>적중률은 아직 내세우지 않습니다.</b> 추천 입찰가와 실제 낙찰가를 매주 대조해서 기록을 쌓고 있어요. 서비스를 열 때 그 기록을 숫자 그대로 함께 공개할 생각입니다. 아직 없는 실적을 앞세우지 않는 게 맞다고 봤어요.</p>
+</div>
 
 <div class="scDo">
 <div class="scDoT"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#scG)" d="M12 0c.62 6.35 5.03 10.76 12 12-6.97 1.24-11.38 5.65-12 12-.62-6.35-5.03-10.76-12-12C6.97 10.76 11.38 6.35 12 0z"/></svg>이걸 전부 AI가 대신 합니다</div>
