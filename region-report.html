@@ -93,6 +93,46 @@ main{padding:36px 0 70px}
 .diff{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:6px}
 .diff div{padding:14px 16px;border-radius:14px;border:1px solid rgba(13,42,41,.10);background:rgba(255,255,255,.6);font-size:.9rem;word-break:keep-all}
 .diff b{display:block;margin-bottom:4px;font-size:.95rem}
+.rrHero{position:relative;overflow:hidden;border-radius:20px;padding:26px 26px 22px;margin:4px 0 16px;word-break:keep-all;
+ background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.20),transparent 55%),
+  radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.22),transparent 55%),
+  radial-gradient(90% 120% at 50% 0%,rgba(139,108,246,.12),transparent 60%),
+  linear-gradient(135deg,rgba(255,255,255,.94),rgba(255,255,255,.66));
+ border:1.5px solid rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff}
+.rrTop{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.rrSpark{width:26px;height:26px;flex:0 0 auto;filter:drop-shadow(0 2px 7px rgba(61,139,253,.45));animation:rrTw 3.4s ease-in-out infinite}
+@keyframes rrTw{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.13) rotate(10deg)}}
+.rrChip{display:inline-block;padding:5px 13px;border-radius:999px;font-size:.75rem;font-weight:800;color:#fff;white-space:nowrap;
+ background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);box-shadow:0 4px 12px rgba(61,139,253,.26)}
+.rrH{font-size:1.62rem;font-weight:800;letter-spacing:-.02em;line-height:1.35;margin:0 0 10px;color:var(--forest)}
+.rrH .gx{background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 55%,#8B6CF6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rrP{font-size:.95rem;line-height:1.75;color:#2E4B49;margin:0 0 20px;max-width:660px}
+.rrP b{color:var(--forest);font-weight:700}
+.rrCmp{display:flex;align-items:stretch;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.rrCol{flex:1 1 230px;background:rgba(255,255,255,.66);border:1px solid rgba(13,42,41,.09);border-radius:15px;padding:15px 16px}
+.rrCol.win{background:linear-gradient(135deg,rgba(38,198,185,.12),rgba(61,139,253,.12) 55%,rgba(139,108,246,.12));border-color:rgba(61,139,253,.28)}
+.rrLbl{display:block;font-size:.78rem;font-weight:800;color:var(--faint);margin-bottom:10px}
+.rrLbl.on{color:#3D8BFD}
+.rrList{list-style:none;margin:0 0 10px;padding:0}
+.rrList li{display:flex;align-items:baseline;gap:8px;font-size:.9rem;line-height:1.6;padding:5px 0;color:#2E4B49}
+.rrList li i{font-style:normal;font-size:.74rem;font-weight:800;color:#8AA5A2;min-width:34px}
+.rrList.old li{color:#8AA5A2;text-decoration:line-through;text-decoration-color:rgba(229,72,77,.5)}
+.rrList.old li i{text-decoration:none;color:#B8A0A0}
+.rrList.new li{color:var(--forest);font-weight:600}
+.rrList.new li i{color:#3D8BFD}
+.rrFoot{display:block;font-size:.79rem;color:var(--faint);padding-top:9px;border-top:1px dashed rgba(13,42,41,.10)}
+.rrFoot.on{color:#3D8BFD;font-weight:600;border-top-color:rgba(61,139,253,.22)}
+.rrVs{display:flex;align-items:center;font-size:.82rem;font-weight:800;color:#BCD3EF;flex:0 0 auto}
+.rrBig{display:flex;align-items:baseline;justify-content:center;gap:8px;flex-wrap:wrap;padding:14px 10px 4px;border-top:1px solid rgba(61,139,253,.16)}
+.rrBigN{font-size:2.1rem;font-weight:800;line-height:1;background:linear-gradient(115deg,#26C6B9,#3D8BFD 55%,#8B6CF6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rrBigN em{font-style:normal;font-size:1.1rem}
+.rrBigN.inf{font-size:2.4rem}
+.rrBigX{font-size:.88rem;font-weight:700;color:#547471}
+.rrBigD{color:#BCD3EF;font-weight:800;margin:0 6px}
+.rrSub div{position:relative;padding-left:16px}
+.rrIco{display:block;font-size:1.05rem;margin-bottom:5px}
+@media(max-width:560px){.rrHero{padding:22px 17px 18px}.rrH{font-size:1.28rem}.rrVs{display:none}}
+
 /* ── 상세/고지 ── */
 .sec{padding:26px 30px;margin-bottom:22px}
 .sec h2{font-size:1.1rem;font-weight:700;letter-spacing:-.02em;margin-bottom:14px;display:flex;align-items:center;gap:9px}
@@ -158,14 +198,14 @@ footer a{color:#B9DCD9;margin:0 8px}
     <p class="lead">한 지역을 생활권 단위로 뜯어서 실거래·수급·정비사업·교통을 한 번에 보고, "그래서 어느 동의 어떤 단지를 봐야 하는가"까지 결론을 내드립니다. 부비 AI가 결제 시점 기준 최신 데이터로 정리하고, 현장에서 분양·매매를 해온 영팀장이 판단을 검수합니다.</p>
     <div class="priceRow">
       <span class="num" id="priceText">19,900원</span>
-      <span class="vat">부가세 포함 · 지역당 1회 구매 · 기간 제한 없이 열람</span>
+      <span class="vat">부가세 포함 · 지역당 <b style="color:#3D8BFD">딱 1회</b> 구매 · 이후 갱신본 평생 무료</span>
     </div>
     <div class="chips">
       <span class="chip">결제 즉시 웹에서 열람</span>
       <span class="chip">한 줄 요약과 순위 결론</span>
       <span class="chip">상황별 추천 단지</span>
       <span class="chip">향후 3년 전망</span>
-      <span class="chip">한 번 구매로 갱신본 무료</span>
+      <span class="chip">✦ 한 번 결제, 평생 갱신 무료</span>
     </div>
   </div>
 </section>
@@ -173,11 +213,55 @@ footer a{color:#B9DCD9;margin:0 8px}
 <!-- ── 스펙 · 장점 ── -->
 <section class="glass sec">
   <h2>이 리포트가 다른 점</h2>
-  <div class="diff">
-    <div><b>한 번 사면 계속 업데이트</b>다른 곳의 지역 강의는 5월에 사고 10월에 또 사야 합니다. 부비 리포트는 지역당 한 번 결제하면 실거래·정비사업 단계가 바뀔 때마다 갱신된 판을 추가 비용 없이 계속 봅니다.</div>
-    <div><b>결론을 냅니다</b>"입지가 좋다"에서 끝나지 않습니다. 어느 동, 어느 단지, 투자가치 1순위, 몇 년 보유인지까지 적고, 그 판단은 영팀장이 검수합니다.</div>
-    <div><b>결제 시점 데이터</b>영상 강의는 촬영한 달에 멈춰 있지만, 이 리포트는 최신 실거래 신고분과 인구·입주물량·정비사업 단계를 기준으로 씁니다.</div>
-    <div><b>15분이면 읽습니다</b>5시간짜리 강의 대신 15분 안에 읽고 바로 임장 동선을 짤 수 있게 만들었습니다. 웹에서 열리니 현장에서 휴대폰으로 다시 봅니다.</div>
+
+  <div class="rrHero">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+      <linearGradient id="rrG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#26C6B9"/><stop offset="55%" stop-color="#3D8BFD"/><stop offset="100%" stop-color="#8B6CF6"/></linearGradient>
+    </defs></svg>
+
+    <div class="rrTop">
+      <svg class="rrSpark" viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#rrG)" d="M12 0c.62 6.35 5.03 10.76 12 12-6.97 1.24-11.38 5.65-12 12-.62-6.35-5.03-10.76-12-12C6.97 10.76 11.38 6.35 12 0z"/></svg>
+      <span class="rrChip">이거 하나면 됩니다</span>
+    </div>
+
+    <h3 class="rrH">한 번 사면, <span class="gx">평생 업데이트</span></h3>
+    <p class="rrP">지역 강의는 5월에 사고 10월에 또 삽니다. 내용이 낡으니까요. <b>부비 리포트는 지역당 딱 한 번</b>입니다. 실거래가 쌓이고 정비사업 단계가 넘어가고 입주물량이 바뀔 때마다 <b>갱신된 판이 계속 올라오고, 추가 결제는 없습니다.</b></p>
+
+    <div class="rrCmp">
+      <div class="rrCol">
+        <span class="rrLbl">다른 곳 지역 강의</span>
+        <ul class="rrList old">
+          <li><i>5월</i> 결제</li>
+          <li><i>10월</i> 또 결제</li>
+          <li><i>내년</i> 또 결제</li>
+        </ul>
+        <span class="rrFoot">낡으면 다시 사야 합니다</span>
+      </div>
+      <div class="rrVs" aria-hidden="true">vs</div>
+      <div class="rrCol win">
+        <span class="rrLbl on">부비 지역 리포트</span>
+        <ul class="rrList new">
+          <li><i>처음</i> 한 번 결제</li>
+          <li><i>이후</i> 갱신본 무료</li>
+          <li><i>계속</i> 추가 결제 0원</li>
+        </ul>
+        <span class="rrFoot on">데이터가 바뀌면 리포트도 바뀝니다</span>
+      </div>
+    </div>
+
+    <div class="rrBig">
+      <span class="rrBigN">1<em>번</em></span>
+      <span class="rrBigX">결제</span>
+      <span class="rrBigD">·</span>
+      <span class="rrBigN inf">∞</span>
+      <span class="rrBigX">갱신</span>
+    </div>
+  </div>
+
+  <div class="diff rrSub">
+    <div><span class="rrIco">🎯</span><b>결론을 냅니다</b>"입지가 좋다"에서 끝나지 않습니다. 어느 동, 어느 단지, 투자가치 1순위, 몇 년 보유인지까지 적고, 그 판단은 영팀장이 검수합니다.</div>
+    <div><span class="rrIco">📡</span><b>결제 시점 데이터</b>영상 강의는 촬영한 달에 멈춰 있지만, 이 리포트는 최신 실거래 신고분과 인구·입주물량·정비사업 단계를 기준으로 씁니다.</div>
+    <div><span class="rrIco">⏱️</span><b>15분이면 읽습니다</b>5시간짜리 강의 대신 15분 안에 읽고 바로 임장 동선을 짤 수 있게 만들었습니다. 웹에서 열리니 현장에서 휴대폰으로 다시 봅니다.</div>
   </div>
   <div class="toc" style="margin-top:18px">
     <div><b>한 줄 요약 · 결론</b>지금 이 구에서 봐야 할 동 4순위와 그 근거</div>
