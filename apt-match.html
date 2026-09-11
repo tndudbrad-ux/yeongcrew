@@ -615,7 +615,7 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
 
 <script src="/apt-budget.js?v=4"></script>
 <script src="/apt-score.js?v=4"></script>
-<script src="/apt-match.js?v=13"></script>
+<script src="/apt-match.js?v=14"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
@@ -776,6 +776,21 @@ function condList(){ return Object.keys(S.conds).map(function(k){ return {key:k,
    숫자가 줄어드는 걸 보여주려고 칩마다 전체 판정을 다시 돌리던 게 이 화면을 무겁게 만들었다.
    아직 데이터 자체가 없는 조건(조용함)만 잠근다 — 이건 지역 선택과 무관한 사실이라 미리 안다. */
 var NO_DATA={quiet:1};
+/* 자산가치 칩은 네 가지만 보지만, 결과 '순서'는 아홉 가지를 가중 합산한다.
+   이 문장을 손으로 적어두면 가중치를 고칠 때마다 어긋나므로 apt-score 에서 직접 뽑는다. */
+function weightNote(){
+  if(!window.AptScore||!AptScore.INVEST_W) return '';
+  /* apt-score 의 라벨은 추천 화면용이라 길다('정비사업이 도는 곳'). 툴팁에선 짧게. */
+  var SHORTW={subway:'역세권',redev:'정비사업',scale:'대단지',newer:'신축',liquid:'거래량',
+              brand:'브랜드',prime:'동네 시세',elem:'초품아',park:'공원'};
+  var L={}; (AptScore.FACTORS||[]).forEach(function(f){ L[f.key]=SHORTW[f.key]||f.label; });
+  var list=Object.keys(AptScore.INVEST_W)
+    .sort(function(a,b){ return AptScore.INVEST_W[b]-AptScore.INVEST_W[a]; })
+    .map(function(k){ return (L[k]||k)+' '+AptScore.INVEST_W[k].toFixed(1); });
+  if(!list.length) return '';
+  return '\n\n결과 순서를 매길 때는 이 넷만 보지 않습니다. '+list.length+'가지를 가중치로 합산해요 —\n'
+    +list.join(' · ')+'.\n값을 모르는 항목은 감점 없이 중간값으로 처리합니다.';
+}
 function buildCloud(){
   var cloud=$('cloud'); cloud.innerHTML='';
   var soon=[];
@@ -787,7 +802,7 @@ function buildCloud(){
     b.innerHTML='<span class="t">'+c.icon+' '+esc(c.label)+' <em>'+esc(c.ladder[0].t)+'</em>'
       +(locked?'<span class="soonTag">곧 열려요</span>'
         :(c.help?'<span class="qm" role="button" tabindex="0" aria-label="'+esc(c.label)+' 판정 기준">?'
-                +'<span class="tip">'+esc(c.help)+'</span></span>':''))+'</span>'
+                +'<span class="tip">'+esc(c.help+(c.key==='asset'?weightNote():''))+'</span></span>':''))+'</span>'
       +'<span class="d">'+esc(c.desc)+'</span>';
     if(locked){ soon.push(c.label); b.disabled=true; }
     else b.onclick=function(e){
@@ -1161,7 +1176,7 @@ function basisHtml(){
     var c=BoobiMatch.CONDS.filter(function(x){return x.key===k;})[0]; if(!c) return '';
     var lv=S.conds[k]||0;
     return '<li><b>'+c.icon+' '+esc(c.label)+'</b> — '+esc(c.ladder[lv].t)
-      +'<span>'+esc(c.help||c.desc)+'</span></li>';
+      +'<span>'+esc((c.help||c.desc)+(k==='asset'?weightNote():''))+'</span></li>';
   }).filter(Boolean).join('');
   if(!li) return '';
   return '<details class="basis"><summary>이 결과는 무엇을 보고 판정했나요? ('+keys.length+'개 조건)</summary>'
