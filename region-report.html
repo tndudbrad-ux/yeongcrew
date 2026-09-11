@@ -87,6 +87,7 @@ main{padding:36px 0 70px}
 .region .links a{font-size:.8rem;font-weight:700;color:var(--blue);border:1px solid rgba(61,139,253,.3);padding:5px 11px;border-radius:999px;background:#fff}
 .gulist{display:flex;flex-wrap:wrap;gap:6px;margin:-8px 0 24px}
 .gulist span{font-size:.78rem;color:#8AA5A2;border:1px dashed rgba(138,165,162,.5);padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.5)}
+.rgnGroup{font-size:.8rem;font-weight:800;letter-spacing:.08em;color:#3D8BFD;margin:4px 0 8px}
 .rgnHint{font-size:.84rem;color:var(--sub);margin:-10px 0 16px;word-break:keep-all}
 .region:hover{transform:translateY(-2px)}
 .rgnPanel{scroll-margin-top:90px}
@@ -304,7 +305,8 @@ footer a{color:#B9DCD9;margin:0 8px}
 </section>
 
 <!-- ── 지역 선택 ── -->
-<h2 style="font-size:1.15rem;font-weight:800;letter-spacing:-.02em;margin:6px 0 12px">지역별 리포트 <span style="font-size:.82rem;font-weight:600;color:#547471;margin-left:6px">서울 25개 자치구 순차 발행 · 동대문구와 성동구를 먼저 올립니다</span></h2>
+<h2 style="font-size:1.15rem;font-weight:800;letter-spacing:-.02em;margin:6px 0 12px">지역별 리포트 <span style="font-size:.82rem;font-weight:600;color:#547471;margin-left:6px">서울 25개 자치구와 경기 주요 도시 순차 발행</span></h2>
+<p class="rgnGroup">서울</p>
 <div class="regions" id="regions">
   <div class="glass region" data-region="dongdaemun" role="button" tabindex="0" aria-pressed="false">
     <span class="tag">2026년 9월 발행</span>
@@ -411,6 +413,60 @@ footer a{color:#B9DCD9;margin:0 8px}
 </section>
 </div>
 <div class="gulist" aria-label="발행 예정 자치구"><span>강남구</span><span>강동구</span><span>강북구</span><span>강서구</span><span>관악구</span><span>광진구</span><span>구로구</span><span>금천구</span><span>노원구</span><span>도봉구</span><span>동작구</span><span>마포구</span><span>서대문구</span><span>서초구</span><span>송파구</span><span>양천구</span><span>영등포구</span><span>용산구</span><span>은평구</span><span>종로구</span><span>중구</span><span>중랑구</span></div>
+<p class="rgnGroup">경기</p>
+<div class="regions" id="regionsGG">
+  <div class="glass region" data-region="gimpo" role="button" tabindex="0" aria-pressed="false">
+    <span class="tag">2026년 9월 발행</span>
+    <h3>김포시</h3>
+    <p>풍무·사우, 고촌, 걸포·북변, 장기·운양, 구래·마산 5개 생활권. 5호선·GTX-D 일정과 투자가치 1순위 포함.</p>
+    <div class="links"><a href="/region-report-gimpo.html">무료 미리보기</a></div>
+  </div>
+</div>
+<section class="glass sec gainSec rgnPanel" id="panel-gimpo" data-panel="gimpo" hidden>
+  <h2><span class="rgnName">김포시</span> 19,900원으로 얻는 것</h2>
+
+  <div class="gainHero">
+    <p class="gainLead">같은 김포, 같은 전용 84㎡인데 <b>4.1억부터 7.3억까지</b> 있습니다.</p>
+    <div class="gainBar">
+      <span class="gEnd low"><i>마산 동일스위트</i><b>4.1억</b></span>
+      <span class="gLine" aria-hidden="true"><span class="gGap">3.2억 차이</span></span>
+      <span class="gEnd high"><i>풍무센트럴푸르지오</i><b>7.3억</b></span>
+    </div>
+    <p class="gainNote">김포 리포트에 실제로 들어 있는 28개 단지 2026년 실거래 중 양끝(분양권 제외). 국토부 실거래 기반.</p>
+    <p class="gainKick">어느 역, 어느 단지를 고르느냐로 <b>3억이 갈리고,</b> 2021년 고점에서 12% 빠진 단지와 38% 빠진 단지가 갈립니다.<br>이 리포트는 봐야 할 생활권 4순위와 투자가치 1순위 단지를 <b>이름으로 적어서</b> 드립니다.</p>
+  </div>
+
+  <div class="gainGrid">
+    <div class="gainCard">
+      <span class="gNum">15<em>분</em></span>
+      <b>5시간 강의 대신</b>
+      <span>지역 강의 한 편이 5시간입니다. 이건 15분 안에 읽고 바로 임장 동선을 짤 수 있게 썼습니다.</span>
+    </div>
+    <div class="gainCard">
+      <span class="gNum">4<em>순위</em></span>
+      <b>"교통 호재 많다"로 안 끝냅니다</b>
+      <span>5호선·GTX-D가 언제 실제로 오는지, 7년 보유와 10년 보유에서 답이 어떻게 갈리는지까지 적습니다. 판단은 영팀장이 검수합니다.</span>
+    </div>
+    <div class="gainCard">
+      <span class="gNum gInf">∞</span>
+      <b>한 번 결제로 끝</b>
+      <span>실거래가 쌓이고 5호선 기본계획이 나오고 입주가 시작될 때마다 갱신본이 올라옵니다. 추가 결제는 없습니다.</span>
+    </div>
+  </div>
+
+  <div class="gainCmp">
+    <span>7억짜리 결정을 내리는 데 쓰는 돈 <b>19,900원</b></span>
+    <span class="gPct">집값의 0.0028%</span>
+  </div>
+
+  <div class="rgnCta">
+    <button class="rgnBuy" type="button" data-go-pay>19,900원 결제하고 전부 보기</button>
+    <a class="rgnPrev" href="/region-report-gimpo.html">무료 미리보기 먼저</a>
+  </div>
+  <p class="rgnCtaNote">지역당 딱 1회 결제 · 갱신본 평생 무료 · 전문 열람 전 전액 환불</p>
+</section>
+<div class="gulist" aria-label="발행 예정 경기 도시"><span>안양시 (다음 발행)</span></div>
+
 
 <section class="glass sec" style="padding:18px 22px"><div class="warnbox" style="margin-top:0">본 리포트는 공개 통계와 실거래 신고 자료를 바탕으로 한 <b>참고 자료</b>이며 투자·법률·세무 자문이 아닙니다. 실거래는 국토부 원본에서 다시 확인하시고, 매수 판단과 결과는 이용자 본인에게 있습니다.</div></section>
 
@@ -477,7 +533,8 @@ var CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm'; // 심사 통과 후 
 var PAY_API    = 'https://boobi-pay.tndud-brad.workers.dev'; // 결제 워커 (신규)
 var REGIONS = {
   dongdaemun: { id: 'region-report-dongdaemun', name: '동대문구 지역 분석 리포트', page: '/region-report-dongdaemun.html' },
-  seongdong:  { id: 'region-report-seongdong',  name: '성동구 지역 분석 리포트',  page: '/region-report-seongdong.html' }
+  seongdong:  { id: 'region-report-seongdong',  name: '성동구 지역 분석 리포트',  page: '/region-report-seongdong.html' },
+  gimpo:      { id: 'region-report-gimpo',      name: '김포시 지역 분석 리포트',  page: '/region-report-gimpo.html' }
 };
 var REGION_Q = new URLSearchParams(location.search).get('region');
 var REGION = (REGION_Q || 'dongdaemun');
