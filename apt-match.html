@@ -616,13 +616,17 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
 
 <script src="/apt-budget.js?v=4"></script>
 <script src="/apt-score.js?v=4"></script>
-<script src="/apt-match.js?v=15"></script>
+<script src="/apt-match.js?v=16"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
    흐름: 지역 → 조건 → 면적 → (출퇴근지) → (자녀) → 주택수 → 현금 → 소득 → 결과
    ═══════════════════════════════════════════════════════════════════════ */
-var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},schools:{},parks:{},redev:[]};
+var DATA={regions:null,index:null,lta:null,code:{},listings:{},meta:{},schools:{},parks:{},redev:[],px:null};
+/* 고르지 않은 지역의 시세. "서울 사고 싶은데 예산이 안 되는" 사람에게 갈 만한 동네를
+   대신 짚어주려면 이게 있어야 한다. 50KB 한 장이고, 없으면 그 안내만 빠진다. */
+fetch('/data/listings/price-index.json').then(function(r){ return r.ok?r.json():null; })
+  .then(function(j){ DATA.px=j&&j.regions||null; }).catch(function(){});
 var S={sido:null,codes:[],all:false,conds:{},sizeLv:3,openLadder:null,work:null,kids:'초등학생',own:'none',first:false,budgetBy:{},saveMonthly:0,corp:0,loanPct:100,loadP:null};
 var $=function(id){return document.getElementById(id);};
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1134,6 +1138,14 @@ function renderMatch(){
   } else {
     h+=zeroHtml(res);
   }
+  /* 결과가 몇 개 나왔더라도, 예산이 이 동네 하위 10%에도 못 미치면
+     "여기선 선택지가 사실상 없다"는 뜻이다. 그 사실을 숨기지 않는다. */
+  if(n>0 && DATA.px){
+    var bud2=Math.max.apply(null,Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].price;}));
+    var low=S.codes.map(function(c){ return DATA.px[c]&&DATA.px[c].q?DATA.px[c].q[2]:null; })
+                   .filter(function(x){return x!=null;});
+    if(low.length && bud2 < Math.min.apply(null,low)) h+=elsewhereHtml(bud2);
+  }
   if(res.relax.some(function(r){return r.add>0;})){
     h+='<div class="secH">🔓 조건 하나만 풀면</div><div class="relaxList">'
       +res.relax.filter(function(r){return r.add>0;}).map(function(r){ return '<button type="button" class="relaxRow" onclick="relaxOne(\''+r.key+'\')"><span>'+r.icon+' '+esc(r.label)+' '+esc(r.from)+' → <span class="to">'+esc(r.to)+'</span></span><b>+'+fmtN(r.add)+'곳</b></button>'; }).join('')+'</div>';
@@ -1245,6 +1257,52 @@ function cardHtml(u){
 }
 
 /* ── 0곳: 네 갈래에 숫자를 붙인다 ───────────────────────────────────── */
+/* 예산으로 실제로 살 수 있는 동네를 짚어준다.
+   "경기도도 보세요"가 아니라 "광명 3.9억·직장 12km"까지 대야 움직일 수 있다. */
+function elsewhere(bud, limit){
+  if(!DATA.px||!bud||!isFinite(bud)) return [];
+  var here={}; S.codes.forEach(function(c){ here[c]=1; });
+  /* 기준점: 직장이 있으면 직장, 없으면 지금 고른 지역의 중심 */
+  var org=null;
+  if(S.work&&S.work.lat!=null) org={lat:S.work.lat,lng:S.work.lng,by:'직장'};
+  else { var ls=S.codes.map(function(c){return DATA.px[c];}).filter(function(x){return x&&x.lat!=null;});
+    if(ls.length) org={lat:ls.reduce(function(a,x){return a+x.lat;},0)/ls.length,
+                       lng:ls.reduce(function(a,x){return a+x.lng;},0)/ls.length, by:'지금 지역'}; }
+  if(!org) return [];
+  var out=[];
+  for(var code in DATA.px){
+    if(here[code]) continue;
+    var r=DATA.px[code]; if(r.lat==null) continue;
+    /* 예산 이하 거래가 몇 %인가 — 20% 는 돼야 '고를 수 있다'고 말할 수 있다 */
+    var pct=0; for(var i=20;i>=0;i--){ if(r.q[i]<=bud){ pct=i*5; break; } }
+    if(pct<20) continue;
+    out.push({code:code, sido:r.sido, sgg:r.sgg, pct:pct, med:r.q[10],
+              km:BoobiMatch.haversine(org.lat,org.lng,r.lat,r.lng)/1000});
+  }
+  out.sort(function(a,b){ return a.km-b.km; });
+  return { by:org.by, list:out.slice(0,limit||4) };
+}
+function elsewhereHtml(bud){
+  var e=elsewhere(bud,4); if(!e.list||!e.list.length) return '';
+  var rows=e.list.map(function(x){
+    return '<button type="button" class="path" onclick="gotoRegion(\''+x.code+'\')">'
+      +'<span><span class="k">📍 '+esc(SHORT[x.sido]||x.sido)+' '+esc(x.sgg)+'</span>'
+      +'<span class="s">예산 안에 드는 거래가 '+x.pct+'% · 이 동네 중앙값 '+readMan(x.med)
+      +' · '+e.by+'에서 직선 '+x.km.toFixed(0)+'km</span></span><b>보기 →</b></button>';
+  }).join('');
+  return '<div class="secH">🧭 예산이 실제로 닿는 동네</div>'
+    +'<p class="hintline" style="margin:0 0 8px">고르신 지역은 예산으로 살 수 있는 매물이 거의 없어요. '
+    +e.by+'에서 가까운 순으로, 예산 안에 드는 거래가 5분의 1이 넘는 곳만 골랐습니다. 거리는 직선거리예요.</p>'
+    +'<div class="paths">'+rows+'</div>';
+}
+window.gotoRegion=function(code){
+  var sido=(DATA.px[code]||{}).sido; if(!sido) return;
+  S.sido=sido; S.all=false; S.codes=[code];
+  ga('match_elsewhere',{code:code});
+  $('matchOut').innerHTML='<p class="note" style="text-align:center;padding:24px 0">'+esc((DATA.px[code]||{}).sgg||'')+' 실거래를 불러오는 중…</p>';
+  loadRegion(S.codes).then(function(){ computeBudgets(); renderBudget(computeBudgets()); renderMatch();
+    $('matchOut').scrollIntoView({behavior:'smooth',block:'start'}); });
+};
 function zeroHtml(res){
   var rows=allRows(), conds=condList();
   var bud=Math.max.apply(null,Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].price;}));
@@ -1269,6 +1327,7 @@ function zeroHtml(res){
     if(need>0){ var s=S.saveMonthly>0?' · 월 '+fmtN(S.saveMonthly)+'만원 저축이면 약 '+(need/S.saveMonthly/12).toFixed(1)+'년':' · 저축액을 적으면 기간을 계산해드려요';
       h+='<a class="path" href="/cheongyak-board.html"><span><span class="k">⏳ '+readMan(need)+' 더 있으면</span><span class="s">조건에 맞는 가장 가까운 곳 '+esc(cheapest.name)+' '+readMan(cheapest.price)+s+(S.own==='none'?' · 무주택이면 청약 특별공급 자격도 확인해보세요':'')+'</span></span><b>청약 →</b></a>'; }
   }
+  h+=elsewhereHtml(bud);
   return h+'</div></div>';
 }
 window.clearConds=function(){ S.conds={}; S.sizeLv=3; renderMatch(); };

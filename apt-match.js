@@ -524,5 +524,6 @@
   }
 
   root.BoobiMatch = { CONDS: CONDS, run: run, countFull: countFull, availability: availability,
-                      buildStats: buildStats, metaKey: metaKey, norm: norm, dongKey: dongKey, indexMeta: indexMeta, test: test };
+                      buildStats: buildStats, metaKey: metaKey, norm: norm, dongKey: dongKey, indexMeta: indexMeta,
+                      haversine: haversine, test: test };
 })(typeof window !== 'undefined' ? window : globalThis);
