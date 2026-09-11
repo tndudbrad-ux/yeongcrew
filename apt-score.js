@@ -208,8 +208,14 @@
     {
       key: 'brand', icon: '🏢', label: '브랜드 아파트',
       desc: '단지명에 시공 브랜드가 확인되는 곳',
-      raw: function (d) { return brandOf(d.name) ? 1 : 0; },
-      why: function (d) { var b = brandOf(d.name); return b ? b + ' 브랜드 단지' : null; }
+      /* 단지명에 브랜드가 안 붙은 곳도 시공사가 1군이면 브랜드 단지다
+         ('올림픽선수기자촌'처럼 이름만으로는 안 잡히는 경우). */
+      raw: function (d) { return (brandOf(d.name) || (d.meta && d.meta.bd)) ? 1 : 0; },
+      why: function (d) {
+        var b = brandOf(d.name);
+        if (b) return b + ' 브랜드 단지';
+        return (d.meta && d.meta.bd) ? d.meta.bd + ' 시공' : null;
+      }
     },
     {
       key: 'newer', icon: '🏗️', label: '지은 지 얼마 안 된 곳',
@@ -287,20 +293,117 @@
         var g = monthsBetween(d.dealYm, C.stats.maxYm);
         return g <= 2 ? d.dealYm.replace('-', '.') + ' 거래 (가장 최근)' : null;
       }
+    },
+
+    /* ── 아래 넷은 K-apt 단지 메타(d.meta)와 좌표가 붙어야 값이 나온다.
+       메타가 없는 건은 raw 가 NaN 을 돌려 정규화에서 중립(50)을 받는다 —
+       모른다는 이유로 꼴찌를 주면 데이터 공백이 곧 감점이 되기 때문이다. ── */
+    {
+      key: 'scale', icon: '🏘', label: '대단지',
+      desc: '세대수가 많아 거래가 붙고 관리비가 분산되는 단지',
+      /* 세대수는 거래량과 겹쳐 보이지만 성격이 다르다. 거래량은 12개월 표본이라
+         해마다 흔들리고, 세대수는 바뀌지 않는 구조값이다.
+         전국 분포: 중앙값 431세대 · 1,000세대↑ 상위 12%. */
+      raw: function (d) { return (d.meta && d.meta.hh) ? d.meta.hh : NaN; },
+      why: function (d) {
+        var h = d.meta && d.meta.hh; if (!h) return null;
+        return num(h) + '세대' + (h >= 1000 ? ' 대단지' : '');
+      }
+    },
+    {
+      key: 'subway', icon: '🚇', label: '역세권',
+      desc: 'K-apt 공시 기준 가장 가까운 지하철역 도보 시간',
+      /* 분이 짧을수록 좋으니 부호를 뒤집는다 */
+      raw: function (d) { return (d.meta && d.meta.sm != null) ? -d.meta.sm : NaN; },
+      why: function (d) {
+        var m = d.meta && d.meta.sm; if (m == null) return null;
+        return (d.meta.st ? d.meta.st + ' ' : '') + '도보 ' + m + '분';
+      }
+    },
+    {
+      key: 'elem', icon: '🏫', label: '초품아',
+      desc: '단지에서 가장 가까운 초등학교까지의 직선 거리',
+      raw: function (d, C) {
+        var n = nearest(d, C.elem); return n ? -n.d : NaN;
+      },
+      why: function (d, C) {
+        var n = nearest(d, C.elem); if (!n) return null;
+        return n.o.n + ' ' + Math.round(n.d) + 'm' + (n.d <= 500 ? ' (초품아)' : '');
+      }
+    },
+    {
+      key: 'park', icon: '🌳', label: '공원',
+      desc: '걸어서 갈 수 있는 근린공원급(1만㎡ 이상) 거리',
+      raw: function (d, C) {
+        var n = nearest(d, C.parks); return n ? -n.d : NaN;
+      },
+      why: function (d, C) {
+        var n = nearest(d, C.parks); if (!n) return null;
+        return n.o.n + ' ' + Math.round(n.d) + 'm';
+      }
     }
   ];
 
   var FMAP = {};
   for (var fi = 0; fi < FACTORS.length; fi++) FMAP[FACTORS[fi].key] = FACTORS[fi];
 
-  /* 데이터가 아직 없어서 뺀 요소 — 화면에 솔직히 밝힌다 */
-  var PENDING = ['역세권·교통', '학군·초품아', '세대수(대단지)'];
+  /* 데이터가 아직 없어서 뺀 요소 — 화면에 솔직히 밝힌다.
+     평지(경사도)는 쓸 만한 공개 데이터를 아직 못 찾았다. 추정으로 채우지 않는다. */
+  var PENDING = ['평지·경사'];
 
   /* 투자 모드 고정 가중치.
-     인수인계 문서의 원안은 정비사업 2.5 · 역세권 2.0 · 연식 1.5 · 대단지 1.5 · 거래량 1.0.
-     연식은 실거래 API가 주는 건축년도로 채웠다(아파트 기준 100% 확보).
-     역세권·대단지는 아직 쓸 데이터가 없어 빼둔다 — 추정으로 채우지 않는다. */
-  var INVEST_W = { redev: 2.5, newer: 1.5, liquid: 1.0, prime: 1.0 };
+     인수인계 원안(정비사업 2.5 · 역세권 2.0 · 연식 1.5 · 대단지 1.5 · 거래량 1.0)을 지키고,
+     좌표·단지메타가 붙으면서 열린 역세권·대단지·초품아·공원을 채워 넣었다.
+     값이 없는 단지는 정규화에서 중립(50)을 받으므로, 메타가 없다고 밀려나지 않는다. */
+  var INVEST_W = {
+    redev:  2.5,   /* 정비사업 — 가격을 가장 크게 움직인다 */
+    subway: 2.0,   /* 역세권 */
+    scale:  1.5,   /* 대단지 */
+    newer:  1.5,   /* 신축 */
+    brand:  1.2,   /* 브랜드 */
+    liquid: 1.0,   /* 거래량 — 팔고 싶을 때 팔리나 */
+    prime:  1.0,   /* 동네 시세 */
+    elem:   1.0,   /* 초품아 */
+    park:   0.8    /* 공원 */
+  };
+
+  function num(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  function haversine(la1, lo1, la2, lo2) {
+    var R = 6371000, rad = Math.PI / 180;
+    var dLa = (la2 - la1) * rad, dLo = (lo2 - lo1) * rad;
+    var a = Math.sin(dLa / 2) * Math.sin(dLa / 2)
+          + Math.cos(la1 * rad) * Math.cos(la2 * rad) * Math.sin(dLo / 2) * Math.sin(dLo / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));   /* m */
+  }
+
+  /* 목록마다 캐시 키를 하나 붙여 둔다. 'elem' 은 초등학교(k==='e')만 남긴다. */
+  var TAGN = 0;
+  function tagged(list, kind) {
+    if (!list || !list.length) return null;
+    var out = (kind === 'elem')
+      ? list.filter(function (x) { return x.k === 'e' && x.lat != null; })
+      : list.filter(function (x) { return x.lat != null; });
+    if (!out.length) return null;
+    out.__k = kind + (++TAGN);
+    return out;
+  }
+
+  /* 단지에서 가장 가까운 지점. 단지 하나당 수천 곳을 훑으므로 결과를 캐시한다
+     (같은 단지가 면적대마다 여러 행으로 들어온다). */
+  var NEAR = {};
+  function nearest(d, list) {
+    if (!list || !list.length) return null;
+    var m = d.meta; if (!m || m.lat == null) return null;
+    var k = list.__k + '|' + m.lat + ',' + m.lng;
+    if (k in NEAR) return NEAR[k];
+    var best = null, bd = Infinity;
+    for (var i = 0; i < list.length; i++) {
+      var o = list[i], dist = haversine(m.lat, m.lng, o.lat, o.lng);
+      if (dist < bd) { bd = dist; best = o; }
+    }
+    return (NEAR[k] = best ? { o: best, d: bd } : null);
+  }
 
   function normalize(vals) {
     var min = Infinity, max = -Infinity, i;
@@ -338,6 +441,9 @@
       budget: opt.budget || 0,
       regulated: !!opt.regulated,   /* 투기과열지구 여부 — 양도 제한 판정에 쓴다 */
       now: opt.now || new Date(),
+      /* 초등학교·공원은 호출 쪽이 넘긴다(fetch 는 페이지 몫). 없으면 그 요소만 중립이 된다. */
+      elem: tagged(opt.schools, 'elem'),
+      parks: tagged(opt.parks, 'park'),
       redev: {}
     };
     var rr = opt.redevRows || [];
@@ -371,7 +477,7 @@
         sc += W[key] * norm[key][idx];
       }
       /* 근거: 유저가 고른 순서대로. 투자 모드는 고정 가중치 순서대로. */
-      var order = invest ? ['redev', 'liquid', 'prime'] : prios;
+      var order = invest ? ['redev', 'subway', 'scale', 'newer', 'brand', 'liquid', 'prime', 'elem', 'park'] : prios;
       var why = [], bars = [];
       for (var w = 0; w < order.length; w++) {
         var Fx = FMAP[order[w]]; if (!Fx) continue;
@@ -411,6 +517,6 @@
     FACTORS: FACTORS, PENDING: PENDING, INVEST_W: INVEST_W,
     brandOf: brandOf, stageRank: stageRank, stageDate: stageDate,
     tradeStatus: tradeStatus, redevNotice: redevNotice, sameSgg: sameSgg,
-    redevMatch: redevMatch, buildStats: buildStats, rank: rank
+    redevMatch: redevMatch, buildStats: buildStats, rank: rank, haversine: haversine
   };
 })(typeof window !== 'undefined' ? window : this);
