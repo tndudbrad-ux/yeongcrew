@@ -105,9 +105,59 @@ footer a{color:#B9DCD9;margin:0 8px}
 <div class="orbitHint" id="orbitHint">← 좌우로 돌려보세요 →</div>
 
 
+<!-- boobi-screener-teaser start -->
+<style>
+.scT{position:relative;overflow:hidden;display:block;margin:26px 0 6px;border-radius:20px;padding:24px 26px;text-decoration:none;color:#0D2A29;word-break:keep-all;
+ background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.18),transparent 55%),
+  radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.20),transparent 55%),
+  radial-gradient(90% 120% at 50% 0%,rgba(139,108,246,.10),transparent 60%),
+  linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.62));
+ border:1.5px solid rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;
+ backdrop-filter:blur(14px);transition:transform .15s,box-shadow .15s}
+.scT:hover{transform:translateY(-2px);box-shadow:0 20px 50px rgba(13,42,41,.14),inset 0 1px 0 #fff}
+.scTtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:11px}
+.scTsp{width:24px;height:24px;flex:0 0 auto;filter:drop-shadow(0 2px 7px rgba(61,139,253,.45));animation:scTtw 3.4s ease-in-out infinite}
+@keyframes scTtw{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.13) rotate(10deg)}}
+.scTc1{display:inline-block;padding:4px 12px;border-radius:999px;font-size:.72rem;font-weight:800;color:#fff;white-space:nowrap;
+ background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);box-shadow:0 4px 12px rgba(61,139,253,.26)}
+.scTc2{display:inline-block;padding:4px 11px;border-radius:999px;font-size:.72rem;font-weight:700;color:#3D8BFD;background:#F0F6FF;white-space:nowrap}
+.scT h3{font-size:1.3rem;font-weight:800;margin:0 0 9px;line-height:1.4;letter-spacing:-.01em;color:#0D2A29}
+.scT h3 .gx{background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 55%,#8B6CF6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.scT p{font-size:.92rem;color:#2E4B49;line-height:1.72;margin:0 0 16px;max-width:620px}
+.scT p b{color:#0D2A29;font-weight:700}
+.scTf{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:16px}
+.scTf .n{background:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.95);border-radius:12px;padding:9px 15px;text-align:center;box-shadow:0 4px 13px rgba(13,42,41,.05)}
+.scTf .n i{display:block;font-style:normal;font-size:.71rem;font-weight:700;color:#8AA5A2;margin-bottom:2px}
+.scTf .n b{display:block;font-size:1.26rem;font-weight:800;color:#547471;line-height:1.25}
+.scTf .n.on{background:linear-gradient(135deg,rgba(61,139,253,.11),rgba(139,108,246,.11));border-color:rgba(61,139,253,.3)}
+.scTf .n.on i{color:#3D8BFD}
+.scTf .n.on b{background:linear-gradient(115deg,#3D8BFD,#8B6CF6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.scTf em{font-style:normal;color:#BCD3EF;font-size:1.1rem;font-weight:700}
+.scTgo{display:inline-flex;align-items:center;gap:7px;font-size:.9rem;font-weight:800;color:#3D8BFD}
+@media(max-width:520px){.scT{padding:20px 17px}.scT h3{font-size:1.1rem}}
+</style>
+<a class="scT" href="/auction-tools.html">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="scTG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#26C6B9"/><stop offset="55%" stop-color="#3D8BFD"/><stop offset="100%" stop-color="#8B6CF6"/></linearGradient></defs></svg>
+<span class="scTtop">
+<svg class="scTsp" viewBox="0 0 24 24" aria-hidden="true"><path fill="url(#scTG)" d="M12 0c.62 6.35 5.03 10.76 12 12-6.97 1.24-11.38 5.65-12 12-.62-6.35-5.03-10.76-12-12C6.97 10.76 11.38 6.35 12 0z"/></svg>
+<span class="scTc1">준비중</span><span class="scTc2">AI 경매 물건 선별</span>
+</span>
+<h3>경매 물건 수백 건, <span class="gx">AI가 먼저 다 봅니다</span></h3>
+<p>경매 사이트를 처음부터 끝까지 넘겨보는 일은 이제 안 하셔도 돼요. <b>권리분석부터 시세·입찰가·수익 계산까지 AI가 끝낸 다음</b>, 실제로 입찰해볼 만한 것만 골라 보내드립니다.</p>
+<span class="scTf">
+<span class="n"><i>이번 주 물건</i><b>305건</b></span>
+<em>›</em>
+<span class="n on"><i>내 메일로</i><b>2건</b></span>
+<em></em>
+</span>
+<span class="scTgo">어떤 AI인지 보기 →</span>
+</a>
+<!-- boobi-screener-teaser end -->
+
 <h2 class="sec">🩺 계약 전 진단</h2>
 <div class="grid">
-<a class="card" href="/region-report.html" style="border-color:rgba(61,139,253,.35);box-shadow:0 8px 22px rgba(61,139,253,.12)"><h3>🗺️ 지역 분석 리포트 <span style="display:inline-block;vertical-align:middle;margin-left:5px;padding:2px 9px;border-radius:999px;background:linear-gradient(115deg,#26C6B9,#3D8BFD 60%,#8B6CF6);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.01em">NEW · 19,900원</span></h3><p>동대문구 편 — 어느 동의 어떤 단지를 봐야 하는지, 투자 1순위와 3년 전망까지 결론</p></a>
+<a class="card" href="/region-report.html" style="border-color:rgba(61,139,253,.35);box-shadow:0 8px 22px rgba(61,139,253,.12)"><h3>🗺️ 지역 분석 리포트 <span style="display:inline-block;vertical-align:middle;margin-left:5px;padding:2px 9px;border-radius:999px;background:linear-gradient(115deg,#26C6B9,#3D8BFD 60%,#8B6CF6);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.01em">NEW · 19,900원</span></h3><p>동대문구·성동구 편 — 어느 동의 어떤 단지를 봐야 하는지, 투자 1순위와 3년 전망까지 결론</p></a>
 <a class="card" href="/pay.html" style="border-color:rgba(61,139,253,.35);box-shadow:0 8px 22px rgba(61,139,253,.12)"><h3>📄 집 종합 리포트 PDF <span style="display:inline-block;vertical-align:middle;margin-left:5px;padding:2px 9px;border-radius:999px;background:linear-gradient(115deg,#26C6B9,#3D8BFD 60%,#8B6CF6);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.01em"><s style="opacity:.62;font-weight:700">4,900원</s> 2,900원</span></h3><p>세금·대출 한도·전세 리스크를 A4 6페이지로 · 결제 즉시 이메일 발송</p></a>
 <a class="card" href="/home-report.html"><h3>🏠 집 종합 리포트</h3><p>주소 하나로 세금·리스크 한눈에, 신호등 결론까지</p></a>
 <a class="card" href="/jeonse-safety-check.html"><h3>🔍 전세사기 정밀진단</h3><p>등기부 PDF 자동 분석 — 신탁·압류·근저당·깡통 위험</p></a>
