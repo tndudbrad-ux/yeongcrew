@@ -352,19 +352,20 @@
   var PENDING = ['평지·경사'];
 
   /* 투자 모드 고정 가중치.
-     인수인계 원안(정비사업 2.5 · 역세권 2.0 · 연식 1.5 · 대단지 1.5 · 거래량 1.0)을 지키고,
-     좌표·단지메타가 붙으면서 열린 역세권·대단지·초품아·공원을 채워 넣었다.
+     원안은 정비사업 2.5 · 역세권 2.0 이었는데 둘을 맞바꿨다 —
+     정비사업은 몇 년 뒤에나 실현되고 무산·지연도 잦은 반면,
+     역세권은 지금 이 순간에도 값에 박혀 있고 사라지지 않는 조건이다.
      값이 없는 단지는 정규화에서 중립(50)을 받으므로, 메타가 없다고 밀려나지 않는다. */
   var INVEST_W = {
-    redev:  2.5,   /* 정비사업 — 가격을 가장 크게 움직인다 */
-    subway: 2.0,   /* 역세권 */
+    subway: 2.5,   /* 역세권 — 이미 값에 박혀 있고 변하지 않는다 */
+    redev:  2.0,   /* 정비사업 — 크게 움직이지만 실현까지 멀다 */
     scale:  1.5,   /* 대단지 */
     newer:  1.5,   /* 신축 */
+    liquid: 1.5,   /* 거래량 — 팔고 싶을 때 팔리나. 호가만 있고 거래가 없는 단지가 실제로 많다 */
     brand:  1.2,   /* 브랜드 */
-    liquid: 1.0,   /* 거래량 — 팔고 싶을 때 팔리나 */
     prime:  1.0,   /* 동네 시세 */
     elem:   1.0,   /* 초품아 */
-    park:   0.8    /* 공원 */
+    park:   0.5    /* 공원 — 있으면 좋지만 값을 끌어올리는 힘은 약하다 */
   };
 
   function num(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
@@ -477,7 +478,7 @@
         sc += W[key] * norm[key][idx];
       }
       /* 근거: 유저가 고른 순서대로. 투자 모드는 고정 가중치 순서대로. */
-      var order = invest ? ['redev', 'subway', 'scale', 'newer', 'brand', 'liquid', 'prime', 'elem', 'park'] : prios;
+      var order = invest ? ['subway', 'redev', 'scale', 'newer', 'liquid', 'brand', 'prime', 'elem', 'park'] : prios;
       var why = [], bars = [];
       for (var w = 0; w < order.length; w++) {
         var Fx = FMAP[order[w]]; if (!Fx) continue;
