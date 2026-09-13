@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-12T12:38:05.664Z",
+  "updatedAt": "2026-09-13T01:37:59.236Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 57,
   "schema": {
@@ -288,21 +288,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020578",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "인천옹진백령 국민임대주택 예비입주자 모집",
-      "region": "인천광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-09-22",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020578&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020697",
       "provider": "LH",
       "ltype": "국민임대",
@@ -329,6 +314,21 @@
       "rcritEnd": "2026-09-22",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020652&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020578",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "인천옹진백령 국민임대주택 예비입주자 모집",
+      "region": "인천광역시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-09-22",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020578&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
