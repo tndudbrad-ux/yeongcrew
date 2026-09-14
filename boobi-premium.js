@@ -4,24 +4,23 @@
  *   bbPremium.check()            → Promise<boolean>  (members/{uid}.premium 확인, 캐시됨)
  *   bbPremium.is()               → boolean           (지금까지 확인된 값, 동기)
  *   bbPremium.wall(opt)          → 페이월 카드 HTML 문자열 (원하는 자리에 끼워 넣기)
- *   bbPremium.buy()              → 래피드 결제 페이지로 이동
+ *   bbPremium.buy()              → 프리미엄 안내 페이지로 이동
  *   bbPremium.claim(payEmail)    → Promise<boolean>  "결제했는데 안 열려요" 확인
  *   document.addEventListener('bb-premium', e => e.detail === true/false)
  *
- * 결제 자체는 래피드(Latpeed) 상품 페이지에서 이뤄지고,
- * 결제 완료 웹훅을 받은 부비 인증 워커가 구매자 이메일로 이용권을 켠다.
+ * 결제는 부비 결제 페이지(/pay.html?product=premium)에서 토스페이먼츠로 이뤄지고,
+ * 결제 승인을 받은 부비 결제 워커(boobi-pay)가 members/{uid}.premium 을 켠다.
  */
 (function () {
 if (window.bbPremium) return;
 
 var CFG = window.BB_PREMIUM_CFG || {};
-/* ⚠️ 래피드 상품 주소가 정해지면 이 한 줄만 바꾸면 사이트 전체에 반영됨.
-   비어 있으면 결제 버튼이 "준비 중"으로 표시되고 링크는 걸리지 않는다. */
-var BUY_URL = CFG.buyUrl || 'https://www.latpeed.com/products/HQyuy';
-var PRICE   = CFG.price  || 990;     /* 실제 결제 금액 — 래피드 상품 가격과 반드시 같아야 한다 */
+/* 부비 자체 결제 페이지. 비어 있으면 결제 버튼이 "준비 중"으로 표시된다. */
+var BUY_URL = CFG.buyUrl || '/pay.html?product=premium';
+var PRICE   = CFG.price  || 990;     /* 실제 결제 금액 — 워커 PRODUCTS.premium.amount 와 반드시 같아야 한다 */
 /* 정가 취소선. 실제로 그 값에 판 적이 없으면 표시광고법상 '허위 할인'이 되므로 0(숨김)으로 둔다. */
 var LIST    = CFG.list   || 0;
-var NAME    = CFG.name   || '맞춤형 아파트 AI리포트';   /* 래피드 상품명과 동일하게 */
+var NAME    = CFG.name   || '부비 프리미엄 이용권';   /* 워커 PRODUCTS.premium.name 과 동일하게 */
 var API     = window.HW_AUTH_API || 'https://boobi-auth.tndud-brad.workers.dev';
 
 var state = null;          /* null=미확인, true/false=확인됨 */
@@ -83,11 +82,13 @@ function buy() {
   location.href = '/premium?from=' + encodeURIComponent(location.pathname + location.search);
   return true;
 }
-/* /premium 페이지에서 실제 결제(래피드)로 넘어갈 때 */
+/* /premium 페이지에서 실제 결제(토스페이먼츠)로 넘어갈 때 */
 function checkout() {
   if (!BUY_URL) return false;
   ga('begin_checkout', { currency: 'KRW', value: PRICE, items: [{ item_id: 'boobi-premium', item_name: NAME, price: PRICE, quantity: 1 }] });
-  location.href = BUY_URL;
+  var back = '';
+  try { back = sessionStorage.getItem('bbPayFrom') || ''; } catch (e) {}
+  location.href = BUY_URL + (back ? ((BUY_URL.indexOf('?') >= 0 ? '&' : '?') + 'from=' + encodeURIComponent(back)) : '');
   return true;
 }
 /* 결제 후 돌아올 곳 — 페이월을 눌렀던 화면 */
