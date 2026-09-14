@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-14T01:56:12.652Z",
+  "updatedAt": "2026-09-14T15:40:23.187Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 57,
+  "count": 55,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,36 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "LH-2015122300020681",
-      "provider": "LH",
-      "ltype": "공공임대",
-      "name": "[정정공고]남원노암 공공임대 50년 예비입주자 모집",
-      "region": "전북특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-09-14",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020681&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=08&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020623",
-      "provider": "LH",
-      "ltype": "공공임대",
-      "name": "남원노암 공공임대 50년 예비입주자 모집",
-      "region": "전북특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-09-14",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020623&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=08&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "LH-2015122300020636",
       "provider": "LH",
