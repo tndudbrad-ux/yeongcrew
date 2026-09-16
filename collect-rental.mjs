@@ -211,6 +211,17 @@ function shPeriod(text) {
   }
   m = text.match(/접수(?:\s*일|\s*기간|\s*일정)\s*[:：]\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
   if (m) { const d = toDate(`${m[1]}-${m[2]}-${m[3]}`); return [d, d]; }
+  /* 표 형식(재개발임대 등): "순위별 신청접수 일정" 표 안에 순위별로 날짜가 흩어져 있고
+     '접수 :' 같은 접두어가 없다. 신청 구간(신청기간/신청접수 ~ 서류심사·당첨자 발표 직전)의
+     전체 날짜(YYYY. M. D.)를 모아 가장 이른 날을 시작, 가장 늦은 날을 마감으로 본다. */
+  const secStart = text.search(/신청\s*(?:접수|기간|일정)|접수\s*(?:기간|일정)/);
+  if (secStart >= 0) {
+    const rest = text.slice(secStart);
+    const secEnd = rest.search(/서류\s*심사|서류제출|당첨자\s*발표|□\s*기타/);
+    const sec = secEnd > 0 ? rest.slice(0, secEnd) : rest.slice(0, 1500);
+    const ds = [...sec.matchAll(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\./g)].map(x => toDate(`${x[1]}-${x[2]}-${x[3]}`)).filter(Boolean).sort();
+    if (ds.length) return [ds[0], ds[ds.length - 1]];
+  }
   return [null, null];   /* 접수일이 첨부 PDF에만 있는 공고도 있다 — 그때는 날짜 없이 목록에만 노출 */
 }
 
@@ -223,11 +234,15 @@ function shQual(text) {
 function shDetailToItem(row, html) {
   const text = stripTags(html).replace(/\s*\n\s*/g, "\n");
   const [start, end] = shPeriod(text);
-  const w = text.match(/(?:서류심사대상자|당첨자|당첨\s*자)\s*발표\s*[:：]?\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
+  /* 당첨자 발표를 우선하고, 없을 때만 서류심사대상자 발표로 대신한다
+     (재개발임대는 서류심사 10월 → 당첨자 이듬해 3월처럼 둘이 반년 차이 난다) */
+  const w = text.match(/(?:당첨자|당첨\s*자)\s*발표(?:일)?\s*[:：]?\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/)
+         || text.match(/서류심사대상자\s*발표\s*[:：]?\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
   const qual = shQual(text);
   /* "신규공급 154호, 재공급 1,330호" → 1484 */
   const unitLine = (text.match(/공급\s*호수\s*[:：]?\s*([^\n]{0,80})/) || [])[1] || "";
-  const nums = (unitLine.match(/([0-9,]+)\s*호/g) || []).map(x => toNum(x)).filter(Boolean);
+  /* "162개 단지 3,821세대" 처럼 '세대'로 세는 공고도 있다. '개 단지' 같은 단지 수는 세지 않는다 */
+  const nums = (unitLine.match(/([0-9,]+)\s*(?:호|세대)/g) || []).map(x => toNum(x)).filter(Boolean);
   const units = nums.length ? nums.reduce((a, b) => a + b, 0) : null;
 
   return {
