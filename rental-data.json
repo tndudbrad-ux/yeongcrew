@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-15T14:10:16.605Z",
+  "updatedAt": "2026-09-16T01:55:57.545Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 71,
+  "count": 69,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,36 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "SH-310178",
-      "provider": "SH",
-      "ltype": "기타",
-      "name": "(재공지)2026년 매력일자리(홈코디 주거상담가 인큐베이팅) 참여자 추가 모집 공고",
-      "region": "서울",
-      "units": null,
-      "target": "자세한 자격은 공고문 확인",
-      "rcritStart": "2026-09-04",
-      "rcritEnd": "2026-09-15",
-      "winnerDate": null,
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=310178",
-      "note": "공고 2026-09-11",
-      "_src": "sh-web"
-    },
-    {
-      "id": "LH-2015122300020703",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[경기남부] 화성시·평택시 신혼·신생아 매입임대주택Ⅱ(전세형) 예비입주자 [후순번] 모집공고",
-      "region": "경기도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-09-21",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020703&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "LH-2015122300020725",
       "provider": "LH",
@@ -573,6 +543,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300020709",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "경북서부지역(구미시, 김천시, 의성군) 국민임대 예비입주자 모집",
+      "region": "경상북도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-10-01",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020709&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020757",
       "provider": "LH",
       "ltype": "국민임대",
@@ -1065,21 +1050,6 @@
       "winnerDate": null,
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=309807",
       "note": "공고 2026-09-07",
-      "_src": "sh-web"
-    },
-    {
-      "id": "SH-309717",
-      "provider": "SH",
-      "ltype": "기타",
-      "name": "[토지지원 사회주택]유니버설디자인하우스_창동 입주자 모집 공고",
-      "region": "서울",
-      "units": null,
-      "target": "자세한 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": null,
-      "winnerDate": null,
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=309717",
-      "note": "공고 2026-09-03",
       "_src": "sh-web"
     }
   ]
