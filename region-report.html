@@ -421,6 +421,12 @@ footer a{color:#B9DCD9;margin:0 8px}
     <p>풍무·사우, 고촌, 걸포·북변, 장기·운양, 구래·마산 5개 생활권. 5호선·GTX-D 일정과 투자가치 1순위 포함.</p>
     <div class="links"><a href="/region-report-gimpo.html">무료 미리보기</a></div>
   </div>
+  <div class="glass region" data-region="anyang" role="button" tabindex="0" aria-pressed="false">
+    <span class="tag">2026년 9월 발행</span>
+    <h3>안양시</h3>
+    <p>평촌 남쪽 학원가권, 인덕원·평촌역, 평촌 북쪽·비산, 만안구 안양역 4개 생활권. 평촌 재건축 선도지구 현황과 투자가치 1순위 포함.</p>
+    <div class="links"><a href="/region-report-anyang.html">무료 미리보기</a></div>
+  </div>
 </div>
 <section class="glass sec gainSec rgnPanel" id="panel-gimpo" data-panel="gimpo" hidden>
   <h2><span class="rgnName">김포시</span> 19,900원으로 얻는 것</h2>
@@ -465,7 +471,50 @@ footer a{color:#B9DCD9;margin:0 8px}
   </div>
   <p class="rgnCtaNote">지역당 딱 1회 결제 · 갱신본 평생 무료 · 전문 열람 전 전액 환불</p>
 </section>
-<div class="gulist" aria-label="발행 예정 경기 도시"><span>안양시 (다음 발행)</span></div>
+<section class="glass sec gainSec rgnPanel" id="panel-anyang" data-panel="anyang" hidden>
+  <h2><span class="rgnName">안양시</span> 19,900원으로 얻는 것</h2>
+
+  <div class="gainHero">
+    <p class="gainLead">같은 안양, 같은 전용 84㎡인데 <b>7.4억부터 15.3억까지</b> 있습니다.</p>
+    <div class="gainBar">
+      <span class="gEnd low"><i>힐스테이트석수</i><b>7.4억</b></span>
+      <span class="gLine" aria-hidden="true"><span class="gGap">7.9억 차이</span></span>
+      <span class="gEnd high"><i>평촌센텀퍼스트</i><b>15.3억</b></span>
+    </div>
+    <p class="gainNote">안양 리포트에 실제로 들어 있는 26개 단지 2026년 실거래 중 양끝. 국토부 실거래 기반.</p>
+    <p class="gainKick">같은 안양인데 한쪽은 <b>2년 실거주 의무에 대출 40%,</b> 다른 한쪽은 <b>실거주 의무 없이 대출 70%</b>입니다.<br>이 리포트는 규제 안에서 살 자리와 규제 밖에서 살 자리를 <b>단지 이름으로 적어서</b> 드립니다.</p>
+  </div>
+
+  <div class="gainGrid">
+    <div class="gainCard">
+      <span class="gNum">15<em>분</em></span>
+      <b>5시간 강의 대신</b>
+      <span>지역 강의 한 편이 5시간입니다. 이건 15분 안에 읽고 바로 임장 동선을 짤 수 있게 썼습니다.</span>
+    </div>
+    <div class="gainCard">
+      <span class="gNum">4<em>순위</em></span>
+      <b>"평촌 좋다"로 안 끝냅니다</b>
+      <span>15억 대출 문턱이 어디서 걸리는지, 재건축 이주가 어느 단지 전세를 밀어 올리는지까지 적습니다. 판단은 영팀장이 검수합니다.</span>
+    </div>
+    <div class="gainCard">
+      <span class="gNum gInf">∞</span>
+      <b>한 번 결제로 끝</b>
+      <span>실거래가 쌓이고 재건축 구역 지정이 넘어갈 때마다 갱신본이 올라옵니다. 추가 결제는 없습니다.</span>
+    </div>
+  </div>
+
+  <div class="gainCmp">
+    <span>15억짜리 결정을 내리는 데 쓰는 돈 <b>19,900원</b></span>
+    <span class="gPct">집값의 0.0013%</span>
+  </div>
+
+  <div class="rgnCta">
+    <button class="rgnBuy" type="button" data-go-pay>19,900원 결제하고 전부 보기</button>
+    <a class="rgnPrev" href="/region-report-anyang.html">무료 미리보기 먼저</a>
+  </div>
+  <p class="rgnCtaNote">지역당 딱 1회 결제 · 갱신본 평생 무료 · 전문 열람 전 전액 환불</p>
+</section>
+<div class="gulist" aria-label="발행 예정 경기 도시"><span>과천시</span><span>광명시</span><span>성남시</span><span>수원시</span><span>의왕시</span><span>부천시</span><span>고양시</span><span>용인시</span></div>
 
 
 <section class="glass sec" style="padding:18px 22px"><div class="warnbox" style="margin-top:0">본 리포트는 공개 통계와 실거래 신고 자료를 바탕으로 한 <b>참고 자료</b>이며 투자·법률·세무 자문이 아닙니다. 실거래는 국토부 원본에서 다시 확인하시고, 매수 판단과 결과는 이용자 본인에게 있습니다.</div></section>
@@ -534,7 +583,8 @@ var PAY_API    = 'https://boobi-pay.tndud-brad.workers.dev'; // 결제 워커 (�
 var REGIONS = {
   dongdaemun: { id: 'region-report-dongdaemun', name: '동대문구 지역 분석 리포트', page: '/region-report-dongdaemun.html' },
   seongdong:  { id: 'region-report-seongdong',  name: '성동구 지역 분석 리포트',  page: '/region-report-seongdong.html' },
-  gimpo:      { id: 'region-report-gimpo',      name: '김포시 지역 분석 리포트',  page: '/region-report-gimpo.html' }
+  gimpo:      { id: 'region-report-gimpo',      name: '김포시 지역 분석 리포트',  page: '/region-report-gimpo.html' },
+  anyang:     { id: 'region-report-anyang',     name: '안양시 지역 분석 리포트',  page: '/region-report-anyang.html' }
 };
 var REGION_Q = new URLSearchParams(location.search).get('region');
 var REGION = (REGION_Q || 'dongdaemun');
