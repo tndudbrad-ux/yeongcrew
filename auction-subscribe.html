@@ -245,7 +245,7 @@ h2{font-size:17px;font-weight:800;letter-spacing:-.02em;margin:0 0 12px}
     <h1 id="payTitle">매주 받아보시겠어요?</h1>
     <p class="lead" id="paySummary"></p>
     <div class="glass pad">
-      <div class="price"><b>9,900원</b><span>/ 월</span></div>
+      <div class="price"><b>29,900원</b><span>/ 월</span></div>
       <ul class="bullets">
         <li>조건에 맞는 물건 <b id="payCount">0</b>건 전체 — 미리보기에서 가린 주소와 금액까지</li>
         <li>왜 나머지를 걸렀는지 사유까지 같이</li>
@@ -436,7 +436,7 @@ h2{font-size:17px;font-weight:800;letter-spacing:-.02em;margin:0 0 12px}
     try{
       var toss=TossPayments(TOSS_CLIENT_KEY);
       widgets=toss.widgets({customerKey:TossPayments.ANONYMOUS});
-      await widgets.setAmount({currency:'KRW',value:9900});
+      await widgets.setAmount({currency:'KRW',value:29900});
       await Promise.all([
         widgets.renderPaymentMethods({selector:'#payment-method',variantKey:'DEFAULT'}),
         widgets.renderAgreement({selector:'#agreement',variantKey:'AGREEMENT'})
@@ -446,17 +446,17 @@ h2{font-size:17px;font-weight:800;letter-spacing:-.02em;margin:0 0 12px}
 
   /* 결제 오픈 전 — 알림 신청으로 대체 */
   function preOpen(){
-    document.getElementById('payTitle').textContent='곧 열립니다';
+    document.getElementById('payTitle').textContent='10월 19일에 엽니다';
     var box=document.querySelector('#s6 .glass');
     box.innerHTML=
-      '<div class="price"><b>9,900원</b><span>/ 월 (예정)</span></div>'+
+      '<div class="price"><b>29,900원</b><span>/ 월</span></div>'+
       '<ul class="bullets">'+
         '<li>조건에 맞는 물건 <b>'+(COUNTS[state.type]||0)+'</b>건 전체 — 미리보기에서 가린 주소와 금액까지</li>'+
         '<li>왜 나머지를 걸렀는지 사유까지 같이</li>'+
         '<li>단지 거래 이력, 예상 낙찰가, 임장 체크리스트</li>'+
       '</ul>'+
-      '<p class="fine" style="margin-top:14px">결제 준비가 끝나면 고르신 조건 그대로 바로 보내드릴게요. '+
-      '이메일만 남겨주시면 오픈하는 날 제일 먼저 알려드립니다.</p>'+
+      '<p class="fine" style="margin-top:14px">10월 19일부터 고르신 조건 그대로 매주 보내드립니다. '+
+      '이메일만 남겨주시면 여는 날 제일 먼저 알려드릴게요.</p>'+
       '<input id="preMail" type="email" inputmode="email" placeholder="이메일 주소" '+
       'style="width:100%;margin-top:12px;padding:14px 16px;border-radius:14px;border:1.5px solid rgba(13,42,41,.12);'+
       'background:rgba(255,255,255,.8);font-family:inherit;font-size:15px;color:#0D2A29">';
@@ -471,7 +471,13 @@ h2{font-size:17px;font-weight:800;letter-spacing:-.02em;margin:0 0 12px}
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ alert('이메일 주소를 확인해 주세요.'); return; }
       try{ localStorage.setItem('boobi_auction_pre',JSON.stringify({mail:v,at:Date.now(),cond:state})); }catch(e){}
       btn.disabled=true; btn.textContent='신청되었습니다 ✓';
-      document.getElementById('paySummary').textContent='오픈하면 '+v+' 으로 알려드릴게요.';
+      document.getElementById('payTitle').textContent='신청이 끝났습니다';
+      document.getElementById('paySummary').textContent=
+        '10월 19일에 '+v+' 으로 첫 리포트를 보내드릴게요. 잠시 후 홈으로 이동합니다.';
+      var box=document.querySelector('#s6 .glass');
+      if(box) box.style.display='none';
+      var mail=document.getElementById('preMail'); if(mail) mail.blur();
+      setTimeout(function(){ location.href='/'; },1800);
     };
   }
 

@@ -96,7 +96,7 @@ dl{margin:0;border-top:1px solid rgba(13,42,41,.08)}
   function ok(data){
     document.getElementById('loading').style.display='none';
     document.getElementById('done').style.display='block';
-    var amt=(data&&data.totalAmount)||Number(amount)||9900;
+    var amt=(data&&data.totalAmount)||Number(amount)||29900;
     var when=(data&&data.approvedAt)?new Date(data.approvedAt):new Date();
     document.getElementById('detail').innerHTML=rows([
       ['상품','부비 경매 리포트 구독 (월)'],
