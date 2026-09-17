@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>결제가 완료되지 않았습니다 — 부비</title>
+<meta name="robots" content="noindex">
+<meta property="og:image" content="https://boobi.ai.kr/og-boobi.png">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<script src="/hwon-auth.js" defer></script>
+<style>
+:root{--ink:#0D2A29;--sub:#547471;--faint:#8AA5A2;--warn:#E5484D;
+ --grad:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%)}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:Pretendard,'Wanted Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.page{position:relative;min-height:100vh}
+.page::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+ background:radial-gradient(60% 45% at 88% -5%,rgba(61,139,253,.14),transparent 60%),
+  radial-gradient(55% 45% at -5% 12%,rgba(42,193,188,.16),transparent 60%)}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:56px 20px 72px}
+.glass{background:
+  radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),
+  radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),
+  linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));
+ border:1.5px solid rgba(255,255,255,.95);
+ box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;
+ backdrop-filter:blur(14px);border-radius:20px;padding:30px 26px}
+.mark{width:62px;height:62px;margin:0 auto 20px;border-radius:999px;background:#E5484D;
+ display:grid;place-items:center;color:#fff;font-size:30px;font-weight:800}
+h1{font-size:24px;font-weight:800;letter-spacing:-.02em;text-align:center;margin:0 0 10px;word-break:keep-all}
+.lead{font-size:14.5px;color:var(--sub);line-height:1.65;text-align:center;margin:0 0 24px;word-break:keep-all}
+dl{margin:0;border-top:1px solid rgba(13,42,41,.08)}
+.row{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid rgba(13,42,41,.06)}
+.row dt{font-size:13.5px;color:var(--faint);margin:0;flex-shrink:0}
+.row dd{margin:0;font-size:14px;font-weight:700;text-align:right;word-break:break-all}
+.cta{display:block;width:100%;margin-top:24px;padding:15px;border:none;border-radius:999px;
+ background:var(--grad);color:#fff;font-size:15.5px;font-weight:800;font-family:inherit;
+ text-align:center;text-decoration:none;white-space:nowrap;box-shadow:0 8px 20px rgba(61,139,253,.28)}
+.ghost{display:block;text-align:center;margin-top:12px;padding:12px;color:var(--faint);font-size:13.5px;text-decoration:none}
+.note{font-size:12.5px;color:var(--faint);line-height:1.65;margin-top:20px;text-align:center;word-break:keep-all}
+</style>
+</head>
+<body>
+<div class="page"><div class="wrap">
+  <div class="glass">
+    <div class="mark">!</div>
+    <h1>결제가 완료되지 않았습니다</h1>
+    <p class="lead" id="lead">결제가 취소되었거나 중간에 중단되었습니다.<br>금액은 빠져나가지 않았습니다.</p>
+    <dl id="detail"></dl>
+    <a class="cta" href="/auction-subscribe.html">다시 시도하기</a>
+    <a class="ghost" href="/auction-tools.html">나중에 할게요</a>
+    <p class="note">
+      같은 문제가 반복되면 다른 결제수단으로 시도해 보시거나,<br>
+      아래 주소로 알려주시면 확인해 드리겠습니다.<br>
+      tndud.brad@gmail.com
+    </p>
+  </div>
+</div></div>
+
+<script>
+(function(){
+  'use strict';
+  var q=new URLSearchParams(location.search);
+  var code=q.get('code'), message=q.get('message'), orderId=q.get('orderId');
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+  var KNOWN={
+    'PAY_PROCESS_CANCELED':'결제 창을 닫으셨습니다.',
+    'PAY_PROCESS_ABORTED':'결제가 중단되었습니다.',
+    'REJECT_CARD_COMPANY':'카드사에서 결제를 거절했습니다. 다른 카드로 시도해 보세요.',
+    'INVALID_CARD_EXPIRATION':'카드 유효기간을 다시 확인해 주세요.',
+    'EXCEED_MAX_DAILY_PAYMENT_COUNT':'하루 결제 한도를 넘었습니다.',
+    'NOT_ENOUGH_BALANCE':'잔액이 부족합니다.'
+  };
+  if(code&&KNOWN[code]){
+    document.getElementById('lead').innerHTML=esc(KNOWN[code])+'<br>금액은 빠져나가지 않았습니다.';
+  }
+
+  var pairs=[];
+  if(orderId) pairs.push(['주문번호',orderId]);
+  if(code) pairs.push(['오류 코드',code]);
+  if(message&&!KNOWN[code]) pairs.push(['안내',message]);
+  document.getElementById('detail').innerHTML=pairs.map(function(p){
+    return '<div class="row"><dt>'+esc(p[0])+'</dt><dd>'+esc(p[1])+'</dd></div>';
+  }).join('');
+})();
+</script>
+</body>
+</html>

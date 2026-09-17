@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>구독이 시작되었습니다 — 부비</title>
+<meta name="robots" content="noindex">
+<meta property="og:image" content="https://boobi.ai.kr/og-boobi.png">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<script src="/hwon-auth.js" defer></script>
+<style>
+:root{--ink:#0D2A29;--sub:#547471;--faint:#8AA5A2;--blue:#3D8BFD;--warn:#E5484D;
+ --grad:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%)}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font-family:Pretendard,'Wanted Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.page{position:relative;min-height:100vh}
+.page::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+ background:radial-gradient(60% 45% at 88% -5%,rgba(61,139,253,.14),transparent 60%),
+  radial-gradient(55% 45% at -5% 12%,rgba(42,193,188,.16),transparent 60%),
+  radial-gradient(50% 40% at 50% 108%,rgba(139,108,246,.10),transparent 60%)}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:56px 20px 72px}
+.glass{background:
+  radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),
+  radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),
+  linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));
+ border:1.5px solid rgba(255,255,255,.95);
+ box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;
+ backdrop-filter:blur(14px);border-radius:20px;padding:30px 26px}
+.mark{width:62px;height:62px;margin:0 auto 20px;border-radius:999px;background:var(--grad);
+ display:grid;place-items:center;color:#fff;font-size:28px;font-weight:800;
+ box-shadow:0 10px 26px rgba(61,139,253,.30)}
+h1{font-size:24px;font-weight:800;letter-spacing:-.02em;text-align:center;margin:0 0 10px;word-break:keep-all}
+.lead{font-size:14.5px;color:var(--sub);line-height:1.65;text-align:center;margin:0 0 24px;word-break:keep-all}
+dl{margin:0;border-top:1px solid rgba(13,42,41,.08)}
+.row{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid rgba(13,42,41,.06)}
+.row dt{font-size:13.5px;color:var(--faint);margin:0;flex-shrink:0}
+.row dd{margin:0;font-size:14px;font-weight:700;text-align:right;word-break:break-all}
+.cta{display:block;width:100%;margin-top:24px;padding:15px;border:none;border-radius:999px;
+ background:var(--grad);color:#fff;font-size:15.5px;font-weight:800;font-family:inherit;
+ text-align:center;text-decoration:none;cursor:pointer;white-space:nowrap;
+ box-shadow:0 8px 20px rgba(61,139,253,.28)}
+.ghost{display:block;text-align:center;margin-top:12px;padding:12px;color:var(--faint);
+ font-size:13.5px;text-decoration:none}
+.note{font-size:12.5px;color:var(--faint);line-height:1.65;margin-top:20px;text-align:center;word-break:keep-all}
+.err{color:var(--warn);font-weight:700}
+.load{text-align:center;padding:30px 0;color:var(--sub);font-size:14.5px}
+.ring{width:46px;height:46px;margin:0 auto 16px;border-radius:999px;
+ background:conic-gradient(from 0deg,#26C6B9,#3D8BFD,#8B6CF6,#26C6B9);
+ -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 0);
+ mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 0);
+ animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(1turn)}}
+#done{display:none}
+</style>
+</head>
+<body>
+<div class="page"><div class="wrap">
+  <div class="glass">
+    <div id="loading">
+      <div class="ring"></div>
+      <p class="load">결제를 확인하고 있습니다<br>창을 닫지 말아 주세요</p>
+    </div>
+    <div id="done">
+      <div class="mark" id="mark">✓</div>
+      <h1 id="title">구독이 시작되었습니다</h1>
+      <p class="lead" id="lead">첫 리포트는 이번 주에 바로 보내드립니다.</p>
+      <dl id="detail"></dl>
+      <a class="cta" href="/mypage.html">내 구독 설정 보기</a>
+      <a class="ghost" href="/auction-tools.html">경매 도구로 돌아가기</a>
+      <p class="note">
+        결제 영수증은 등록하신 이메일로 발송됩니다.<br>
+        해지는 마이페이지에서 언제든 가능하며, 아직 발송되지 않은 회차는 전액 환불됩니다.
+      </p>
+    </div>
+  </div>
+</div></div>
+
+<script>
+(function(){
+  'use strict';
+  // TODO: 결제 승인 엔드포인트 주소로 교체 (Cloudflare Worker 등)
+  var CONFIRM_URL='https://api.boobi.ai.kr/toss/confirm';
+
+  var q=new URLSearchParams(location.search);
+  var paymentKey=q.get('paymentKey'), orderId=q.get('orderId'), amount=q.get('amount');
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+  function rows(pairs){
+    return pairs.map(function(p){
+      return '<div class="row"><dt>'+esc(p[0])+'</dt><dd>'+esc(p[1])+'</dd></div>';
+    }).join('');
+  }
+
+  function ok(data){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('done').style.display='block';
+    var amt=(data&&data.totalAmount)||Number(amount)||9900;
+    var when=(data&&data.approvedAt)?new Date(data.approvedAt):new Date();
+    document.getElementById('detail').innerHTML=rows([
+      ['상품','부비 경매 리포트 구독 (월)'],
+      ['결제 금액',amt.toLocaleString('ko-KR')+'원'],
+      ['결제 일시',when.toLocaleString('ko-KR')],
+      ['주문번호',orderId||'-']
+    ]);
+  }
+
+  function fail(msg){
+    document.getElementById('loading').style.display='none';
+    document.getElementById('done').style.display='block';
+    var m=document.getElementById('mark');
+    m.textContent='!'; m.style.background='#E5484D'; m.style.boxShadow='none';
+    document.getElementById('title').textContent='결제 확인에 실패했습니다';
+    document.getElementById('title').className='err';
+    document.getElementById('lead').innerHTML=
+      esc(msg||'결제는 처리되었을 수 있습니다.')+'<br>주문번호를 가지고 문의해 주시면 바로 확인해 드리겠습니다.';
+    document.getElementById('detail').innerHTML=rows([
+      ['주문번호',orderId||'-'],
+      ['문의','tndud.brad@gmail.com']
+    ]);
+  }
+
+  if(!paymentKey||!orderId||!amount){ fail('결제 정보가 전달되지 않았습니다.'); return; }
+
+  fetch(CONFIRM_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({paymentKey:paymentKey,orderId:orderId,amount:Number(amount)})
+  })
+  .then(function(r){ return r.json().then(function(j){ return {ok:r.ok,body:j}; }); })
+  .then(function(res){
+    if(res.ok) ok(res.body);
+    else fail((res.body&&res.body.message)||'승인 요청이 거절되었습니다.');
+  })
+  .catch(function(){ fail('서버에 연결하지 못했습니다.'); });
+})();
+</script>
+</body>
+</html>
