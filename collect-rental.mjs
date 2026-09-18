@@ -200,15 +200,18 @@ function lhDetailParse(html) {
   return out;
 }
 
-/* 접수 시작일이 없는 LH 공고만 상세를 열어 채운다 (게시판에 부담 주지 않게 순차·간격) */
+/* LH 공고 상세를 열어 접수기간·발표일·자격을 채운다 (순차 요청, 간격 350ms).
+   '비어 있는 것만' 채우면 안 된다 — LH API가 실패해 이전 수집분을 재사용할 때
+   한 번 잘못 들어간 날짜가 영영 고쳐지지 않는다. 값을 얻으면 항상 덮어쓴다. */
 async function enrichLH(items) {
-  const todo = items.filter(it => !it.rcritStart && /panId=/.test(it.url || ""));
+  const todo = items.filter(it => /panId=/.test(it.url || ""));
   if (!todo.length) { console.log("[LH] 상세 보강 대상 없음"); return; }
-  let ok = 0, fail = 0;
+  let ok = 0, fail = 0, fixed = 0;
   for (const it of todo) {
     try {
       const d = lhDetailParse(await lhGet(it.url));
       if (d.start) {
+        if (it.rcritStart !== d.start) fixed++;
         it.rcritStart = d.start;
         if (d.end) it.rcritEnd = d.end;   /* 목록의 마감일보다 상세가 정확하다 */
         ok++;
@@ -218,7 +221,7 @@ async function enrichLH(items) {
     } catch (e) { fail++; }
     await new Promise(r => setTimeout(r, 350));
   }
-  console.log(`[LH] 상세 보강 ${todo.length}건 시도 → 접수기간 확보 ${ok}건, 실패 ${fail}건`);
+  console.log(`[LH] 상세 보강 ${todo.length}건 시도 → 접수기간 확보 ${ok}건(값이 바뀐 것 ${fixed}건), 실패 ${fail}건`);
 }
 
 /* ---------- SH 서울주택도시공사 (i-sh.co.kr 공고 게시판) ----------
