@@ -163,20 +163,38 @@ async function lhGet(url) {
 }
 
 function lhDetailParse(html) {
-  const t = stripTags(html).replace(/\s*\n\s*/g, "\n");
   const out = {};
-  const p = t.match(/접수\s*기간\s*[:：]\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})[^~\n]{0,14}~\s*(?:(\d{4})\.\s*)?(\d{1,2})\.\s*(\d{1,2})/);
-  if (p) {
-    out.start = toDate(`${p[1]}-${p[2]}-${p[3]}`);
-    out.end   = toDate(`${p[4] || p[1]}-${p[5]}-${p[6]}`);
+  /* 접수기간은 화면에 JS로 채워 넣는다 — HTML의 <label id="sta_acpDt">는 비어 있다.
+     대신 같은 페이지 인라인 스크립트에 원본 값이 있다:
+       var sbscAcpStDt = '2026.09.28';  var sbscAcpClsgDt = '2026.09.30';
+     이걸 1순위로 읽는다. (텍스트만 긁으면 바로 아래 '서류접수기간'을 접수일로 잘못 집는다) */
+  const vs = html.match(/sbscAcpStDt\s*=\s*'(\d{4})\.(\d{2})\.(\d{2})'/);
+  const ve = html.match(/sbscAcpClsgDt\s*=\s*'(\d{4})\.(\d{2})\.(\d{2})'/);
+  if (vs) out.start = toDate(`${vs[1]}-${vs[2]}-${vs[3]}`);
+  if (ve) out.end = toDate(`${ve[1]}-${ve[2]}-${ve[3]}`);
+
+  const t = stripTags(html).replace(/\s*\n\s*/g, "\n");
+
+  /* 스크립트 값이 없을 때만 본문에서 찾는다. '서류접수기간'은 접수일이 아니므로 제외 */
+  if (!out.start) {
+    const p = t.match(/(^|[^류])\s*접수\s*기간\s*[:：]\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})[^~\n]{0,14}~\s*(?:(\d{4})\.\s*)?(\d{1,2})\.\s*(\d{1,2})/);
+    if (p) {
+      out.start = toDate(`${p[2]}-${p[3]}-${p[4]}`);
+      out.end   = toDate(`${p[5] || p[2]}-${p[6]}-${p[7]}`);
+    }
   }
+
   const w = t.match(/당첨자\s*발표일?\s*[:：]\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
   if (w) out.winner = toDate(`${w[1]}-${w[2]}-${w[3]}`);
-  /* 신청자격: '공통신청자격' ~ '1순위' 사이. 없으면 '신청자격' 뒤 한 덩어리 */
+
+  /* 신청자격: 표 헤더 안내문("구분, 세부자격요건에 대한 정보 제공" 등)이 같이 딸려 오므로
+     '공통신청자격' 뒤부터 '1순위' 앞까지를 우선 쓴다. */
   let q = t.match(/공통\s*신청\s*자격([\s\S]{5,400}?)(?:1\s*순위|$)/);
   if (!q) q = t.match(/신청\s*자격\s*[:：]?([\s\S]{5,300})/);
   if (q) {
-    const line = q[1].replace(/\s+/g, " ").replace(/^[\s:：·\-]+/, "").trim();
+    const line = q[1].replace(/\s+/g, " ")
+      .replace(/구분\s*,?\s*세부자격요건[^가-힣]{0,40}(정보\s*제공)?/g, " ")
+      .replace(/^[\s:：·\-]+/, "").trim();
     if (/무주택|청년|신혼|고령|수급|자산|소득/.test(line)) out.target = line.slice(0, 160);
   }
   return out;
