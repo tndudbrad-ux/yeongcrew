@@ -1,7 +1,7 @@
 /*
  * 부비 임대공고 자동 수집기 (GitHub Actions 크론용, Node 20+)
  * ------------------------------------------------------------
- * 하는 일: HUG 든든전세·LH 공식 오픈API + SH 공고 게시판에서 임대 공고를 받아
+ * 하는 일: HUG 든든전세·LH 공식 오픈API(+공고 상세 보강) + SH 공고 게시판에서 임대 공고를 받아
  *          rental-data.json 을 갱신한다. 수동으로 넣은 큐레이션 항목은 보존.
  *          LH는 "임대주택 계열"만 채택(토지·상가·분양·공공분양·취소공고 제외),
  *          접수 마감(rcritEnd)이 지난 공고는 전 소스 공통으로 제외, _raw 미저장(슬림화).
@@ -144,6 +144,65 @@ async function fetchLH(key) {
   return out;
 }
 
+/* ---------- LH 공고 상세 보강 ----------
+ * LH 목록 API(lhLeaseNoticeInfo1)는 마감일만 주고 접수 시작일을 안 준다.
+ * 그래서 매입임대 공고가 캘린더에 '접수마감' 한 줄로만 남고, 접수 시작일에는 아무것도 안 떴다.
+ * 그런데 LH청약플러스 공고 상세 페이지에는 '공급일정' 블록에 그대로 적혀 있다:
+ *   접수기간 : 2026.09.28 10:00 ~ 2026.09.30 16:00
+ *   당첨자발표일 : 2026.12.11
+ * 공고문 PDF를 열 필요 없이 이 페이지만 읽으면 된다. 신청자격도 같이 가져와 target을 채운다. */
+const LH_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36";
+
+async function lhGet(url) {
+  const res = await fetch(url, {
+    headers: { "User-Agent": LH_UA, "Accept": "text/html,application/xhtml+xml", "Accept-Language": "ko-KR,ko;q=0.9" },
+    signal: AbortSignal.timeout(20000)
+  });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  return await res.text();
+}
+
+function lhDetailParse(html) {
+  const t = stripTags(html).replace(/\s*\n\s*/g, "\n");
+  const out = {};
+  const p = t.match(/접수\s*기간\s*[:：]\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})[^~\n]{0,14}~\s*(?:(\d{4})\.\s*)?(\d{1,2})\.\s*(\d{1,2})/);
+  if (p) {
+    out.start = toDate(`${p[1]}-${p[2]}-${p[3]}`);
+    out.end   = toDate(`${p[4] || p[1]}-${p[5]}-${p[6]}`);
+  }
+  const w = t.match(/당첨자\s*발표일?\s*[:：]\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
+  if (w) out.winner = toDate(`${w[1]}-${w[2]}-${w[3]}`);
+  /* 신청자격: '공통신청자격' ~ '1순위' 사이. 없으면 '신청자격' 뒤 한 덩어리 */
+  let q = t.match(/공통\s*신청\s*자격([\s\S]{5,400}?)(?:1\s*순위|$)/);
+  if (!q) q = t.match(/신청\s*자격\s*[:：]?([\s\S]{5,300})/);
+  if (q) {
+    const line = q[1].replace(/\s+/g, " ").replace(/^[\s:：·\-]+/, "").trim();
+    if (/무주택|청년|신혼|고령|수급|자산|소득/.test(line)) out.target = line.slice(0, 160);
+  }
+  return out;
+}
+
+/* 접수 시작일이 없는 LH 공고만 상세를 열어 채운다 (게시판에 부담 주지 않게 순차·간격) */
+async function enrichLH(items) {
+  const todo = items.filter(it => !it.rcritStart && /panId=/.test(it.url || ""));
+  if (!todo.length) { console.log("[LH] 상세 보강 대상 없음"); return; }
+  let ok = 0, fail = 0;
+  for (const it of todo) {
+    try {
+      const d = lhDetailParse(await lhGet(it.url));
+      if (d.start) {
+        it.rcritStart = d.start;
+        if (d.end) it.rcritEnd = d.end;   /* 목록의 마감일보다 상세가 정확하다 */
+        ok++;
+      }
+      if (d.winner) it.winnerDate = d.winner;
+      if (d.target) it.target = d.target;
+    } catch (e) { fail++; }
+    await new Promise(r => setTimeout(r, 350));
+  }
+  console.log(`[LH] 상세 보강 ${todo.length}건 시도 → 접수기간 확보 ${ok}건, 실패 ${fail}건`);
+}
+
 /* ---------- SH 서울주택도시공사 (i-sh.co.kr 공고 게시판) ----------
  * data.go.kr·서울열린데이터광장에는 SH '실시간 모집공고' 데이터셋이 없다.
  * (있는 건 주택관리현황·공급계획 같은 정적 통계뿐)
@@ -166,7 +225,8 @@ async function shGet(url) {
 const stripTags = h => String(h).replace(/<script[\s\S]*?<\/script>/gi, " ")
   .replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ")
   .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-  .replace(/&quot;/g, '"').replace(/[ \t]+/g, " ");
+  .replace(/&quot;/g, '"').replace(/&#(\d+);/g, (_, d) => String.fromCharCode(+d))
+  .replace(/&[a-zA-Z]+;/g, " ").replace(/[ \t]+/g, " ");
 
 /* 목록 HTML → [{seq, title, dept, posted}] */
 function parseShList(html) {
@@ -188,8 +248,8 @@ function parseShList(html) {
 /* 모집공고만 추린다 — 계약결과·설문·재계약 안내 같은 공지는 캘린더에 올릴 게 아니다 */
 function isShRecruit(t) {
   if (!/모집/.test(t)) return false;
-  if (/계약결과|재계약|설문|만족도|입주안내|결과|최종|취소|중단|연기|평가위원회|채용/.test(t)) return false;
-  return /입주자\s*모집|예비입주자\s*모집|예비자\s*모집|추가\s*모집|수시\s*모집|모집\s*공고/.test(t);
+  if (/발표|당첨자|계약결과|재계약|설문|만족도|입주안내|결과|최종|취소|중단|연기|평가위원회|채용|일자리|참여자/.test(t)) return false;
+  return /입주자\s*모집|예비입주자\s*모집|예비자\s*모집|추가\s*모집|수시\s*모집|일반모집|모집\s*공고/.test(t);
 }
 
 function shLtype(t) {
@@ -200,29 +260,33 @@ function shLtype(t) {
   return "기타";
 }
 
-/* "2026. 9. 9.(수) 10:00 ~ 9. 11.(금) 17:00" — 끝 날짜에는 연도가 없다.
-   콜론(:)을 반드시 요구한다. 안 그러면 제목의 공고일 "(2026. 8. 21.)"을 접수일로 잘못 집는다. */
+/* 접수일 표기가 공고마다 다르다.
+     "○ 인터넷 접수 : 2026. 9. 9.( 수 ) 10:00 ~ 9. 11.( 금 ) 17:00"   (콜론형)
+     "신청기간 | 1순위(선순위) | 2026. 9. 29.(화) 10:00 | ~ 2026. 10. 2.(금)"  (표형, 콜론 없음)
+   그래서 콜론을 요구하지 않고, '접수/신청기간' 키워드 뒤 구간에서 '날짜 ~ 날짜'를 찾는다.
+   범위(~)를 요구하므로 제목의 공고일 "(2026. 8. 28.)"은 걸리지 않는다.
+   요일이 "( 수 )"처럼 띄어져 나오는 경우가 있어 날짜와 ~ 사이는 느슨하게 둔다. */
+const SH_RANGE = /(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.?[^~]{0,25}~\s*(?:(\d{4})\.\s*)?(\d{1,2})\.\s*(\d{1,2})/g;
+const pad2 = n => String(n).padStart(2, "0");
+
 function shPeriod(text) {
-  let m = text.match(/(?:인터넷|온라인|방문|청약)?\s*접수(?:\s*일|\s*기간|\s*일정)?\s*[:：]\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\.?[^~\n]{0,25}~\s*(?:(\d{4})\.\s*)?(\d{1,2})\.\s*(\d{1,2})/);
-  if (m) {
-    const y1 = +m[1], mo1 = +m[2];
-    const y2 = m[4] ? +m[4] : (+m[5] < mo1 ? y1 + 1 : y1);   /* 해를 넘겨 마감하는 접수 */
-    return [toDate(`${y1}-${mo1}-${+m[3]}`), toDate(`${y2}-${+m[5]}-${+m[6]}`)];
+  const found = [];
+  /* 표기가 공고마다 다르다: "접수일" / "신청기간" / "청약신청 일정" / "청약 일정".
+     이 목록이 좁으면 앞쪽 진짜 접수일을 놓치고 뒤쪽 서류·계약 일정을 접수일로 집는다. */
+  const kw = /(접수|신청\s*(?:기간|일정)|청약\s*(?:신청|기간|일정)|모집\s*(?:기간|일정))/g;
+  let k;
+  while ((k = kw.exec(text)) !== null) {
+    const win = text.slice(k.index, k.index + 320);
+    let m; SH_RANGE.lastIndex = 0;
+    while ((m = SH_RANGE.exec(win)) !== null) {
+      const y1 = +m[1], mo1 = +m[2];
+      const y2 = m[4] ? +m[4] : (+m[5] < mo1 ? y1 + 1 : y1);   /* 해를 넘겨 마감하는 접수 */
+      found.push([`${y1}-${pad2(mo1)}-${pad2(+m[3])}`, `${y2}-${pad2(+m[5])}-${pad2(+m[6])}`]);
+    }
   }
-  m = text.match(/접수(?:\s*일|\s*기간|\s*일정)\s*[:：]\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
-  if (m) { const d = toDate(`${m[1]}-${m[2]}-${m[3]}`); return [d, d]; }
-  /* 표 형식(재개발임대 등): "순위별 신청접수 일정" 표 안에 순위별로 날짜가 흩어져 있고
-     '접수 :' 같은 접두어가 없다. 신청 구간(신청기간/신청접수 ~ 서류심사·당첨자 발표 직전)의
-     전체 날짜(YYYY. M. D.)를 모아 가장 이른 날을 시작, 가장 늦은 날을 마감으로 본다. */
-  const secStart = text.search(/신청\s*(?:접수|기간|일정)|접수\s*(?:기간|일정)/);
-  if (secStart >= 0) {
-    const rest = text.slice(secStart);
-    const secEnd = rest.search(/서류\s*심사|서류제출|당첨자\s*발표|□\s*기타/);
-    const sec = secEnd > 0 ? rest.slice(0, secEnd) : rest.slice(0, 1500);
-    const ds = [...sec.matchAll(/(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})\./g)].map(x => toDate(`${x[1]}-${x[2]}-${x[3]}`)).filter(Boolean).sort();
-    if (ds.length) return [ds[0], ds[ds.length - 1]];
-  }
-  return [null, null];   /* 접수일이 첨부 PDF에만 있는 공고도 있다 — 그때는 날짜 없이 목록에만 노출 */
+  if (!found.length) return [null, null];   /* 접수일이 첨부 PDF에만 있는 공고도 많다 */
+  found.sort((a, b) => (a[0] < b[0] ? -1 : 1));
+  return found[0];   /* 가장 이른 구간 하나만 — 뒤따르는 서류제출·계약 기간을 끌어오지 않게 */
 }
 
 /* 본문에 '신청자격'이 여러 번 나온다(메뉴·안내문구). 자격 단어가 실제로 들어간 줄을 고른다. */
@@ -234,14 +298,10 @@ function shQual(text) {
 function shDetailToItem(row, html) {
   const text = stripTags(html).replace(/\s*\n\s*/g, "\n");
   const [start, end] = shPeriod(text);
-  /* 당첨자 발표를 우선하고, 없을 때만 서류심사대상자 발표로 대신한다
-     (재개발임대는 서류심사 10월 → 당첨자 이듬해 3월처럼 둘이 반년 차이 난다) */
-  const w = text.match(/(?:당첨자|당첨\s*자)\s*발표(?:일)?\s*[:：]?\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/)
-         || text.match(/서류심사대상자\s*발표\s*[:：]?\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
+  const w = text.match(/(?:서류심사대상자|당첨자|당첨)\s*(?:및[^\n]{0,12})?\s*발표\s*[:：]?\s*(\d{4})\.\s*(\d{1,2})\.\s*(\d{1,2})/);
   const qual = shQual(text);
   /* "신규공급 154호, 재공급 1,330호" → 1484 */
   const unitLine = (text.match(/공급\s*호수\s*[:：]?\s*([^\n]{0,80})/) || [])[1] || "";
-  /* "162개 단지 3,821세대" 처럼 '세대'로 세는 공고도 있다. '개 단지' 같은 단지 수는 세지 않는다 */
   const nums = (unitLine.match(/([0-9,]+)\s*(?:호|세대)/g) || []).map(x => toNum(x)).filter(Boolean);
   const units = nums.length ? nums.reduce((a, b) => a + b, 0) : null;
 
@@ -252,7 +312,7 @@ function shDetailToItem(row, html) {
     name: row.title,
     region: "서울",
     units,
-    target: qual ? qual.replace(/\s*,\s*/g, ", ") : "자세한 자격은 공고문 확인",
+    target: qual ? qual.replace(/^[○●■▶·\-]\s*/, "").replace(/\s*,\s*/g, ", ").slice(0, 120) : "자세한 자격은 공고문 확인",
     rcritStart: start,
     rcritEnd: end,
     winnerDate: w ? toDate(`${w[1]}-${w[2]}-${w[3]}`) : null,
@@ -264,9 +324,10 @@ function shDetailToItem(row, html) {
 
 async function fetchSH() {
   /* 게시판은 한 페이지 10여 건뿐이라 하루 이틀이면 밀려난다.
-     공고일과 접수 시작 사이가 2주쯤 뜨는 경우가 많아 4페이지(약 40건)까지 훑는다. */
+     공고일과 접수 시작 사이가 2~3주 벌어지는 경우가 많아 8페이지(약 80건, 약 3주치)까지 훑는다.
+     실제로 '26년 2차 행복주택'은 8/28 공고 / 9/9 접수라 6페이지에 있었다. */
   const rows = [], seen = new Set();
-  for (let page = 1; page <= 4; page++) {
+  for (let page = 1; page <= 8; page++) {
     let html;
     try { html = await shGet(SH_BOARD + "list.do" + (page > 1 ? "?page=" + page : "")); }
     catch (e) {
@@ -321,6 +382,7 @@ async function main() {
   // fetch 실패(null)면 이전 수집분을 유지(어차피 아래 공통 필터로 마감건은 걸러짐)
   const hug = (await fetchHUG(process.env.HUG_SERVICE_KEY)) ?? prevHug;
   const lh  = (await fetchLH(process.env.LH_API_KEY)) ?? prevLh;
+  await enrichLH(lh);   /* 목록 API에 없는 접수 시작일을 공고 상세에서 채운다 */
   const sh  = (await fetchSH()) ?? prevSh;
 
   // 자동 수집분 + 수동 큐레이션분 합치고 중복(id) 제거
