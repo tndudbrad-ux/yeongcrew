@@ -639,7 +639,7 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
 <script src="/apt-budget.js?v=4"></script>
 <script src="/apt-score.js?v=4"></script>
 <script src="/apt-match.js?v=16"></script>
-<script src="/boobi-tier.js?v=1"></script>
+<script src="/boobi-tier.js?v=2"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    조건 매칭 내집찾기 — 페이지 로직
@@ -1176,7 +1176,7 @@ function renderMatch(){
   if(S.openLadder && !res.conds.some(function(c){ return c.key===S.openLadder; })) S.openLadder=null;
   if(S.openLadder) drawLadder(S.openLadder); else $('ladderBox').innerHTML='';
 
-  var out=$('matchOut'), h=tierUpHtml();
+  var out=$('matchOut'), h=tierUpHtml()+schoolMapHtml();
   var n=res.counts.full, condN=res.conds.length, locked=0;
   /* free = 아직 공짜로 보여줄 수 있는 칸 수. null 이면 이용권이 있어 제한 없음 */
   var free = isPaid() ? null : FREE_CANDS;
@@ -1292,6 +1292,13 @@ function tierTagHtml(u){
   var say=d===0?'같은 등급':d>0?(d>=2?'두 칸 위':'한 칸 위'):(d<=-2?'두 칸 아래':'한 칸 아래');
   return '<span class="tg" style="background:'+T.bg+';color:'+T.c+'">'+esc(a.n)+' · '+esc(say)+'</span>';
 }
+/* 학군지 표 — 학군을 고른 사람에게만. 이름값이지 진학률이 아니다(그건 조건 판정에 따로 있다). */
+function schoolTagHtml(u){
+  if(S.conds.school==null||!window.BoobiTier) return '';
+  var s=BoobiTier.schoolOf(u.sido,u.sgg,u.dong); if(!s) return '';
+  var T=BoobiTier.STIER[s.t];
+  return '<span class="tg" style="background:'+T.bg+';color:'+T.c+'">🎓 '+esc(s.n)+' · '+esc(T.n)+'</span>';
+}
 function cardHtml(u){
   var b=budgetOf(u), gap=b?u.price-b.price:0;
   var reg=isRegulated(u.sido,u.sgg), lta=ltaZone(u.sido,u.sgg);
@@ -1303,7 +1310,7 @@ function cardHtml(u){
     +esc(u.name)+'<span class="nmGo" aria-hidden="true">↗</span><span class="sr">네이버에서 검색 (새 창)</span></a>'
     +' <span class="tg">'+esc(SHORT[u.sido]||u.sido)+' '+esc(u.sgg)+' '+esc(u.dong)+'</span>'
     +(S.codes.length>1?'<span class="tg" style="'+(reg?'background:#FFF4F4;color:#B23B3B':'background:#F1FBF9;color:#1E7A6E')+'">'+(reg?'규제':'비규제')+(b?' · 예산 '+readMan(b.price):'')+'</span>':'')
-    +(lta?'<span class="tg" style="background:#FFF8EC;color:#8A5A16">토허구역</span>':'')+tierTagHtml(u)+'</div>';
+    +(lta?'<span class="tg" style="background:#FFF8EC;color:#8A5A16">토허구역</span>':'')+tierTagHtml(u)+schoolTagHtml(u)+'</div>';
   h+='<div class="lo">전용 '+u.area+'㎡ ('+Math.round(u.area/3.3058)+'평) · '+(u.buildYear?u.buildYear+'년 준공 · ':'')+esc(String(u.dealYm||'').replace('-','.'))+' 거래'+(u.meta&&u.meta.hh?' · '+fmtN(u.meta.hh)+'세대':'')+'</div>';
   var sc=sideCosts(u.price,costOpt(reg,u.area>85,u.area));
   h+='<div><span class="pr">'+readMan(u.price)+'</span><span class="tg" style="margin-left:6px" title="취득세·중개보수·등기·이사·입주청소'+(sc.interior?'·인테리어':'')+' 포함">부대비용 포함 '+readMan(u.price+sc.total)+'</span>'+(gap<0?'<span class="tg" style="margin-left:6px">예산보다 '+readMan(-gap)+' 아래</span>':gap>0?'<span class="tg" style="margin-left:6px;background:#FFF4F4;color:#B23B3B">예산 +'+readMan(gap)+'</span>':'')+'</div>';
@@ -1421,6 +1428,69 @@ function tierUpHtml(){
   }).join('');
   h+='</div><p class="hintline" style="margin:10px 0 0">'+(more?'같은 등급에 '+more+'곳이 더 있지만, 예산이 닿는 순서로 여섯 곳만 뒀어요. ':'')+esc(BoobiTier.note)
     +' 숫자는 <b>시군구 전체</b> 실거래라 권역 안 실제 시세와 달라요. 투자 권유가 아닙니다.</p></div>';
+  return h;
+}
+
+/* ── 학군지 지도 ─────────────────────────────────────────────────────
+   학군 조건을 고른 사람에게만. 부비의 학군 판정은 '이 단지에서 초등학교까지 몇 m,
+   둘레 중학교 진학률 몇 %'라는 잰 값이고, 여기 붙는 건 동네 이름값이다.
+   둘은 다른 얘기라 섞지 않고 따로 보여준다 — 대치는 진학률이고, '대치'라는
+   이름은 학원가다. 예산이 어느 학군지까지 닿는지까지 붙여야 고를 수 있다. */
+function schoolMapHtml(){
+  if(S.conds.school==null||!window.BoobiTier||!DATA.px) return '';
+  var ST=BoobiTier.STIER;
+  var bud=Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].price;});
+  bud=bud.length?Math.max.apply(null,bud):0;
+  var here={}; S.codes.forEach(function(c){ here[c]=1; });
+  /* 지금 보는 지역에 걸친 학군지 — 한 시군구에 둘 이상일 수 있다(영통구: 광교·영통) */
+  var mineT=null, mineN=[];
+  S.codes.forEach(function(c){ var r=DATA.px[c]; if(!r) return;
+    BoobiTier.SCHOOL.forEach(function(a){
+      if(a.sido!==r.sido||a.sgg!==r.sgg) return;
+      if(mineT==null||a.t<mineT){ mineT=a.t; mineN=[a.n]; }
+      else if(a.t===mineT&&mineN.indexOf(a.n)<0) mineN.push(a.n);
+    }); });
+  var mine=mineT!=null?{t:mineT,n:mineN.join('·')}:null;
+
+  var h='<div class="ladderBoxUp"><div class="lu">🎓 학군지 지도';
+  if(mine) h+='<span class="st" style="background:'+ST[mine.t].bg+';color:'+ST[mine.t].c+'">지금 '+esc(mine.n)+' · '+esc(ST[mine.t].n)+'</span>';
+  h+='</div>';
+  h+='<p class="hintline" style="margin:8px 0 10px">'
+    +(mine?'고르신 지역은 <b>'+esc(mine.n)+'</b>('+esc(ST[mine.t].n)+')에 걸쳐 있어요. '
+          :'고르신 지역은 이 지도의 학군지에 없어요. ')
+    +(bud>0?'예산 <b>'+readMan(bud)+'</b>으로 ':'')+'닿는 학군지를 <b>높은 등급부터</b> 놓았어요.</p>';
+
+  /* 『학군지도』가 서울·경기·인천과 지방을 갈라 놓은 데는 이유가 있다. 노원 사는 사람에게
+     "둔산(대전)이 예산에 잘 맞아요"는 답이 아니다. 고른 지역과 같은 쪽만 보여준다. */
+  var CAP={'서울특별시':1,'경기도':1,'인천광역시':1};
+  var capHere=S.codes.some(function(c){ return DATA.px[c]&&CAP[DATA.px[c].sido]; });
+
+  /* 한 이름이 시군구 여럿에 걸치면(일산·해운대·동래) 가장 잘 닿는 쪽으로 모은다 */
+  var byName={}, order=[];
+  BoobiTier.SCHOOL.forEach(function(a){
+    if(!!CAP[a.sido]!==capHere) return;
+    var code=pxCodeOf(a.sido,a.sgg); if(!code) return;
+    var r=DATA.px[code], pct=0;
+    if(bud>0){ for(var i=20;i>=0;i--){ if(r.q[i]<=bud){ pct=i*5; break; } } }
+    var cur=byName[a.n];
+    if(!cur){ byName[a.n]={n:a.n,t:a.t,code:code,sido:a.sido,sgg:a.sgg,med:r.q[10],pct:pct,mine:!!here[code]}; order.push(byName[a.n]); }
+    else if(pct>cur.pct){ cur.code=code; cur.sido=a.sido; cur.sgg=a.sgg; cur.med=r.q[10]; cur.pct=pct; cur.mine=cur.mine||!!here[code]; }
+    else if(here[code]) cur.mine=true;
+  });
+  var rows=order.filter(function(x){ return !x.mine; })
+    .sort(function(a,b){ return (b.pct>=20)-(a.pct>=20) || a.t-b.t || b.pct-a.pct; });
+  var more=Math.max(0,rows.length-6); rows=rows.slice(0,6);
+  if(!rows.length) return h+'</div>';
+  h+='<div class="paths">'+rows.map(function(x){
+    var T=ST[x.t];
+    var reach=x.pct>=20?'예산 안에 드는 거래 '+x.pct+'%':x.pct>0?'예산 안에 드는 거래 '+x.pct+'% — 선택지가 거의 없어요':'예산으로 닿는 거래가 없어요';
+    return '<button type="button" class="path" onclick="gotoRegion(\''+x.code+'\')">'
+      +'<span><span class="k">'+esc(x.n)+' <span class="tg" style="background:'+T.bg+';color:'+T.c+'">'+esc(T.n)+'</span> '
+      +'<span style="font-weight:400;color:var(--sub)">'+esc(SHORT[x.sido]||x.sido)+' '+esc(x.sgg)+'</span></span>'
+      +'<span class="s">'+esc(reach)+' · 이 시군구 중앙값 '+readMan(x.med)+'</span></span><b>보기 →</b></button>';
+  }).join('')+'</div>';
+  h+='<p class="hintline" style="margin:10px 0 0">'+(more?'학군지가 '+more+'곳 더 있지만 여섯 곳만 뒀어요. ':'')
+    +esc(BoobiTier.schoolNote)+' 숫자는 <b>시군구 전체</b> 실거래라 학군지 안 실제 시세와 달라요.</p></div>';
   return h;
 }
 
