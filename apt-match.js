@@ -141,6 +141,31 @@
     return meta && meta.bd ? 3 : 0;   /* 0 = 시공사도 단지명 힌트도 없음 → unknown */
   }
 
+  /* 브역대신초공 + 정비사업·거래량·동네시세 아홉 가지를 세는 곳.
+     자산가치 '조건'과 자산가치 '관점 정렬'이 같은 수를 봐야 해서 따로 뺐다. */
+  function assetScan(c, ctx) {
+    var m = c.meta, hit = [], miss = [];
+    function mark(ok, label, detail) {
+      if (ok) hit.push(detail ? label + ' ' + detail : label);
+      else miss.push(label);
+    }
+    mark(brandTier(m, c.name) === 1, '브랜드', (m && m.bd) ? m.bd.split(',')[0] : '');
+    mark(m && m.sm != null && m.sm <= 10, '역세권', (m && m.sm != null) ? '도보 ' + m.sm + '분' : '');
+    mark(m && m.hh >= 1000, '대단지', (m && m.hh) ? fmt(m.hh) + '세대' : '');
+    var age = c.buildYear ? ctx.thisYear - c.buildYear : null;
+    mark(age != null && age <= 10, '신축', age != null ? age + '년 차' : '');
+    var el = nearOf(m, ctx.schools, function (x) { return x.k === 'e'; });
+    mark(el && el.d <= 500, '초품아', el ? Math.round(el.d) + 'm' : '');
+    var pk = nearOf(m, ctx.parks, null);
+    mark(pk && pk.d <= 500, '공원', pk ? Math.round(pk.d) + 'm' : '');
+    var rd = ctx.redevOf ? ctx.redevOf(c) : null;
+    mark(rd && rd.n > 0, '정비사업', rd && rd.n ? rd.n + '곳' : '');
+    var S = ctx.stats || {};
+    mark(!!(S.liquidTop && S.liquidTop[c.name + '|' + c.dong]), '거래량', '');
+    mark(!!(S.dongPyTop && S.dongPyTop[c.dong]), '동네 시세', '');
+    return { hit: hit, miss: miss };
+  }
+
   /* ══════════════════════════════════════════════════════════════════════
      조건 정의
        ladder : 완화 사다리. index 0 이 기본. 오른쪽으로 갈수록 느슨하다.
@@ -228,30 +253,11 @@
       ladder: [{ t: '9가지 중 5개', n: 5 }, { t: '4개', n: 4 }, { t: '3개', n: 3 }],
       needs: [],
       test: function (c, lv, ctx) {
-        var m = c.meta, hit = [], miss = [];
-        function mark(ok, label, detail) {
-          if (ok) hit.push(detail ? label + ' ' + detail : label);
-          else miss.push(label);
-        }
-        mark(brandTier(m, c.name) === 1, '브랜드', (m && m.bd) ? m.bd.split(',')[0] : '');
-        mark(m && m.sm != null && m.sm <= 10, '역세권', (m && m.sm != null) ? '도보 ' + m.sm + '분' : '');
-        mark(m && m.hh >= 1000, '대단지', (m && m.hh) ? fmt(m.hh) + '세대' : '');
-        var age = c.buildYear ? ctx.thisYear - c.buildYear : null;
-        mark(age != null && age <= 10, '신축', age != null ? age + '년 차' : '');
-        var el = nearOf(m, ctx.schools, function (x) { return x.k === 'e'; });
-        mark(el && el.d <= 500, '초품아', el ? Math.round(el.d) + 'm' : '');
-        var pk = nearOf(m, ctx.parks, null);
-        mark(pk && pk.d <= 500, '공원', pk ? Math.round(pk.d) + 'm' : '');
-        var rd = ctx.redevOf ? ctx.redevOf(c) : null;
-        mark(rd && rd.n > 0, '정비사업', rd && rd.n ? rd.n + '곳' : '');
-        var S = ctx.stats || {};
-        mark(!!(S.liquidTop && S.liquidTop[c.name + '|' + c.dong]), '거래량', '');
-        mark(!!(S.dongPyTop && S.dongPyTop[c.dong]), '동네 시세', '');
-
-        var line = hit.length ? '✓ ' + hit.join(' · ') : '';
-        if (miss.length) line += (line ? '  ' : '') + '✗ ' + miss.join('·');
-        return { v: hit.length >= this.ladder[lv].n ? 'pass' : 'fail',
-                 fact: hit.length + '/9 — ' + line };
+        var s = assetScan(c, ctx);
+        var line = s.hit.length ? '✓ ' + s.hit.join(' · ') : '';
+        if (s.miss.length) line += (line ? '  ' : '') + '✗ ' + s.miss.join('·');
+        return { v: s.hit.length >= this.ladder[lv].n ? 'pass' : 'fail',
+                 fact: s.hit.length + '/9 — ' + line };
       }
     },
     {
@@ -523,7 +529,93 @@
     });
   }
 
+  /* ══════════════════════════════════════════════════════════════════════
+     관점별 줄 세우기
+     ────────────────────────────────────────────────────────────────────
+     결과에서 조건 칩을 누르면 그 조건의 눈으로 다시 줄을 세운다.
+     학군을 눌렀으면 학군 순, 직주근접을 눌렀으면 통근 빠른 순.
+     '전부 충족'만 남은 목록이라 다들 기준선은 넘었고, 그 안에서 누가 더
+     나은지는 조건마다 다르다. 예산 근접순 하나로는 그 질문에 답을 못 한다.
+
+     반환값은 작을수록 앞. 잴 수 없으면 null — 맨 뒤로 보내되 빼지는 않는다.
+     ══════════════════════════════════════════════════════════════════════ */
+  function nearStationMin(c, ctx) {
+    var m = c.meta; if (!m) return null;
+    if (m.lat != null && ctx.stations && ctx.stations.length) {
+      var bd = 1e12;
+      for (var i = 0; i < ctx.stations.length; i++) {
+        var s = ctx.stations[i], d = haversine(m.lat, m.lng, s.lat, s.lng);
+        if (d < bd) bd = d;
+      }
+      return walkMin(bd);
+    }
+    return m.sm != null ? m.sm : null;      /* K-apt 공시 구간 상한 */
+  }
+  function midProgress(c, ctx) {           /* 둘레 중학교 특목·자사고 진학률 가중평균 */
+    var m = c.meta;
+    if (!m || m.lat == null || !ctx.schools || !ctx.progress) return null;
+    var num = 0, den = 0;
+    for (var j = 0; j < ctx.schools.length; j++) {
+      var ms = ctx.schools[j]; if (ms.k !== 'm') continue;
+      if (haversine(m.lat, m.lng, ms.lat, ms.lng) > 1500) continue;
+      var p = ctx.progress[ms.c]; if (!p) continue;
+      num += p.r * p.g; den += p.g;
+    }
+    return den > 0 ? num / den : null;
+  }
+  var RANKS = {
+    size:      { t: '넓은 순',          of: function (c) { return c.area > 0 ? -c.area : null; } },
+    newbuild:  { t: '새로 지은 순',      of: function (c) { var y = c.buildYear || (c.meta && c.meta.yr); return y ? -y : null; } },
+    brand:     { t: '브랜드 순',         of: function (c) { var t = brandTier(c.meta, c.name); return t === 0 ? null : t; } },
+    parking:   { t: '주차 넉넉한 순',     of: function (c) { var m = c.meta; return (m && m.pk != null) ? -m.pk : null; } },
+    community: { t: '커뮤니티 갖춘 순',   of: function (c) { var m = c.meta; if (!m || !m.fac) return null;
+                   return m.fac.indexOf('comm') >= 0 ? 0 : (m.fac.indexOf('pub') >= 0 ? 1 : 2); } },
+    subway:    { t: '역 가까운 순',       of: function (c, ctx) { return nearStationMin(c, ctx); } },
+    park:      { t: '공원 가까운 순',     of: function (c, ctx) { var n = nearOf(c.meta, ctx.parks, null); return n ? n.d : null; } },
+    quiet:     { t: '조용한 순',         of: function (c, ctx) {
+                   var m = c.meta; if (!m || m.lat == null || !ctx.noise) return null;
+                   var n = 0; for (var i = 0; i < ctx.noise.length; i++) if (haversine(m.lat, m.lng, ctx.noise[i].lat, ctx.noise[i].lng) <= 300) n++;
+                   return n; } },
+    commute:   { t: '출퇴근 빠른 순',     of: function (c, ctx) {
+                   var m = c.meta, w = ctx.work;
+                   if (!m || m.lat == null || !w || w.lat == null) return null;
+                   return haversine(m.lat, m.lng, w.lat, w.lng); } },
+    asset:     { t: '갖춘 항목 많은 순',   of: function (c, ctx) { return -assetScan(c, ctx).hit.length; } },
+    school:    { t: function (ctx) { return (ctx.kids === '중고등학생' || ctx.kids === '자산가치')
+                        ? '중학교 진학 실적 순' : '초등학교 가까운 순'; },
+                 of: function (c, ctx) {
+                   var teen = ctx.kids === '중고등학생' || ctx.kids === '자산가치';
+                   if (teen) { var avg = midProgress(c, ctx); if (avg != null) return -avg; }
+                   var el = nearOf(c.meta, ctx.schools, function (x) { return x.k === 'e'; });
+                   return el ? el.d : null; } }
+  };
+  function rank(u, key, ctx) {
+    var r = RANKS[key]; if (!r) return null;
+    var v = r.of(u, ctx || {});
+    return (v == null || !isFinite(v)) ? null : v;
+  }
+  function rankLabel(key, ctx) {
+    var r = RANKS[key]; if (!r) return '';
+    return typeof r.t === 'function' ? r.t(ctx || {}) : r.t;
+  }
+  /* 관점 정렬 — 잴 수 없는 곳은 뒤로, 동점이면 예산 가까운 순 */
+  function sortBy(list, key, ctx, budget) {
+    var memo = (typeof Map !== 'undefined') ? new Map() : null;
+    function k(u) {
+      if (memo && memo.has(u)) return memo.get(u);
+      var v = rank(u, key, ctx); if (v == null) v = Infinity;
+      if (memo) memo.set(u, v);
+      return v;
+    }
+    return list.slice().sort(function (a, b) {
+      var d = k(a) - k(b);
+      if (d) return d;
+      return Math.abs(a.price - (budget || 0)) - Math.abs(b.price - (budget || 0));
+    });
+  }
+
   root.BoobiMatch = { CONDS: CONDS, run: run, countFull: countFull, availability: availability,
+                      rank: rank, rankLabel: rankLabel, sortBy: sortBy, hasRank: function (k) { return !!RANKS[k]; },
                       buildStats: buildStats, metaKey: metaKey, norm: norm, dongKey: dongKey, indexMeta: indexMeta,
                       haversine: haversine, test: test };
 })(typeof window !== 'undefined' ? window : globalThis);

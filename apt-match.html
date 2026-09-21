@@ -302,6 +302,9 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .jumpBar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#EAF3FE;border:1px solid #BEDBFC;border-radius:12px;padding:10px 13px;margin:4px 0 16px;font-size:.86rem;color:#1C5FB0}
 .jumpBar span{font-size:.78rem;color:#4A7FC4;font-weight:300}
 .jumpBar button{margin-left:auto;border:1px solid #BEDBFC;background:#fff;color:#2A7DE8;border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit}
+.viewBar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#F1FBF9;border:1px solid #BFE8E2;border-radius:12px;padding:9px 13px;margin:0 0 12px;font-size:.84rem;color:#1E7A6E}
+.viewBar span{font-size:.78rem;color:#4E948C;font-weight:300}
+.viewBar button{margin-left:auto;border:1px solid #BFE8E2;background:#fff;color:#1E7A6E;border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit}
 
 .cloud{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .cond{border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:10px 13px;cursor:pointer;font-family:inherit;text-align:left;transition:.14s;color:var(--forest);display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -623,7 +626,7 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
 
 <script src="/apt-budget.js?v=4"></script>
 <script src="/apt-score.js?v=4"></script>
-<script src="/apt-match.js?v=16"></script>
+<script src="/apt-match.js?v=17"></script>
 <script src="/boobi-tier.js?v=2"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1128,12 +1131,36 @@ function renderMatch(){
   if(S.openLadder && !res.conds.some(function(c){ return c.key===S.openLadder; })) S.openLadder=null;
   if(S.openLadder) drawLadder(S.openLadder); else $('ladderBox').innerHTML='';
 
+  /* ── 관점 정렬 ───────────────────────────────────────────────────────
+     조건 칩을 누르면 그 조건의 눈으로 다시 줄을 세운다. '전부 충족'에 남은
+     곳들은 이미 기준선을 다 넘었으니, 그 안에서 누가 더 나은지는 조건마다
+     다른 질문이다. 학군을 누른 사람에게 예산 가까운 순을 보여줄 이유가 없다. */
+  var view=(S.openLadder&&BoobiMatch.hasRank(S.openLadder)&&res.conds.some(function(c){return c.key===S.openLadder;}))?S.openLadder:null;
+  var viewDef=view?BoobiMatch.CONDS.filter(function(c){return c.key===view;})[0]:null;
+  var viewLbl=view?BoobiMatch.rankLabel(view,matchCtx()):'';
+  var viewDead=false;
+  if(view){
+    var bud0=Math.max.apply(null,Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].price;}));
+    var cx=matchCtx();
+    /* 잴 수 있는 곳이 하나도 없으면(출퇴근지를 안 골랐다든지) 줄이 안 바뀐다.
+       그런데도 '다시 줄 세웠어요'라고 쓰면 거짓말이 된다. */
+    viewDead=!res.full.some(function(u){ return BoobiMatch.rank(u,view,cx)!=null; });
+    res.full=BoobiMatch.sortBy(res.full,view,cx,bud0);
+    res.unknown=BoobiMatch.sortBy(res.unknown,view,cx,bud0);
+    res.relaxable=BoobiMatch.sortBy(res.relaxable,view,cx,bud0);
+  }
+
   var out=$('matchOut'), h=jumpBannerHtml()+tierUpHtml()+schoolMapHtml();
   var n=res.counts.full, condN=res.conds.length, locked=0;
   /* free = 아직 공짜로 보여줄 수 있는 칸 수. null 이면 이용권이 있어 제한 없음 */
   var free = isPaid() ? null : FREE_CANDS;
   if(n>0){
-    h+='<div class="secH">✅ '+(condN?'조건 '+condN+'개 전부 충족':'예산 안 아파트')+' <span class="cnt">'+fmtN(n)+'곳</span>'+(n>8?'<span class="sub">예산 가까운 순</span>':'')+'</div>';
+    var sortLbl=(view&&!viewDead)?viewLbl:'예산 가까운 순';
+    h+='<div class="secH">✅ '+(condN?'조건 '+condN+'개 전부 충족':'예산 안 아파트')+' <span class="cnt">'+fmtN(n)+'곳</span>'+(n>1?'<span class="sub">'+esc(sortLbl)+'</span>':'')+'</div>';
+    if(view) h+='<div class="viewBar">'+viewDef.icon+' <b>'+esc(viewDef.label)+'</b> '
+      +(viewDead?'로는 줄을 세울 수가 없어요 <span>— 공시에 없거나 아직 못 재는 값이라 예산 순 그대로예요</span>'
+               :'기준으로 다시 줄 세웠어요 <span>— '+esc(viewLbl)+'</span>')
+      +'<button type="button" onclick="clearView()">예산 순으로</button></div>';
     if(free===null){                       /* 이용권 있음 — 전부 */
       h+=res.full.slice(0,8).map(cardHtml).join('');
       if(n>8) h+='<button type="button" class="showMore" onclick="showAll(this)">'+fmtN(n-8)+'곳 더 보기</button>';
@@ -1209,9 +1236,10 @@ window.relaxOne=function(key){
 /* 여닫기만으로 전체 매칭을 다시 돌리지 않는다 — 결과는 그대로고 줄만 열리는 것이다 */
 function showLadder(key){
   S.openLadder = (S.openLadder===key) ? null : key;   /* 같은 조건을 다시 누르면 접는다 */
-  paintCondBar();
-  if(S.openLadder) drawLadder(S.openLadder); else $('ladderBox').innerHTML='';
+  renderMatch();                                      /* 눈금만 여는 게 아니라 그 조건 관점으로 다시 줄을 세운다 */
+  $('condBar').scrollIntoView({behavior:'smooth',block:'start'});
 }
+window.clearView=function(){ S.openLadder=null; renderMatch(); };
 function paintCondBar(){
   var bar=$('condBar'); if(!bar) return;
   [].forEach.call(bar.querySelectorAll('button'), function(b){
@@ -1431,7 +1459,7 @@ function tierUpHtml(){
    둘은 다른 얘기라 섞지 않고 따로 보여준다 — 대치는 진학률이고, '대치'라는
    이름은 학원가다. 예산이 어느 학군지까지 닿는지까지 붙여야 고를 수 있다. */
 function schoolMapHtml(){
-  if(S.conds.school==null||!window.BoobiTier||!DATA.px) return '';
+  if(S.conds.school==null||S.openLadder!=='school'||!window.BoobiTier||!DATA.px) return '';
   var ST=BoobiTier.STIER;
   var bud=Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].price;});
   bud=bud.length?Math.max.apply(null,bud):0;
