@@ -305,6 +305,30 @@ input.f.wbig{padding:16px 16px;font-size:1.24rem;font-weight:600;letter-spacing:
 .viewBar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#F1FBF9;border:1px solid #BFE8E2;border-radius:12px;padding:9px 13px;margin:0 0 12px;font-size:.84rem;color:#1E7A6E}
 .viewBar span{font-size:.78rem;color:#4E948C;font-weight:300}
 .viewBar button{margin-left:auto;border:1px solid #BFE8E2;background:#fff;color:#1E7A6E;border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit}
+/* 결과 링크 공유 */
+.shareBox{margin-top:26px;padding:17px 17px 15px;border-radius:18px;
+  background:
+    radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),
+    radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),
+    linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));
+  border:1.5px solid rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff}
+.shareBox .t{font-size:.96rem;font-weight:800;letter-spacing:-.03em}
+.shareBox .s{font-size:.78rem;color:var(--sub);font-weight:300;margin-top:4px;line-height:1.6}
+.shareBox .btns{display:flex;gap:8px;margin-top:13px}
+.shareBox button{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  padding:13px;border-radius:999px;font-size:.92rem;font-weight:800;cursor:pointer;font-family:inherit;
+  border:none;white-space:nowrap;transition:.14s}
+.shareBox .go2{color:#fff;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);
+  box-shadow:0 8px 20px rgba(61,139,253,.28)}
+.shareBox .go2:hover{transform:translateY(-1px)}
+.shareBox .cp{flex:0 0 auto;padding:13px 18px;background:#fff;color:var(--sub);border:1.5px solid var(--line)}
+#bbToast{position:fixed;left:50%;bottom:74px;transform:translateX(-50%) translateY(8px);background:#0D2A29;
+  color:#fff;font-size:.87rem;padding:11px 18px;border-radius:999px;box-shadow:0 10px 28px rgba(13,42,41,.3);
+  z-index:9993;opacity:0;transition:.24s;pointer-events:none;max-width:88vw;text-align:center}
+#bbToast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.fromLink{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#F1FBF9;border:1px solid #BFE8E2;
+  border-radius:12px;padding:10px 13px;margin:0 0 14px;font-size:.85rem;color:#1E7A6E}
+.fromLink span{font-size:.77rem;color:#4E948C;font-weight:300}
 
 .cloud{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .cond{border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:10px 13px;cursor:pointer;font-family:inherit;text-align:left;transition:.14s;color:var(--forest);display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -601,6 +625,7 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
   <div id="condBar" class="condBar"></div>
   <div id="ladderBox"></div>
   <div id="matchOut"></div>
+  <div id="shareBar"></div>
   <div class="wnav two" style="margin-top:22px">
     <button type="button" class="wskip" id="editAns">← 답변 고치기</button>
     <a class="go" href="/imjang-checklist.html">🔍 임장 체크리스트로 가기</a>
@@ -655,6 +680,7 @@ Promise.all([
   DATA.regions=v[0]; DATA.index=v[1]; DATA.lta=v[2];
   Object.keys(DATA.regions).forEach(function(full){ DATA.regions[full].forEach(function(g){ DATA.code[full+'|'+g.name]=g.code; }); });
   buildSido(); loadRedev();
+  bootFromLink();        /* ?s= 로 들어왔으면 위저드를 건너뛰고 바로 결과 */
 }).catch(function(){ $('sidoRow').innerHTML='<p class="hintline">지역 데이터를 불러오지 못했어요. 새로고침 해주세요.</p>'; });
 
 var REDEV_FILES=['/data/redev-seoul.json','/data/redev-busan.json','/data/redev-incheon.json','/data/redev-gyeonggi.json'];
@@ -673,6 +699,7 @@ function buildSido(){
   var row=$('sidoRow'); row.innerHTML='';
   Object.keys(DATA.regions).forEach(function(full){
     var b=document.createElement('button'); b.type='button'; b.className='rChip'; b.textContent=SHORT[full]||full;
+    b.classList.toggle('on', full===S.sido);
     b.onclick=function(){ S.sido=full; S.codes=[]; S.all=false; [].forEach.call(row.children,function(x){x.classList.remove('on');}); b.classList.add('on'); buildSgg(); };
     row.appendChild(b);
   });
@@ -1158,7 +1185,7 @@ function renderMatch(){
     res.relaxable=BoobiMatch.sortBy(res.relaxable,view,cx,bud0);
   }
 
-  var out=$('matchOut'), h=jumpBannerHtml()+tierUpHtml();
+  var out=$('matchOut'), h=fromLinkHtml()+jumpBannerHtml()+tierUpHtml();
   var n=res.counts.full, condN=res.conds.length, locked=0;
   /* free = 아직 공짜로 보여줄 수 있는 칸 수. null 이면 이용권이 있어 제한 없음 */
   var free = isPaid() ? null : FREE_CANDS;
@@ -1220,6 +1247,7 @@ function renderMatch(){
      화면에 근거 한 줄만 보이면 "나머지는 안 본 건가" 싶어지기 때문이다. */
   h+=basisHtml();
   out.innerHTML=h;
+  renderShare(res);
   if(locked>0 && window.gtag){ try{ gtag('event','view_paywall',{page:location.pathname,locked:locked}); }catch(x){} }
 }
 function basisHtml(){
@@ -1488,6 +1516,114 @@ window.widenAll=function(){ S.all=true; S.codes=(DATA.regions[S.sido]||[]).map(f
 /* 로그인 게이트 — 결과가 뜰 때 로드 (허브·질문은 비로그인도 볼 수 있어야 유입이 막히지 않는다) */
 var gateLoaded=false;
 function loadGate(){ if(gateLoaded) return; gateLoaded=true; var sc=document.createElement('script'); sc.src='/boobi-login-gate.js?v=3'; sc.defer=true; document.body.appendChild(sc); }
+/* ══════════════════════════════════════════════════════════════════════
+   결과 링크 공유
+   ────────────────────────────────────────────────────────────────────
+   여덟 문항을 답해야 나오는 화면이라, 그냥 주소를 보내면 받은 사람은 빈
+   위저드를 본다. 그래서 답을 주소에 실어 보낸다 — 링크를 열면 그 사람 화면에
+   같은 결과가 바로 뜬다.
+
+   실은 답만 싣고 결과는 열 때 다시 계산한다. 실거래는 매달 바뀌니 석 달 뒤에
+   열어도 그때 시세로 나오는 게 맞다. 대신 보낸 사람이 본 숫자와 달라질 수 있어서,
+   링크로 들어온 화면에 그렇게 적는다.
+   소득·현금은 예산 계산에만 쓰이고 화면에 그대로 찍히지는 않는다.
+   ══════════════════════════════════════════════════════════════════════ */
+var NUM_IDS=['fCash','fIncome','fDebt','fSave','fRate','fInt','fMove','fClean','fCorp'];
+function b64u(t){ return btoa(unescape(encodeURIComponent(t))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function unb64u(t){ t=String(t).replace(/-/g,'+').replace(/_/g,'/'); while(t.length%4) t+='='; return decodeURIComponent(escape(atob(t))); }
+function packState(){
+  var o={v:1,g:S.codes,a:S.all?1:0,c:S.conds,z:S.sizeLv,k:S.kids,o:S.own,f:S.first?1:0,lp:S.loanPct};
+  if(S.openLadder) o.vw=S.openLadder;
+  if(S.work&&S.work.lat!=null) o.w=[S.work.name,+(+S.work.lat).toFixed(5),+(+S.work.lng).toFixed(5)];
+  o.n={}; NUM_IDS.forEach(function(id){ var v=$(id).value; if(v!=='') o.n[id]=v; });
+  if($('fCorpOn').checked) o.cq=1;
+  return b64u(JSON.stringify(o));
+}
+function shareUrl(){ return location.origin+'/apt-match?s='+packState(); }
+var FROM_LINK=false;
+function restoreState(raw){
+  var o=JSON.parse(unb64u(raw));
+  if(!o||!o.g||!o.g.length) return false;
+  S.codes=o.g.filter(function(c){ return DATA.index&&DATA.index.regions[c]; });
+  if(!S.codes.length) return false;
+  S.all=!!o.a; S.conds=o.c||{}; S.sizeLv=(o.z==null?3:o.z); S.kids=o.k||'초등학생';
+  S.own=o.o||'none'; S.first=!!o.f; S.loanPct=(o.lp==null?100:o.lp); S.openLadder=o.vw||null;
+  S.work=(o.w&&o.w.length===3)?{name:o.w[0],lat:o.w[1],lng:o.w[2]}:null;
+  S.sido=(DATA.index.regions[S.codes[0]]||{}).sido||null;
+  NUM_IDS.forEach(function(id){ $(id).value=(o.n&&o.n[id]!=null)?o.n[id]:''; });
+  if(o.cq){ $('fCorpOn').checked=true; $('corpWrap').style.display=''; }
+  /* '답변 고치기'로 돌아갔을 때 위저드가 링크의 답과 같아야 한다 */
+  buildSido(); buildSgg(); buildCloud();
+  function mark(wrapId,attr,val){ [].forEach.call($(wrapId).querySelectorAll('button'),function(b){
+    b.classList.toggle('on', String(b.dataset[attr])===String(val)); }); }
+  mark('sizeOpt','lv',S.sizeLv); mark('kidsOpt','v',S.kids); mark('ownOpt','v',S.own);
+  $('firstWrap').style.display=S.own==='none'?'':'none'; $('fFirst').checked=S.first; $('ownNav').style.display='';
+  if(S.work){ $('workInput').value=S.work.name; $('workNote').textContent='✓ '+S.work.name+' 기준으로 통근시간을 계산해요.'; }
+  ['fInt','fMove','fClean'].forEach(function(id){ var e=$(id); if(e.oninput) e.oninput.call(e); });
+  FROM_LINK=true;
+  return true;
+}
+function fromLinkHtml(){
+  if(!FROM_LINK) return '';
+  return '<div class="fromLink">🔗 공유받은 조건으로 계산했어요 <span>— 실거래는 계속 바뀌어서 보내주신 분이 본 숫자와 다를 수 있어요</span></div>';
+}
+function bbToast(msg){
+  var t=$('bbToast');
+  if(!t){ t=document.createElement('div'); t.id='bbToast'; document.body.appendChild(t); }
+  t.textContent=msg; requestAnimationFrame(function(){ t.classList.add('on'); });
+  clearTimeout(t.__tm); t.__tm=setTimeout(function(){ t.classList.remove('on'); },2400);
+}
+function copyLink(url){
+  (navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){
+    bbToast('✅ 링크를 복사했어요 — 카톡에 붙여넣기만 하면 돼요');
+  }).catch(function(){
+    var ta=document.createElement('textarea'); ta.value=url; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); bbToast('✅ 링크를 복사했어요'); }
+    catch(e){ prompt('링크를 복사하세요',url); }
+    ta.remove();
+  });
+}
+function renderShare(res){
+  var box=$('shareBar'); if(!box) return;
+  var n=res?res.counts.full:0;
+  var rg=DATA.index.regions[S.codes[0]]||{};
+  var where=((SHORT[rg.sido]||rg.sido||'')+' '+(S.all?'전체':(S.codes.length>1?(rg.sgg||'')+' 외 '+(S.codes.length-1)+'곳':(rg.sgg||'')))).trim();
+  var title=n>0?(where+'에서 내 예산에 맞는 아파트 '+fmtN(n)+'곳'):(where+' 내 예산으로 찾아본 결과');
+  box.innerHTML='<div class="shareBox">'
+    +'<div class="t">📤 이 결과 그대로 공유하기</div>'
+    +'<div class="s">링크를 열면 <b>같은 조건·같은 예산으로 계산한 이 화면</b>이 바로 떠요. '
+    +'받는 사람이 질문에 다시 답할 필요가 없어요. 현금·소득은 예산 계산에만 쓰이고 화면에 그대로 적히지 않아요.</div>'
+    +'<div class="btns"><button type="button" class="go2" id="shGo">공유하기</button>'
+    +'<button type="button" class="cp" id="shCp">링크 복사</button></div></div>';
+  var url=shareUrl();
+  $('shGo').onclick=function(){
+    ga('share_match',{n:n});
+    if(navigator.share) navigator.share({title:title+' | 부비',text:title,url:url}).catch(function(){});
+    else copyLink(url);
+  };
+  $('shCp').onclick=function(){ ga('copy_match_link',{n:n}); copyLink(url); };
+}
+/* 링크로 들어온 경우 — 위저드를 건너뛰고 바로 결과 */
+function bootFromLink(){
+  var raw=null;
+  try{ raw=new URLSearchParams(location.search).get('s'); }catch(e){}
+  if(!raw) return;
+  var ok=false; try{ ok=restoreState(raw); }catch(e){ ok=false; }
+  if(!ok){ bbToast('링크가 오래됐거나 손상돼서 처음부터 시작할게요'); return; }
+  $('wizBox').style.display='none'; $('resultBox').style.display='';
+  $('matchOut').innerHTML='<p class="note" style="text-align:center;padding:24px 0">공유받은 조건으로 계산하는 중…</p>';
+  S.loadP=loadRegion(S.codes);
+  S.loadP.then(function(){
+    var B=computeBudgets();
+    if(S.loanPct<100){ $('loanOn').checked=true; $('loanCtl').style.display=''; $('loanRange').value=S.loanPct; applyLoanPct(); }
+    loanLabels(); renderBudget(computeBudgets()); renderMatch();
+    loadGate();
+  }).catch(function(){
+    $('matchOut').innerHTML='<p class="note" style="text-align:center;padding:24px 0">실거래 데이터를 불러오지 못했어요. 새로고침 해주세요.</p>';
+  });
+}
+
 </script>
 <script src="/hwon-auth.js" defer></script>
 <script src="/boobi-premium.js?v=5" defer></script>
