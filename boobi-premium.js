@@ -50,7 +50,7 @@ function check() {
     return firebase.firestore().collection('members').doc(u.uid).get();
   }).then(function (snap) {
     var d = (snap && snap.exists) ? (snap.data() || {}) : {};
-    state = d.premium === true;
+    state = (d.premium === true) || (Number(d.premium) > 0);  /* 워커는 members.premium 에 1을 기록한다 */
     emit();
     return state;
   }).catch(function (e) {
