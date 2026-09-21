@@ -81,6 +81,6 @@ text{font-family:'Pretendard','Wanted Sans','Apple SD Gothic Neo','Malgun Gothic
 <text class="lock" x="500" y="588">🔒 나머지 21곳은 프리미엄에서</text>
 
 <rect x="84" y="668" width="146" height="34" rx="17" fill="#EAF3FE"/><text class="foot" x="157" y="690">990원 1회 결제</text>
-<rect x="242" y="668" width="150" height="34" rx="17" fill="#EAF3FE"/><text class="foot" x="317" y="690">기간 제한 없음</text>
+<rect x="242" y="668" width="150" height="34" rx="17" fill="#EAF3FE"/><text class="foot" x="317" y="690">12개월 이용</text>
 <rect x="404" y="668" width="164" height="34" rx="17" fill="#EAF3FE"/><text class="foot" x="486" y="690">계정에 바로 연결</text>
 </svg>

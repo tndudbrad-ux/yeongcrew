@@ -116,7 +116,7 @@ function wall(opt) {
   var desc = opt.desc || '한 번 결제하면 아파트 찾기 전체 목록은 물론<br>부비의 모든 유료 기능이 계속 열려요.';
   var priceLine = PRICE ? '<div class="bbwPrice">'
     + (LIST > PRICE ? '<span class="was">' + won(LIST) + '</span>' : '')
-    + '<span class="num">' + won(PRICE) + '</span><span class="vat">1회 결제 · 계속 이용</span></div>' : '';
+    + '<span class="num">' + won(PRICE) + '</span><span class="vat">1회 결제 · 12개월 이용</span></div>' : '';
   var btn = BUY_URL
     ? '<button class="bbwBuy" type="button" data-nogate="1" onclick="bbPremium.buy()">' + (PRICE ? won(PRICE) + '으로 전체 보기' : '전체 보기') + '</button>'
     : '<button class="bbwBuy" type="button" data-nogate="1" disabled style="opacity:.5;cursor:not-allowed">결제 기능 준비 중이에요</button>';
