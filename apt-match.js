@@ -584,10 +584,18 @@
     school:    { t: function (ctx) { return (ctx.kids === '중고등학생' || ctx.kids === '자산가치')
                         ? '중학교 진학 실적 순' : '초등학교 가까운 순'; },
                  of: function (c, ctx) {
+                   /* 학원가가 선 동네(이른바 학군지)를 아주 조금 앞으로 당긴다.
+                      화면에 띄우지 않는 참고 분류라서, 잰 값(거리·진학률)을 뒤집지 않을
+                      만큼만 건드린다 — 상위 학군지라도 1km 밖이면 500m 앞을 못 이긴다. */
+                   var z = ctx.schoolZone ? ctx.schoolZone(c) : null;
                    var teen = ctx.kids === '중고등학생' || ctx.kids === '자산가치';
-                   if (teen) { var avg = midProgress(c, ctx); if (avg != null) return -avg; }
+                   if (teen) {
+                     var avg = midProgress(c, ctx);
+                     if (avg != null) return -(avg + (z === 1 ? 0.02 : z === 2 ? 0.01 : z === 3 ? 0.005 : 0));
+                   }
                    var el = nearOf(c.meta, ctx.schools, function (x) { return x.k === 'e'; });
-                   return el ? el.d : null; } }
+                   if (!el) return null;
+                   return el.d * (z === 1 ? 0.90 : z === 2 ? 0.94 : z === 3 ? 0.97 : 1); } }
   };
   function rank(u, key, ctx) {
     var r = RANKS[key]; if (!r) return null;
