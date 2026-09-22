@@ -1,9 +1,9 @@
 {
-"updated": "2026-09-16",
+"updated": "2026-09-22",
 "items": [
 {"id":"kr","flag":"🇰🇷","name":"한국 기준금리","rate":"3.00%","change":"+0.25%p","dir":"up","asof":"8.27 인상 · 다음 결정 10.22"},
-{"id":"us","flag":"🇺🇸","name":"미국 기준금리","rate":"3.50~3.75%","change":"동결","dir":"flat","asof":"7.29 동결 · 9.16(현지) 결정 발표 예정"},
-{"id":"jp","flag":"🇯🇵","name":"일본 기준금리","rate":"1.00%","change":"동결","dir":"flat","asof":"7.31 동결 · 다음 결정 9.18"},
+{"id":"us","flag":"🇺🇸","name":"미국 기준금리","rate":"3.75~4.00%","change":"+0.25%p","dir":"up","asof":"9.16(현지) 인상 · 다음 결정 10.27~28"},
+{"id":"jp","flag":"🇯🇵","name":"일본 기준금리","rate":"1.25%","change":"+0.25%p","dir":"up","asof":"9.18 인상 · 31년 만에 최고치"},
 {"id":"cofix_new","flag":"🏦","name":"코픽스 · 신규취급액","rate":"3.18%","change":"동결","dir":"flat","asof":"8월 기준 · 다음 공시 10.15"},
 {"id":"cofix_bal","flag":"🏦","name":"코픽스 · 잔액","rate":"3.05%","change":"+0.05%p","dir":"up","asof":"8월 기준"},
 {"id":"cofix_snew","flag":"🏦","name":"코픽스 · 신잔액","rate":"2.71%","change":"+0.06%p","dir":"up","asof":"8월 기준"}
