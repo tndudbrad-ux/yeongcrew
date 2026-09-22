@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-21T15:41:25.551Z",
+  "updatedAt": "2026-09-22T02:04:27.149Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 83,
+  "count": 84,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -59,36 +59,6 @@
       "rcritEnd": "2026-09-23",
       "winnerDate": "2026-12-10",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020763&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020760",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "[정정공고]대구죽전 행복주택(산업단지형) 예비 입주자 모집",
-      "region": "대구광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-09-21",
-      "rcritEnd": "2026-09-23",
-      "winnerDate": "2026-12-10",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020760&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020810",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "[정정공고]칠곡왜관4 국민임대아파트 예비입주자 모집(51형)",
-      "region": "경상북도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-09-28",
-      "rcritEnd": "2026-09-28",
-      "winnerDate": "2026-12-29",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020810&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -198,21 +168,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020743",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "군산구암 국민임대주택 예비입주자 모집 공고('26.9.15.)",
-      "region": "전북특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-09-29",
-      "rcritEnd": "2026-09-29",
-      "winnerDate": "2027-01-07",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020743&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020709",
       "provider": "LH",
       "ltype": "국민임대",
@@ -228,32 +183,17 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020655",
+      "id": "LH-2015122300020743",
       "provider": "LH",
       "ltype": "국민임대",
-      "name": "부산광역시 기장군 정관7국민임대 소득완화 모집공고",
-      "region": "부산광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-09-28",
-      "rcritEnd": "2026-09-29",
-      "winnerDate": "2026-12-10",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020655&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020754",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "[양산시지역]양산대석휴먼시아 국민임대주택 예비입주자 모집",
-      "region": "경상남도",
+      "name": "군산구암 국민임대주택 예비입주자 모집 공고('26.9.15.)",
+      "region": "전북특별자치도",
       "units": null,
       "target": "무주택 등 · 자격은 공고문 확인",
       "rcritStart": "2026-09-29",
       "rcritEnd": "2026-09-29",
-      "winnerDate": "2027-01-15",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020754&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "winnerDate": "2027-01-07",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020743&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -288,6 +228,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300020754",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "[양산시지역]양산대석휴먼시아 국민임대주택 예비입주자 모집",
+      "region": "경상남도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-09-29",
+      "rcritEnd": "2026-09-29",
+      "winnerDate": "2027-01-15",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020754&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020724",
       "provider": "LH",
       "ltype": "국민임대",
@@ -303,17 +258,17 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020758",
+      "id": "LH-2015122300020655",
       "provider": "LH",
       "ltype": "국민임대",
-      "name": "부산광역시 국민임대주택 예비입주자 정례모집 공고(2026.09.15.)",
+      "name": "부산광역시 기장군 정관7국민임대 소득완화 모집공고",
       "region": "부산광역시",
       "units": null,
       "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-09-29",
+      "rcritStart": "2026-09-28",
       "rcritEnd": "2026-09-29",
-      "winnerDate": "2027-01-28",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020758&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "winnerDate": "2026-12-10",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020655&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -329,21 +284,6 @@
       "rcritEnd": "2026-09-30",
       "winnerDate": "2026-12-03",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020808&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020759",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[서울지역본부] 26년 3차 청년 매입임대주택 예비입주자 모집공고",
-      "region": "서울특별시",
-      "units": null,
-      "target": "공고일 현재(2026.09.17.) 무주택자인 미혼 청년으로서 소득 및 자산 기준을 충족하는, ① 19세 이상 39세 이하인 사람(1986.09.18. ~ 2007.09.17. 출생자) ② 대학생(입학·복학 예정자 포함) ③ 취업준비생(고등학교·대학교 등을 졸업·중퇴 후 2년 이내인 사",
-      "rcritStart": "2026-09-28",
-      "rcritEnd": "2026-09-30",
-      "winnerDate": "2026-12-11",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020759&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -374,6 +314,21 @@
       "rcritEnd": "2026-09-30",
       "winnerDate": "2026-12-11",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020749&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020759",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[서울지역본부] 26년 3차 청년 매입임대주택 예비입주자 모집공고",
+      "region": "서울특별시",
+      "units": null,
+      "target": "공고일 현재(2026.09.17.) 무주택자인 미혼 청년으로서 소득 및 자산 기준을 충족하는, ① 19세 이상 39세 이하인 사람(1986.09.18. ~ 2007.09.17. 출생자) ② 대학생(입학·복학 예정자 포함) ③ 취업준비생(고등학교·대학교 등을 졸업·중퇴 후 2년 이내인 사",
+      "rcritStart": "2026-09-28",
+      "rcritEnd": "2026-09-30",
+      "winnerDate": "2026-12-11",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020759&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -663,6 +618,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300020708",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "전남광주통합특별(광산구,북구) 국민임대주택 예비입주자 모집(2026.09.15.공고)",
+      "region": "전남광주통합특별시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-09-29",
+      "rcritEnd": "2026-09-30",
+      "winnerDate": "2027-01-29",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020708&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020667",
       "provider": "LH",
       "ltype": "국민임대",
@@ -708,21 +678,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020708",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "전남광주통합특별(광산구,북구) 국민임대주택 예비입주자 모집(2026.09.15.공고)",
-      "region": "전남광주통합특별시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-09-29",
-      "rcritEnd": "2026-09-30",
-      "winnerDate": "2027-01-29",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020708&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020677",
       "provider": "LH",
       "ltype": "국민임대",
@@ -751,6 +706,21 @@
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=310107",
       "note": "공고 2026-08-28",
       "_src": "sh-web"
+    },
+    {
+      "id": "LH-2015122300020710",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "[정정공고]남양주마석2단지 국민임대주택 예비입주자 모집공고(2026.9.7.)",
+      "region": "경기도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-09-30",
+      "rcritEnd": "2026-10-01",
+      "winnerDate": "2027-01-25",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020710&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
     },
     {
       "id": "LH-2015122300020807",
@@ -888,21 +858,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020752",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "청주가경4 국민임대주택 예비입주자 모집 공고[2026.09.15]",
-      "region": "충청북도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-01",
-      "rcritEnd": "2026-10-01",
-      "winnerDate": "2027-01-27",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020752&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020804",
       "provider": "LH",
       "ltype": "행복주택",
@@ -1023,6 +978,36 @@
       "_src": "sh-web"
     },
     {
+      "id": "LH-2015122300020811",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "인천광역시, 경기도 부천시 다자녀 매입임대주택 예비입주자 모집 공고",
+      "region": "인천광역시 외",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-06",
+      "rcritEnd": "2026-10-08",
+      "winnerDate": "2026-12-08",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020811&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020781",
+      "provider": "LH",
+      "ltype": "영구임대",
+      "name": "익산부송1 영구임대주택 예비입주자 모집공고",
+      "region": "전북특별자치도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-08",
+      "rcritEnd": "2026-10-08",
+      "winnerDate": "2026-12-24",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020781&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020746",
       "provider": "LH",
       "ltype": "국민임대",
@@ -1064,6 +1049,21 @@
       "rcritEnd": "2026-10-16",
       "winnerDate": "2027-03-09",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020727&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020800",
+      "provider": "LH",
+      "ltype": "영구임대",
+      "name": "철원갈말 영구임대 예비입주자 모집공고",
+      "region": "강원특별자치도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-19",
+      "rcritEnd": "2026-10-23",
+      "winnerDate": "2027-02-02",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020800&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -1126,6 +1126,21 @@
       "url": "https://elandpeer.com/dmc",
       "note": "1차 청약 7/11 접수 종료 · 잔여세대·추가모집 일정은 공식 페이지에서 확인",
       "_src": "manual-curated"
+    },
+    {
+      "id": "SH-310629",
+      "provider": "SH",
+      "ltype": "기타",
+      "name": "[토지임대부 사회주택] 옥류서원 입주자 모집 공고문",
+      "region": "서울",
+      "units": null,
+      "target": "모집공고일 현재 서울특별시에 거주하는 무주택자로 소득기준 / 자산기준 / 자동차가액 기준을 모두 충족하는 자",
+      "rcritStart": null,
+      "rcritEnd": null,
+      "winnerDate": null,
+      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=310629",
+      "note": "공고 2026-09-22",
+      "_src": "sh-web"
     },
     {
       "id": "SH-310575",
