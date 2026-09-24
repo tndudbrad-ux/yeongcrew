@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-23T14:06:21.456Z",
+  "updatedAt": "2026-09-24T01:51:29.358Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 84,
+  "count": 82,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,36 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "LH-2015122300020813",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "[정정공고]대구죽전 행복주택(산업단지형) 예비 입주자 모집",
-      "region": "대구광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-09-21",
-      "rcritEnd": "2026-09-23",
-      "winnerDate": "2026-12-10",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020813&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020769",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[정정공고][온라인 접수 불가, 관할 주거복지지사 현장접수] 경기남부지역본부 2026년 일반 매입임대주택 입주자 모집공고",
-      "region": "경기도",
-      "units": null,
-      "target": "입주자모집공고일(2026.09.10.) 현재 무주택세대구성원으로서, 아래의 순위별 자격요건에 해당하는 자",
-      "rcritStart": "2026-09-21",
-      "rcritEnd": "2026-09-23",
-      "winnerDate": "2026-11-03",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020769&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "LH-2015122300020817",
       "provider": "LH",
@@ -378,6 +348,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300020777",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[광주전남지역본부] 신혼·신생아 매입임대주택Ⅰ 예비입주자 모집공고",
+      "region": "전남광주통합특별시",
+      "units": null,
+      "target": "신청자격 :  에 대한 정보 제공  공통신청자격 공고일 현재 무주택세대구성원으로서 신혼·신생아 매입임대주택Ⅰ 소득 및 자산기준을 충족하는, ① 신혼부부 : 공고일 현재 혼인 7년 이내(혼인신고일이 2019.9.17.~2026.9.17.)인 사람 ② 예비신혼부부 : 공고일 현재 혼인 예정",
+      "rcritStart": "2026-09-28",
+      "rcritEnd": "2026-09-30",
+      "winnerDate": "2026-12-08",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020777&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020784",
       "provider": "LH",
       "ltype": "매입임대",
@@ -404,21 +389,6 @@
       "rcritEnd": "2026-09-30",
       "winnerDate": "2026-12-09",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020778&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020777",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[광주전남지역본부] 신혼·신생아 매입임대주택Ⅰ 예비입주자 모집공고",
-      "region": "전남광주통합특별시",
-      "units": null,
-      "target": "신청자격 :  에 대한 정보 제공  공통신청자격 공고일 현재 무주택세대구성원으로서 신혼·신생아 매입임대주택Ⅰ 소득 및 자산기준을 충족하는, ① 신혼부부 : 공고일 현재 혼인 7년 이내(혼인신고일이 2019.9.17.~2026.9.17.)인 사람 ② 예비신혼부부 : 공고일 현재 혼인 예정",
-      "rcritStart": "2026-09-28",
-      "rcritEnd": "2026-09-30",
-      "winnerDate": "2026-12-08",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020777&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
