@@ -312,7 +312,19 @@ function init(){
   [].forEach.call(document.querySelectorAll('[data-bb-mail-order]'), function(el){ el.textContent = m; });
 
   var f=document.querySelector('footer');
-  if(!f || f.querySelector('.bbBiz')) return;
+  if(!f) return;
+
+  /* 서비스 범위 고지 — 전 페이지 공통 (카드사 심사 요건) */
+  if(!f.querySelector('.bbScope')){
+    var sc=document.createElement('style');
+    sc.textContent='.bbScope{margin-top:16px;padding:12px 16px;border-radius:12px;border:1px solid rgba(127,165,162,.30);font-size:.76rem;line-height:1.8;text-align:center;opacity:.92;font-weight:300}';
+    document.head.appendChild(sc);
+    var sd=document.createElement('div'); sd.className='bbScope';
+    sd.innerHTML='부비는 부동산 정보를 정리해 보여드리는 <b>정보 제공 서비스</b>입니다. 투자자문업·유사투자자문업·경매 대행업 등록 사업자가 아니며, 특정 물건의 매수·매도를 권유하거나 수익을 보장하지 않습니다. 판매 상품은 모두 정보성 리포트(디지털 콘텐츠)이며, 투자 판단과 그 결과에 대한 책임은 이용자 본인에게 있습니다.';
+    f.appendChild(sd);
+  }
+
+  if(f.querySelector('.bbBiz')) return;
   if((f.textContent||'').indexOf('사업자등록번호')>-1) return; // 이미 있는 페이지는 건너뜀
   var st=document.createElement('style');
   st.textContent='.bbBiz{margin-top:16px;padding-top:14px;border-top:1px solid rgba(127,165,162,.28);font-size:.76rem;line-height:1.9;text-align:center;opacity:.92;font-weight:300}'+
