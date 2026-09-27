@@ -133,6 +133,38 @@ footer a{color:#B9DCD9;margin:0 8px}
 <p class="note">주택임대차보호법상 전환율 상한은 "기준금리 + 2%p"입니다 (2026년 7월 기준 4.5%). 이 상한은 계약 기간 중 전세→월세 전환에 적용되며, 신규 계약은 시장 시세에 따라 달라질 수 있습니다.</p>
 </div>
 
+<!-- adsense-temp:basis-start -->
+<h2 class="sec">계산 근거</h2>
+<div class="tool-box">
+<article class="post" style="border:none;padding:0">
+
+<h3>법정 전월세전환율 = 한국은행 기준금리 + 2%p</h3>
+<p>주택임대차보호법 제7조의2와 같은 법 시행령 제9조가 정한 상한입니다. 기준금리가 2.5%인 2026년 9월 현재 상한은 <b>연 4.5%</b>예요. 기준금리가 바뀌면 상한도 같이 움직이므로, 계약 시점의 기준금리를 확인해 계산기의 전환율을 바꿔 넣으시면 됩니다.</p>
+
+<h3>수식</h3>
+<p><b>전세 → 월세</b><br>
+월세 = (기존 전세보증금 − 새 보증금) × 전환율 ÷ 12</p>
+<p><b>월세 → 전세</b><br>
+전세 환산액 = 보증금 + (월세 × 12 ÷ 전환율)</p>
+
+<h3>이 상한이 적용되는 건 '계약 중 전환'입니다</h3>
+<p>법정 상한은 <b>계약 기간 중이거나 갱신할 때</b> 전세를 월세로 바꾸는 경우에 적용됩니다. 처음 맺는 신규 계약은 시장 시세로 정해지므로 이 비율을 넘겨도 위법이 아니에요. 다만 주변 매물의 실제 전환율을 재보는 기준으로는 그대로 쓸 수 있습니다. 시세 전환율이 6%라면 같은 보증금으로 월세가 그만큼 비싸다는 뜻이니, 전세를 유지하는 쪽이 유리하다는 신호예요.</p>
+<p>계약갱신요구권을 써서 갱신하는 경우에는 차임·보증금 증액이 <b>5% 이내</b>로 따로 제한됩니다(같은 법 제7조). 전환율 상한과 5% 상한을 둘 다 확인해야 해요.</p>
+
+<h3>예시 1 — 전세 4억을 보증금 1억 + 월세로 돌릴 때</h3>
+<p>줄어드는 보증금 = 4억 − 1억 = 3억원<br>
+월세 = 3억 × 4.5% ÷ 12 = <b>112만 5,000원</b><br>
+연간 1,350만원입니다. 집주인이 월 150만원을 요구했다면 전환율이 6%로 계산된 것이라, 계약 중 전환이면 <b>초과분 37만 5,000원은 무효</b>를 주장할 수 있습니다.</p>
+
+<h3>예시 2 — 보증금 5,000만원 / 월세 70만원을 전세로 되돌릴 때</h3>
+<p>전세 환산액 = 5,000만 + (70만 × 12 ÷ 0.045) = 5,000만 + 1억 8,667만 = <b>2억 3,667만원</b><br>
+집주인이 2억 8,000만원을 부르면 그건 전환율 약 3.6%로 계산한 셈이라 세입자에게 불리합니다. 반대로 2억원을 부르면 전환율 약 5.6%로, 세입자에게 유리해요. <b>전세 환산액이 클수록 세입자에게 유리</b>하다고 기억하면 됩니다.</p>
+
+<div class="box"><b>전세로 갈지 월세로 갈지 고민이라면</b> — 보증금을 은행에 넣어 받는 이자와 월세를 직접 비교해야 답이 나옵니다. 전환율이 예금금리보다 높으면 전세가, 낮으면 월세가 유리해요. 전세대출 이자까지 넣어 비교하려면 <a href="/loan-calculator.html" style="color:var(--teal);font-weight:600">대출 상환 계산기</a>를 같이 쓰세요. 월세는 연말정산에서 <a href="/wolse-tax-credit-guide.html" style="color:var(--teal);font-weight:600">월세 세액공제</a>를 받을 수 있다는 점도 계산에 넣으시고요.</div>
+</article>
+</div>
+<!-- adsense-temp:basis-end -->
+
 <div class="rel"><h2 class="sec">함께 보면 좋은 콘텐츠</h2><div class="grid">
 <a class="card" href="/jeonse-contract.html"><div class="ic">📋</div><h3>전세 계약 체크리스트</h3><p>보증금 지키는 필수 확인사항</p></a>
 <a class="card" href="/loan-calculator.html"><div class="ic">🏦</div><h3>대출 상환 계산기</h3><p>전세대출 이자와 월세 비교</p></a>
@@ -145,6 +177,11 @@ footer a{color:#B9DCD9;margin:0 8px}
 <details class="faq"><summary>전세 1억을 월세로 바꾸면 얼마인가요?</summary><p>보증금 1억원을 월세로 전환하면 1억 × 4.5% ÷ 12 = 약 37만 5천원이에요. 계산기에서 금액만 바꿔 바로 확인할 수 있어요.</p></details>
 <details class="faq"><summary>신규 계약에도 법정 전환율이 적용되나요?</summary><p>법정 전환율은 기존 계약을 갱신·변경할 때 적용돼요. 신규 계약은 시장 시세로 정해지므로, 주변 매물의 전환율과 비교해 적정한지 판단하는 기준으로 활용하세요.</p></details>
 <details class="faq"><summary>갱신 때 월세를 얼마나 올릴 수 있나요?</summary><p>계약갱신요구권을 사용한 갱신에서는 차임 증액이 5% 이내로 제한돼요. 전환율과 5% 상한을 함께 확인하면 부당한 인상인지 판단할 수 있습니다.</p></details>
+<!-- adsense-temp:faq-start -->
+<details class="faq"><summary>집주인이 법정 상한을 넘겨 요구하면 어떻게 하나요?</summary><p>계약 기간 중이거나 갱신하면서 전세를 월세로 바꾸는 경우라면, 상한을 넘는 부분은 무효입니다. 이미 냈다면 <b>부당이득 반환</b>을 청구할 수 있어요. 먼저 내용증명으로 법정 전환율을 근거로 조정을 요구하고, 협의가 안 되면 <b>대한법률구조공단 주택임대차분쟁조정위원회</b>(국번 없이 132)에 조정을 신청할 수 있습니다. 조정은 무료이고 소송보다 훨씬 빨라요.</p></details>
+<details class="faq"><summary>반전세로 바꾸면 확정일자와 우선변제권은 어떻게 되나요?</summary><p>보증금이 줄어드는 방향으로 계약을 바꾸면 <b>새 계약서에 확정일자를 다시 받아야</b> 합니다. 이때 주의할 게 있어요. 기존 보증금에 대한 우선변제 순위는 최초 확정일자 기준으로 유지되지만, 조건이 바뀐 부분은 새 순위가 매겨집니다. 그 사이 집주인이 근저당을 새로 잡았다면 그 근저당이 앞설 수 있어요. 전환 전에 <a href="/jeonse-safety-check.html" style="color:var(--teal);font-weight:600">전세사기 위험 진단</a>으로 등기부부터 다시 확인하세요.</p></details>
+<details class="faq"><summary>기준금리가 바뀌면 이미 맺은 계약의 전환율도 바뀌나요?</summary><p>아니요. 이미 전환이 끝난 계약의 월세가 저절로 바뀌지는 않습니다. 법정 상한은 <b>전환하는 시점</b>의 기준금리로 판단해요. 다음 갱신 때 다시 전환하거나 조건을 바꾼다면 그때의 기준금리 + 2%p가 새 상한이 됩니다. 계산기에서 전환율을 직접 바꿔 넣을 수 있으니, 계약 시점의 기준금리를 한국은행 홈페이지에서 확인해 넣으세요.</p></details>
+<!-- adsense-temp:faq-end -->
 </div>
 <style>.faq{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;padding:0 18px}.faq summary{cursor:pointer;font-weight:500;font-size:.95rem;padding:15px 0;list-style:none;position:relative}.faq summary::after{content:"+";position:absolute;right:2px;color:var(--teal);font-size:1.1rem}.faq[open] summary::after{content:"−"}.faq p{font-size:.88rem;color:var(--sub);padding:0 0 15px;line-height:1.7}</style>
 </div></main>
