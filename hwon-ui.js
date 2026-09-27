@@ -47,7 +47,11 @@ function initReveal(){
   var els=document.querySelectorAll('.card,.tool-box,.faq,.rel,article.post');
   var io=new IntersectionObserver(function(es){
     es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('hwIn'); io.unobserve(e.target); } });
-  },{threshold:0.08,rootMargin:'0px 0px -6% 0px'});
+  /* threshold 를 0.08 하나로만 두면, 화면보다 훨씬 큰 블록은 8%가 한 번에 보일 수
+     없어서 isIntersecting 이 영원히 false 다 — 그 블록은 opacity:0 인 채로 남는다.
+     (임대공고 82건이 들어간 박스가 28,000px 짜리여서 통째로 안 보였다)
+     0 을 같이 넣어 '조금이라도 닿으면' 나타나게 한다. */
+  },{threshold:[0,0.08],rootMargin:'0px 0px -6% 0px'});
   els.forEach(function(el,i){
     if(el.closest && el.closest('.deck')) return;   /* 가로 카드덱은 제외 */
     var r=el.getBoundingClientRect();

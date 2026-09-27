@@ -389,6 +389,28 @@ const DEFAULT_SCHEMA = {
   winnerDate: "당첨자 발표 YYYY-MM-DD", url: "공식 링크", note: "비고(선택)"
 };
 
+/* ── 게시판 페이지의 날짜 도장 ─────────────────────────────────────────
+   rental-board.html 은 목록을 rental-data.json 에서 읽어 그리지만,
+   JSON-LD 의 dateModified 와 자바스크립트가 꺼졌을 때 보이는 날짜는
+   HTML 에 박혀 있다. 손으로 적어두면 반드시 낡는다 — 9월에도 "마지막
+   업데이트 8월 31일"이 떠 있었던 게 그래서다. 수집이 끝날 때 같이 찍는다. */
+const BOARD = "rental-board.html";
+async function stampBoard(count) {
+  let html;
+  try { html = await readFile(BOARD, "utf8"); }
+  catch { console.log(`[게시판] ${BOARD} 없음 — 건너뜀`); return; }
+  const kst = new Date(Date.now() + 9 * 3600 * 1000);
+  const ymd = kst.toISOString().slice(0, 10);
+  const ko  = `${kst.getUTCFullYear()}년 ${kst.getUTCMonth() + 1}월 ${kst.getUTCDate()}일`;
+  const before = html;
+  html = html.replace(/"dateModified":\s*"\d{4}-\d{2}-\d{2}"/, `"dateModified": "${ymd}"`);
+  html = html.replace(/(id="rbUpdated"[^>]*>)[\s\S]*?(<\/div>)/,
+    `$1\u{1F504} 마지막 업데이트: <b>${ko}</b> · 공고 ${count}건 · 신청 전 반드시 공식 공고문 원문을 확인하세요.$2`);
+  if (html === before) { console.log("[게시판] 바뀐 것 없음"); return; }
+  await writeFile(BOARD, html, "utf8");
+  console.log(`[게시판] ${BOARD} 날짜 갱신 → ${ko} (공고 ${count}건)`);
+}
+
 async function main() {
   let cur;
   try { cur = JSON.parse(await readFile(FILE, "utf8")); }
@@ -424,6 +446,7 @@ async function main() {
     items
   };
   await writeFile(FILE, JSON.stringify(out, null, 2) + "\n", "utf8");
+  await stampBoard(items.length);
   console.log(`완료: 총 ${items.length}건 (HUG ${hug.length} / LH ${lh.length} / SH ${sh.length} / 수동 ${manual.length})`);
 }
 
