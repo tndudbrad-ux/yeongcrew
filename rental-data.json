@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-27T02:06:42.839Z",
+  "updatedAt": "2026-09-27T14:35:09.543Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 82,
   "schema": {
@@ -153,6 +153,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300020655",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "부산광역시 기장군 정관7국민임대 소득완화 모집공고",
+      "region": "부산광역시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-09-28",
+      "rcritEnd": "2026-09-29",
+      "winnerDate": "2026-12-10",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020655&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020754",
       "provider": "LH",
       "ltype": "국민임대",
@@ -194,21 +209,6 @@
       "rcritEnd": "2026-09-29",
       "winnerDate": "2027-01-29",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020747&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020724",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "창녕창녕 국민임대주택 예비입주자 모집",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-09-29",
-      "rcritEnd": "2026-09-29",
-      "winnerDate": "2027-01-15",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020724&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -569,6 +569,21 @@
       "rcritEnd": "2026-09-30",
       "winnerDate": "2027-01-28",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020767&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020667",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "보성군·순천시·광양시 국민임대주택 예비입주자 모집",
+      "region": "전남광주통합특별시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-09-29",
+      "rcritEnd": "2026-09-30",
+      "winnerDate": "2027-01-29",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020667&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -959,21 +974,6 @@
       "rcritEnd": "2026-10-14",
       "winnerDate": "2026-12-07",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020746&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020726",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "아산지역 국민임대주택 예비입주자 모집공고(2026.09.15)",
-      "region": "충청남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-12",
-      "rcritEnd": "2026-10-14",
-      "winnerDate": "2027-02-25",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020726&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
