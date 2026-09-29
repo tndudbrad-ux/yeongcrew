@@ -127,6 +127,66 @@ footer a{color:#B9DCD9;margin:0 8px}
 <p>내야 할 세금(결정세액)보다 공제액이 크면 그 이상 돌려주지는 않아요. 연봉이 낮아 원천징수된 세금 자체가 적다면 공제액을 다 못 쓸 수 있다는 점만 알아두세요.</p>
 
 <h2>나 받을 수 있나 — 조건 체크리스트</h2>
+<div id="wtcCheck" style="background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));border:1.5px solid rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;border-radius:18px;padding:18px 18px 16px;margin:14px 0 20px">
+<div style="font-weight:800;font-size:1rem;letter-spacing:-.02em;margin-bottom:3px">✅ 3대 조건, 하나씩 눌러보세요</div>
+<div style="font-size:.82rem;color:#547471;font-weight:300;margin-bottom:13px">세 개가 다 켜져야 받을 수 있어요. 눌러도 어디에도 저장되지 않아요.</div>
+
+<label class="wtcItem"><input type="checkbox" data-k="0">
+<span><b>무주택 세대주</b><em>12월 31일 기준으로 세대 전원이 집이 없어야 해요. 부모님과 같은 등본에 있고 부모님이 집을 갖고 있으면 안 됩니다. 세대주가 원칙이지만, 세대주가 주택 관련 공제를 받지 않았다면 세대원도 가능해요.</em></span></label>
+
+<label class="wtcItem"><input type="checkbox" data-k="1">
+<span><b>총급여 8,000만원 이하</b><em>세전 연봉 기준이에요(종합소득금액 7,000만원을 넘으면 제외). 5,500만원 이하면 공제율 17%, 5,500만~8,000만원이면 15%입니다.</em></span></label>
+
+<label class="wtcItem"><input type="checkbox" data-k="2">
+<span><b>전용 85㎡ 이하 <u>또는</u> 기준시가 4억원 이하</b><em>둘 중 <b>하나만</b> 넘으면 돼요. 85㎡가 넘어도 기준시가가 4억 이하면 대상입니다. 아파트·빌라·단독은 물론 오피스텔·고시원도 포함돼요.</em></span></label>
+
+<div id="wtcOut" style="margin-top:12px;border-radius:12px;padding:12px 14px;font-size:.87rem;line-height:1.65;background:#F2F7F6;color:#547471">세 가지를 확인해보세요.</div>
+
+<div style="font-size:.8rem;color:#547471;font-weight:300;margin-top:10px;line-height:1.6">＋ 조건은 아니지만 <b>전입신고</b>는 반드시 돼 있어야 해요. 계약서 주소와 주민등록 주소가 같아야 하고, <b>전입신고한 날 이후에 낸 월세부터</b> 공제됩니다. 확정일자는 필요 없어요.</div>
+</div>
+
+<style>
+.wtcItem{display:flex;gap:11px;align-items:flex-start;background:#fff;border:1.5px solid #E4EDEC;border-radius:13px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:.14s;word-break:keep-all}
+.wtcItem:hover{border-color:#BEDBFC}
+.wtcItem input{flex:0 0 auto;width:20px;height:20px;margin:1px 0 0;accent-color:#3D8BFD;cursor:pointer}
+.wtcItem>span>b{display:block;font-size:.93rem;font-weight:700;letter-spacing:-.02em;color:#0D2A29}
+.wtcItem em b{font-weight:700;color:#0D2A29}
+.wtcItem>span>em{display:block;font-style:normal;font-size:.8rem;color:#547471;font-weight:300;line-height:1.6;margin-top:3px}
+.wtcItem.on{border-color:transparent;background:#F1FBF9;box-shadow:0 0 0 1.5px #8FE0D8 inset}
+</style>
+<script>
+(function(){
+  var box=document.getElementById('wtcCheck'); if(!box) return;
+  var out=document.getElementById('wtcOut');
+  var items=[].slice.call(box.querySelectorAll('.wtcItem'));
+  var NAME=['무주택 세대주','총급여 8,000만원 이하','주택 면적·기준시가 요건'];
+  function draw(){
+    var miss=[];
+    items.forEach(function(l,i){
+      var on=l.querySelector('input').checked;
+      l.classList.toggle('on',on);
+      if(!on) miss.push(NAME[i]);
+    });
+    if(!miss.length){
+      out.style.background='#F1FBF9'; out.style.color='#1E7A6E';
+      out.innerHTML='🎉 <b>세 가지 모두 충족이에요 — 받을 수 있습니다.</b><br>'
+        +'전입신고까지 돼 있다면 아래 <b>필요 서류 3종</b>을 챙겨 연말정산 때 내면 돼요. '
+        +'놓친 해가 있다면 <b>5년 이내 경정청구</b>로 소급해서 받을 수 있고, 집주인 동의는 필요 없어요.';
+    } else if(miss.length===3){
+      out.style.background='#F2F7F6'; out.style.color='#547471';
+      out.innerHTML='세 가지를 확인해보세요.';
+    } else {
+      out.style.background='#FFF7ED'; out.style.color='#B45309';
+      out.innerHTML='아직 <b>'+miss.join('</b>, <b>')+'</b>이(가) 안 켜져 있어요.<br>'
+        +'<b>총급여</b>가 8,000만원을 넘어서라면 세액공제는 못 받지만, 홈택스에서 <b>월세 현금영수증</b>을 신청해 소득공제라도 챙길 수 있어요(아래에 설명해뒀어요). '
+        +'<b>무주택</b>이 걸린다면 세대 분리 시점을, <b>주택 요건</b>이 걸린다면 기준시가를 다시 확인해보세요 — 85㎡가 넘어도 기준시가 4억 이하면 대상이에요.';
+    }
+  }
+  box.addEventListener('change',draw);
+  draw();
+})();
+</script>
+
 <table>
 <tr><th>조건</th><th>기준</th><th>체크 포인트</th></tr>
 <tr><td><b>무주택</b></td><td>12월 31일 기준 세대 전원이 무주택</td><td>세대주가 원칙, 세대주가 주택 관련 공제를 안 받았다면 세대원도 가능</td></tr>
@@ -154,6 +214,15 @@ footer a{color:#B9DCD9;margin:0 8px}
 2월에 서류를 못 냈어도 그해 5월 종합소득세 신고 기간에 홈택스에서 직접 반영할 수 있어요. 경로는 홈택스 로그인 → 종합소득세 신고 → 근로소득자 신고서에 월세액 세액공제 입력이에요.</div>
 <div class="box"><b>3️⃣ 지난 몇 년을 통째로 놓쳤다면: 경정청구 (5년 이내)</b><br>
 월세 세액공제를 몰랐거나 집주인 눈치를 보느라 신청 안 한 해가 있다면, <b>법정 신고기한으로부터 5년 안에</b> 홈택스 경정청구로 돌려받을 수 있어요. <b>이미 이사를 갔어도, 그 회사를 퇴사했어도 가능</b>해요 — 그 해의 계약서와 이체 내역만 있으면 돼요. 여러 해를 놓쳤다면 연도별로 각각 청구하면 되고, 처리되면 보통 1~2개월 내 환급돼요.</div>
+
+<div style="margin:14px 0 4px">
+<a href="https://www.hometax.go.kr" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px;border-radius:999px;text-decoration:none;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;font-size:1.02rem;font-weight:800;white-space:nowrap;box-shadow:0 8px 20px rgba(61,139,253,.28)">🏛 국세청 홈택스 바로가기 →</a>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+<a href="https://www.gov.kr" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 10px;border-radius:999px;text-decoration:none;background:#fff;border:1.5px solid #E4EDEC;color:#547471;font-size:.86rem;font-weight:700;white-space:nowrap">📄 정부24 — 등본 발급</a>
+<a href="/jeonse-monthly.html" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 10px;border-radius:999px;text-decoration:none;background:#fff;border:1.5px solid #E4EDEC;color:#547471;font-size:.86rem;font-weight:700;white-space:nowrap">🔄 전월세 전환 계산기</a>
+</div>
+<p style="font-size:.79rem;color:#8AA5A2;font-weight:300;line-height:1.65;margin:10px 0 0">홈택스는 <b>공동인증서·금융인증서·간편인증</b> 중 하나로 로그인해야 해요. 모바일은 <b>손택스</b> 앱에서 같은 메뉴를 쓸 수 있습니다. 경정청구는 연도별로 따로 신청하니, 놓친 해가 여러 해면 그만큼 반복하시면 돼요.</p>
+</div>
 
 <h2>집주인 눈치, 봐야 하나요?</h2>
 <p>결론부터: <b>안 봐도 돼요.</b> 월세 세액공제는 세입자가 국세청에 신청하는 것이고, 임대인의 동의·확인·서명이 전혀 필요 없어요. 신청했다고 임대인에게 통지가 가지도 않아요. 임대인 입장에서 세입자의 공제 신청이 임대소득 노출로 이어질 수 있어 꺼리는 경우가 있는데, 임대소득 신고는 임대인의 의무일 뿐 세입자가 공제를 포기할 이유가 아니에요.</p>
@@ -206,7 +275,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 부비 — 부동산 비서<br>© 2026 원대시투 ·
 <a href="/about.html">소개</a>·<a href="/contact.html">문의</a>·<a href="/terms.html">이용약관</a>·<a href="/privacy.html">개인정보처리방침</a>
 </div></footer>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"월세 세액공제 완벽정리 — 최대 170만원 돌려받고, 놓친 5년치도 환급","description":"월세 세액공제 총정리 — 총급여 8,000만원 이하 무주택 세대주가 전용 85㎡ 이하 또는 기준시가 4억 이하 주택에 전입신고하고 낸 월세의 15~17%를 연 1,000만원 한도(최대 170만원)로 세액공제. 집주인 동의 불필요, 놓친 해는 5년 내 경정청구. 2027년부터 한도 1,200만원·청년 소득무관 17%(최대 204만원) 개편안까지","image":["https://boobi.ai.kr/wolse-tax-credit-guide-header.webp"],"datePublished":"2026-09-23","dateModified":"2026-09-23","inLanguage":"ko-KR","articleSection":"임대차","wordCount":3000,"keywords":"월세 세액공제, 연말정산 월세, 월세 환급, 경정청구, 월세 현금영수증, 무주택 세대주, 청년 월세 공제","about":[{"@type":"Thing","name":"월세 세액공제","description":"총급여 8,000만원 이하 무주택 근로자가 전용 85㎡ 이하 또는 기준시가 4억원 이하 주택(오피스텔·고시원 포함)에 전입신고 후 지급한 월세의 15%(총급여 5,500만~8,000만원) 또는 17%(5,500만원 이하)를 연 1,000만원 한도로 산출세액에서 공제(조세특례제한법 제95조의2)"},{"@type":"Thing","name":"월세 경정청구","description":"연말정산에서 월세 세액공제를 누락한 경우 법정 신고기한부터 5년 이내 홈택스 경정청구로 소급 환급. 임대인 동의 불필요, 이사·퇴사 후에도 가능"},{"@type":"Thing","name":"2026 세제개편안 월세 공제 확대","description":"2027년 1월 1일 이후 지급 월세분부터 공제 한도 연 1,000만원→1,200만원, 청년(15~34세, 군복무 최대 6년 가산)은 소득 무관 17% 공제율 적용(2027~2029년 한시) 예정 — 국회 확정 전제"}],"citation":[{"@type":"CreativeWork","name":"머니투데이 — 월세 공제 한도 1200만원으로… 청년은 소득 관계없이 17% (2026.8)","url":"https://www.mt.co.kr/estate/2026/08/12/2026081213423162342"},{"@type":"CreativeWork","name":"국세청 국세상담센터 — 연말정산 월세 세액공제","url":"https://call.nts.go.kr/call/qna/selectQnaInfo.do?mi=1318&ctgId=CTG11906"},{"@type":"CreativeWork","name":"국가법령정보센터 — 조세특례제한법 제95조의2","url":"https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A1%B0%EC%84%B8%ED%8A%B9%EB%A1%80%EC%A0%9C%ED%95%9C%EB%B2%95"}],"speakable":{"@type":"SpeakableSpecification","cssSelector":[".tip","article.post h1"]},"author":{"@type":"Organization","name":"부비 시장연구소","url":"https://boobi.ai.kr/about.html","parentOrganization":{"@type":"Organization","name":"부비 - 부동산 비서","url":"https://boobi.ai.kr/"}},"publisher":{"@type":"Organization","name":"부비","url":"https://boobi.ai.kr/","logo":{"@type":"ImageObject","url":"https://boobi.ai.kr/icon-512.png"}},"isPartOf":{"@type":"WebSite","name":"부비 - 부동산 비서","url":"https://boobi.ai.kr/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://boobi.ai.kr/wolse-tax-credit-guide.html","lastReviewed":"2026-09-23"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"월세 세액공제 완벽정리 — 최대 170만원 돌려받고, 놓친 5년치도 환급","description":"월세 세액공제 총정리 — 총급여 8,000만원 이하 무주택 세대주가 전용 85㎡ 이하 또는 기준시가 4억 이하 주택에 전입신고하고 낸 월세의 15~17%를 연 1,000만원 한도(최대 170만원)로 세액공제. 집주인 동의 불필요, 놓친 해는 5년 내 경정청구. 2027년부터 한도 1,200만원·청년 소득무관 17%(최대 204만원) 개편안까지","image":["https://boobi.ai.kr/wolse-tax-credit-guide-header.webp"],"datePublished":"2026-09-23","dateModified":"2026-09-29","inLanguage":"ko-KR","articleSection":"임대차","wordCount":3000,"keywords":"월세 세액공제, 연말정산 월세, 월세 환급, 경정청구, 월세 현금영수증, 무주택 세대주, 청년 월세 공제","about":[{"@type":"Thing","name":"월세 세액공제","description":"총급여 8,000만원 이하 무주택 근로자가 전용 85㎡ 이하 또는 기준시가 4억원 이하 주택(오피스텔·고시원 포함)에 전입신고 후 지급한 월세의 15%(총급여 5,500만~8,000만원) 또는 17%(5,500만원 이하)를 연 1,000만원 한도로 산출세액에서 공제(조세특례제한법 제95조의2)"},{"@type":"Thing","name":"월세 경정청구","description":"연말정산에서 월세 세액공제를 누락한 경우 법정 신고기한부터 5년 이내 홈택스 경정청구로 소급 환급. 임대인 동의 불필요, 이사·퇴사 후에도 가능"},{"@type":"Thing","name":"2026 세제개편안 월세 공제 확대","description":"2027년 1월 1일 이후 지급 월세분부터 공제 한도 연 1,000만원→1,200만원, 청년(15~34세, 군복무 최대 6년 가산)은 소득 무관 17% 공제율 적용(2027~2029년 한시) 예정 — 국회 확정 전제"}],"citation":[{"@type":"CreativeWork","name":"머니투데이 — 월세 공제 한도 1200만원으로… 청년은 소득 관계없이 17% (2026.8)","url":"https://www.mt.co.kr/estate/2026/08/12/2026081213423162342"},{"@type":"CreativeWork","name":"국세청 국세상담센터 — 연말정산 월세 세액공제","url":"https://call.nts.go.kr/call/qna/selectQnaInfo.do?mi=1318&ctgId=CTG11906"},{"@type":"CreativeWork","name":"국가법령정보센터 — 조세특례제한법 제95조의2","url":"https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A1%B0%EC%84%B8%ED%8A%B9%EB%A1%80%EC%A0%9C%ED%95%9C%EB%B2%95"}],"speakable":{"@type":"SpeakableSpecification","cssSelector":[".tip","article.post h1"]},"author":{"@type":"Organization","name":"부비 시장연구소","url":"https://boobi.ai.kr/about.html","parentOrganization":{"@type":"Organization","name":"부비 - 부동산 비서","url":"https://boobi.ai.kr/"}},"publisher":{"@type":"Organization","name":"부비","url":"https://boobi.ai.kr/","logo":{"@type":"ImageObject","url":"https://boobi.ai.kr/icon-512.png"}},"isPartOf":{"@type":"WebSite","name":"부비 - 부동산 비서","url":"https://boobi.ai.kr/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://boobi.ai.kr/wolse-tax-credit-guide.html","lastReviewed":"2026-09-29"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"월세 세액공제는 얼마나 받을 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"연간 지급한 월세액(한도 1,000만원)의 15% 또는 17%를 산출세액에서 공제합니다. 총급여 5,500만원 이하는 17%, 5,500만원 초과 8,000만원 이하는 15%입니다. 월세 60만원(연 720만원)에 총급여 5,000만원이면 약 122만원, 한도를 채우면 최대 170만원입니다. 2026년 세제개편안이 확정되면 2027년 지급분부터 한도가 1,200만원으로 늘고 청년(15~34세)은 소득과 무관하게 17%가 적용돼 최대 204만원까지 커집니다."}},{"@type":"Question","name":"월세 세액공제에 집주인 동의가 필요한가요?","acceptedAnswer":{"@type":"Answer","text":"필요 없습니다. 세입자가 국세청에 신청하는 것이고 임대인에게 통지도 가지 않습니다. 공제 신청을 금지하는 특약은 효력을 인정받기 어렵습니다. 임대인과의 관계가 부담스럽다면 계약 종료 후 이사하고 나서 5년 이내에 경정청구로 소급해 환급받는 방법도 있습니다."}},{"@type":"Question","name":"과거에 놓친 월세 세액공제도 돌려받을 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"네. 법정 신고기한부터 5년 이내라면 홈택스 경정청구로 소급 환급받을 수 있습니다. 이미 이사를 갔거나 퇴사했어도 해당 연도의 임대차계약서와 월세 이체 내역만 있으면 가능하며, 여러 해를 놓쳤다면 연도별로 각각 청구합니다. 처리 후 보통 1~2개월 내 환급됩니다."}},{"@type":"Question","name":"월세 세액공제 조건은 무엇인가요?","acceptedAnswer":{"@type":"Answer","text":"세 가지입니다. ① 12월 31일 기준 무주택 세대주(요건 충족 시 세대원 가능) ② 총급여 8,000만원 이하 근로자(종합소득금액 7,000만원 초과 제외) ③ 임차 주택이 전용면적 85㎡ 이하 또는 기준시가 4억원 이하(오피스텔·고시원 포함). 여기에 임대차계약서 주소로 전입신고가 되어 있어야 하며, 확정일자는 요건이 아닙니다. 서류는 주민등록등본, 임대차계약서 사본, 월세 이체 내역 세 가지입니다."}},{"@type":"Question","name":"소득 기준을 초과하면 월세 관련 공제를 전혀 못 받나요?","acceptedAnswer":{"@type":"Answer","text":"세액공제는 못 받지만, 홈택스에서 주택임차료 현금영수증 발급을 신청하면 지급한 월세가 현금영수증 사용액으로 인정돼 신용카드 등 사용금액 소득공제에 합산됩니다. 이 역시 임대인 동의 없이 신청할 수 있고 한 번 신청하면 계약 기간 동안 자동 발급됩니다. 같은 월세로 세액공제와 중복 적용은 안 됩니다."}}]}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://boobi.ai.kr/"},{"@type":"ListItem","position":2,"name":"칼럼","item":"https://boobi.ai.kr/column.html"},{"@type":"ListItem","position":3,"name":"월세 세액공제 완벽정리","item":"https://boobi.ai.kr/wolse-tax-credit-guide.html"}]}</script>
 <script src="/column-views.js?v=2" defer></script>
