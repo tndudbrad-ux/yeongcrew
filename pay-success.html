@@ -145,8 +145,9 @@ if(!paymentKey || !orderId || !amount){
     }else{
       mark.className = 'mark'; mark.textContent = '✓';
       ttl.textContent = '결제가 완료되었습니다';
-      lead.textContent = isRegion ? '지역 분석 리포트 전문이 열렸습니다. 아래 버튼으로 바로 이어 읽으세요.' : '구매하신 리포트를 이메일로 보내드릴게요. 발송까지 최대 24시간이 걸릴 수 있습니다.';
+      lead.textContent = isRegion ? '지역 분석 리포트 전문이 열렸습니다. 아래 버튼으로 바로 이어 읽으세요.' : '입력하신 집 정보로 리포트를 만들어 영업일 기준 1일 이내에 이메일로 보내드립니다.';
       if(isRegion) unlockRegion();
+      if(product === 'home-report') saveReportRequest(orderId, d);
       if(window.gtag){
         try{ gtag('event','purchase',{ transaction_id: orderId, currency:'KRW', value: Number(d.amount || amount),
           items:[{ item_id:product, item_name: d.orderName || (isRegion ? '지역 분석 리포트' : '집 종합 리포트 PDF'), price: Number(d.amount || amount), quantity:1 }] }); }catch(x){}
@@ -173,5 +174,47 @@ if(!paymentKey || !orderId || !amount){
 }
 </script>
 <script src="/hwon-auth.js" defer></script>
+<script>
+/* 집 종합 리포트 — 결제가 끝나면 입력하신 집 정보를 판매자에게 전달합니다.
+   (결제만 받고 무엇을 만들어야 할지 모르는 상황을 막기 위한 장치) */
+function bbLoadFS(){
+  return new Promise(function(res,rej){
+    if(window.firebase&&firebase.firestore){res();return;}
+    var s=document.createElement('script');
+    s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js';
+    s.onload=res;s.onerror=rej;document.head.appendChild(s);
+  });
+}
+function saveReportRequest(orderId, d){
+  var hr=null; try{ hr=JSON.parse(sessionStorage.getItem('bb_hr')||'null'); }catch(e){}
+  if(!hr || !hr.addr) return;
+  var mail=(d&&d.email)||'';
+  var dgTxt = hr.dg ? ('근저당 '+hr.dg.mortCnt+'건 / 위험등기 '+(hr.dg.flags&&hr.dg.flags.length?hr.dg.flags.join(', '):'없음')) : '미첨부';
+  var msg='주문번호: '+orderId+'\n금액: '+((d&&d.amount)||'')+'원\n받을 메일: '+mail
+    +'\n\n[입력한 집 정보]\n주소: '+hr.addr
+    +'\n매매가(만원): '+(hr.price||'-')
+    +'\n보증금(만원): '+(hr.deposit||'-')
+    +'\n월세(만원): '+(hr.wolse||'-')
+    +'\n주변시세(만원): '+(hr.mkt||'-')
+    +'\n등기부: '+dgTxt
+    +'\n입력시각: '+(hr.at||'');
+  fetch('https://api.web3forms.com/submit',{method:'POST',
+    headers:{'Content-Type':'application/json',Accept:'application/json'},
+    body:JSON.stringify({access_key:'68b3267b-477a-4017-960f-d80077190c01',
+      from_name:'부비 리포트 주문', subject:'[부비] 집 종합 리포트 주문 — '+hr.addr, message:msg})
+  }).catch(function(){});
+  var u=window.hwonUser;
+  if(u && u.uid){
+    bbLoadFS().then(function(){
+      return firebase.firestore().collection('reportRequests').doc(orderId).set({
+        orderId:orderId, productId:'home-report', uid:u.uid, email:mail,
+        addr:hr.addr, price:hr.price||'', deposit:hr.deposit||'', wolse:hr.wolse||'', mkt:hr.mkt||'',
+        dg:hr.dg||null, status:'OPEN', createdAt:new Date().toISOString()
+      });
+    }).catch(function(e){ console.warn('reportRequest save fail',e); });
+  }
+  try{ sessionStorage.removeItem('bb_hr'); }catch(e){}
+}
+</script>
 </body>
 </html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주문내역 - 부비</title>
+<meta name="description" content="부비에서 구매한 리포트와 이용권의 결제 내역을 확인하고, 리뷰를 남기거나 취소를 요청할 수 있습니다.">
+<link rel="canonical" href="https://boobi.ai.kr/orders.html">
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:title" content="주문내역 - 부비">
+<meta property="og:description" content="부비에서 구매한 리포트와 이용권의 결제 내역입니다.">
+<meta property="og:url" content="https://boobi.ai.kr/orders.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="부비 - 부동산 비서">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://boobi.ai.kr/og-boobi.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="/hwon-ui.css?v=3">
+<style>
+.odWrap{max-width:760px;margin:0 auto}
+.odHead{margin:6px 0 18px}
+.odHead h1{font-size:1.6rem;font-weight:800;letter-spacing:-.02em;margin:0 0 6px;word-break:keep-all}
+.odHead p{margin:0;font-size:.92rem;color:#547471;word-break:keep-all}
+.glassBox{border-radius:20px;padding:22px 22px 20px;
+ background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),
+  radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),
+  linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));
+ border:1.5px solid rgba(255,255,255,.95);
+ box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;
+ backdrop-filter:blur(14px);color:#0D2A29}
+.gBtn{padding:12px 24px;border:none;border-radius:999px;cursor:pointer;
+ background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);
+ color:#fff;font-weight:800;font-size:.95rem;white-space:nowrap;
+ box-shadow:0 8px 20px rgba(61,139,253,.28)}
+.gBtn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
+.lnBtn{padding:9px 16px;border-radius:999px;border:1.5px solid rgba(13,42,41,.14);
+ background:#fff;color:#0D2A29;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block}
+.lnBtn:hover{border-color:#3D8BFD;color:#2A6FD8}
+.lnBtn.q{color:#8AA5A2}
+.odGate{text-align:center;padding:38px 24px}
+.odGate h2{font-size:1.12rem;font-weight:800;margin:0 0 8px}
+.odGate p{font-size:.92rem;color:#547471;margin:0 0 18px;word-break:keep-all}
+.odSign{display:flex;flex-direction:column;gap:9px;max-width:300px;margin:0 auto}
+.odSign button{padding:12px 18px;border-radius:12px;border:1.5px solid rgba(13,42,41,.12);
+ background:#fff;font-weight:700;font-size:.93rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.odSign button.kakao{background:#FEE500;border-color:#FEE500}
+.odSign button.naver{background:#03C75A;border-color:#03C75A;color:#fff}
+.odList{display:grid;gap:12px}
+.od{border-radius:16px;border:1px solid rgba(13,42,41,.10);background:rgba(255,255,255,.72);padding:16px 18px}
+.od .t1{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:4px}
+.od .nm{font-size:1rem;font-weight:800;letter-spacing:-.01em;word-break:keep-all}
+.od .amt{margin-left:auto;font-size:1rem;font-weight:800;color:#2A6FD8;white-space:nowrap}
+.od .meta{font-size:.8rem;color:#8AA5A2;word-break:break-all;margin-bottom:12px}
+.od .acts{display:flex;flex-wrap:wrap;gap:8px}
+.bdg{font-size:.72rem;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.bdg.paid{background:#E6F7F5;color:#178C88}
+.bdg.wait{background:#F2F5F7;color:#8AA5A2}
+.bdg.fail{background:#FDECEC;color:#E5484D}
+.bdg.creq{background:#FFF4E5;color:#B26A00}
+.bdg.cxl{background:#F2F5F7;color:#547471}
+.odEmpty{text-align:center;padding:34px 20px;border-radius:16px;border:1.5px dashed rgba(61,139,253,.35);color:#547471;font-size:.93rem;word-break:keep-all}
+.odEmpty .gBtn{margin-top:16px}
+.panel{margin-top:12px;padding:14px 16px;border-radius:14px;background:#fff;border:1px solid rgba(13,42,41,.10)}
+.panel h4{margin:0 0 8px;font-size:.92rem;font-weight:800}
+.panel textarea{width:100%;min-height:78px;padding:11px 13px;border:1.5px solid #DCEEEC;border-radius:11px;font:inherit;font-size:.92rem;color:#0D2A29;background:#fff;resize:vertical}
+.panel textarea:focus{outline:none;border-color:#3D8BFD;box-shadow:0 0 0 3px rgba(61,139,253,.15)}
+.panel .pick{display:flex;gap:3px;margin:2px 0 9px}
+.panel .pick button{background:none;border:none;font-size:1.5rem;line-height:1;cursor:pointer;color:#DCEEEC;padding:0 2px}
+.panel .pick button.on{color:#F5B301}
+.panel .row{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.panel .note{font-size:.79rem;color:#8AA5A2;margin:8px 0 0;word-break:keep-all;line-height:1.6}
+.msg{font-size:.86rem;margin-top:9px;color:#2A6FD8}
+.msg.err{color:#E5484D}
+.odMore{margin-top:22px}
+.odMore summary{cursor:pointer;font-size:.88rem;color:#8AA5A2;font-weight:700}
+.odMore .odList{margin-top:12px}
+.odNote{margin-top:22px;font-size:.84rem;color:#8AA5A2;line-height:1.8;word-break:keep-all}
+.odNote a{color:#2A6FD8}
+@media(max-width:560px){.od .amt{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><img class="logo3d" src="/boobi-ring-3d.png" alt=""><span class="lgt"><b>부</b>동산 <b>비</b>서</span></a>
+    <nav>
+      <a href="index.html#guide">내집마련</a>
+      <a href="index.html#rent">전월세</a>
+      <a href="index.html#tax">세금·대출</a>
+      <a href="index.html#invest">재개발·투자</a>
+      <a href="about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+<div class="odWrap">
+
+<p class="breadcrumb"><a href="index.html">홈</a> › <a href="account.html">마이</a> › 주문내역</p>
+
+<div class="odHead">
+  <h1>주문내역</h1>
+  <p>부비에서 결제하신 리포트와 이용권입니다.</p>
+</div>
+
+<div id="odBody">
+  <div class="glassBox" style="text-align:center;padding:34px 20px;color:#8AA5A2;font-size:.92rem">불러오는 중…</div>
+</div>
+
+<p class="odNote">
+  로그인하지 않고 이메일만 입력해 결제하신 건은 여기에 표시되지 않습니다. 결제 시 받으신 이메일을 확인해 주세요.<br>
+  영수증·현금영수증은 결제 시 안내된 메일에서 확인하실 수 있고, 그 밖의 문의는 <a href="/contact.html">문의하기</a> 또는 010-2553-4297로 연락 주세요.<br>
+  취소·환불 기준은 <a href="/refund.html">취소·환불 정책</a>을 따릅니다.
+</p>
+
+</div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>본 사이트의 콘텐츠는 일반적인 정보 제공을 목적으로 하며, 법률·세무·투자 자문이 아닙니다.</p>
+    <p><a href="about.html">사이트 소개</a> · <a href="terms.html">이용약관</a> · <a href="refund.html">취소·환불 정책</a> · <a href="privacy.html">개인정보처리방침</a> · <a href="contact.html">문의하기</a></p>
+    <p>© 2026 부비. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="/hwon-bot.js" defer></script>
+<script src="/hwon-auth.js" defer></script>
+<script src="/hwon-ui.js" defer></script>
+
+<script>
+(function(){
+var W3F_KEY='68b3267b-477a-4017-960f-d80077190c01';
+var body=document.getElementById('odBody');
+var db=null, USER=null;
+
+/* 상품별 바로가기 */
+var GO={
+  'premium':{t:'전체 단지 목록 열기',u:'/apt-finder.html'},
+  'region-report-dongdaemun':{t:'리포트 열기',u:'/region-report-dongdaemun.html'},
+  'region-report-seongdong':{t:'리포트 열기',u:'/region-report-seongdong.html'},
+  'region-report-gimpo':{t:'리포트 열기',u:'/region-report-gimpo.html'},
+  'region-report-anyang':{t:'리포트 열기',u:'/region-report-anyang.html'},
+  'region-report-gwacheon':{t:'리포트 열기',u:'/region-report-gwacheon.html'}
+};
+var STATUS={
+  PAID:{t:'결제 완료',c:'paid'},
+  READY:{t:'결제 미완료',c:'wait'},
+  FAILED:{t:'결제 실패',c:'fail'},
+  AMOUNT_MISMATCH:{t:'확인 필요',c:'fail'},
+  CANCELED:{t:'취소됨',c:'cxl'}
+};
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function won(n){return (Number(n)||0).toLocaleString('ko-KR')+'원';}
+function when(s){ if(!s) return ''; var d=new Date(s); if(isNaN(d)) return String(s).slice(0,16).replace('T',' ');
+  var p=function(x){return x<10?'0'+x:''+x;};
+  return d.getFullYear()+'.'+p(d.getMonth()+1)+'.'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes()); }
+function maskName(name,email){
+  if(name) return name.length<=1?name:name.charAt(0)+'*'.repeat(Math.max(1,name.length-1));
+  var e=String(email||''); var h=e.split('@')[0]||'구매자';
+  return h.slice(0,2)+'*'.repeat(Math.max(1,h.length-2));
+}
+function loadFS(){
+  return new Promise(function(res,rej){
+    if(window.firebase&&firebase.firestore){res();return;}
+    var s=document.createElement('script');
+    s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js';
+    s.onload=res;s.onerror=rej;document.head.appendChild(s);
+  });
+}
+function notify(subject,message){
+  if(!W3F_KEY) return;
+  fetch('https://api.web3forms.com/submit',{method:'POST',
+    headers:{'Content-Type':'application/json',Accept:'application/json'},
+    body:JSON.stringify({access_key:W3F_KEY,from_name:'부비 주문내역',subject:subject,message:message})
+  }).catch(function(){});
+}
+
+/* ---------- 로그인 게이트 ---------- */
+function gate(){
+  body.innerHTML=
+   '<div class="glassBox odGate">'+
+   '<h2>로그인하면 주문내역이 보입니다</h2>'+
+   '<p>결제하신 계정으로 로그인해 주세요. 카카오·네이버·구글 어느 쪽으로 로그인해도 같은 이메일이면 같은 계정으로 연결됩니다.</p>'+
+   '<div class="odSign">'+
+   '<button class="kakao" id="sKakao">카카오로 계속하기</button>'+
+   '<button class="naver" id="sNaver">네이버로 계속하기</button>'+
+   '<button id="sGoogle">Google로 계속하기</button>'+
+   '</div></div>';
+  var g=function(id,fn){ var b=document.getElementById(id); if(b) b.onclick=function(){ if(window.hwonAuth) hwonAuth[fn](); }; };
+  g('sKakao','signInKakao'); g('sNaver','signInNaver'); g('sGoogle','signInGoogle');
+}
+
+/* ---------- 목록 ---------- */
+function render(orders,cancels){
+  var done=[], undone=[];
+  orders.forEach(function(o){ (o.status==='PAID'||o.status==='CANCELED') ? done.push(o) : undone.push(o); });
+  done.sort(function(a,b){return String(b.createdAt||'').localeCompare(String(a.createdAt||''));});
+  undone.sort(function(a,b){return String(b.createdAt||'').localeCompare(String(a.createdAt||''));});
+
+  var html='';
+  if(!done.length){
+    html+='<div class="odEmpty">아직 결제하신 상품이 없습니다.<br>'+
+      '<a class="gBtn" style="text-decoration:none;display:inline-block;margin-top:16px" href="/#store">상품 보러 가기</a></div>';
+  }else{
+    html+='<div class="odList">'+done.map(function(o){return card(o,cancels);}).join('')+'</div>';
+  }
+  if(undone.length){
+    html+='<details class="odMore"><summary>결제가 완료되지 않은 주문 '+undone.length+'건 보기</summary>'+
+      '<div class="odList">'+undone.map(function(o){return card(o,cancels,true);}).join('')+'</div></details>';
+  }
+  body.innerHTML=html;
+  bind(cancels);
+}
+
+function card(o,cancels,dim){
+  var st=STATUS[o.status]||{t:o.status||'-',c:'wait'};
+  var creq=cancels[o.orderId];
+  var go=GO[o.productId];
+  var acts='';
+  if(o.status==='PAID'){
+    if(go) acts+='<a class="lnBtn" href="'+go.u+'">'+esc(go.t)+'</a>';
+    else acts+='<button class="lnBtn" data-resend="'+esc(o.orderId)+'">리포트 다시 보내기</button>';
+    acts+='<button class="lnBtn" data-review="'+esc(o.orderId)+'">리뷰 남기기</button>';
+    if(creq) acts+='<span class="bdg creq">취소 요청 접수됨</span>';
+    else acts+='<button class="lnBtn q" data-cancel="'+esc(o.orderId)+'">취소 요청</button>';
+  }
+  return '<div class="od" data-id="'+esc(o.orderId)+'"'+(dim?' style="opacity:.72"':'')+'>'+
+    '<div class="t1"><span class="nm">'+esc(o.orderName||o.productId||'상품')+'</span>'+
+    '<span class="bdg '+st.c+'">'+esc(st.t)+'</span>'+
+    '<span class="amt">'+won(o.amount)+'</span></div>'+
+    '<div class="meta">주문번호 '+esc(o.orderId)+' · '+esc(when(o.createdAt))+(o.email?' · '+esc(o.email):'')+'</div>'+
+    (acts?'<div class="acts">'+acts+'</div>':'')+
+    '<div class="slot"></div></div>';
+}
+
+function slotOf(id){ var el=document.querySelector('.od[data-id="'+CSS.escape(id)+'"] .slot'); return el; }
+function orderOf(id){ for(var i=0;i<ALL.length;i++){ if(ALL[i].orderId===id) return ALL[i]; } return null; }
+var ALL=[];
+
+function bind(cancels){
+  [].forEach.call(document.querySelectorAll('[data-review]'),function(b){
+    b.onclick=function(){ openReview(b.getAttribute('data-review')); };
+  });
+  [].forEach.call(document.querySelectorAll('[data-cancel]'),function(b){
+    b.onclick=function(){ openCancel(b.getAttribute('data-cancel')); };
+  });
+  [].forEach.call(document.querySelectorAll('[data-resend]'),function(b){
+    b.onclick=function(){ openResend(b.getAttribute('data-resend')); };
+  });
+}
+
+/* ---------- 리뷰 ---------- */
+function openReview(id){
+  var slot=slotOf(id), o=orderOf(id); if(!slot||!o) return;
+  if(slot.getAttribute('data-open')==='review'){ slot.innerHTML=''; slot.removeAttribute('data-open'); return; }
+  slot.setAttribute('data-open','review');
+  slot.innerHTML='<div class="panel"><h4>이 상품 어떠셨어요?</h4>'+
+    '<div class="pick">'+[1,2,3,4,5].map(function(n){return '<button data-s="'+n+'">★</button>';}).join('')+'</div>'+
+    '<textarea maxlength="600" placeholder="어떤 점이 도움이 됐는지, 아쉬운 점은 무엇인지 적어주세요."></textarea>'+
+    '<div class="row"><button class="gBtn" data-send>등록하기</button></div>'+
+    '<p class="note">작성자는 이름 일부만 표시됩니다. 등록한 리뷰는 상품 페이지에 공개됩니다.</p>'+
+    '<p class="msg"></p></div>';
+  var stars=0, pick=slot.querySelector('.pick'), ta=slot.querySelector('textarea'),
+      msg=slot.querySelector('.msg'), send=slot.querySelector('[data-send]');
+  [].forEach.call(pick.children,function(b){
+    b.onclick=function(){ stars=Number(b.getAttribute('data-s'));
+      [].forEach.call(pick.children,function(c,i){ c.classList.toggle('on', i<stars); }); };
+  });
+  send.onclick=function(){
+    msg.className='msg';
+    if(!stars){ msg.className='msg err'; msg.textContent='별점을 선택해 주세요.'; return; }
+    if(ta.value.trim().length<5){ msg.className='msg err'; msg.textContent='내용을 조금만 더 적어주세요.'; return; }
+    send.disabled=true; msg.textContent='등록 중…';
+    var doc={product:o.productId,uid:USER.uid,name:maskName(USER.displayName,USER.email),
+      stars:stars,text:ta.value.trim().slice(0,600),purchased:true,createdAt:new Date().toISOString()};
+    loadFS().then(function(){ db=db||firebase.firestore();
+      return db.collection('regionReviews').doc(o.productId+'_'+USER.uid).set(doc); })
+    .then(function(){ msg.className='msg'; msg.textContent='리뷰가 등록됐습니다. 고맙습니다.';
+      if(window.gtag){try{gtag('event','review_submit',{item_id:o.productId,stars:stars});}catch(x){}} })
+    .catch(function(e){ console.warn(e); send.disabled=false; msg.className='msg err'; msg.textContent='등록에 실패했습니다. 잠시 후 다시 시도해 주세요.'; });
+  };
+}
+
+/* ---------- 취소 요청 ---------- */
+function openCancel(id){
+  var slot=slotOf(id), o=orderOf(id); if(!slot||!o) return;
+  if(slot.getAttribute('data-open')==='cancel'){ slot.innerHTML=''; slot.removeAttribute('data-open'); return; }
+  slot.setAttribute('data-open','cancel');
+  slot.innerHTML='<div class="panel"><h4>취소를 요청합니다</h4>'+
+    '<textarea maxlength="500" placeholder="취소 사유를 적어주세요."></textarea>'+
+    '<div class="row"><button class="gBtn" data-send>취소 요청 보내기</button></div>'+
+    '<p class="note">디지털 콘텐츠 특성상 리포트가 이미 발송·열람된 건은 <a href="/refund.html">취소·환불 정책</a>에 따라 환불이 제한될 수 있습니다. '+
+    '요청을 접수하면 판매자가 확인 후 영업일 기준 3일 이내에 회신드립니다.</p>'+
+    '<p class="msg"></p></div>';
+  var ta=slot.querySelector('textarea'), msg=slot.querySelector('.msg'), send=slot.querySelector('[data-send]');
+  send.onclick=function(){
+    msg.className='msg';
+    if(ta.value.trim().length<2){ msg.className='msg err'; msg.textContent='사유를 적어주세요.'; return; }
+    send.disabled=true; msg.textContent='접수 중…';
+    var doc={orderId:o.orderId,uid:USER.uid,email:o.email||USER.email||'',productId:o.productId||'',
+      orderName:o.orderName||'',amount:Number(o.amount)||0,kind:'CANCEL',
+      reason:ta.value.trim().slice(0,500),status:'OPEN',createdAt:new Date().toISOString()};
+    loadFS().then(function(){ db=db||firebase.firestore();
+      return db.collection('cancelRequests').doc(o.orderId).set(doc); })
+    .then(function(){
+      notify('[부비] 결제 취소 요청 — '+doc.orderName,
+        '주문번호: '+doc.orderId+'\n상품: '+doc.orderName+' ('+doc.productId+')\n금액: '+doc.amount+'원\n'+
+        '구매자: '+doc.email+'\n요청시각: '+doc.createdAt+'\n사유: '+doc.reason);
+      msg.className='msg'; msg.textContent='취소 요청이 접수됐습니다. 확인 후 회신드리겠습니다.';
+      if(window.gtag){try{gtag('event','refund_request',{item_id:doc.productId,value:doc.amount});}catch(x){}}
+    })
+    .catch(function(e){ console.warn(e); send.disabled=false; msg.className='msg err'; msg.textContent='접수에 실패했습니다. 문의하기로 연락 주세요.'; });
+  };
+}
+
+/* ---------- 리포트 재발송 요청 ---------- */
+function openResend(id){
+  var slot=slotOf(id), o=orderOf(id); if(!slot||!o) return;
+  if(slot.getAttribute('data-open')==='resend'){ slot.innerHTML=''; slot.removeAttribute('data-open'); return; }
+  slot.setAttribute('data-open','resend');
+  slot.innerHTML='<div class="panel"><h4>리포트를 다시 보내드립니다</h4>'+
+    '<p class="note" style="margin:0 0 10px">결제 시 입력하신 <b>'+esc(o.email||USER.email||'')+'</b> 로 다시 보내드립니다. '+
+    '다른 주소로 받으시려면 아래에 적어주세요.</p>'+
+    '<textarea maxlength="200" placeholder="(선택) 받을 이메일 주소"></textarea>'+
+    '<div class="row"><button class="gBtn" data-send>재발송 요청</button></div>'+
+    '<p class="note">스팸함도 한 번 확인해 주세요. 요청하시면 영업일 기준 1일 이내에 보내드립니다.</p>'+
+    '<p class="msg"></p></div>';
+  var ta=slot.querySelector('textarea'), msg=slot.querySelector('.msg'), send=slot.querySelector('[data-send]');
+  send.onclick=function(){
+    send.disabled=true; msg.className='msg'; msg.textContent='접수 중…';
+    var to=ta.value.trim()||o.email||USER.email||'';
+    var doc={orderId:o.orderId,uid:USER.uid,email:to,productId:o.productId||'',orderName:o.orderName||'',
+      amount:Number(o.amount)||0,kind:'RESEND',reason:'리포트 재발송 요청',status:'OPEN',createdAt:new Date().toISOString()};
+    loadFS().then(function(){ db=db||firebase.firestore();
+      return db.collection('cancelRequests').doc(o.orderId+'_resend').set(doc); })
+    .then(function(){
+      notify('[부비] 리포트 재발송 요청 — '+doc.orderName,
+        '주문번호: '+doc.orderId+'\n상품: '+doc.orderName+'\n받을 메일: '+to+'\n요청시각: '+doc.createdAt);
+      msg.textContent='요청이 접수됐습니다. 곧 보내드리겠습니다.';
+    })
+    .catch(function(e){ console.warn(e); send.disabled=false; msg.className='msg err'; msg.textContent='접수에 실패했습니다. 문의하기로 연락 주세요.'; });
+  };
+}
+
+/* ---------- 데이터 ---------- */
+function load(u){
+  USER=u;
+  body.innerHTML='<div class="glassBox" style="text-align:center;padding:34px 20px;color:#8AA5A2;font-size:.92rem">주문내역을 불러오는 중…</div>';
+  loadFS().then(function(){
+    db=firebase.firestore();
+    return Promise.all([
+      db.collection('orders').where('uid','==',u.uid).limit(100).get(),
+      db.collection('cancelRequests').where('uid','==',u.uid).limit(100).get()
+    ]);
+  }).then(function(r){
+    ALL=r[0].docs.map(function(d){ var o=d.data()||{}; if(!o.orderId) o.orderId=d.id; return o; });
+    var cancels={};
+    r[1].docs.forEach(function(d){ var c=d.data()||{}; if(c.kind!=='RESEND'&&c.orderId) cancels[c.orderId]=c; });
+    render(ALL,cancels);
+  }).catch(function(e){
+    console.warn('orders load fail',e);
+    body.innerHTML='<div class="glassBox" style="text-align:center;padding:30px 20px">'+
+      '<p style="margin:0 0 6px;font-weight:700">주문내역을 불러오지 못했습니다.</p>'+
+      '<p style="margin:0;font-size:.88rem;color:#547471">잠시 후 새로고침해 주세요. 계속 안 되면 <a href="/contact.html" style="color:#2A6FD8">문의하기</a>로 알려주세요.</p></div>';
+  });
+}
+
+function start(u){ if(u) load(u); else gate(); }
+if(typeof window.hwonUser!=='undefined' && window.hwonUser!==null) start(window.hwonUser);
+document.addEventListener('hwon-auth',function(e){ start(e.detail); });
+setTimeout(function(){ if(!USER && body.textContent.indexOf('불러오는 중')>-1) gate(); },3500);
+})();
+</script>
+</body>
+</html>

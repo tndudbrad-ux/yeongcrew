@@ -191,8 +191,8 @@ footer a{color:#B9DCD9;margin:0 8px}
   <p>화면 결과에 <b>양도세 시나리오·대출 한도·전세 리스크 항목</b>과 계산 근거를 더해
      A4 6페이지 PDF로 만들어 드립니다. 공인중개사나 가족에게 그대로 보여줄 수 있어요.</p>
   <div class="pr"><s>4,900원</s>2,900원<em>출시 기념 할인</em><small>부가세 포함 · 1회 발급</small></div>
-  <a class="b" href="/pay.html">리포트 PDF 구매하기</a>
-  <p class="n">결제 즉시 생성해 이메일로 보내드립니다(평균 1분, 최대 24시간).
+  <a class="b" id="hrBuy" href="/pay.html?product=home-report">리포트 PDF 구매하기</a>
+  <p class="n">입력하신 집 정보로 리포트를 만들어, 영업일 기준 1일 이내에 결제 시 적어주신 이메일로 보내드립니다.
      제공 개시 전에는 전액 환불되며, 자세한 기준은 <a href="/refund.html">취소·환불 정책</a>에 있습니다.</p>
 </div>
 </div>
@@ -482,5 +482,30 @@ function makeReport(){
 <script src="/hwon-auth.js" defer></script>
 <script src="/hwon-ui.js" defer></script>
 <script src="/boobi-login-gate.js?v=3" defer></script>
+<script>
+/* 집 종합 리포트 구매 — 입력값을 결제 단계로 넘깁니다.
+   주소·매매가가 없으면 결제로 넘어가지 않습니다 (리포트를 만들 수 없으므로). */
+(function(){
+  var b=document.getElementById('hrBuy'); if(!b) return;
+  b.addEventListener('click',function(e){
+    var v=function(id){ var el=document.getElementById(id); return el?String(el.value||'').trim():''; };
+    var addr=v('addr'), price=v('price');
+    if(!addr || !price){
+      e.preventDefault();
+      alert('리포트를 만들려면 집 주소와 매매가가 필요합니다. 위에서 먼저 입력해 주세요.');
+      var t=document.getElementById(addr?'price':'addr');
+      if(t){ t.scrollIntoView({behavior:'smooth',block:'center'}); try{ t.focus(); }catch(x){} }
+      return;
+    }
+    var g=(typeof DG!=='undefined'&&DG)?DG:(window.DG||null), dg=null;
+    try{ if(g && g.a) dg={file:g.name||'', mortCnt:g.a.mortCnt||0, hasMalso:!!g.a.hasMalso,
+      flags:(g.a.flags||[]).map(function(f){return f[1]+' '+f[2];})}; }catch(x){}
+    try{ sessionStorage.setItem('bb_hr', JSON.stringify({
+      addr:addr, price:price, deposit:v('deposit'), wolse:v('wolse'), mkt:v('mkt'),
+      dg:dg, at:new Date().toISOString()
+    })); }catch(x){}
+  });
+})();
+</script>
 </body>
 </html>
