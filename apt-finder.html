@@ -123,6 +123,15 @@ footer a{color:#B9DCD9;margin:0 8px}
 .regbadge.off{background:#F1FBF9;border:1px solid #C9EBE5;color:#1E7A6E}
 .regbadge.lta{background:#FFF8EC;border:1px solid #F5E2BE;color:#8A5A16}
 .regbadge.lta span{display:block;margin-top:5px;font-weight:400;font-size:.82rem;line-height:1.6}
+.facTabs{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 12px}
+.facTabs .fl{font-size:.78rem;font-weight:700;color:#8AA5A2;margin-right:2px}
+.facTabs button{padding:7px 13px;border-radius:999px;border:1.5px solid rgba(13,42,41,.12);background:#fff;font:inherit;font-size:.82rem;font-weight:700;color:#547471;cursor:pointer;white-space:nowrap}
+.facTabs button.on{border-color:transparent;color:#fff;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);box-shadow:0 6px 16px rgba(61,139,253,.26)}
+.hitBar{display:flex;align-items:center;gap:13px;margin:2px 0 14px;padding:14px 18px;border-radius:16px;background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));border:1.5px solid rgba(255,255,255,.95);box-shadow:0 10px 30px rgba(13,42,41,.08),inset 0 1px 0 #fff}
+.hitBar b{font-size:1.75rem;font-weight:800;letter-spacing:-.03em;line-height:1;white-space:nowrap;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hitBar span{font-size:.93rem;font-weight:700;color:#0D2A29;word-break:keep-all;line-height:1.55}
+.hitBar em{font-style:normal;color:#2A6FD8}
+.hitBar i{display:inline-block;margin-top:3px;font-style:normal;font-size:.8rem;font-weight:500;color:#547471}
 .bres{background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));border:1.5px solid rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;backdrop-filter:blur(14px);border-radius:18px;padding:22px 24px;color:#0D2A29;margin-top:20px}
 .bres .lab{font-size:.78rem;font-weight:600;color:#547471;margin-bottom:4px}
 .bres .big{font-size:2.15rem;font-weight:700;letter-spacing:-.03em;line-height:1.15;
@@ -870,7 +879,7 @@ var STEPS=(function(){var a=[];
 function nearestIdx(v){var b=0,d=1e12;for(var i=0;i<STEPS.length;i++){var x=Math.abs(STEPS[i]-v);if(x<d){d=x;b=i}}return b;}
 /* '내 아파트 찾기'이므로 기본 유형은 아파트. 평당가 기준으로 정렬하면
    빌라가 상단을 전부 차지해버려서, 유형은 유저가 명시적으로 넓히게 둔다. */
-var UI={idx:0,type:'apt',sort:0};
+var UI={idx:0,type:'apt',sort:0,factor:null};
 /* 비회원·무료 이용자에게 먼저 보여줄 단지 수 (나머지는 프리미엄) */
 var FREE_CANDS=1;
 var SORTS=[{k:'near',t:'예산 근접순'},{k:'desc',t:'가격 높은순'},{k:'asc',t:'가격 낮은순'}];
@@ -989,6 +998,15 @@ function renderFinder(){
      점수가 예산 규율을 밀어내는 일은 없어야 한다. */
   var ranked=(UI.sort===0)&&(window.__PURPOSE==='invest'||(window.__PRIOS||[]).length>0);
   if(ranked) rows=rankCands(rows,b);
+  /* 요소별 보기 — 고른 우선순위 하나를 기준으로 다시 줄 세운다 (종합은 가중 합산 순서) */
+  if(ranked && UI.factor){
+    rows=rows.slice().sort(function(x,y){
+      var gx=null,gy=null,i;
+      for(i=0;i<(x._bars||[]).length;i++) if(x._bars[i].key===UI.factor){gx=x._bars[i];break;}
+      for(i=0;i<(y._bars||[]).length;i++) if(y._bars[i].key===UI.factor){gy=y._bars[i];break;}
+      return ((gy?gy.v:-1)-(gx?gx.v:-1)) || (Math.abs(x.price-b)-Math.abs(y.price-b));
+    });
+  }
   window.__CANDS=rows;
   var where=(SHORT[R.area.sido]||R.area.sido)+(R.area.sgg?' '+R.area.sgg:'');
 
@@ -1002,6 +1020,25 @@ function renderFinder(){
    +'<div style="font-size:.85rem;font-weight:500;color:var(--sub)">'+where+' · <b style="color:var(--forest)">'+rows.length+'</b>개 단지</div>'
    +'<button type="button" class="sortBtn" data-nogate="1" onclick="UI.sort=(UI.sort+1)%3;renderFinder()">'
    +'<span class="ic">⇅</span>'+(ranked?'부비 추천순':SORTS[UI.sort].t)+'</button></div>';
+  /* 결과 건수를 먼저, 크게 — 몇 건이 걸렸는지가 결제 판단의 출발점이다 */
+  if(rows.length){
+    var _paidNow=!!(window.bbPremium && bbPremium.is());
+    h+='<div class="hitBar">'
+      +'<b>'+rows.length.toLocaleString('ko-KR')+'건</b>'
+      +'<span><em>'+esc(where)+'</em>에서 내 조건에 맞는 아파트가 조회됐어요'
+      +(_paidNow||rows.length<=FREE_CANDS?'':'<br><i>1곳 먼저 보여드리고, 나머지 '+(rows.length-FREE_CANDS).toLocaleString('ko-KR')+'곳과 추천 근거는 이용권으로 열려요</i>')
+      +'</span></div>';
+  }
+  /* 고른 요소별로 끊어 볼 수 있게 — 학군 기준, 직주근접 기준, 종합 */
+  var _b0=(rows[0]&&rows[0]._bars)||[];
+  if(ranked && _b0.length>1){
+    h+='<div class="facTabs"><span class="fl">기준</span>'
+      +'<button type="button" data-nogate="1" class="'+(UI.factor?'':'on')+'" onclick="UI.factor=null;renderFinder()">종합</button>'
+      +_b0.map(function(bb){
+         return '<button type="button" data-nogate="1" class="'+(UI.factor===bb.key?'on':'')+'" onclick="UI.factor=\''+bb.key+'\';renderFinder()">'
+           +bb.icon+' '+esc(bb.label)+'</button>';
+       }).join('')+'</div>';
+  }
   if(!rows.length){
     h+='<div style="text-align:center;padding:34px 12px;color:var(--sub);font-size:.9rem">'
       +'이 예산대에 '+where+' 실거래가 없어요.<br>예산을 조절하거나 유형을 넓혀보세요.<br>'
