@@ -108,8 +108,20 @@
   <div class="glassBox" style="text-align:center;padding:34px 20px;color:#8AA5A2;font-size:.92rem">불러오는 중…</div>
 </div>
 
+<div class="glassBox" id="odClaim" style="margin-top:14px;padding:16px 18px">
+  <p style="margin:0 0 8px;font-weight:700;font-size:.95rem">결제했는데 안 보이나요?</p>
+  <p style="margin:0 0 10px;font-size:.88rem;color:#547471">결제할 때 적으신 이메일을 넣어 주시면 그 결제 건을 이 계정에 붙여 드려요.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <input id="odClaimMail" type="email" inputmode="email" autocomplete="email" placeholder="결제 시 입력한 이메일"
+      style="flex:1 1 220px;min-width:0;padding:10px 12px;border:1px solid #D7E6E4;border-radius:10px;font-size:.92rem">
+    <button type="button" id="odClaimGo"
+      style="padding:10px 16px;border:0;border-radius:10px;background:#1B918D;color:#fff;font-weight:700;cursor:pointer">찾기</button>
+  </div>
+  <p id="odClaimMsg" style="margin:8px 0 0;font-size:.88rem"></p>
+</div>
+
 <p class="odNote">
-  로그인하지 않고 이메일만 입력해 결제하신 건은 여기에 표시되지 않습니다. 결제 시 받으신 이메일을 확인해 주세요.<br>
+  로그인 전에 이메일만 입력해 결제하신 건은 로그인하시면 이 목록에 자동으로 붙습니다. 다른 이메일로 결제하셨다면 아래에서 찾으실 수 있어요.<br>
   영수증·현금영수증은 결제 시 안내된 메일에서 확인하실 수 있고, 그 밖의 문의는 <a href="/contact.html">문의하기</a> 또는 010-2553-4297로 연락 주세요.<br>
   취소·환불 기준은 <a href="/refund.html">취소·환불 정책</a>을 따릅니다.
 </p>
@@ -345,18 +357,43 @@ function openResend(id){
   };
 }
 
+/* ---------- 비회원 결제 귀속 ---------- */
+var AUTH_API='https://boobi-auth.tndud-brad.workers.dev';
+function claimOrders(u,payEmail){
+  if(!u||!u.getIdToken) return Promise.resolve(null);
+  var done=false;
+  return new Promise(function(res){
+    var t=setTimeout(function(){ if(!done){ done=true; res(null); } },6000);
+    u.getIdToken().then(function(tok){
+      return fetch(AUTH_API+'/claim',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({idToken:tok,payEmail:payEmail||''})});
+    }).then(function(r){ return r.json(); }).then(function(j){
+      if(!done){ done=true; clearTimeout(t); res(j); }
+    }).catch(function(){ if(!done){ done=true; clearTimeout(t); res(null); } });
+  });
+}
+
+/* 24시간 넘게 '결제 미완료'로 남은 주문은 결제창만 열고 닫은 흔적이라 보여주지 않는다 */
+function fresh(o){
+  if(o.status!=='READY') return true;
+  var t=Date.parse(o.createdAt||'');
+  return !t || t > Date.now()-24*60*60*1000;
+}
+
 /* ---------- 데이터 ---------- */
 function load(u){
   USER=u;
   body.innerHTML='<div class="glassBox" style="text-align:center;padding:34px 20px;color:#8AA5A2;font-size:.92rem">주문내역을 불러오는 중…</div>';
   loadFS().then(function(){
     db=firebase.firestore();
+    return claimOrders(u);                /* 비회원으로 결제한 건을 먼저 계정에 붙인다 */
+  }).then(function(){
     return Promise.all([
       db.collection('orders').where('uid','==',u.uid).limit(100).get(),
       db.collection('cancelRequests').where('uid','==',u.uid).limit(100).get()
     ]);
   }).then(function(r){
-    ALL=r[0].docs.map(function(d){ var o=d.data()||{}; if(!o.orderId) o.orderId=d.id; return o; });
+    ALL=r[0].docs.map(function(d){ var o=d.data()||{}; if(!o.orderId) o.orderId=d.id; return o; }).filter(fresh);
     var cancels={};
     r[1].docs.forEach(function(d){ var c=d.data()||{}; if(c.kind!=='RESEND'&&c.orderId) cancels[c.orderId]=c; });
     render(ALL,cancels);
@@ -367,6 +404,20 @@ function load(u){
       '<p style="margin:0;font-size:.88rem;color:#547471">잠시 후 새로고침해 주세요. 계속 안 되면 <a href="/contact.html" style="color:#2A6FD8">문의하기</a>로 알려주세요.</p></div>';
   });
 }
+
+var cBtn=document.getElementById('odClaimGo');
+if(cBtn) cBtn.onclick=function(){
+  var mi=document.getElementById('odClaimMail'), ms=document.getElementById('odClaimMsg');
+  var em=(mi.value||'').trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ ms.style.color='#C0392B'; ms.textContent='이메일 형식을 확인해 주세요.'; return; }
+  if(!USER){ ms.style.color='#C0392B'; ms.textContent='먼저 로그인해 주세요.'; return; }
+  cBtn.disabled=true; ms.style.color='#547471'; ms.textContent='찾아보는 중…';
+  claimOrders(USER,em).then(function(j){
+    cBtn.disabled=false;
+    if(j && j.ok && j.attached>0){ ms.style.color='#1B918D'; ms.textContent=j.attached+'건을 찾아 계정에 붙였습니다. 목록을 새로 불러옵니다.'; load(USER); }
+    else { ms.style.color='#547471'; ms.textContent='그 이메일로 결제된 건을 찾지 못했습니다. 결제 안내 메일의 주소를 다시 확인해 주세요.'; }
+  });
+};
 
 function start(u){ if(u) load(u); else gate(); }
 if(typeof window.hwonUser!=='undefined' && window.hwonUser!==null) start(window.hwonUser);
