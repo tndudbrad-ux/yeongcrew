@@ -1140,7 +1140,7 @@ function renderBudget(B){
   $('budgetOut').innerHTML=h;
 }
 
-var lastRes=null;
+var lastRes=null, LEAD=[];
 /* 무료는 1곳까지. 조건을 세운 값이 진짜인지 한 곳으로 확인하고, 나머지는 프리미엄. */
 var FREE_CANDS=1;
 function isPaid(){ return !!(window.bbPremium && bbPremium.is()); }
@@ -1183,7 +1183,6 @@ function renderMatch(){
     var cx=matchCtx();
     /* 잴 수 있는 곳이 하나도 없으면(출퇴근지를 안 골랐다든지) 줄이 안 바뀐다.
        그런데도 '다시 줄 세웠어요'라고 쓰면 거짓말이 된다. */
-    viewDead=!res.full.some(function(u){ return BoobiMatch.rank(u,view,cx)!=null; });
     res.full=BoobiMatch.sortBy(res.full,view,cx,bud0);
     res.unknown=BoobiMatch.sortBy(res.unknown,view,cx,bud0);
     res.relaxable=BoobiMatch.sortBy(res.relaxable,view,cx,bud0);
@@ -1193,9 +1192,33 @@ function renderMatch(){
   var n=res.counts.full, condN=res.conds.length, locked=0;
   /* free = 아직 공짜로 보여줄 수 있는 칸 수. null 이면 이용권이 있어 제한 없음 */
   var free = isPaid() ? null : FREE_CANDS;
-  if(n>0){
+  /* ── 0곳이어도 '없어요'로 시작하지 않는다 ────────────────────────────
+     여덟 문항을 다 채운 사람에게 첫 화면이 "맞는 곳이 없어요"면, 자기 조건을
+     의심하는 게 아니라 이 기능을 의심한다. 그러니 전부 충족이 0곳이면
+     ① 조건 하나가 딱 한 칸 모자란 곳(relaxable)을, 그것도 없으면
+     ② 조건을 빼고 예산만 본 목록을 — 어쨌든 진짜 아파트를 먼저 깐다.
+     어느 조건이 모자랐는지는 카드 안 빨간 줄에 이미 적혀 있으니
+     따로 선언하지 않는다. 다른 길(조건/유형/지역/저축)은 카드 아래로 내린다. */
+  var lead=res.full, kind='full', bud1=Math.max.apply(null,Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].price;}));
+  if(n===0){
+    if(res.relaxable&&res.relaxable.length){ lead=res.relaxable; kind='near'; }
+    else {
+      var loose0=BoobiMatch.run({cands:candidates(), all:allRows(), metaIndex:metaIndex(), budget:bud1, conds:[], ctx:matchCtx()});
+      if(loose0.counts.full){ lead=view?BoobiMatch.sortBy(loose0.full,view,matchCtx(),bud1):loose0.full; kind='loose'; }
+      else lead=[];
+    }
+  }
+  LEAD=lead;
+  if(view) viewDead=!lead.some(function(u){ return BoobiMatch.rank(u,view,matchCtx())!=null; });
+  var ln=lead.length;
+  if(ln>0){
     var sortLbl=(view&&!viewDead)?viewLbl:'예산 가까운 순';
-    h+='<div class="secH">✅ '+(condN?'조건 '+condN+'개 전부 충족':'예산 안 아파트')+' <span class="cnt">'+fmtN(n)+'곳</span>'+(n>1?'<span class="sub">'+esc(sortLbl)+'</span>':'')+'</div>';
+    var head=kind==='near'?'✨ 조건에 가장 가까운 곳':kind==='loose'?'🏠 예산 안에서 고를 수 있는 곳'
+            :'✅ '+(condN?'조건 '+condN+'개 전부 충족':'예산 안 아파트');
+    var sub=kind==='near'?'조건 하나가 한 칸 차이예요'
+           :kind==='loose'?'예산 안에 드는 곳, 가까운 순'
+           :(ln>1?esc(sortLbl):'');
+    h+='<div class="secH">'+head+' <span class="cnt">'+fmtN(ln)+'곳</span>'+(sub?'<span class="sub">'+sub+'</span>':'')+'</div>';
     /* 고른 조건별로 끊어 보기 — 학군 기준, 직주근접 기준, 종합 */
     var _rk=res.conds.filter(function(c){ return BoobiMatch.hasRank(c.key); });
     if(_rk.length){
@@ -1211,20 +1234,20 @@ function renderMatch(){
                :'기준으로 다시 줄 세웠어요 <span>— '+esc(viewLbl)+'</span>')
       +'<button type="button" onclick="clearView()">예산 순으로</button></div>';
     if(free===null){                       /* 이용권 있음 — 전부 */
-      h+=res.full.slice(0,8).map(cardHtml).join('');
-      if(n>8) h+='<button type="button" class="showMore" onclick="showAll(this)">'+fmtN(n-8)+'곳 더 보기</button>';
+      h+=lead.slice(0,8).map(cardHtml).join('');
+      if(ln>8) h+='<button type="button" class="showMore" onclick="showAll(this)">'+fmtN(ln-8)+'곳 더 보기</button>';
     } else {
-      var show=Math.min(free,n);
-      h+=res.full.slice(0,show).map(cardHtml).join('');
+      var show=Math.min(free,ln);
+      h+=lead.slice(0,show).map(cardHtml).join('');
       free-=show;
-      if(n>show){
-        h+='<div class="bbTease" aria-hidden="true">'+res.full.slice(show,show+2).map(cardHtml).join('')+'</div>';
-        locked=n-show+res.unknown.length;
-        h+=wallHtml(locked, '고르신 조건에 다 맞는 곳이 <b>'+fmtN(n)+'곳</b> 나왔어요.');
+      if(ln>show){
+        h+='<div class="bbTease" aria-hidden="true">'+lead.slice(show,show+2).map(cardHtml).join('')+'</div>';
+        locked=ln-show+(kind==='full'?res.unknown.length:0);
+        h+=wallHtml(locked, kind==='near'?'조건에 가장 가까운 곳이 <b>'+fmtN(ln)+'곳</b> 있어요.'
+                           :kind==='loose'?'예산 안에 드는 아파트가 <b>'+fmtN(ln)+'곳</b> 있어요.'
+                           :'고르신 조건에 다 맞는 곳이 <b>'+fmtN(ln)+'곳</b> 나왔어요.');
       }
     }
-  } else {
-    h+=zeroHtml(res);
   }
   /* 결과가 몇 개 나왔더라도, 예산이 이 동네 하위 10%에도 못 미치면
      "여기선 선택지가 사실상 없다"는 뜻이다. 그 사실을 숨기지 않는다. */
@@ -1238,8 +1261,9 @@ function renderMatch(){
     h+='<div class="secH">🔓 조건 하나만 풀면</div><div class="relaxList">'
       +res.relax.filter(function(r){return r.add>0;}).map(function(r){ return '<button type="button" class="relaxRow" onclick="relaxOne(\''+r.key+'\')"><span>'+r.icon+' '+esc(r.label)+' '+esc(r.from)+' → <span class="to">'+esc(r.to)+'</span></span><b>+'+fmtN(r.add)+'곳</b></button>'; }).join('')+'</div>';
   }
-  if(res.unknown.length){
-    h+='<div class="secH">🔍 데이터 미확인 <span class="cnt">'+fmtN(res.unknown.length)+'곳</span><span class="sub">확인된 조건은 다 맞는데 일부가 공시에 없어요</span></div>';
+  /* 조건을 뺀 목록을 위에 깔았으면 미확인 단지도 이미 그 안에 들어 있다 — 두 번 깔지 않는다 */
+  if(res.unknown.length && kind!=='loose'){
+    h+='<div class="secH">🔍 데이터 미확인<span class="cnt">'+fmtN(res.unknown.length)+'곳</span><span class="sub">확인된 조건은 다 맞는데 일부가 공시에 없어요</span></div>';
     var un=res.unknown.length;
     if(free===null){
       h+=res.unknown.slice(0,4).map(cardHtml).join('');
@@ -1257,6 +1281,8 @@ function renderMatch(){
       }
     }
   }
+  /* 전부 충족이 0곳일 때의 네 갈래 — 화면 맨 위가 아니라 카드를 다 본 뒤에 둔다 */
+  if(n===0) h+=altPathsHtml(res,kind);
   /* 고른 조건이 각각 무엇으로 판정됐는지 결과 아래에 그대로 밝힌다.
      화면에 근거 한 줄만 보이면 "나머지는 안 본 건가" 싶어지기 때문이다. */
   h+=basisHtml();
@@ -1278,7 +1304,7 @@ function basisHtml(){
     +'<p>전부 국토부 실거래(최근 12개월)·K-apt 단지 공시·학교알리미·정비사업 통계·전국도시공원 표준데이터에서 '
     +'확인된 사실입니다. 거리는 직선거리 기반 추정이고, 가격이 오른다는 예측이 아닙니다.</p></details>';
 }
-window.showAll=function(btn){ var res=lastRes; btn.outerHTML=res.full.slice(8).map(cardHtml).join(''); };
+window.showAll=function(btn){ btn.outerHTML=LEAD.slice(8).map(cardHtml).join(''); };
 window.relaxOne=function(key){
   if(key==='size'){ S.sizeLv=Math.min(3,S.sizeLv+1); } else { S.conds[key]=(S.conds[key]||0)+1; }
   ga('match_relax',{key:key}); renderMatch(); $('matchOut').scrollIntoView({behavior:'smooth',block:'start'});
@@ -1497,14 +1523,16 @@ function tierUpHtml(){
   return h;
 }
 
-function zeroHtml(res){
+/* 네 갈래 — 예전에는 "N곳 중 맞는 곳이 없어요" 큰 글씨와 함께 결과 맨 위에 떴다.
+   답을 다 적은 사람에게 그 문장을 먼저 들이대면 추천을 의심하게 된다.
+   문장은 지웠고, 갈래만 남겨 카드 아래로 내렸다. */
+function altPathsHtml(res,kind){
   var rows=allRows(), conds=condList();
   var bud=Math.max.apply(null,Object.keys(S.budgetBy).map(function(k){return S.budgetBy[k].price;}));
-  var h='<div class="zero"><h3>'+(res.counts.units?fmtN(res.counts.units)+'곳 중 조건에 다 맞는 곳이 없어요':'이 예산대에 아파트 실거래가 없어요')+'</h3>';
-  h+='<div class="why">예산 '+readMan(bud)+'로는 고르신 조건을 다 갖추기 어려워요. 대신 —</div><div class="paths">';
-  /* ① 조건을 풀면 — 조건 없이 예산만 */
-  var loose=BoobiMatch.run({cands:candidates(), all:rows, metaIndex:metaIndex(), budget:bud, conds:[], ctx:matchCtx()});
-  if(loose.counts.full){
+  var h='<div class="secH">🧭 이렇게도 찾아볼 수 있어요</div><div class="paths">';
+  /* ① 조건을 풀면 — 조건 없이 예산만 (이미 그 목록을 위에 깔았으면 건너뛴다) */
+  var loose=kind==='loose'?null:BoobiMatch.run({cands:candidates(), all:rows, metaIndex:metaIndex(), budget:bud, conds:[], ctx:matchCtx()});
+  if(loose&&loose.counts.full){
     var areas=loose.full.map(function(u){return u.area;}).sort(function(a,b){return a-b;}); var med=areas[Math.floor(areas.length/2)];
     var yrs=loose.full.map(function(u){return u.buildYear;}).filter(Boolean).sort(function(a,b){return a-b;}); var my=yrs[Math.floor(yrs.length/2)];
     h+='<button type="button" class="path" onclick="clearConds()"><span><span class="k">🏠 조건을 풀면</span><span class="s">예산 안 아파트 · 절반이 전용 '+med+'㎡ 이하'+(my?' · '+my+'년 이전 준공':'')+'</span></span><b>'+fmtN(loose.counts.full)+'곳</b></button>';
@@ -1521,8 +1549,7 @@ function zeroHtml(res){
     if(need>0){ var s=S.saveMonthly>0?' · 월 '+fmtN(S.saveMonthly)+'만원 저축이면 약 '+(need/S.saveMonthly/12).toFixed(1)+'년':' · 저축액을 적으면 기간을 계산해드려요';
       h+='<a class="path" href="/cheongyak-board.html"><span><span class="k">⏳ '+readMan(need)+' 더 있으면</span><span class="s">조건에 맞는 가장 가까운 곳 '+esc(cheapest.name)+' '+readMan(cheapest.price)+s+(S.own==='none'?' · 무주택이면 청약 특별공급 자격도 확인해보세요':'')+'</span></span><b>청약 →</b></a>'; }
   }
-  h+=elsewhereHtml(bud);
-  return h+'</div></div>';
+  return h+'</div>'+elsewhereHtml(bud);
 }
 window.clearConds=function(){ S.conds={}; S.sizeLv=3; renderMatch(); };
 window.widenAll=function(){ S.all=true; S.codes=(DATA.regions[S.sido]||[]).map(function(g){return g.code;}); $('matchOut').innerHTML='<p class="note" style="text-align:center;padding:24px 0">'+esc(SHORT[S.sido]||S.sido)+' 전체를 불러오는 중…</p>';
