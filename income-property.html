@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>수익형 부동산 — 하이엔드 레지던스·분양형 호텔 큐레이션 (준비 중) | 부비</title>
+<title>수익형 부동산 — 분양형 호텔·레지던스 큐레이션 | 부비</title>
 <meta name="robots" content="noindex,follow">
-<meta name="description" content="매달 임대수익을 노리는 수익형 부동산. 하이엔드 오피스텔·분양형 호텔·생활형 숙박시설·리조트 레지던스·지식산업센터까지, 부비가 엄선해 소개할 큐레이션을 준비하고 있어요.">
+<meta name="description" content="세운지구 호텔 더 보타닉 세운 명동 등 수익형 부동산을 부비가 확인한 사실만 정리해 소개합니다. 객실 규모·전용면적·운영 실적을 적고, 확정 수익이 보장되지 않는 점까지 함께 밝혀요.">
 <meta name="keywords" content="수익형 부동산, 하이엔드 오피스텔, 분양형 호텔, 생활형 숙박시설, 리조트 레지던스, 지식산업센터, 임대수익, 부비">
 <link rel="canonical" href="https://boobi.ai.kr/income-property.html">
 <meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
-<meta property="og:title" content="수익형 부동산 큐레이션 (준비 중) | 부비">
-<meta property="og:description" content="하이엔드 레지던스·분양형 호텔 등 수익형 부동산을 부비가 엄선해 소개할 예정이에요.">
+<meta property="og:title" content="수익형 부동산 큐레이션 | 부비">
+<meta property="og:description" content="세운지구 호텔 더 보타닉 세운 명동 등 수익형 부동산을 부비가 확인한 사실만 정리해 소개합니다. 객실 규모·전용면적·운영 실적을 적고, 확정 수익이 보장되지 않는 점까지 함께 밝혀요.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://boobi.ai.kr/income-property.html">
 <meta property="og:site_name" content="부비 - 부동산 비서">
@@ -55,9 +55,9 @@ h1{font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
 /* 부비 픽 실물 카드 — 확인된 사실만 적는다. 분양가·수익률처럼 확인 못 한 칸은
    0 으로 채우지 않고 '확인 중'으로 비워 둔다. 수익형은 숫자 하나가 계약을 좌우한다. */
 .pick{background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));border:1.5px solid rgba(255,255,255,.95);box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;border-radius:20px;padding:22px 24px;margin-bottom:16px;word-break:keep-all;display:grid;grid-template-columns:300px 1fr;gap:22px;align-items:start}
-.pick .shot{border-radius:14px;overflow:hidden;border:1px solid rgba(61,139,253,.16);background:#EFF5FA;line-height:0}
-.pick .shot img{width:100%;height:auto;display:block}
-.pick .shot figcaption{font-size:.7rem;color:#8AA5A2;font-weight:300;line-height:1.55;padding:7px 9px;background:#fff;text-align:center}
+.pick .shot{margin:0;line-height:0}
+.pick .shot img{width:100%;height:auto;display:block;filter:drop-shadow(0 18px 28px rgba(13,42,41,.22))}
+.pick .shot figcaption{font-size:.7rem;color:#8AA5A2;font-weight:300;line-height:1.55;padding:9px 2px 0;text-align:center}
 @media(max-width:760px){.pick{grid-template-columns:1fr;padding:18px;gap:16px}}
 .pick .tag{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.01em;padding:4px 11px;border-radius:999px;background:linear-gradient(115deg,#26C6B9,#3D8BFD 60%,#8B6CF6);color:#fff}
 .pick h3{font-size:1.2rem;font-weight:800;letter-spacing:-.025em;color:#0D2A29;margin:9px 0 3px}
@@ -67,6 +67,8 @@ h1{font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
 .pick .facts dt{font-size:.74rem;color:#8AA5A2;font-weight:400;margin-bottom:2px}
 .pick .facts dd{font-size:.9rem;font-weight:700;color:#0D2A29;letter-spacing:-.01em}
 .pick .facts dd.tbd{color:#B45309;font-weight:600}
+.pick .hl{font-size:.87rem;color:#547471;font-weight:300;line-height:1.75;margin-bottom:4px}
+.pick .hl b{font-weight:700;color:#0D2A29}
 .pick .src{font-size:.78rem;color:#8AA5A2;font-weight:300;line-height:1.7}
 .pick .src a{color:#3D8BFD}
 .pick .acts{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0 11px}
@@ -96,35 +98,36 @@ footer a{color:#B9DCD9;margin:0 8px}
 <main><div class="wrap">
 <div class="crumb"><a href="/">홈</a> › <a href="/invest.html">투자</a> › 수익형</div>
 <h1>🏢 수익형 부동산</h1>
-<p class="lead">매달 임대수익을 노리는 하이엔드 레지던스·분양형 호텔·수익형 상품을 부비가 엄선해 소개할 예정이에요.</p>
+<p class="lead">매달 임대수익을 노리는 분양형 호텔·레지던스·수익형 상품을 부비가 골라 소개해요. <b>확인한 사실만 적고, 확인 못 한 숫자는 비워 둡니다.</b></p>
 
 <div class="sechead">⭐ 부비 픽 — 대표 수익형</div>
 
 <div class="pick">
 <figure class="shot">
-  <img src="/sewoon-botanic.webp" width="900" height="849" loading="lazy"
-       alt="세운 푸르지오 더 보타닉 — 야간 외관. 저층 상가 위로 객실 조명이 켜진 고층 타워 두 동">
+  <img src="/hotel-botanic-sewoon.webp" width="900" height="927" loading="lazy"
+       alt="호텔 더 보타닉 세운 명동 — 야간 외관. 저층 상가 위로 객실 조명이 켜진 고층 타워 두 동">
   <figcaption>준공 외관 (제공 사진)</figcaption>
 </figure>
 <div class="body">
-<span class="tag">도심 오피스텔 · 도시형생활주택</span>
-<h3>세운 푸르지오 더 보타닉</h3>
-<div class="loc">서울 세운재정비촉진지구 <b>6-3구역</b> · 푸르지오(대우건설) 브랜드 · 공급 한호건설그룹</div>
+<span class="tag">분양형 호텔 · 객실 개별등기</span>
+<h3>호텔 더 보타닉 세운 명동</h3>
+<div class="loc">서울 중구 <b>산림동·입정동</b> 일대(세운지구) · 을지로3가역(2·3호선)·종로3가역(1·3·5호선) 도보권 · 분양 디블록그룹(옛 한호건설그룹)</div>
 <dl class="facts">
-<div><dt>총 규모</dt><dd>564세대</dd></div>
-<div><dt>오피스텔</dt><dd>366실 · 전용 24~59㎡</dd></div>
-<div><dt>도시형생활주택</dt><dd>198세대 · 전용 36~49㎡</dd></div>
-<div><dt>층수</dt><dd>지하 8층~지상 20층</dd></div>
+<div><dt>총 객실</dt><dd>756실</dd></div>
+<div><dt>전용면적</dt><dd>21~50㎡</dd></div>
+<div><dt>층수</dt><dd>지하 6층~지상 20층</dd></div>
+<div><dt>개장</dt><dd>2024년 12월</dd></div>
+<div><dt>객실 점유율</dt><dd>약 80%↑ <span style="font-weight:400;color:#8AA5A2">(운영 실적)</span></dd></div>
 <div><dt>분양가</dt><dd class="tbd">확인 중</dd></div>
-<div><dt>입주 시기</dt><dd class="tbd">확인 중</dd></div>
 </dl>
+<p class="hl">옛 <b>세운 푸르지오 G-팰리스</b>가 2024년 12월 호텔로 정식 개장하면서 이름을 바꾼 곳이에요. 2025년 5월에는 <b>회사 보유분 28실</b>을 일반 분양했고(청약금 100만원), 운영 실적으로 <b>월평균 투숙객 약 4만 명</b>이 알려져 있어요. 객실은 <b>개별등기</b>가 되고 <b>주택 수에 포함되지 않습니다</b>.</p>
 <div class="acts">
 <a class="call" href="tel:010-6751-4513">📞 분양 문의하기</a>
 <a href="/yield-calculator.html">📊 내 조건으로 수익률 계산하기 →</a>
 <a href="/saengsuk-investment-guide.html">📖 수익형, 사기 전에 볼 것 →</a>
 </div>
 <p class="call-n">문의 <b>010-6751-4513</b> — 휴대폰에서는 누르면 바로 연결돼요.</p>
-<p class="src">위 수치는 <b>2022년 4월 공급 보도자료 기준</b>이에요(<a href="https://www.newsis.com/view/NISX20220422_0001844236" target="_blank" rel="noopener">뉴시스</a>). 분양가·현재 분양 상태·입주 시기·임대 수익률은 <b>부비가 아직 확인하지 못해 비워 뒀습니다</b> — 숫자를 지어내지 않으려고 빈칸으로 둡니다. 계약 전에는 분양 주체에 직접 확인하세요. 소개이며 투자 권유가 아닙니다.</p>
+<p class="src">위 내용은 <b>2025년 5월 9일 분양 보도자료 기준</b>이에요(<a href="https://www.etoday.co.kr/news/view/2468932" target="_blank" rel="noopener">이투데이</a>). <b>분양가와 현재 잔여 물량은 부비가 확인하지 못해 비워 뒀습니다</b> — 숫자를 지어내지 않으려고 빈칸으로 둡니다. 점유율·투숙객은 <b>호텔 전체 운영 실적</b>이지 개별 객실의 수익을 보장하는 수치가 아니에요. 분양형 호텔은 확정 수익이 보장되지 않고 공실·운영 리스크가 있으며, 취득세·부가세와 위탁운영 계약 조건을 따로 따져야 합니다. 계약 전 분양 주체에 직접 확인하세요. 소개이며 투자 권유가 아닙니다.</p>
 </div>
 </div>
 
