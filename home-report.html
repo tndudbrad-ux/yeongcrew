@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>집 종합 리포트 — 주소 하나로 세금·리스크 한눈에 | 부비</title>
-<meta name="description" content="주소와 금액만 넣으면 부비가 이 집의 취득세·보유세·전세 리스크를 한 장으로 정리하고, 사도 될지 신호등(🟢🟡🔴)으로 결론까지 알려드려요. 부동산 비서 부비.">
+<title>집 종합 리포트 — 등기부 위험등기 전수 검수 + 세금 한눈에 | 부비</title>
+<meta name="description" content="등기부등본을 올리면 근저당·저당·전세권·압류·가압류·가처분·경매·공매·신탁·가등기까지 위험 등기를 전수로 검수하고, 취득세·보유세·양도세와 전세 보증금 리스크를 한 장으로 정리해 사도 될지 신호등으로 알려드려요. 파일은 브라우저 안에서만 읽고 서버로 보내지 않아요.">
 <meta name="keywords" content="집 종합 리포트, 부동산 리포트, 취득세, 보유세, 전세 리스크, 집 살때 세금, 부동산 비서, 부비, 부비AI">
 <link rel="canonical" href="https://boobi.ai.kr/home-report.html">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="집 종합 리포트 — 주소 하나로 세금·리스크 한눈에">
-<meta name="twitter:description" content="주소와 금액만 넣으면 부비가 이 집의 취득세·보유세·전세 리스크를 한 장으로 정리하고, 사도 될지 신호등(🟢🟡🔴)으로 결론까지 알려드려요. 부동산 비서 부비.">
+<meta name="twitter:title" content="집 종합 리포트 — 등기부 위험등기 전수 검수 + 세금 한눈에">
+<meta name="twitter:description" content="등기부등본을 올리면 근저당·저당·전세권·압류·가압류·가처분·경매·공매·신탁·가등기까지 위험 등기를 전수로 검수하고, 취득세·보유세·양도세와 전세 보증금 리스크를 한 장으로 정리해 사도 될지 신호등으로 알려드려요. 파일은 브라우저 안에서만 읽고 서버로 보내지 않아요.">
 <meta name="twitter:image" content="https://boobi.ai.kr/og-boobi.png">
 <meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
 <meta name="author" content="부비 (원대시투)">
 <meta name="naver-site-verification" content="6429e086856e0a2fee422121e0cb17072d2edc3a" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%238FE9E4'/%3E%3Cstop offset='1' stop-color='%231B918D'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='13'/%3E%3C/svg%3E">
-<meta property="og:title" content="집 종합 리포트 — 주소 하나로 세금·리스크 한눈에 | 부비">
-<meta property="og:description" content="이 집 사도 될까? 취득세·보유세·전세 리스크를 한 장으로. 부비가 신호등으로 결론까지.">
+<meta property="og:title" content="집 종합 리포트 — 등기부 위험등기 전수 검수 + 세금 한눈에 | 부비">
+<meta property="og:description" content="이 집 사도 될까? 등기부의 근저당·압류·가압류·경매·신탁까지 전수 검수하고 세금까지 한 장으로. 부비가 신호등으로 결론까지.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://boobi.ai.kr/home-report.html">
 <meta property="og:site_name" content="부비 - 부동산 비서">
@@ -86,6 +86,10 @@ button.go:hover{transform:translateY(-1px)}
 .dgDrop span{display:block;font-size:.79rem;color:#8AA5A2;line-height:1.55;word-break:keep-all}
 .dgDrop:focus-visible{outline:2px solid #3D8BFD;outline-offset:2px}
 .dgStat{font-size:.84rem;margin-top:8px;line-height:1.6;word-break:keep-all;color:#547471}
+/* 전수 검수 항목 — 무엇을 봤는지 눈으로 세어볼 수 있게 */
+.dgChkLead{font-size:.8rem;color:#547471;font-weight:300;margin:12px 0 7px;line-height:1.6;word-break:keep-all}
+.dgChk{display:flex;flex-wrap:wrap;gap:6px}
+.dgChk span{font-size:.76rem;font-weight:500;color:#2A7DE8;background:#F0F6FF;border:1px solid #DCEAFE;border-radius:999px;padding:5px 10px;white-space:nowrap}
 /* 등기부등본 떼러 가는 버튼 — 드롭존 '밖'에 둔다.
    드롭존은 div 전체에 click 핸들러가 걸려 있어서, 안쪽에 링크를 넣으면
    누를 때 새 창이 열리면서 파일 선택창까지 같이 뜬다. */
@@ -130,7 +134,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 <div class="crumb"><a href="/">홈</a> › 집 종합 리포트</div>
 <div class="hero-t">
 <h1>🏠 집 종합 리포트</h1>
-<p>주소와 금액을 넣고 <b>등기부등본</b>을 올리면, 이 집의 <b>세금과 권리관계 위험</b>을 한 장으로. 사도 될지 <b>신호등</b>으로 결론까지 알려드려요.</p>
+<p><b>등기부등본</b>을 올리면 근저당·저당·전세권·압류·가압류·경매·공매·신탁·가등기까지 <b>위험 등기를 전수로 검수</b>하고, 주소와 금액으로 <b>세금</b>까지 한 장에. 사도 될지 <b>신호등</b>으로 결론까지 알려드려요.</p>
 </div>
 
 <div class="tool-box">
@@ -223,9 +227,17 @@ footer a{color:#B9DCD9;margin:0 8px}
 </style>
 <section class="bg-sec">
 <article class="bg-card">
-<h2>집 한 채에 붙는 세금은 세 번 나뉘어 옵니다</h2>
-<p>같은 집이라도 <b>살 때(취득세)</b>, <b>가지고 있을 때(재산세·종합부동산세)</b>, <b>팔 때(양도소득세)</b>의 계산 방식이 완전히 다릅니다. 집 종합 리포트가 주소와 금액만으로 세 구간을 한 장에 모으는 이유는, 매수를 결정할 때 흔히 취득세만 보고 보유세와 출구(양도)를 빼놓기 때문입니다. 여기에 전세를 끼고 사는 경우의 보증금 리스크까지 얹어야 비로소 "사도 되는지"에 답할 수 있습니다.</p>
-<h3>세 구간을 가르는 기준</h3>
+<h2>이 집에 걸린 것 전부 — 등기부 권리관계와 세금을 한 장에</h2>
+<p>집을 살지 말지는 두 가지가 동시에 맞아야 답이 나옵니다. 하나는 <b>이 집에 누가 무엇을 걸어뒀는지</b>, 다른 하나는 <b>살 때·가질 때·팔 때 얼마를 내는지</b>입니다. 집 종합 리포트는 등기부등본 PDF를 브라우저 안에서 읽어 <b>갑구·을구의 위험 등기를 전수로 훑고</b>, 거기에 주소와 금액으로 계산한 세 구간의 세금을 얹어 신호등 하나로 결론을 냅니다. 파일은 서버로 보내지 않습니다.</p>
+
+<h3>등기부에서 무엇을 찾나요</h3>
+<p><b>을구(빚과 사용 권리)</b>에서는 <b>근저당권</b>의 채권최고액을 전부 합산하고, 근저당이 아닌 <b>(보통)저당권</b>, 순위를 밀어내는 <b>전세권</b>, 앞 세입자가 보증금을 못 받아 남긴 <b>임차권등기명령</b>, 그리고 <b>지상권·지역권</b>을 찾습니다. 채권최고액은 보통 실제 빚의 120~130%로 잡으므로, 합계가 크다면 실제 채무는 그 70~80% 선으로 가늠하고 잔금 때 말소 특약을 반드시 넣어야 합니다.</p>
+<p><b>갑구(소유권을 흔드는 등기)</b>에서는 <b>압류</b>와 <b>가압류</b>를 따로 구분해 잡고, <b>가처분</b>, <b>경매개시결정(임의·강제)</b>, 세금 체납으로 캠코에 넘어간 <b>공매공고</b>, 소유자가 신탁회사인 <b>신탁등기</b>, 소유권이 넘어갈 수 있는 <b>가등기</b>와 근저당처럼 선순위가 되는 <b>담보가등기</b>, 되팔 약정인 <b>환매특약</b>, 소송 중 표시인 <b>예고등기</b>, 처분 권한이 관리인에게 넘어가는 <b>파산·회생</b>, 그리고 <b>공동소유(지분)</b> 여부까지 확인합니다.</p>
+<p>찾은 것만 보여주고 끝내지 않습니다. 걸리는 게 하나도 없을 때도 <b>무엇을 찾아봤는지 목록 그대로</b> 보여드립니다. "이상 없음"과 "안 봤음"은 전혀 다른 말이기 때문입니다. 아울러 근저당·압류·가압류·담보가등기·경매·공매·전세권 중 <b>가장 먼저 설정된 날</b>을 뽑아 말소기준권리로 삼습니다 — 내 전입일이 그보다 빠른지가 보증금을 지킬 수 있는지를 가릅니다.</p>
+<div class="bg-law"><b>꼭 말소사항 포함으로</b><br>등기부등본은 <b>현재 유효사항</b>과 <b>말소사항 포함</b> 두 가지로 뗄 수 있습니다. 지워진 등기까지 보려면 <b>말소사항 포함</b>으로 받으세요. 잦은 가압류·임차권등기가 말소된 이력은 지금 깨끗해 보여도 집주인의 상태를 알려주는 신호입니다. 인터넷등기소 열람은 700원, 발급은 1,000원입니다.</div>
+
+<h3>세금은 세 번 나뉘어 옵니다</h3>
+<p>같은 집이라도 <b>살 때(취득세)</b>, <b>가지고 있을 때(재산세·종합부동산세)</b>, <b>팔 때(양도소득세)</b>의 계산 방식이 완전히 다릅니다. 매수를 결정할 때 흔히 취득세만 보고 보유세와 출구(양도)를 빼놓기 때문에, 세 구간을 한 장에 모읍니다.</p>
 <ul>
 <li><b>취득세</b> — 1주택이라도 취득가액 6억원 이하는 1%, 6억 초과 9억 이하는 1~3% 구간 계산식, 9억 초과는 3%입니다. 여기에 지방교육세가 붙고 전용 85㎡ 초과면 농어촌특별세가 더해집니다. 조정대상지역의 2주택은 8%, 3주택부터는 12%로 뛰어 같은 집도 <b>내 주택 수</b>에 따라 8배 넘게 벌어집니다.</li>
 <li><b>재산세</b> — 공시가격 × 공정시장가액비율로 과세표준을 구한 뒤 세율을 곱합니다. 2026년 1주택자의 공정시장가액비율은 공시가 3억 이하 43%, 3억~6억 44%, 6억 초과 45%이며 다주택자·법인은 60%입니다. 공시가격 9억원 이하 1세대 1주택자는 구간별로 0.05%p 낮은 특례세율(0.05~0.35%)을 적용받습니다.</li>
@@ -236,8 +248,8 @@ footer a{color:#B9DCD9;margin:0 8px}
 <h3>사례로 보기</h3>
 <div class="bg-case">공시가격 5억원, 매매가 7억원인 전용 84㎡ 아파트를 1주택자가 사는 경우를 계산해 보겠습니다. 취득세는 6억 초과 9억 이하 구간이라 대략 1.7% 안팎이 적용돼 1,200만원 선이고 지방교육세가 더해집니다. 보유 단계에서는 과세표준이 5억 × 44% = 2억2,000만원이고 1주택 특례세율을 적용하면 재산세 본세가 약 26만원, 여기에 도시지역분과 지방교육세를 더해 <b>연 62만원 안팎</b>을 7월과 9월에 나눠 냅니다. 공시가 12억원 이하이므로 종부세는 없습니다. 문제는 출구입니다. 이 집이 조정대상지역이라면 전세를 놓고 보유만 하다 팔 경우 12억원 이하여도 비과세가 안 되고, 직접 들어가 2년을 살아야 합니다. 취득세 1,200만원보다 이 <b>거주 2년</b> 조건이 실제 손익에 훨씬 크게 작용합니다.</div>
 <h3>한 줄 정리</h3>
-<p>집을 살지 말지는 결국 <b>살 때·가질 때·팔 때의 합계</b>로 판단해야 합니다. 취득세는 계약 전에 확정할 수 있는 유일한 비용이고, 보유세는 매년 반복되며, 양도세는 몇 년 뒤 요건을 채웠는지에 따라 0원이 되기도 하고 수억원이 되기도 합니다. 리포트의 신호등이 노란색이나 빨간색으로 나왔다면 무엇이 원인인지 항목을 열어 확인해 보세요. 대개는 주택 수, 조정대상지역 여부, 거주 요건 중 하나가 걸려 있고 이 셋은 계약 전에 조정할 여지가 있는 항목입니다.</p>
-<p class="bg-note">2026년 8월 기준으로 정리했습니다. 공시가격·세율·지역 지정은 매년 바뀌고 개별 사실관계에 따라 결과가 달라지니, 실제 계약 전에는 세무 전문가 확인을 받으세요.</p>
+<p>집을 살지 말지는 <b>등기부에 걸린 것</b>과 <b>살 때·가질 때·팔 때의 세금</b>을 함께 놓고 봐야 답이 나옵니다. 둘의 성격은 다릅니다. 권리관계는 계약 전에 등기부 한 장이면 확인되지만 도장을 찍은 뒤에는 되돌릴 수 없고, 세금은 취득세만 계약 전에 확정되며 보유세는 매년 반복되고 양도세는 몇 년 뒤 요건을 채웠는지에 따라 0원이 되기도 수억원이 되기도 합니다. 리포트의 신호등이 노란색이나 빨간색으로 나왔다면 항목을 열어 원인을 확인해 보세요. 빨간색은 대개 압류·가압류·경매·신탁처럼 <b>계약 자체를 다시 생각해야 하는 등기</b>에서 나오고, 노란색은 주택 수·조정대상지역·거주 요건이나 말소를 약속받으면 되는 근저당처럼 <b>계약 전에 조정할 여지가 있는 항목</b>에서 나옵니다.</p>
+<p class="bg-note">세금은 2026년 8월 기준으로 정리했습니다. 공시가격·세율·지역 지정은 매년 바뀝니다. 등기부 판독은 PDF 원본의 글자를 읽어 키워드를 찾는 방식이라 스캔 이미지는 읽지 못하고, 발견된 등기의 법적 효력과 말소 여부까지 판단해 주지는 않습니다. 실제 계약 전에는 공인중개사·법무사·세무 전문가 확인을 받으세요.</p>
 </article>
 </section>
 <!-- boobi-guide-body end -->
@@ -325,21 +337,27 @@ var DG=null;   /* {a:분석결과, name:파일명} */
   }
 })();
 
-/* 위험등기 목록 카드 */
+/* 위험등기 목록 카드 — 깃발이 없을 때도 '무엇을 봤는지'를 그대로 적는다.
+   "아무것도 안 나왔어요"는 안 본 건지 없는 건지 구분이 안 된다. */
+function dgCheckList(){
+  var c=(window.bbDeunggi&&bbDeunggi.CHECKS)||[];
+  return c.length?'<div class="dgChk">'+c.map(function(k){ return '<span>✓ '+k+'</span>'; }).join('')+'</div>':'';
+}
 function dgFlagsHTML(a){
   if(!a.flags.length){
-    return '<div class="flag ok">신탁·압류·가압류·가처분·경매개시·임차권등기·가등기 키워드가 발견되지 않았어요.'
-      +(a.hasMalso?'':' <b>말소사항 포함</b>으로 다시 떼어 재확인을 권해요.')+'</div>';
+    return '<div class="flag ok"><b>전수 검수 결과 — 걸리는 등기가 없어요.</b> 아래 항목을 전부 찾아봤는데 하나도 발견되지 않았어요.'
+      +(a.hasMalso?'':' 다만 <b>말소사항 포함</b>으로 떼신 게 아니라면, 지워진 이력까지 보려면 그 옵션으로 다시 떼어 올려주세요.')+'</div>'+dgCheckList();
   }
   return '<div class="rlist">'+a.flags.map(function(f){
     return '<div class="ri '+f[0]+'"><b>'+f[1]+'</b>'+f[2]+'</div>';
-  }).join('')+'</div>';
+  }).join('')+'</div>'
+    +'<p class="dgChkLead">이 집 등기부에서 아래 항목을 전부 찾아봤어요 — 위에 없는 건 발견되지 않은 항목이에요.</p>'+dgCheckList();
 }
 /* 등기부를 안 올렸을 때 — 무엇을 못 봤는지 분명히 말한다 */
 function dgMissingHTML(kind){
   var basis = kind==='buy' ? '세금(취득세·보유세)만 보고' : '보증금과 시세 비율만 보고';
   return '<div class="rcard"><h3>📄 권리관계 (등기부) — 아직 확인 못 했어요</h3>'
-    +'<div class="flag warn">등기부등본을 안 올리셔서 <b>근저당·신탁·압류·가압류·경매개시 같은 권리관계는 보지 못했어요.</b> '
+    +'<div class="flag warn">등기부등본을 안 올리셔서 <b>근저당·저당·전세권·압류·가압류·가처분·경매·공매·신탁·가등기 같은 권리관계는 하나도 보지 못했어요.</b> '
     +'위 신호등은 '+basis+' 낸 결론이라, 이 집의 진짜 위험은 아직 판정되지 않은 상태예요.<br><br>'
     +'<a href="https://www.iros.go.kr" target="_blank" rel="noopener" style="color:#3D8BFD;font-weight:700">인터넷등기소</a>에서 <b>700원</b>에 떼서 올리면 함께 판정해드려요. '
     +'발급할 때 <b>말소사항 포함</b>으로 받으시면 더 정확해요.</div></div>';
