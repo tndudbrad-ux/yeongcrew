@@ -90,6 +90,15 @@ button.go:hover{transform:translateY(-1px)}
 .dgChkLead{font-size:.8rem;color:#547471;font-weight:300;margin:12px 0 7px;line-height:1.6;word-break:keep-all}
 .dgChk{display:flex;flex-wrap:wrap;gap:6px}
 .dgChk span{font-size:.76rem;font-weight:500;color:#2A7DE8;background:#F0F6FF;border:1px solid #DCEAFE;border-radius:999px;padding:5px 10px;white-space:nowrap}
+/* 홈에서 '구매하기'로 들어온 사람에게 — 결제창이 아니라 입력 화면이 먼저 뜨는 이유를 말해준다.
+   pay.html 은 주소·매매가(bb_hr)가 없으면 결제 버튼을 잠그기 때문에,
+   바로 결제로 보내면 "먼저 집 정보를 입력해 주세요"만 보고 막힌다. */
+.hrLead{display:flex;gap:11px;align-items:flex-start;background:radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.6));border:1.5px solid rgba(255,255,255,.95);box-shadow:0 10px 26px rgba(13,42,41,.08),inset 0 1px 0 #fff;border-radius:16px;padding:14px 16px;margin-bottom:12px;word-break:keep-all}
+.hrLead .i{flex:0 0 auto;font-size:1.2rem;line-height:1.3}
+.hrLead .tx{flex:1 1 auto;min-width:0}
+.hrLead .t{display:block;font-size:.95rem;font-weight:800;letter-spacing:-.02em;color:#0D2A29;margin-bottom:3px}
+.hrLead .d{display:block;font-size:.82rem;color:#547471;font-weight:300;line-height:1.7}
+.hrLead .d b{font-weight:700;color:#0D2A29}
 /* 등기부등본 떼러 가는 버튼 — 드롭존 '밖'에 둔다.
    드롭존은 div 전체에 click 핸들러가 걸려 있어서, 안쪽에 링크를 넣으면
    누를 때 새 창이 열리면서 파일 선택창까지 같이 뜬다. */
@@ -137,7 +146,9 @@ footer a{color:#B9DCD9;margin:0 8px}
 <p><b>등기부등본</b>을 올리면 근저당·저당·전세권·압류·가압류·경매·공매·신탁·가등기까지 <b>위험 등기를 전수로 검수</b>하고, 주소와 금액으로 <b>세금</b>까지 한 장에. 사도 될지 <b>신호등</b>으로 결론까지 알려드려요.</p>
 </div>
 
-<div class="tool-box">
+<div id="hrBuyLead"></div>
+
+<div class="tool-box" id="hrForm">
 <label class="f">주소</label>
 <div class="addrRow">
 <input class="f" id="addr" type="text" placeholder="주소를 검색하세요" readonly>
@@ -501,6 +512,29 @@ function makeReport(){
   el.innerHTML=html;
   el.scrollIntoView({behavior:'smooth',block:'start'});
 }
+
+/* 홈 화면에서 넘어온 사람 맞이하기 ────────────────────────────────────
+   예전에는 홈의 '2,900원 구매하기'가 /pay.html 로 바로 갔는데, 결제 페이지는
+   주소·매매가(sessionStorage 의 bb_hr)가 없으면 결제 버튼을 잠근다. 그래서
+   돈을 내려던 사람이 "먼저 집 정보를 입력해 주세요"만 보고 되돌아 나와야 했다.
+   이제 두 버튼 모두 이 입력 화면으로 먼저 보내고, 어떤 의도로 왔는지만
+   한 줄로 알려준 뒤 폼으로 내려준다. */
+(function(){
+  var q; try{ q=new URLSearchParams(location.search); }catch(e){ return; }
+  var buy=q.get('buy')==='1';
+  if(!buy && q.get('from')!=='home') return;
+  var box=document.getElementById('hrBuyLead'); if(!box) return;
+  box.innerHTML='<div class="hrLead"><span class="i">'+(buy?'\uD83E\uDDFE':'\uD83D\uDCC4')+'</span><span class="tx">'
+    +'<span class="t">'+(buy?'PDF 발급까지 두 단계예요':'먼저 무료 결과부터 보세요')+'</span>'
+    +'<span class="d">'+(buy
+      ? '\u2460 아래에 <b>주소·금액</b>을 넣고 <b>등기부등본</b>을 올려주세요 \u2192 \u2461 화면 결과를 확인하고 그 아래에서 결제하시면 그 집으로 PDF를 만들어 드려요. 입력이 있어야 PDF를 만들 수 있어서 결제를 먼저 받지 않습니다.'
+      : '아래에 <b>주소·금액</b>을 넣고 <b>등기부등본</b>을 올리면 세금과 권리관계를 바로 보여드려요. PDF는 결과를 본 뒤에 고르시면 됩니다.')
+    +'</span></span></div>';
+  setTimeout(function(){
+    var y=box.getBoundingClientRect().top+window.pageYOffset-84;
+    window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
+  },220);
+})();
 </script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"집 종합 리포트","url":"https://boobi.ai.kr/home-report.html","description":"주소와 금액으로 이 집의 취득세·보유세·전세 리스크를 한 장으로 정리하고 신호등으로 결론을 내주는 무료 부동산 리포트","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"provider":{"@type":"Organization","name":"부비","url":"https://boobi.ai.kr"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"홈","item":"https://boobi.ai.kr/"},{"@type":"ListItem","position":2,"name":"집 종합 리포트","item":"https://boobi.ai.kr/home-report.html"}]}</script>
