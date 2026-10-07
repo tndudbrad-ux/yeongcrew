@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-07T02:55:29.239Z",
+  "updatedAt": "2026-10-07T16:07:08.671Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 53,
+  "count": 54,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,21 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "SH-310391",
-      "provider": "SH",
-      "ltype": "기타",
-      "name": "2026년 2차 임대상가 재공급 모집공고",
-      "region": "서울",
-      "units": null,
-      "target": "자세한 자격은 공고문 확인",
-      "rcritStart": "2026-10-06",
-      "rcritEnd": "2026-10-07",
-      "winnerDate": null,
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=310391",
-      "note": "공고 2026-09-16",
-      "_src": "sh-web"
-    },
     {
       "id": "LH-2015122300020824",
       "provider": "LH",
@@ -168,21 +153,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020761",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[대전충남] 2026년 9월 신혼·신생아 I 매입임대주택 예비입주자 모집 공고",
-      "region": "대전광역시 외",
-      "units": null,
-      "target": "신청자격 :  에 대한 정보 제공  조회된 데이터가 없습니다. 기타사항 □ (중복신청 불가) 1세대(세대구성원 전원)당 1주택 신청하여야 하며, 중복 신청 시 전부 무효처리합니다. □ (중복신청 불가) 본 공고에 따라 신청하여 서류제출까지 완료한 경우, 예비입주자 순번 발표 시까지 동일",
-      "rcritStart": "2026-10-12",
-      "rcritEnd": "2026-10-14",
-      "winnerDate": "2027-01-20",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020761&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020876",
       "provider": "LH",
       "ltype": "매입임대",
@@ -288,36 +258,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020839",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "2026년 3차 대구경북(구미)지역 기숙사형 청년주택 입주자 모집공고",
-      "region": "경상북도",
-      "units": null,
-      "target": "공고일 현재 무주택자인 미혼 청년으로서 소득 기준을 충족하는, ① 대학교 및 대학원 재학생(입학·복학 예정자 포함) ② 19세 이상 39세 이하인 사람 (1986.9.30. ~ 2007.9.29. 출생자)",
-      "rcritStart": "2026-10-13",
-      "rcritEnd": "2026-10-15",
-      "winnerDate": "2026-12-17",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020839&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020838",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "2026년 3차 대구경북지역 청년매입임대 입주자 모집공고",
-      "region": "대구광역시 외",
-      "units": null,
-      "target": "공고일 현재 무주택자인 미혼 청년으로서 소득 및 자산 기준을 충족하는, ① 19세 이상39세 이하인 사람 (1986.09.30. ~ 2007.09.29. 출생자) ② 대학교 재학생(입학·복학 예정자 포함) ③ 취업준비생(고등학교·대학교 등을 졸업·중퇴 후 2년 이내인 사람으로서 미취업자",
-      "rcritStart": "2026-10-13",
-      "rcritEnd": "2026-10-15",
-      "winnerDate": "2026-12-17",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020838&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020841",
       "provider": "LH",
       "ltype": "매입임대",
@@ -348,17 +288,32 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020803",
+      "id": "LH-2015122300020839",
       "provider": "LH",
-      "ltype": "행복주택(신혼희망)",
-      "name": "의왕청계2 A1블록 신혼희망타운 행복주택 입주자 모집공고",
-      "region": "경기도",
+      "ltype": "매입임대",
+      "name": "2026년 3차 대구경북(구미)지역 기숙사형 청년주택 입주자 모집공고",
+      "region": "경상북도",
       "units": null,
-      "target": ", 서류 등을 사전에 확인하고 신청하시기 바랍니다. ○ 본 단지는 별도로 견본주택(모델하우스) 운영을 하지 않습니다. 접수처정보 소재지 : 지도보기 경기도 성남시 분당구 성남대로54번길 3(구미동) 1층 105호 대강당 --> 소재지 : 경기도 성남시 분당구 성남대로54번길 3(구미동)",
+      "target": "공고일 현재 무주택자인 미혼 청년으로서 소득 기준을 충족하는, ① 대학교 및 대학원 재학생(입학·복학 예정자 포함) ② 19세 이상 39세 이하인 사람 (1986.9.30. ~ 2007.9.29. 출생자)",
       "rcritStart": "2026-10-13",
       "rcritEnd": "2026-10-15",
-      "winnerDate": "2027-02-03",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020803&ccrCnntSysDsCd=03&uppAisTpCd=39&aisTpCd=42&mi=1026",
+      "winnerDate": "2026-12-17",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020839&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020838",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "2026년 3차 대구경북지역 청년매입임대 입주자 모집공고",
+      "region": "대구광역시 외",
+      "units": null,
+      "target": "공고일 현재 무주택자인 미혼 청년으로서 소득 및 자산 기준을 충족하는, ① 19세 이상39세 이하인 사람 (1986.09.30. ~ 2007.09.29. 출생자) ② 대학교 재학생(입학·복학 예정자 포함) ③ 취업준비생(고등학교·대학교 등을 졸업·중퇴 후 2년 이내인 사람으로서 미취업자",
+      "rcritStart": "2026-10-13",
+      "rcritEnd": "2026-10-15",
+      "winnerDate": "2026-12-17",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020838&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -453,21 +408,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-0000061176",
-      "provider": "LH",
-      "ltype": "공공임대",
-      "name": "대전천동3 5블록 10년 분양전환공공임대주택 예비입주자 모집공고('26.09.29)",
-      "region": "대전광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": "2026-10-16",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=0000061176&ccrCnntSysDsCd=02&uppAisTpCd=06&aisTpCd=08&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020856",
       "provider": "LH",
       "ltype": "공공임대",
@@ -479,6 +419,21 @@
       "rcritEnd": "2026-10-20",
       "winnerDate": "2027-01-20",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020856&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=08&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020854",
+      "provider": "LH",
+      "ltype": "행복주택",
+      "name": "창녕영산 1BL 행복주택 예비입주자 모집 공고 ('26.10.07. 공고)",
+      "region": "경상남도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-19",
+      "rcritEnd": "2026-10-21",
+      "winnerDate": "2027-01-14",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020854&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -513,17 +468,17 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020863",
+      "id": "LH-2015122300020881",
       "provider": "LH",
       "ltype": "영구임대",
-      "name": "대전광역시 영구임대주택 예비입주자 모집(2026.10.06)",
+      "name": "[정정공고]대전광역시 영구임대주택 예비입주자 모집(2026.10.06)",
       "region": "대전광역시",
       "units": null,
       "target": "무주택 등 · 자격은 공고문 확인",
       "rcritStart": "2026-10-20",
       "rcritEnd": "2026-10-22",
       "winnerDate": "2027-02-26",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020863&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020881&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -539,6 +494,36 @@
       "rcritEnd": "2026-10-22",
       "winnerDate": "2027-02-26",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020866&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020863",
+      "provider": "LH",
+      "ltype": "영구임대",
+      "name": "대전광역시 영구임대주택 예비입주자 모집(2026.10.06)",
+      "region": "대전광역시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-20",
+      "rcritEnd": "2026-10-22",
+      "winnerDate": "2027-02-26",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020863&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020880",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "장애인 자립특화형 주택 여기가 입주자 모집공고(경기도 김포시)",
+      "region": "전국",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-20",
+      "rcritEnd": "2026-10-23",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020880&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -569,6 +554,21 @@
       "rcritEnd": "2026-10-23",
       "winnerDate": "2026-12-02",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020802&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020882",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[강원지역본부] 26년 2차 일반 매입임대주택 입주자 모집 공고",
+      "region": "강원특별자치도",
+      "units": null,
+      "target": "입주자모집공고일(2026.10.07.) 현재 무주택세대구성원으로서, 자격요건 및 소득기준을 충족하는 자",
+      "rcritStart": "2026-10-27",
+      "rcritEnd": "2026-10-29",
+      "winnerDate": "2026-11-26",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020882&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -676,6 +676,21 @@
       "url": "https://elandpeer.com/dmc",
       "note": "1차 청약 7/11 접수 종료 · 잔여세대·추가모집 일정은 공식 페이지에서 확인",
       "_src": "manual-curated"
+    },
+    {
+      "id": "SH-310976",
+      "provider": "SH",
+      "ltype": "기타",
+      "name": "[토지임대부 사회주택] 옥류서원 입주자 모집 공고문",
+      "region": "서울",
+      "units": null,
+      "target": "모집공고일 현재 서울특별시에 거주하는 무주택자로 소득기준 / 자산기준 / 자동차가액 기준을 모두 충족하는 자",
+      "rcritStart": null,
+      "rcritEnd": null,
+      "winnerDate": null,
+      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=310976",
+      "note": "공고 2026-10-07",
+      "_src": "sh-web"
     },
     {
       "id": "SH-311005",
