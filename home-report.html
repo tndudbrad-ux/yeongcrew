@@ -513,22 +513,19 @@ function makeReport(){
   el.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-/* 홈 화면에서 넘어온 사람 맞이하기 ────────────────────────────────────
+/* 홈에서 '구매하기'로 들어온 사람 맞이하기 ──────────────────────────
    예전에는 홈의 '2,900원 구매하기'가 /pay.html 로 바로 갔는데, 결제 페이지는
    주소·매매가(sessionStorage 의 bb_hr)가 없으면 결제 버튼을 잠근다. 그래서
    돈을 내려던 사람이 "먼저 집 정보를 입력해 주세요"만 보고 되돌아 나와야 했다.
-   이제 두 버튼 모두 이 입력 화면으로 먼저 보내고, 어떤 의도로 왔는지만
-   한 줄로 알려준 뒤 폼으로 내려준다. */
+   이제 이 입력 화면으로 먼저 보내고, 왜 결제가 뒤인지 한 줄로 알려준 뒤
+   폼으로 내려준다. */
 (function(){
   var q; try{ q=new URLSearchParams(location.search); }catch(e){ return; }
-  var buy=q.get('buy')==='1';
-  if(!buy && q.get('from')!=='home') return;
+  if(q.get('buy')!=='1') return;
   var box=document.getElementById('hrBuyLead'); if(!box) return;
-  box.innerHTML='<div class="hrLead"><span class="i">'+(buy?'\uD83E\uDDFE':'\uD83D\uDCC4')+'</span><span class="tx">'
-    +'<span class="t">'+(buy?'PDF 발급까지 두 단계예요':'먼저 무료 결과부터 보세요')+'</span>'
-    +'<span class="d">'+(buy
-      ? '\u2460 아래에 <b>주소·금액</b>을 넣고 <b>등기부등본</b>을 올려주세요 \u2192 \u2461 화면 결과를 확인하고 그 아래에서 결제하시면 그 집으로 PDF를 만들어 드려요. 입력이 있어야 PDF를 만들 수 있어서 결제를 먼저 받지 않습니다.'
-      : '아래에 <b>주소·금액</b>을 넣고 <b>등기부등본</b>을 올리면 세금과 권리관계를 바로 보여드려요. PDF는 결과를 본 뒤에 고르시면 됩니다.')
+  box.innerHTML='<div class="hrLead"><span class="i">\uD83E\uDDFE</span><span class="tx">'
+    +'<span class="t">PDF 발급까지 두 단계예요</span>'
+    +'<span class="d">\u2460 아래에 <b>주소·금액</b>을 넣고 <b>등기부등본</b>을 올려주세요 \u2192 \u2461 화면 결과를 확인하고 그 아래에서 결제하시면 그 집으로 PDF를 만들어 드려요. 입력이 있어야 PDF를 만들 수 있어서 결제를 먼저 받지 않습니다.'
     +'</span></span></div>';
   setTimeout(function(){
     var y=box.getBoundingClientRect().top+window.pageYOffset-84;
