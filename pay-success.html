@@ -166,6 +166,7 @@ if(!paymentKey || !orderId || !amount){
         (d.receiptUrl ? '<a class="btn sec" href="' + esc(d.receiptUrl) + '" target="_blank" rel="noopener">영수증 보기</a>' : '') +
         (isRegion && nextPage ? '<a class="btn pri" href="' + esc(nextPage) + '">리포트 이어 읽기</a><a class="btn sec" href="/account.html">마이페이지</a>' : '<a class="btn pri" href="/account.html">마이페이지</a>') +
       '</div>' +
+      (d.receiptUrl ? '<p class="note">영수증 보기를 누르면 토스페이먼츠 <b>본인확인 화면</b>이 먼저 나옵니다. 결제수단에 따라 카드번호·계좌정보 등과 결제 금액·결제일을 넣으시면 영수증이 열려요.</p>' : '') +
       '<p class="note">결제 내역과 영수증은 마이페이지에서 다시 확인할 수 있습니다. 문의: tndud.brad@gmail.com</p>';
   })
   .catch(function(e){
