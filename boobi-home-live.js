@@ -163,17 +163,13 @@ function ga(n, p) { if (window.gtag) { try { gtag('event', n, p || {}); } catch 
         + '<span class="newsBody"><span class="newsTit">' + esc(title) + '</span>'
         + (meta ? '<span class="newsMeta">' + esc(meta) + '</span>' : '') + '</span></a>';
     }).join('');
-    if (items.length > SHOW) {
-      h += '<button type="button" class="newsMoreBtn" id="newsMore">기사 ' + (items.length - SHOW) + '건 더 보기</button>';
-    }
+    h += '<a class="newsMoreBtn" id="newsMore" href="/news.html" style="display:block;text-align:center;text-decoration:none">'
+      + (items.length > SHOW ? '기사 ' + (items.length - SHOW) + '건 더 보기' : '뉴스 전체 보기')
+      + ' →</a>';
     h += '<div class="newsFoot">부비 브리핑이 참고한 기사예요</div>';
     list.innerHTML = h;
     var more = document.getElementById('newsMore');
-    if (more) more.onclick = function () {
-      [].forEach.call(list.querySelectorAll('.newsItem.newsHidden'), function (e) { e.classList.remove('newsHidden'); });
-      more.remove();
-      ga('news_more', { q: curQ });
-    };
+    if (more) more.onclick = function () { ga('news_more', { q: curQ }); };
   }
 
   var curQ = '부동산', reqId = 0;
