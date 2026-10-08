@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-07T16:07:08.671Z",
+  "updatedAt": "2026-10-08T03:13:07.127Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 54,
+  "count": 53,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -810,21 +810,6 @@
       "winnerDate": null,
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=309802",
       "note": "공고 2026-09-10",
-      "_src": "sh-web"
-    },
-    {
-      "id": "SH-310037",
-      "provider": "SH",
-      "ltype": "기타",
-      "name": "[토지지원 사회주택]함께주택4호 401-3호 입주자 모집 공고",
-      "region": "서울",
-      "units": null,
-      "target": "자세한 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": null,
-      "winnerDate": null,
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=310037",
-      "note": "공고 2026-09-09",
       "_src": "sh-web"
     }
   ]
