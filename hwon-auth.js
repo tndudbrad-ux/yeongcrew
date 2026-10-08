@@ -22,7 +22,7 @@ var link=null;
 (function(){
 var nav=document.querySelector('header nav, nav.gnb');
 if(!nav) return;
-var items=[['/tools.html','AI진단'],['/calculator.html','계산기'],['/rental-board.html','청년·신혼부부'],['/senior.html','시니어'],['/invest.html','투자'],['/column.html','칼럼']];
+var items=[['/tools.html','AI진단'],['/calculator.html','계산기'],['/rental-board.html','청년·신혼부부'],['/senior.html','시니어'],['/invest.html','투자'],['/news.html','뉴스'],['/column.html','칼럼']];
 var here=location.pathname.replace(/^\//,'').replace(/index\.html$/,'');
 /* ── 2단 헤더: 1줄 = 로고 + 로그인 버튼, 2줄 = 메뉴 탭 (아파티 스타일) ── */
 nav.innerHTML=''; nav.style.display='none';
