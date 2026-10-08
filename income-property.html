@@ -61,15 +61,13 @@ h1{font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
 .pick .shot{position:relative;float:left;width:258px;margin:4px 20px 8px 0;line-height:0}
 .pick .shot img{width:100%;height:auto;display:block;filter:drop-shadow(0 18px 28px rgba(13,42,41,.22))}
 .pick .shot figcaption{font-size:.7rem;color:#8AA5A2;font-weight:300;line-height:1.55;padding:9px 2px 0;text-align:center}
-/* 선물 포장 라벨 — 사진 왼쪽 위에 살짝 기울여 붙인다. 리본 꼬리는 가짜 요소로. */
-.gifttag{position:absolute;top:10px;left:-6px;z-index:2;transform:rotate(-7deg);filter:drop-shadow(0 6px 14px rgba(13,42,41,.28))}
-.gifttag .bd{position:relative;background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 60%,#8B6CF6 100%);color:#fff;border-radius:12px;padding:8px 14px 9px;line-height:1.25;text-align:center;border:2px solid rgba(255,255,255,.9)}
-.gifttag .k{display:block;font-size:.66rem;font-weight:600;letter-spacing:.04em;opacity:.95}
-.gifttag .v{display:block;font-size:1.12rem;font-weight:800;letter-spacing:-.02em}
-.gifttag .bd::before,.gifttag .bd::after{content:'';position:absolute;top:50%;width:13px;height:13px;background:inherit;border-radius:3px;transform:translateY(-50%) rotate(45deg);z-index:-1}
-.gifttag .bd::before{left:-5px}
-.gifttag .bd::after{right:-5px}
-@media(max-width:760px){.gifttag{top:10px;left:4px}.gifttag .v{font-size:1rem}}
+/* 완장 — 건물 위팔에 두른 띠처럼 얇게. 크게 키우면 건물을 가리고 촌스러워져서
+   한 줄로 눕히고 폭은 글자에 맞춘다. 기울기는 건물 면의 각도에 맞췄다. */
+.sash{position:absolute;left:-14px;top:20%;z-index:2;transform:rotate(-19deg);transform-origin:left center;pointer-events:none;filter:drop-shadow(0 5px 10px rgba(13,42,41,.35))}
+.sash .bar{background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 58%,#8B6CF6 100%);color:#fff;padding:5px 13px 6px;white-space:nowrap;display:flex;align-items:baseline;gap:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.sash .k{font-size:.63rem;font-weight:600;letter-spacing:.03em;opacity:.95}
+.sash .v{font-size:.92rem;font-weight:800;letter-spacing:-.01em}
+@media(max-width:760px){.sash{left:-10px;top:19%}}
 /* 표와 버튼은 사진 옆에서 쪼그라들면 보기 흉하니 사진 아래로 내린다 */
 .pick .facts{clear:left}
 @media(max-width:760px){
@@ -121,7 +119,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 
 <div class="pick">
 <figure class="shot">
-  <div class="gifttag"><div class="bd"><span class="k">계약서상 확정수익</span><span class="v">연 9%</span></div></div>
+  <div class="sash"><div class="bar"><span class="k">확정수익</span><span class="v">연 9%</span></div></div>
   <img src="/hotel-botanic-sewoon.webp" width="900" height="927" loading="lazy"
        alt="호텔 더 보타닉 세운 명동 — 야간 외관. 저층 상가 위로 객실 조명이 켜진 고층 타워 두 동">
   <figcaption>준공 외관 (제공 사진)</figcaption>
