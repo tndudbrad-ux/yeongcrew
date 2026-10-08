@@ -212,6 +212,14 @@
 .newsMoreBtn{grid-column:1/-1;width:100%;margin-top:8px;padding:11px;border:1px solid var(--line,#DCEEEC);background:#fff;border-radius:12px;font-family:inherit;font-size:.86rem;font-weight:700;color:var(--teal,#20A6A2);cursor:pointer;transition:.15s}
 .newsMoreBtn:hover{background:#F0F6FF;border-color:#C9DFFB}
 .liveCol .newsChips{flex-wrap:wrap}
+/* 제목 오른쪽에 뉴스 페이지로 가는 길. 제목과 같은 줄에 두되,
+   좁아지면 버튼이 아래로 내려가 제목을 밀지 않게 한다. */
+.liveHead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.liveHead h2{margin:0}
+.newsAllBtn{flex:0 0 auto;margin-left:auto;padding:7px 13px;border-radius:999px;border:1.5px solid #CFE3FD;
+  background:linear-gradient(135deg,#F7FBFF,#F3FAF9);color:#2A7DE8;font-size:.82rem;font-weight:700;
+  text-decoration:none;white-space:nowrap;transition:.15s}
+.newsAllBtn:hover{border-color:#3D8BFD;background:#EFF6FF;transform:translateY(-1px)}
 @media(max-width:860px){.liveGrid{grid-template-columns:1fr;gap:28px}}
 </style>
 </section>
@@ -375,7 +383,10 @@
 </div>
 
 <div class="liveCol">
+<div class="liveHead">
 <h2>브리핑이 참고한 오늘의 기사</h2>
+<a class="newsAllBtn" href="/news.html">뉴스 전체 →</a>
+</div>
 <div class="newsChips" id="newsChips">
 <button class="newsChip on" data-q="부동산">종합</button>
 <button class="newsChip" data-q="아파트 분양">분양</button>
