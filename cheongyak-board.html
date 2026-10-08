@@ -112,7 +112,7 @@ footer a{color:#B9DCD9;margin:0 8px}
 <div class="stats">
 <div class="stat"><b id="stOpen">–</b><span>접수중</span></div>
 <div class="stat"><b id="stSoon">–</b><span>접수예정</span></div>
-<div class="stat"><b id="stAll">–</b><span>전체 공고</span></div>
+<div class="stat"><b id="stAll">–</b><span>지금 볼 수 있는 공고</span></div>
 </div>
 
 <div class="filters">
@@ -262,7 +262,12 @@ footer a{color:#B9DCD9;margin:0 8px}
     var items=(data.items||[]).filter(function(it){
       if(fR!=='전체' && (it.region||'').indexOf(fR)!==0) return false;
       if(fT!=='전체' && it.type!==fT) return false;
-      if(fS!=='all' && statusOf(it)!==fS) return false;
+      /* '전체'는 아직 기회가 남은 공고만 보여준다. 끝난 공고가 목록 위쪽까지
+         차지하면 지금 넣을 수 있는 공고를 찾기가 어렵다.
+         지난 공고는 '마감' 칩을 눌렀을 때만 따로 본다. */
+      var _st=statusOf(it);
+      if(fS==='all'){ if(_st==='close') return false; }
+      else if(_st!==fS) return false;
       return true;
     });
     // 확정차익(hot) 최상단 → 접수중 → 접수예정 → 마감, 각 그룹은 임박순
@@ -308,10 +313,13 @@ footer a{color:#B9DCD9;margin:0 8px}
 
   function stats(){
     var all=data.items||[], o=0,s=0;
-    all.forEach(function(it){var st=statusOf(it); if(st==='open')o++; else if(st==='soon')s++;});
+    all.forEach(function(it){var st=statusOf(it);
+      if(st==='open')o++; else if(st==='soon')s++; });
     document.getElementById('stOpen').textContent=o;
     document.getElementById('stSoon').textContent=s;
-    document.getElementById('stAll').textContent=all.length;
+    /* 목록에서 마감을 뺐으니 숫자도 '지금 볼 수 있는 공고' 기준으로 센다.
+       전체 건수라고 적어놓고 목록은 그보다 적으면 숫자를 의심하게 된다. */
+    document.getElementById('stAll').textContent=(o+s);
   }
   function showUpd(){
     var el=document.getElementById('upd');
