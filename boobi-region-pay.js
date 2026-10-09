@@ -134,7 +134,7 @@ function boot() {
 
 open.addEventListener('click', function () {
   pay.hidden = false;
-  open.hidden = true;
+  open.style.display = 'none';   /* .buy 가 display:inline-block 이라 hidden 속성만으론 안 숨는다 */
   if (window.hwonUser && window.hwonUser.email && !mail.value) mail.value = window.hwonUser.email;
   ga('view_item', { items: [{ item_id: PRODUCT, item_name: NAME, price: AMOUNT }] });
   boot();
