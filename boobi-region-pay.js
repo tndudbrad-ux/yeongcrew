@@ -29,7 +29,7 @@ if (!gate) return;
 var box = gate.querySelector('.lockBox');
 if (!box) return;
 
-var widgets = null, agreed = false, ready = false, booting = false, done = false;
+var widgets = null, agreed = true, ready = false, booting = false, done = false;
 
 function won(n) { return n.toLocaleString('ko-KR') + '원'; }
 function ga(n, p) { if (window.gtag) { try { gtag('event', n, p || {}); } catch (e) {} } }
@@ -119,13 +119,10 @@ function boot() {
       return Promise.all([
         widgets.renderPaymentMethods({ selector: '#bbPM' }),
         widgets.renderAgreement({ selector: '#bbAG' }).then(function (aw) {
-          function apply(st) { agreed = !!(st && st.agreedRequiredTerms); sync(); }
-          aw.on('agreementStatusChange', apply);
-          /* 재방문이면 토스가 체크된 상태로 그려주는데 변경 이벤트는 안 온다.
-             초기 상태를 직접 읽지 않으면 체크돼 보이는데 버튼이 안 눌린다. */
-          if (aw.getAgreementStatus) {
-            try { Promise.resolve(aw.getAgreementStatus()).then(apply).catch(function () {}); } catch (e) {}
-          }
+          /* 토스 약관 위젯은 현재 상태를 읽는 API가 없고 바뀔 때만 알려준다.
+             그래서 동의한 것으로 보고 시작하고, 체크를 풀면 그때 잠근다.
+             동의 없이 결제를 누르면 토스가 거절하는데, 그건 아래에서 안내로 받는다. */
+          aw.on('agreementStatusChange', function (st) { agreed = !!(st && st.agreedRequiredTerms); sync(); });
         })
       ]);
     });
@@ -184,9 +181,10 @@ go.addEventListener('click', function () {
     });
   }).catch(function (e) {
     console.error('requestPayment fail', e);
-    if (!(e && e.code === 'USER_CANCEL')) {
-      showErr((e && e.message) ? e.message : '결제를 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.');
-    } else { clearErr(); }
+    var code = (e && e.code) ? String(e.code) : '';
+    if (code === 'USER_CANCEL') { clearErr(); }
+    else if (/AGREEMENT/i.test(code)) { showErr('아래 필수 약관에 동의해 주세요.'); }
+    else { showErr((e && e.message) ? e.message : '결제를 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.'); }
     ready = true; sync();
   });
 });

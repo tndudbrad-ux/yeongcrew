@@ -344,7 +344,7 @@ var errMsg   = document.getElementById('errMsg');
 var emailIn  = document.getElementById('buyerEmail');
 var whoText  = document.getElementById('whoText');
 var widgets  = null;
-var agreed   = false;
+var agreed   = true;   /* 토스 약관 위젯은 현재 상태를 읽는 API가 없고 바뀔 때만 알려준다 — 동의로 보고 시작하고 체크를 풀면 잠근다 */
 var ready    = false;
 
 function showErr(t){ errMsg.textContent = t; errMsg.classList.add('show'); }
@@ -415,11 +415,7 @@ else if(NEEDS_LOGIN) applyUser(null);
     await Promise.all([
       widgets.renderPaymentMethods({ selector: '#payment-method' }),
       widgets.renderAgreement({ selector: '#agreement' }).then(function(aw){
-        function apply(st){ agreed = !!(st && st.agreedRequiredTerms); syncBtn(); }
-        aw.on('agreementStatusChange', apply);
-        /* 재방문이면 토스가 체크된 상태로 그려주는데 변경 이벤트가 안 온다.
-           초기 상태를 직접 읽지 않으면 체크돼 보이는데 버튼이 안 눌린다. */
-        if(aw.getAgreementStatus){ try{ Promise.resolve(aw.getAgreementStatus()).then(apply).catch(function(){}); }catch(e){} }
+        aw.on('agreementStatusChange', function(st){ agreed = !!(st && st.agreedRequiredTerms); syncBtn(); });
       })
     ]);
 
@@ -481,6 +477,8 @@ btn.addEventListener('click', async function(){
     var code = e && e.code ? e.code : '';
     if(code === 'USER_CANCEL'){
       clearErr();
+    }else if(/AGREEMENT/i.test(String(code))){
+      showErr('아래 필수 약관에 동의해 주세요.');
     }else{
       showErr((e && e.message) ? e.message : '결제를 시작하지 못했습니다. 잠시 후 다시 시도해 주세요.');
     }
