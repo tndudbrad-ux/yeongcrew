@@ -385,7 +385,6 @@ try{ if(localStorage.getItem('bb_unlock_'+PRODUCT)) mount(); }catch(e){}
 function loadFS(){return new Promise(function(res,rej){ if(window.firebase&&firebase.firestore){res();return;} var s=document.createElement('script'); s.src='https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js'; s.onload=res; s.onerror=rej; document.head.appendChild(s);});}
 function checkUser(u){
   if(!u||unlocked) return;
-  if((u.email||'').toLowerCase()==='tndud.brad@gmail.com'){ mount(); return; }
   loadFS().then(function(){ return firebase.firestore().collection('members').doc(u.uid).get(); })
   .then(function(s){ var d=s.exists?s.data():null; if(d && d.purchases && d.purchases[PRODUCT]) mount(); })
   .catch(function(e){ console.warn('purchase check fail',e); });
@@ -477,6 +476,7 @@ function drawCharts(){
 })();
 </script>
 <script src="/hwon-auth.js" defer></script>
+<script src="/boobi-region-pay.js?v=3" defer></script>
 <script src="/hwon-ui.js" defer></script>
 <script src="/boobi-reviews.js?v=1" defer></script>
 </body>

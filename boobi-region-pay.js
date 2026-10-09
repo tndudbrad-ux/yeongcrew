@@ -21,7 +21,7 @@ var m = location.pathname.match(/region-report-([a-z]+)\.html/);
 if (!m) return;
 var KEY     = m[1];
 var PRODUCT = 'region-report-' + KEY;
-var NAMES   = { dongdaemun:'동대문구', seongdong:'성동구', gimpo:'김포시', anyang:'안양시', gwacheon:'과천시' };
+var NAMES   = { dongdaemun:'동대문구', seongdong:'성동구', gimpo:'김포시', anyang:'안양시', gwacheon:'과천시', gangdong:'강동구', mapo:'마포구' };
 var NAME    = (NAMES[KEY] || '') + ' 지역 분석 리포트';
 
 var gate = document.getElementById('rrGate');
