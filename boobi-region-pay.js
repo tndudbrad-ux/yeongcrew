@@ -119,7 +119,13 @@ function boot() {
       return Promise.all([
         widgets.renderPaymentMethods({ selector: '#bbPM' }),
         widgets.renderAgreement({ selector: '#bbAG' }).then(function (aw) {
-          aw.on('agreementStatusChange', function (st) { agreed = !!st.agreedRequiredTerms; sync(); });
+          function apply(st) { agreed = !!(st && st.agreedRequiredTerms); sync(); }
+          aw.on('agreementStatusChange', apply);
+          /* 재방문이면 토스가 체크된 상태로 그려주는데 변경 이벤트는 안 온다.
+             초기 상태를 직접 읽지 않으면 체크돼 보이는데 버튼이 안 눌린다. */
+          if (aw.getAgreementStatus) {
+            try { Promise.resolve(aw.getAgreementStatus()).then(apply).catch(function () {}); } catch (e) {}
+          }
         })
       ]);
     });
