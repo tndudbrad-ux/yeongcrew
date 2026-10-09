@@ -618,6 +618,18 @@ input.f.wcost{margin-top:7px;padding:10px 13px;font-size:.92rem}
       <button type="button" data-v="60">46평 60</button>
     </div>
     <input class="f wcost" id="fClean" type="number" inputmode="numeric" placeholder="비우면 고르신 면적으로 자동 계산">
+
+    <!-- 미소 제휴 — 이사비·입주청소 칸 바로 아래. 결과 화면 부대비용 표에도 같은 블록이
+         한 번 더 들어간다(misoHtml). 금액을 적어 넣는 자리에서 바로 실제 견적으로
+         넘어갈 수 있어야 쓸모가 있어서 입력 화면에도 둔다. -->
+    <div class="misoBox">
+      <div class="misoT"><img src="/miso-logo.webp" width="272" height="96" alt="미소" loading="lazy"><span class="misoAd">제휴</span></div>
+      <div class="misoBtns">
+        <a class="misoBtn" href="https://get.miso.kr/9uzmqr" target="_blank" rel="nofollow sponsored noopener" onclick="ga('miso_click',{kind:'move',at:'input'})">🚚 이사 견적받기</a>
+        <a class="misoBtn" href="https://get.miso.kr/9uzmqr" target="_blank" rel="nofollow sponsored noopener" onclick="ga('miso_click',{kind:'clean',at:'input'})">🧹 입주청소 견적받기</a>
+      </div>
+      <p class="misoN">위 금액은 부비가 잡은 <b>시세 기본값</b>이에요. 짐 양·층수·사다리차·날짜에 따라 달라지니 실제 견적으로 채워 넣으면 예산이 더 정확해져요. 미소 제휴 링크이며, 이용 시 부비가 수수료를 받을 수 있습니다.</p>
+    </div>
   </div>
   <details class="adv" style="margin-top:14px"><summary>매달 갚는 돈 · 저축 · 금리 (선택)</summary>
     <input class="f" id="fDebt" type="number" inputmode="numeric" placeholder="월 상환액 (신용대출·할부·학자금) — 없으면 0" style="margin-top:10px">
