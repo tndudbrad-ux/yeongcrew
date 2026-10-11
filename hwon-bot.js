@@ -1,5 +1,10 @@
 /* 부비 — 부동산 비서 */
 (function(){
+/* 임베드 모드 — 다른 사이트가 iframe 으로 부비를 얹을 때 ?embed=1 로 들어온다.
+   그때는 PWA 매니페스트·서비스워커·설치 배너·전역 UI 를 전부 건너뛴다.
+   그건 boobi.ai.kr 의 것이고, 남의 사이트 안에서 깔리면 안 되는 것들이다. */
+var EMBED=window.BOOBI_EMBED===true||/(^|[?&])embed=1(&|$)/.test(location.search);
+if(!EMBED){
 if(!document.querySelector('link[href="/hwon-ui.css"]')){
   var uiL=document.createElement('link');uiL.rel='stylesheet';uiL.href='/hwon-ui.css';document.head.appendChild(uiL);
 }
@@ -38,6 +43,7 @@ window.addEventListener('beforeinstallprompt',function(ev){
 window.addEventListener('appinstalled',function(){
   var ib=document.getElementById('hwbInstall'); if(ib)ib.remove();
 });
+}
 var css=document.createElement('style');
 css.textContent='#hwbBtn{position:fixed;right:20px;bottom:20px;width:62px;height:62px;border-radius:50%;border:none;cursor:pointer;z-index:9998;background:#fff;box-shadow:0 6px 20px rgba(42,193,188,.42),0 0 30px rgba(42,193,188,.22);display:flex;align-items:center;justify-content:center;padding:0;transition:transform .18s cubic-bezier(.34,1.56,.64,1)}'
 +'#hwbBtn:hover{transform:translateY(-3px) scale(1.05)}'
@@ -205,7 +211,7 @@ btn.classList.add('pulse');
 var teaser=null;
 function hideTeaser(){ if(teaser){teaser.classList.remove('show');setTimeout(function(){teaser&&teaser.remove();teaser=null;},350);} }
 try{
- if(!sessionStorage.getItem('hwbSeen')){
+ if(!EMBED && !sessionStorage.getItem('hwbSeen')){
   teaser=el('div','',null);teaser.id='hwbTeaser';
   teaser.innerHTML='부동산, 깜깜한 게 있나요?<br>비서 <b>부비</b>에게 물어보세요 🔆<span class="x">✕</span>';
   document.body.appendChild(teaser);
@@ -617,6 +623,25 @@ window.BOOBI={
   }
 };
 panel.querySelector('#hwbClose').onclick=function(){panel.classList.remove('open');};
+
+/* ── 임베드 모드 ────────────────────────────────────────────────────────────
+   iframe 하나를 통째로 채운다. 떠다니는 링 버튼·크기 조절 그립·최대화는
+   바깥 사이트의 로더(boobi-widget.js)가 맡으니 여기서는 숨긴다.
+   닫기는 프레임 안에서 할 수 없는 일이라 부모 창에 알려준다. */
+if(EMBED){
+  var ecss=document.createElement('style');
+  ecss.textContent='html.hwbEmbed,html.hwbEmbed body{margin:0;padding:0;height:100%;overflow:hidden;background:#fff}'
+   +'html.hwbEmbed #hwbBtn,html.hwbEmbed #hwbGrip,html.hwbEmbed #hwbMax,html.hwbEmbed #hwbTeaser,html.hwbEmbed #hwbInstall{display:none!important}'
+   +'html.hwbEmbed #hwbPanel{position:absolute;inset:0;left:0;top:0;right:0;bottom:0;'
+   +'width:100%!important;height:100%!important;max-height:none!important;'
+   +'border-radius:0;box-shadow:none;display:flex}';
+  document.head.appendChild(ecss);
+  document.documentElement.classList.add('hwbEmbed');
+  panel.querySelector('#hwbClose').onclick=function(){
+    try{ parent.postMessage({boobi:'close'},'*'); }catch(e){}
+  };
+  openPanel();
+}
 function send(){
   var inp=panel.querySelector('#hwbInput');
   var t=inp.value.trim(); if(!t)return;
