@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-11T02:28:05.258Z",
+  "updatedAt": "2026-10-11T15:21:23.394Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 51,
+  "count": 47,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -228,36 +228,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020841",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "2026년 3차 대구경북지역 신혼ㆍ신생아Ⅱ(전세형) 입주자 모집공고",
-      "region": "대구광역시 외",
-      "units": null,
-      "target": "신청자격 :  에 대한 정보 제공  공통신청자격 공고일 현재 무주택세대구성원으로서 신혼·신생아 매입임대주택Ⅱ 소득 및 자산기준을 충족하는, ① 신혼부부 : 공고일 현재 혼인 7년 이내(혼인신고일이 2019.09.29~2026.09.29)인 사람 ② 예비신혼부부 : 공고일 현재 혼인 예정",
-      "rcritStart": "2026-10-13",
-      "rcritEnd": "2026-10-15",
-      "winnerDate": "2026-12-17",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020841&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020840",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "2026년 3차 대구경북지역 신혼ㆍ신생아Ⅰ매입임대 입주자 모집공고",
-      "region": "대구광역시 외",
-      "units": null,
-      "target": "신청자격 :  에 대한 정보 제공  공통신청자격 공고일 현재 무주택세대구성원으로서 신혼·신생아 매입임대주택Ⅰ 소득 및 자산기준을 충족하는, ① 신혼부부 : 공고일 현재 혼인 7년 이내(혼인신고일이 2019.09.29~2026.09.29)인 사람 ② 예비신혼부부 : 공고일 현재 혼인 예정",
-      "rcritStart": "2026-10-13",
-      "rcritEnd": "2026-10-15",
-      "winnerDate": "2026-12-17",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020840&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "SH-310653",
       "provider": "SH",
       "ltype": "매입임대",
@@ -329,36 +299,6 @@
       "rcritEnd": "2026-10-16",
       "winnerDate": "2026-12-21",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020692&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020855",
-      "provider": "LH",
-      "ltype": "통합공공임대",
-      "name": "대구연호 A-2BL, A-3BL 통합공공임대주택 입주자 모집",
-      "region": "대구광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-13",
-      "rcritEnd": "2026-10-16",
-      "winnerDate": "2027-04-02",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020855&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=48&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020856",
-      "provider": "LH",
-      "ltype": "공공임대",
-      "name": "부산당감1단지 50년공공임대주택 예비입주자 모집 공고",
-      "region": "부산광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-20",
-      "rcritEnd": "2026-10-20",
-      "winnerDate": "2027-01-20",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020856&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=08&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
