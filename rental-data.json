@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-12T02:52:44.272Z",
+  "updatedAt": "2026-10-12T18:37:14.547Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 47,
   "schema": {
@@ -29,36 +29,6 @@
       "rcritEnd": "2026-10-13",
       "winnerDate": "2026-11-26",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020870&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020835",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[제주지역본부-제주시] 든든전세주택 (예비)입주자 모집 공고(분양전환형)",
-      "region": "제주특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-12",
-      "rcritEnd": "2026-10-13",
-      "winnerDate": "2026-12-01",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020835&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020834",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[제주지역본부-서귀포시] 든든전세주택 (예비)입주자 모집 공고(비분양전환형)",
-      "region": "제주특별자치도",
-      "units": null,
-      "target": "신청자격 :  에 대한 정보 제공  공통신청자격 입주자모집 공고일(2026.09.30) 현재 무주택세대구성원이며, 모집권역 제한없이 신청 가능 기타사항 세대구성원 전원이 1주택 신청하여야 하며, 중복 신청시 전부 무효처리 접수처정보 접수처정보 : 소재지, 전화번호, 운영기간에 대한 정보",
-      "rcritStart": "2026-10-12",
-      "rcritEnd": "2026-10-13",
-      "winnerDate": "2026-12-01",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020834&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -209,21 +179,6 @@
       "rcritEnd": "2026-10-15",
       "winnerDate": "2026-11-20",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020755&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020858",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "인천석남 어울림센터 행복주택 입주자 최초모집",
-      "region": "인천광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-13",
-      "rcritEnd": "2026-10-15",
-      "winnerDate": "2027-03-18",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020858&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -468,6 +423,36 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-0000061184",
+      "provider": "LH",
+      "ltype": "공공임대",
+      "name": "충북혁신 4단지 10년분양전환공공임대주택 예비입주자 모집공고('26.10.12)",
+      "region": "충청북도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-10-26",
+      "winnerDate": "2026-10-30",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=0000061184&ccrCnntSysDsCd=02&uppAisTpCd=06&aisTpCd=08&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020895",
+      "provider": "LH",
+      "ltype": "공공임대",
+      "name": "익산부송3단지 50년 공공임대 예비입주자 모집",
+      "region": "전북특별자치도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-27",
+      "rcritEnd": "2026-10-27",
+      "winnerDate": "2026-12-11",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020895&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=08&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020882",
       "provider": "LH",
       "ltype": "매입임대",
@@ -511,6 +496,21 @@
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020868&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
       "note": null,
       "_src": "lh-api"
+    },
+    {
+      "id": "SH-311349",
+      "provider": "SH",
+      "ltype": "기타",
+      "name": "은평구 홀몸어르신 은빛주택(수요자맞춤형) 잔여세대 모집 공고",
+      "region": "서울",
+      "units": 2,
+      "target": "자세한 자격은 공고문 확인",
+      "rcritStart": "2026-10-26",
+      "rcritEnd": "2026-11-06",
+      "winnerDate": "2026-11-19",
+      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=311349",
+      "note": "공고 2026-10-12",
+      "_src": "sh-web"
     },
     {
       "id": "LH-2015122300020825",
@@ -586,6 +586,21 @@
       "url": "https://elandpeer.com/dmc",
       "note": "1차 청약 7/11 접수 종료 · 잔여세대·추가모집 일정은 공식 페이지에서 확인",
       "_src": "manual-curated"
+    },
+    {
+      "id": "SH-311375",
+      "provider": "SH",
+      "ltype": "기타",
+      "name": "[토지지원 사회주택]유니버설디자인하우스_장안 입주자 모집 공고",
+      "region": "서울",
+      "units": null,
+      "target": "자세한 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": null,
+      "winnerDate": null,
+      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=311375",
+      "note": "공고 2026-10-13",
+      "_src": "sh-web"
     },
     {
       "id": "SH-310976",
@@ -705,21 +720,6 @@
       "winnerDate": null,
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=310174",
       "note": "공고 2026-09-14",
-      "_src": "sh-web"
-    },
-    {
-      "id": "SH-309802",
-      "provider": "SH",
-      "ltype": "매입임대",
-      "name": "[청년형] 특화형 매입임대주택(금천구) 입주자 모집 공고(운영기관 : 한지붕 협동조합)",
-      "region": "서울",
-      "units": null,
-      "target": "자세한 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": null,
-      "winnerDate": null,
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=309802",
-      "note": "공고 2026-09-10",
       "_src": "sh-web"
     }
   ]
