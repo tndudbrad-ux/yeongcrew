@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>부비 뉴스</title>
+<!-- 바깥 사이트의 iframe 안에서 사는 화면이다. 기사 원문도, 부비 링크도
+     프레임 안에서 열면 남의 페이지 한 칸에 갇히니 전부 새 창으로 보낸다. -->
+<base target="_blank">
+<style>
+  :root{
+    --ink:#0D2A29; --sub:#547471; --mute:#8AA5A2;
+    --line:#E4EDEC; --blue:#2A7DE8; --mint:#26C6B9;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:transparent}
+  body{font-family:'Wanted Sans','Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+       color:var(--ink);line-height:1.7;word-break:keep-all;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{padding:2px}
+
+  /* 부비 브리핑 — 기사보다 먼저, 오늘을 한 문단으로 */
+  .brief{background:
+      radial-gradient(120% 170% at 92% -20%,rgba(61,139,253,.16),transparent 55%),
+      radial-gradient(130% 170% at -8% 120%,rgba(42,193,188,.18),transparent 55%),
+      linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.66));
+    border:1.5px solid rgba(255,255,255,.95);
+    box-shadow:0 14px 40px rgba(13,42,41,.10),inset 0 1px 0 #fff;
+    border-radius:20px;padding:19px 21px;margin-bottom:18px}
+  .brief .bt{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:8px}
+  .brief .bt b{font-size:1.02rem;font-weight:800;letter-spacing:-.02em}
+  .brief .bt span{font-size:.76rem;color:var(--mute)}
+  .brief p{font-size:.91rem;line-height:1.8;color:#2B4744;margin:0}
+  .bf{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+  .bf a,.bf span{display:inline-flex;align-items:baseline;gap:5px;font-size:.76rem;
+    background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 11px;
+    color:var(--sub);text-decoration:none;white-space:nowrap}
+  .bf a:hover{border-color:#3D8BFD;color:var(--blue)}
+  .bf i{font-style:normal;font-weight:800;color:var(--blue)}
+
+  /* 주제 탭 */
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 13px}
+  .chip{border:1.5px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;
+    padding:7px 14px;font-size:.83rem;font-weight:600;cursor:pointer;font-family:inherit;
+    transition:.15s;white-space:nowrap}
+  .chip:hover{border-color:#B9D4FA;color:var(--blue)}
+  .chip.on{background:linear-gradient(115deg,#26C6B9 0%,#3D8BFD 72%);border-color:transparent;color:#fff}
+
+  .cnt{font-size:.78rem;color:var(--mute);margin:0 0 9px;padding-left:3px}
+  .cnt b{color:var(--blue);font-weight:700}
+
+  /* 기사 목록 */
+  .list{display:grid;gap:8px;grid-template-columns:1fr}
+  @media(min-width:720px){.list{grid-template-columns:1fr 1fr}}
+  .item{display:flex;gap:11px;align-items:flex-start;text-decoration:none;
+    background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;
+    transition:border-color .15s,transform .12s,box-shadow .15s}
+  .item:hover{border-color:#B9D4FA;transform:translateY(-1px);box-shadow:0 8px 20px rgba(13,42,41,.07)}
+  .rank{flex:0 0 auto;min-width:19px;font-size:.78rem;font-weight:800;color:var(--blue);
+    padding-top:2px;text-align:center}
+  .body{min-width:0}
+  .tit{display:block;font-size:.88rem;font-weight:600;line-height:1.5;color:var(--ink)}
+  .meta{display:block;font-size:.73rem;color:var(--mute);margin-top:4px}
+
+  .skel{height:66px;border-radius:14px;border:1px solid var(--line);
+    background:linear-gradient(100deg,#F6FAF9 30%,#EEF5F4 50%,#F6FAF9 70%);
+    background-size:220% 100%;animation:sh 1.3s linear infinite}
+  @keyframes sh{to{background-position:-220% 0}}
+  @media(prefers-reduced-motion:reduce){.skel{animation:none}}
+
+  .err{grid-column:1/-1;text-align:center;color:var(--sub);font-size:.86rem;padding:26px 10px}
+  .err button{margin-top:12px;border:1.5px solid var(--line);background:#fff;color:var(--blue);
+    border-radius:999px;padding:8px 16px;font-size:.83rem;font-weight:600;cursor:pointer;font-family:inherit}
+
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    margin-top:13px;font-size:.74rem;color:var(--mute)}
+  .more{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-weight:700;
+    color:var(--blue);font-size:.79rem}
+  .more img{width:15px;height:15px;display:block}
+  .disc{margin-top:11px;font-size:.72rem;color:var(--mute);line-height:1.65}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="brief" id="brief" hidden>
+    <div class="bt"><b>🗞 부비 브리핑</b><span id="brDate"></span></div>
+    <p id="brText"></p>
+    <div class="bf" id="brFacts"></div>
+  </section>
+
+  <div class="chips" id="chips"></div>
+  <p class="cnt" id="cnt"></p>
+  <div class="list" id="list">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>
+  <div class="foot">
+    <span id="upd"></span>
+    <a class="more" href="https://boobi.ai.kr/news.html">
+      <img src="/boobi-ring-3d.png" alt="">부비에서 더 보기 →</a>
+  </div>
+  <p class="disc">기사는 언론사 원문으로 바로 연결되며, 부비는 제목과 발행 시각만 모아 보여줍니다.
+     기사 내용의 책임은 각 언론사에 있고 부비의 의견이 아닙니다.</p>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════
+   부비 뉴스 — 임베드 판
+   ────────────────────────────────────────────────────────────────────
+   news.html 과 같은 출처를 본다(기사 API + /news-brief.json). 다른 점은
+   셋뿐이다 — 헤더·푸터가 없고, 주제 탭을 붙이는 쪽이 고를 수 있고,
+   높이가 바뀔 때마다 부모 창에 알려준다. iframe 은 제 내용을 몰라서
+   스스로 키가 자라지 않기 때문이다.
+   ══════════════════════════════════════════════════════════════════════ */
+(function(){
+  var NEWS_API='https://hwon-rtms.vercel.app/api/news?q=';
+
+  /* 주제 이름 → 검색어. 붙이는 쪽은 이름만 넘기면 된다. */
+  var TOPICS={
+    '종합':'부동산',
+    '분양':'아파트 분양',
+    '숙박':'생활형숙박시설 호텔 분양',
+    '세금':'부동산 세금',
+    '재개발':'재개발 재건축',
+    '금리':'주택담보대출 금리',
+    '전월세':'전세 월세',
+    '정책':'부동산 정책 대책',
+    '경매':'부동산 경매',
+    '수익형':'상가 오피스텔 수익형 부동산'
+  };
+
+  var qs=new URLSearchParams(location.search);
+  var want=(qs.get('topics')||'종합,숙박,세금,재개발').split(',')
+            .map(function(s){return s.trim();})
+            .filter(function(s){return TOPICS[s];});
+  if(!want.length) want=['종합'];
+  var LIMIT=Math.max(2,Math.min(30,parseInt(qs.get('limit'),10)||8));
+  var SHOW_BRIEF=qs.get('brief')!=='0';
+
+  var list=document.getElementById('list'), chips=document.getElementById('chips');
+  var cntEl=document.getElementById('cnt'), updEl=document.getElementById('upd');
+  var cache={}, curK=want[0], reqId=0;
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function clean(t){ return String(t||'').replace(/<[^>]*>/g,'')
+    .replace(/&quot;/g,'"').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+    .replace(/&apos;|&#39;/g,"'").replace(/&nbsp;/g,' ').trim(); }
+
+  function press(it){
+    var u=it.link||it.originallink||it.url||'';
+    try{ return new URL(u).hostname.replace(/^www\./,'').replace(/\.(co\.kr|com|kr|net)$/,''); }
+    catch(e){ return it.press||it.source||''; }
+  }
+  function pubOf(it){ return it.pub||it.pubDate||it.date||it.publishedAt||it.isoDate||0; }
+  function when(v){
+    if(!v) return '';
+    var d=(typeof v==='number'||/^\d{10,}$/.test(String(v)))?new Date(Number(v)):new Date(v);
+    if(isNaN(d.getTime())) return '';
+    var m=Math.round((Date.now()-d.getTime())/60000);
+    if(m<1) return '방금';
+    if(m<60) return m+'분 전';
+    if(m<1440) return Math.floor(m/60)+'시간 전';
+    var days=Math.floor(m/1440);
+    if(days<=7) return days+'일 전';
+    var k=new Date(d.getTime()+9*3600*1000), nk=new Date(Date.now()+9*3600*1000);
+    if(k.getUTCFullYear()!==nk.getUTCFullYear())
+      return k.getUTCFullYear()+'. '+(k.getUTCMonth()+1)+'. '+k.getUTCDate()+'.';
+    return (k.getUTCMonth()+1)+'월 '+k.getUTCDate()+'일';
+  }
+
+  /* ── 부모 창에 키를 알려준다 ──────────────────────────────────────────
+     한 번만 보내면 기사 목록이 들어차는 순간 잘린다. 바뀔 때마다 보낸다. */
+  var lastH=0;
+  function tellHeight(){
+    var h=Math.ceil(document.documentElement.getBoundingClientRect().height);
+    if(!h || Math.abs(h-lastH)<2) return;
+    lastH=h;
+    try{ parent.postMessage({boobi:'news-height',h:h},'*'); }catch(e){}
+  }
+  if(window.ResizeObserver) new ResizeObserver(tellHeight).observe(document.documentElement);
+  window.addEventListener('load',tellHeight);
+  setInterval(tellHeight,1000);   /* 폰트가 늦게 뜨는 경우의 안전망 */
+
+  function skel(){
+    cntEl.textContent=''; updEl.textContent='';
+    list.innerHTML=new Array(4).join('<div class="skel"></div>')+'<div class="skel"></div>';
+  }
+  function fail(msg){
+    cntEl.textContent='';
+    list.innerHTML='<div class="err">'+esc(msg)+'<br><button type="button" id="retry">다시 불러오기</button></div>';
+    var r=document.getElementById('retry');
+    if(r) r.onclick=function(){ load(curK,true); };
+    tellHeight();
+  }
+
+  function render(items){
+    if(!items.length){ fail('지금은 가져올 기사가 없어요.'); return; }
+    items=items.slice().sort(function(a,b){
+      return (new Date(pubOf(b)).getTime()||0)-(new Date(pubOf(a)).getTime()||0);
+    });
+    /* 같은 기사가 여러 매체로 중복돼 들어온다 — 제목 앞머리로 한 번 거른다 */
+    var seen={}, out=[];
+    items.forEach(function(it){
+      var t=clean(it.title||it.headline||''); if(!t) return;
+      var key=t.replace(/[^가-힣a-zA-Z0-9]/g,'').slice(0,28);
+      if(seen[key]) return; seen[key]=1; out.push(it);
+    });
+    out=out.slice(0,LIMIT);
+    list.innerHTML=out.map(function(it,i){
+      var t=clean(it.title||it.headline||''), u=it.link||it.originallink||it.url||'';
+      var meta=[press(it),when(pubOf(it))].filter(Boolean).join(' · ');
+      return '<a class="item"'+(u?' href="'+esc(u)+'" rel="noopener noreferrer"':'')
+        +'><span class="rank">'+(i+1)+'</span><span class="body">'
+        +'<span class="tit">'+esc(t)+'</span>'
+        +(meta?'<span class="meta">'+esc(meta)+'</span>':'')+'</span></a>';
+    }).join('');
+    cntEl.innerHTML='<b>'+out.length+'</b>건 · '+esc(curK);
+    updEl.textContent='마지막 확인 '+when(Date.now());
+    tellHeight();
+  }
+
+  function load(k,force){
+    curK=k;
+    var q=TOPICS[k];
+    if(!force && cache[q]){ render(cache[q]); return; }
+    var my=++reqId;
+    skel();
+    var to=setTimeout(function(){ if(my===reqId) fail('기사를 불러오지 못했어요.'); },12000);
+    fetch(NEWS_API+encodeURIComponent(q)+'&cb='+Date.now())
+      .then(function(r){ if(!r.ok) throw new Error('bad'); return r.json(); })
+      .then(function(d){
+        if(my!==reqId) return;
+        clearTimeout(to);
+        var items=(d&&(d.items||d.articles||d.results))||[];
+        cache[q]=items; render(items);
+      })
+      .catch(function(){
+        if(my!==reqId) return;
+        clearTimeout(to);
+        fail('기사를 불러오지 못했어요. 잠시 후 다시 시도해주세요.');
+      });
+  }
+
+  /* 탭이 하나뿐이면 굳이 보여줄 이유가 없다 */
+  if(want.length>1){
+    chips.innerHTML=want.map(function(k,i){
+      return '<button type="button" class="chip'+(i?'':' on')+'" data-k="'+esc(k)+'">'+esc(k)+'</button>';
+    }).join('');
+    chips.addEventListener('click',function(e){
+      var b=e.target.closest('.chip'); if(!b) return;
+      [].forEach.call(chips.querySelectorAll('.chip'),function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      load(b.dataset.k);
+    });
+  }else{
+    chips.remove();
+  }
+  load(want[0]);
+
+  /* 부비 브리핑 — 홈·뉴스 페이지와 같은 파일을 본다 */
+  if(SHOW_BRIEF){
+    fetch('/news-brief.json?cb='+Date.now()).then(function(r){ return r.ok?r.json():null; })
+      .then(function(d){
+        if(!d||!d.brief) return;
+        document.getElementById('brText').textContent=d.brief;
+        var dt=d.date||'';
+        document.getElementById('brDate').textContent=dt?dt.replace(/-/g,'. ')+' 기준':'';
+        var f=d.facts||{}, bits=[], B='https://boobi.ai.kr/cheongyak-board.html';
+        if(f.noticeTotal) bits.push('<a href="'+B+'">등록 공고 <i>'+f.noticeTotal+'</i>건</a>');
+        if(f.open)       bits.push('<a href="'+B+'">접수 중 <i>'+f.open+'</i>건</a>');
+        if(f.upcoming)   bits.push('<a href="'+B+'">접수 예정 <i>'+f.upcoming+'</i>건</a>');
+        if(f.remainder)  bits.push('<a href="'+B+'">무순위 <i>'+f.remainder+'</i>건</a>');
+        if(d.newsCount)  bits.push('<span>참고 기사 <i>'+d.newsCount+'</i>건</span>');
+        document.getElementById('brFacts').innerHTML=bits.join('');
+        document.getElementById('brief').hidden=false;
+        tellHeight();
+      }).catch(function(){});
+  }else{
+    document.getElementById('brief').remove();
+  }
+})();
+</script>
+</body>
+</html>
