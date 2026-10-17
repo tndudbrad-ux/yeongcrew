@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-16T13:46:04.192Z",
+  "updatedAt": "2026-10-17T01:47:54.318Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 48,
+  "count": 47,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,21 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "LH-2015122300020878",
-      "provider": "LH",
-      "ltype": "통합공공임대",
-      "name": "[정정공고]대구연호 A-2BL, A-3BL 통합공공임대주택 입주자 모집",
-      "region": "대구광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-13",
-      "rcritEnd": "2026-10-16",
-      "winnerDate": "2027-04-02",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020878&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=48&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "LH-2015122300020904",
       "provider": "LH",
