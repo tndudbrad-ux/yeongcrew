@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T01:47:54.318Z",
+  "updatedAt": "2026-10-17T12:42:59.426Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 47,
   "schema": {
@@ -213,6 +213,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300020887",
+      "provider": "LH",
+      "ltype": "행복주택",
+      "name": "광주우산·영광단주 행복주택 입주자격완화 예비입주자 모집",
+      "region": "전남광주통합특별시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-26",
+      "rcritEnd": "2026-10-27",
+      "winnerDate": "2027-02-26",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020887&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020919",
       "provider": "LH",
       "ltype": "행복주택",
@@ -239,21 +254,6 @@
       "rcritEnd": "2026-10-27",
       "winnerDate": "2027-02-15",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020911&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020887",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "광주우산·영광단주 행복주택 입주자격완화 예비입주자 모집",
-      "region": "전남광주통합특별시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-26",
-      "rcritEnd": "2026-10-27",
-      "winnerDate": "2027-02-26",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020887&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -333,21 +333,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020910",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "2026.10.15. 의령동동 행복주택 예비입주자 정례모집_공급대상확대 및 입주자격완화",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-27",
-      "rcritEnd": "2026-10-28",
-      "winnerDate": "2027-02-15",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020910&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020888",
       "provider": "LH",
       "ltype": "행복주택",
@@ -359,6 +344,21 @@
       "rcritEnd": "2026-10-28",
       "winnerDate": "2027-01-12",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020888&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020910",
+      "provider": "LH",
+      "ltype": "행복주택",
+      "name": "2026.10.15. 의령동동 행복주택 예비입주자 정례모집_공급대상확대 및 입주자격완화",
+      "region": "경상남도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-27",
+      "rcritEnd": "2026-10-28",
+      "winnerDate": "2027-02-15",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020910&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
