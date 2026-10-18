@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-17T12:42:59.426Z",
+  "updatedAt": "2026-10-18T01:45:33.101Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 47,
   "schema": {
@@ -363,21 +363,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020902",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "[경남지역본부]26년 4차 비분양전환형 든든전세주택 입주자 모집 공고",
-      "region": "경상남도",
-      "units": null,
-      "target": "신청자격 :  에 대한 정보 제공  공통신청자격 입주자모집 공고일 현재 무주택세대구성원으로 주민등록표등본상 거주하고 있는 모집권역(부산·울산·경남)에 한하여 신청 가능 기타사항 반드시 공고문을 통해 세부 내용을 숙지하신 후 신청하여 주시기 바랍니다. 접수처정보 접수처정보 : 소재지, 전",
-      "rcritStart": "2026-10-26",
-      "rcritEnd": "2026-10-28",
-      "winnerDate": "2026-11-27",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020902&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020901",
       "provider": "LH",
       "ltype": "매입임대",
@@ -389,6 +374,21 @@
       "rcritEnd": "2026-10-28",
       "winnerDate": "2026-11-27",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020901&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020902",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[경남지역본부]26년 4차 비분양전환형 든든전세주택 입주자 모집 공고",
+      "region": "경상남도",
+      "units": null,
+      "target": "신청자격 :  에 대한 정보 제공  공통신청자격 입주자모집 공고일 현재 무주택세대구성원으로 주민등록표등본상 거주하고 있는 모집권역(부산·울산·경남)에 한하여 신청 가능 기타사항 반드시 공고문을 통해 세부 내용을 숙지하신 후 신청하여 주시기 바랍니다. 접수처정보 접수처정보 : 소재지, 전",
+      "rcritStart": "2026-10-26",
+      "rcritEnd": "2026-10-28",
+      "winnerDate": "2026-11-27",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020902&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
