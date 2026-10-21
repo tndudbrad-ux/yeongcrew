@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-20T14:07:23.881Z",
+  "updatedAt": "2026-10-21T02:12:56.520Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 46,
+  "count": 45,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -48,21 +48,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020854",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "창녕영산 1BL 행복주택 예비입주자 모집 공고 ('26.10.07. 공고)",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-19",
-      "rcritEnd": "2026-10-21",
-      "winnerDate": "2027-01-14",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020854&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020893",
       "provider": "LH",
       "ltype": "국민임대",
@@ -74,21 +59,6 @@
       "rcritEnd": "2026-10-22",
       "winnerDate": "2026-12-17",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020893&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300020881",
-      "provider": "LH",
-      "ltype": "영구임대",
-      "name": "[정정공고]대전광역시 영구임대주택 예비입주자 모집(2026.10.06)",
-      "region": "대전광역시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-20",
-      "rcritEnd": "2026-10-22",
-      "winnerDate": "2027-02-26",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020881&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -539,6 +509,21 @@
       "rcritEnd": "2026-11-12",
       "winnerDate": "2027-04-16",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020897&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020930",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "LH임대주택 기장군 중소기업 근로자 공공임대주택 기관공급 사업 대상기업 모집계획 공고",
+      "region": "부산광역시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-21",
+      "rcritEnd": "2026-11-13",
+      "winnerDate": "2026-12-07",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020930&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
