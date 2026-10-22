@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-22T02:07:18.124Z",
+  "updatedAt": "2026-10-22T14:22:09.812Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 43,
+  "count": 42,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -31,21 +31,6 @@
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020893&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
-    },
-    {
-      "id": "SH-311087",
-      "provider": "SH",
-      "ltype": "기타",
-      "name": "강동구 청년창업가,예술인주택(수요자맞춤형) 잔여세대 모집 공고",
-      "region": "서울",
-      "units": 37,
-      "target": "자세한 자격은 공고문 확인",
-      "rcritStart": "2026-10-08",
-      "rcritEnd": "2026-10-22",
-      "winnerDate": "2026-12-30",
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=311087",
-      "note": "공고 2026-10-08",
-      "_src": "sh-web"
     },
     {
       "id": "LH-2015122300020927",
