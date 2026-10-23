@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-22T14:22:09.812Z",
+  "updatedAt": "2026-10-23T02:12:13.712Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 42,
+  "count": 47,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -17,21 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "LH-2015122300020893",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "익산한스빌 국민임대주택 예비입주자 자격완화 모집 공고",
-      "region": "전북특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-10-21",
-      "rcritEnd": "2026-10-22",
-      "winnerDate": "2026-12-17",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020893&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "LH-2015122300020927",
       "provider": "LH",
@@ -288,6 +273,21 @@
       "_src": "sh-web"
     },
     {
+      "id": "LH-0000061191",
+      "provider": "LH",
+      "ltype": "공공임대",
+      "name": "[정정공고]대곡 호정포레스트, 풍경그린, 옥포 르상트레빌, 테크노4 10년공공임대주택 예비입주자 모집",
+      "region": "대구광역시",
+      "units": null,
+      "target": "을 확인(검증)하지 않고 신청자의 입력(기재) 사항만으로 당첨자를 결정하므로, 본 공고문의 신청자격(나이, 무주택세대구성원 여부)등을 사전에 정확하게 확인하시기 바라며, 예비당첨자를 대상으로 전산조회, 제출서류 등을 통해 우리공사에서 확인한 결과 신청자격과 다른 사실이 판명된 경우 예비",
+      "rcritStart": null,
+      "rcritEnd": "2026-10-29",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=0000061191&ccrCnntSysDsCd=02&uppAisTpCd=06&aisTpCd=08&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-0000061187",
       "provider": "LH",
       "ltype": "공공임대",
@@ -393,6 +393,66 @@
       "_src": "sh-web"
     },
     {
+      "id": "LH-2015122300020945",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[정정공고][인천지역본부] 일반 매입임대주택 입주자 모집 공고(인천,부천)",
+      "region": "인천광역시 외",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-11-03",
+      "rcritEnd": "2026-11-03",
+      "winnerDate": "2026-12-02",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020945&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020931",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[인천지역본부] 일반 매입임대주택 입주자 모집 공고(인천,부천)",
+      "region": "인천광역시 외",
+      "units": null,
+      "target": "입주자모집공고일 현재 사업대상지역에 주민등록이 등재되어 있는 무주택세대구성원으로서 아래의 순위별 자격요건에 해당하는 자",
+      "rcritStart": "2026-11-03",
+      "rcritEnd": "2026-11-03",
+      "winnerDate": "2026-12-02",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020931&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020918",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[전북지역본부]2026년 2차 군산시 분양전환형 든든전세주택 입주자 모집 공고",
+      "region": "전북특별자치도",
+      "units": null,
+      "target": "신청자격 :  에 대한 정보 제공  공통신청자격 입주자모집 공고일(2026.10.22.) 현재 무주택세대구성원에 한하여 신청 가능 * 금회 공고는 거주지 모집권역 제한없이 신청 가능한 공고입니다. 기타사항 * 반드시 공고문을 통해 세부 내용을 숙지하신 후 신청하여 주시기 바랍니다. * ",
+      "rcritStart": "2026-11-02",
+      "rcritEnd": "2026-11-04",
+      "winnerDate": "2026-12-10",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020918&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-0000061190",
+      "provider": "LH",
+      "ltype": "공공임대",
+      "name": "구리갈매 S1블록 10년공공임대주택 예비입주자 모집공고",
+      "region": "경기도",
+      "units": null,
+      "target": "공고일(2026.10.22) 현재 수도권(서울특별시,경기도, 인천광역시)에 거주(주민등록표등본 기준)하는 성년자(만19세 이상)인 무주택세대구성원 - 1세대 1건만 신청가능 (단, 주택공급에 관한 규칙 제55조의2(부부 동시 당첨에 관한 특례)[2024. 3.25.신설조항]에 따라 당첨",
+      "rcritStart": null,
+      "rcritEnd": "2026-11-04",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=0000061190&ccrCnntSysDsCd=02&uppAisTpCd=06&aisTpCd=08&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020923",
       "provider": "LH",
       "ltype": "매입임대",
@@ -450,6 +510,21 @@
       "winnerDate": "2026-11-19",
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=311349",
       "note": "공고 2026-10-12",
+      "_src": "sh-web"
+    },
+    {
+      "id": "SH-311908",
+      "provider": "SH",
+      "ltype": "기타",
+      "name": "노원구 도전숙(수요자맞춤형) 잔여세대 입주자 모집 공고",
+      "region": "서울",
+      "units": 6,
+      "target": "청년 창업자 또는 청년 문화예술인(첨부된 모집공고문 3페이지 참조)",
+      "rcritStart": "2026-10-23",
+      "rcritEnd": "2026-11-09",
+      "winnerDate": "2026-12-23",
+      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=311908",
+      "note": "공고 2026-10-23",
       "_src": "sh-web"
     },
     {
