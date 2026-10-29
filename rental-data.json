@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-29T03:06:08.973Z",
+  "updatedAt": "2026-10-29T15:52:36.495Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 46,
   "schema": {
@@ -17,21 +17,6 @@
     "note": "비고(선택)"
   },
   "items": [
-    {
-      "id": "LH-0000061191",
-      "provider": "LH",
-      "ltype": "공공임대",
-      "name": "[정정공고]대곡 호정포레스트, 풍경그린, 옥포 르상트레빌, 테크노4 10년공공임대주택 예비입주자 모집",
-      "region": "대구광역시",
-      "units": null,
-      "target": "을 확인(검증)하지 않고 신청자의 입력(기재) 사항만으로 당첨자를 결정하므로, 본 공고문의 신청자격(나이, 무주택세대구성원 여부)등을 사전에 정확하게 확인하시기 바라며, 예비당첨자를 대상으로 전산조회, 제출서류 등을 통해 우리공사에서 확인한 결과 신청자격과 다른 사실이 판명된 경우 예비",
-      "rcritStart": null,
-      "rcritEnd": "2026-10-29",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=0000061191&ccrCnntSysDsCd=02&uppAisTpCd=06&aisTpCd=08&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
     {
       "id": "SH-311521",
       "provider": "SH",
@@ -213,6 +198,21 @@
       "_src": "sh-web"
     },
     {
+      "id": "LH-2015122300020972",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "[부산] 2026년 2차 일반 매입임대주택 입주자 모집 공고",
+      "region": "부산광역시",
+      "units": null,
+      "target": "입주자모집공고일 현재 사업대상지역에 주민등록이 등재되어 있는 무주택세대구성원으로서 아래의 순위별 자격요건에 해당하는 자",
+      "rcritStart": "2026-11-10",
+      "rcritEnd": "2026-11-12",
+      "winnerDate": "2026-11-25",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020972&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020960",
       "provider": "LH",
       "ltype": "행복주택",
@@ -303,21 +303,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020978",
-      "provider": "LH",
-      "ltype": "영구임대",
-      "name": "[정정공고]광주오치1 영구임대주택 예비입주자 표준모집공고문(2026.10.27. 공고)",
-      "region": "전남광주통합특별시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-11-09",
-      "rcritEnd": "2026-11-13",
-      "winnerDate": "2027-05-21",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020978&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020981",
       "provider": "LH",
       "ltype": "영구임대",
@@ -363,6 +348,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300020978",
+      "provider": "LH",
+      "ltype": "영구임대",
+      "name": "[정정공고]광주오치1 영구임대주택 예비입주자 표준모집공고문(2026.10.27. 공고)",
+      "region": "전남광주통합특별시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-11-09",
+      "rcritEnd": "2026-11-13",
+      "winnerDate": "2027-05-21",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020978&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020977",
       "provider": "LH",
       "ltype": "영구임대",
@@ -393,21 +393,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020928",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "경남 의령군 화정면 다자녀 매입임대주택 예비입주자 모집공고",
-      "region": "전국",
-      "units": null,
-      "target": "신청자격 :  에 대한 정보 제공  조회된 데이터가 없습니다. 접수처정보 접수처정보 : 소재지, 전화번호, 운영기간에 대한 정보를 제공합니다. 소재지 전화번호 운영기간 2026.10.19 ~ 2026.10.19 접수처 관련 위치 정보 표시할 위치정보가 없습니다. 안내사항 주의사항 관심공",
-      "rcritStart": "2026-11-02",
-      "rcritEnd": "2026-11-13",
-      "winnerDate": "2027-01-15",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020928&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020933",
       "provider": "LH",
       "ltype": "매입임대",
@@ -419,6 +404,21 @@
       "rcritEnd": "2026-11-13",
       "winnerDate": "2027-01-15",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020933&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020928",
+      "provider": "LH",
+      "ltype": "매입임대",
+      "name": "경남 의령군 화정면 다자녀 매입임대주택 예비입주자 모집공고",
+      "region": "전국",
+      "units": null,
+      "target": "신청자격 :  에 대한 정보 제공  조회된 데이터가 없습니다. 접수처정보 접수처정보 : 소재지, 전화번호, 운영기간에 대한 정보를 제공합니다. 소재지 전화번호 운영기간 2026.10.19 ~ 2026.10.19 접수처 관련 위치 정보 표시할 위치정보가 없습니다. 안내사항 주의사항 관심공",
+      "rcritStart": "2026-11-02",
+      "rcritEnd": "2026-11-13",
+      "winnerDate": "2027-01-15",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020928&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -524,6 +524,21 @@
       "rcritEnd": "2026-11-13",
       "winnerDate": "2027-01-28",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020959&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020905",
+      "provider": "LH",
+      "ltype": "통합공공임대",
+      "name": "담양삼만 통합공공임대(일자리연계형 지원주택) 입주자 추가 모집(2026.10.29. 공고)",
+      "region": "전남광주통합특별시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-11-13",
+      "rcritEnd": "2026-11-17",
+      "winnerDate": "2027-02-18",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020905&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=48&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -690,21 +705,6 @@
       "winnerDate": null,
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=311375",
       "note": "공고 2026-10-13",
-      "_src": "sh-web"
-    },
-    {
-      "id": "SH-310976",
-      "provider": "SH",
-      "ltype": "기타",
-      "name": "[토지임대부 사회주택] 옥류서원 입주자 모집 공고문",
-      "region": "서울",
-      "units": null,
-      "target": "모집공고일 현재 서울특별시에 거주하는 무주택자로 소득기준 / 자산기준 / 자동차가액 기준을 모두 충족하는 자",
-      "rcritStart": null,
-      "rcritEnd": null,
-      "winnerDate": null,
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=310976",
-      "note": "공고 2026-10-07",
       "_src": "sh-web"
     }
   ]
