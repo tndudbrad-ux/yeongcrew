@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-29T15:52:36.495Z",
+  "updatedAt": "2026-10-30T03:10:23.984Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 46,
+  "count": 48,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -423,6 +423,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300020967",
+      "provider": "LH",
+      "ltype": "영구임대",
+      "name": "광주두암4 영구임대주택 예비입주자모집 공고(모집공고일 : 2026.10.27)",
+      "region": "전남광주통합특별시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-11-09",
+      "rcritEnd": "2026-11-13",
+      "winnerDate": "2027-05-21",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020967&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300020971",
       "provider": "LH",
       "ltype": "영구임대",
@@ -483,21 +498,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300020967",
-      "provider": "LH",
-      "ltype": "영구임대",
-      "name": "광주두암4 영구임대주택 예비입주자모집 공고(모집공고일 : 2026.10.27)",
-      "region": "전남광주통합특별시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-11-09",
-      "rcritEnd": "2026-11-13",
-      "winnerDate": "2027-05-21",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020967&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300020966",
       "provider": "LH",
       "ltype": "영구임대",
@@ -554,6 +554,36 @@
       "rcritEnd": "2026-11-18",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=0000061193&ccrCnntSysDsCd=02&uppAisTpCd=06&aisTpCd=08&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020993",
+      "provider": "LH",
+      "ltype": "통합공공임대",
+      "name": "평창장평 통합공공임대주택(고령자복지형) 입주자 모집",
+      "region": "강원특별자치도",
+      "units": null,
+      "target": "등 자세한 사항은 반드시 공고문을 확인하시기 바랍니다. (공고내용 미숙지로 인한 모든 책임은 신청자 본인에게 있습니다) 접수처정보 소재지 : 지도보기 강원특별자치도 춘천시 공지로 337(효자동) --> 소재지 : 강원특별자치도 춘천시 공지로 337(효자동) 전화번호 : 1600-1004",
+      "rcritStart": "2026-11-16",
+      "rcritEnd": "2026-11-20",
+      "winnerDate": "2027-04-09",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020993&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=48&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300020992",
+      "provider": "LH",
+      "ltype": "통합공공임대",
+      "name": "평창장평 통합공공임대주택(일반형) 입주자 모집",
+      "region": "강원특별자치도",
+      "units": null,
+      "target": "등 자세한 사항은 반드시 공고문을 확인하시기 바랍니다. (공고내용 미숙지로 인한 모든 책임은 신청자 본인에게 있습니다) 접수처정보 소재지 : 지도보기 강원특별자치도 춘천시 공지로 337(효자동) --> 소재지 : 강원특별자치도 춘천시 공지로 337(효자동) 전화번호 : 1600-1004",
+      "rcritStart": "2026-11-16",
+      "rcritEnd": "2026-11-20",
+      "winnerDate": "2027-04-09",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020992&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=48&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
