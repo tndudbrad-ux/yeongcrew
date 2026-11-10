@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-10T04:55:36.886Z",
+  "updatedAt": "2026-11-10T16:48:10.922Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 48,
   "schema": {
@@ -46,6 +46,21 @@
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=312339",
       "note": "공고 2026-10-28",
       "_src": "sh-web"
+    },
+    {
+      "id": "LH-2015122300021045",
+      "provider": "LH",
+      "ltype": "행복주택",
+      "name": "[정정공고]익산제3일반산단 행복주택 입주자격완화 추가모집(동호지정,선계약후검증)",
+      "region": "전북특별자치도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-10-15",
+      "rcritEnd": "2026-11-12",
+      "winnerDate": "2026-11-12",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021045&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
+      "note": null,
+      "_src": "lh-api"
     },
     {
       "id": "LH-2015122300020972",
@@ -106,21 +121,6 @@
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=311965",
       "note": "공고 2026-10-26",
       "_src": "sh-web"
-    },
-    {
-      "id": "LH-2015122300020944",
-      "provider": "LH",
-      "ltype": "매입임대",
-      "name": "경남 창원시 일반 매입임대주택 예비입주자 모집 공고",
-      "region": "경상남도",
-      "units": null,
-      "target": "사업대상지역(해당 시,군,구, 이하 같음)에 거주하는 무주택세대구성원으로서 입주자모집공고일 현재 사업대상지역에 주민등록이 등재되어 있는 자 중 아래의 「공급순위 및 세부 자격요건」에 해당하는 자",
-      "rcritStart": "2026-11-09",
-      "rcritEnd": "2026-11-13",
-      "winnerDate": null,
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300020944&ccrCnntSysDsCd=03&uppAisTpCd=13&aisTpCd=26&mi=1026",
-      "note": null,
-      "_src": "lh-api"
     },
     {
       "id": "SH-312612",
@@ -359,6 +359,21 @@
       "rcritEnd": "2026-11-18",
       "winnerDate": null,
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=0000061193&ccrCnntSysDsCd=02&uppAisTpCd=06&aisTpCd=08&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300021030",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "[정정공고][정정공고]'26.11월 경주시, 영천시 국민임대주택 동호지정 입주자격 완화 입주자 모집(선계약 후검증)",
+      "region": "경상북도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-11-17",
+      "rcritEnd": "2026-11-19",
+      "winnerDate": "2026-11-23",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021030&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -720,21 +735,6 @@
       "winnerDate": null,
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=312313",
       "note": "공고 2026-10-27",
-      "_src": "sh-web"
-    },
-    {
-      "id": "SH-311987",
-      "provider": "SH",
-      "ltype": "기타",
-      "name": "[토지지원 사회주택]유니버설디자인하우스_장안 입주자 모집 공고",
-      "region": "서울",
-      "units": null,
-      "target": "자세한 자격은 공고문 확인",
-      "rcritStart": null,
-      "rcritEnd": null,
-      "winnerDate": null,
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=311987",
-      "note": "공고 2026-10-26",
       "_src": "sh-web"
     }
   ]
