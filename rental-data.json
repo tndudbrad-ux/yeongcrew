@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-12T17:22:37.703Z",
+  "updatedAt": "2026-11-13T03:47:52.714Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 47,
+  "count": 46,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -705,21 +705,6 @@
       "winnerDate": null,
       "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=312053",
       "note": "공고 2026-11-02",
-      "_src": "sh-web"
-    },
-    {
-      "id": "SH-312325",
-      "provider": "SH",
-      "ltype": "기타",
-      "name": "[토지임대부 사회주택] 옥류서원 입주자 모집 공고문",
-      "region": "서울",
-      "units": null,
-      "target": "모집공고일 현재 서울특별시에 거주하는 무주택자로 소득기준 / 자산기준 / 자동차가액 기준을 모두 충족하는 자",
-      "rcritStart": null,
-      "rcritEnd": null,
-      "winnerDate": null,
-      "url": "https://www.i-sh.co.kr/app/lay2/program/S48T1581C563/www/brd/m_247/view.do?seq=312325",
-      "note": "공고 2026-10-28",
       "_src": "sh-web"
     }
   ]
