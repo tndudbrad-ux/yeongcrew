@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-14T03:46:15.728Z",
+  "updatedAt": "2026-11-14T15:34:46.513Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 43,
   "schema": {
@@ -393,21 +393,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300021051",
-      "provider": "LH",
-      "ltype": "영구임대",
-      "name": "원주명륜2 영구임대주택 예비입주자 모집",
-      "region": "강원특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-11-25",
-      "rcritEnd": "2026-11-27",
-      "winnerDate": "2027-03-10",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021051&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300021029",
       "provider": "LH",
       "ltype": "영구임대",
@@ -419,6 +404,21 @@
       "rcritEnd": "2026-11-27",
       "winnerDate": "9999-12-31",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021029&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300021051",
+      "provider": "LH",
+      "ltype": "영구임대",
+      "name": "원주명륜2 영구임대주택 예비입주자 모집",
+      "region": "강원특별자치도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-11-25",
+      "rcritEnd": "2026-11-27",
+      "winnerDate": "2027-03-10",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021051&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=09&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
