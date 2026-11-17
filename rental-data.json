@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-16T19:17:16.708Z",
+  "updatedAt": "2026-11-17T05:26:09.919Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 70,
+  "count": 72,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -183,6 +183,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300021095",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "창원시 지역 진해청안해오름, 진해청안그린빌 국민임대주택 예비입주자 모집 공고(26.11.16.)",
+      "region": "경상남도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-11-26",
+      "rcritEnd": "2026-11-26",
+      "winnerDate": "2027-03-19",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021095&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300021088",
       "provider": "LH",
       "ltype": "국민임대",
@@ -224,21 +239,6 @@
       "rcritEnd": "2026-11-26",
       "winnerDate": "2027-04-09",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021064&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300021095",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "창원시 지역 진해청안해오름, 진해청안그린빌 국민임대주택 예비입주자 모집 공고(26.11.16.)",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-11-26",
-      "rcritEnd": "2026-11-26",
-      "winnerDate": "2027-03-19",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021095&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -423,6 +423,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300021100",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "[정정공고]부산광역시 국민임대주택 예비입주자 정례모집 공고(2026.11.16.)",
+      "region": "부산광역시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-11-30",
+      "rcritEnd": "2026-11-30",
+      "winnerDate": "2027-03-31",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021100&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300021093",
       "provider": "LH",
       "ltype": "국민임대",
@@ -603,21 +618,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300021069",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "양산시 국민임대주택 예비입주자 완화 모집('26.11.16)_소득, 자산, 무주택 요건 완화 / 계약금 인하",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-12-01",
-      "rcritEnd": "2026-12-02",
-      "winnerDate": "2027-02-26",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021069&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300021094",
       "provider": "LH",
       "ltype": "국민임대",
@@ -629,6 +629,21 @@
       "rcritEnd": "2026-12-02",
       "winnerDate": "2027-02-26",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021094&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300021069",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "양산시 국민임대주택 예비입주자 완화 모집('26.11.16)_소득, 자산, 무주택 요건 완화 / 계약금 인하",
+      "region": "경상남도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-12-01",
+      "rcritEnd": "2026-12-02",
+      "winnerDate": "2027-02-26",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021069&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -779,6 +794,21 @@
       "rcritEnd": "2026-12-02",
       "winnerDate": "2026-12-09",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021018&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-0000061209",
+      "provider": "LH",
+      "ltype": "가정어린이집",
+      "name": "NHF제13호 화성봉담2 그랑드비체5단지 가정어린이집 운영예정자 모집 공고",
+      "region": "경기도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": null,
+      "rcritEnd": "2026-12-03",
+      "winnerDate": null,
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=0000061209&ccrCnntSysDsCd=02&uppAisTpCd=06&aisTpCd=40&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
