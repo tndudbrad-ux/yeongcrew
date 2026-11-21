@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-21T04:29:55.688Z",
+  "updatedAt": "2026-11-21T16:38:24.468Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 75,
   "schema": {
@@ -363,21 +363,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300021003",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "정읍상동2.3 국민임대주택 예비입주자 모집 공고",
-      "region": "전북특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-11-30",
-      "rcritEnd": "2026-12-01",
-      "winnerDate": "2027-03-04",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021003&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300021057",
       "provider": "LH",
       "ltype": "국민임대",
@@ -393,6 +378,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300021003",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "정읍상동2.3 국민임대주택 예비입주자 모집 공고",
+      "region": "전북특별자치도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-11-30",
+      "rcritEnd": "2026-12-01",
+      "winnerDate": "2027-03-04",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021003&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300021047",
       "provider": "LH",
       "ltype": "국민임대",
@@ -404,21 +404,6 @@
       "rcritEnd": "2026-12-01",
       "winnerDate": "2027-03-15",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021047&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300021020",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "원주무실5 국민임대주택 예비입주자 모집",
-      "region": "강원특별자치도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-12-01",
-      "rcritEnd": "2026-12-01",
-      "winnerDate": "2027-04-02",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021020&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -449,6 +434,21 @@
       "rcritEnd": "2026-12-01",
       "winnerDate": "2027-03-26",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021076&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300021035",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "청주시지역(청주율량9) 국민임대주택 예비입주자 모집공고[2026.11.16.]",
+      "region": "충청북도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-12-01",
+      "rcritEnd": "2026-12-01",
+      "winnerDate": "2027-03-26",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021035&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
