@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-24T07:16:58.539Z",
+  "updatedAt": "2026-11-24T19:57:48.722Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
   "count": 74,
   "schema": {
@@ -378,21 +378,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300021121",
-      "provider": "LH",
-      "ltype": "행복주택",
-      "name": "인천논현 LH16단지 (인천논현4 1블록) 창업지원주택 입주자 모집[인정업종 확대, 선착순동호지정, 선계약후검증](입주자모집공고일 : 2026.11.19.)",
-      "region": "인천광역시",
-      "units": null,
-      "target": "자가검증체크리스트.hwpx 바로보기 점자뷰어 [양식2-3]개인정보수집이용및제3자제공동의서(LH양식).hwpx 바로보기 점자뷰어 [양식2-4]금융정보등(금융,신용,보험정보)제공동의서.hwpx 바로보기 점자뷰어 [양식2-5]자산보유사실확인서.hwpx 바로보기 점자뷰어 [양식3]위임장양식(대",
-      "rcritStart": "2026-12-02",
-      "rcritEnd": "2026-12-02",
-      "winnerDate": "2027-03-31",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021121&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300021119",
       "provider": "LH",
       "ltype": "행복주택",
@@ -404,6 +389,21 @@
       "rcritEnd": "2026-12-02",
       "winnerDate": "2026-12-04",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021119&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300021121",
+      "provider": "LH",
+      "ltype": "행복주택",
+      "name": "인천논현 LH16단지 (인천논현4 1블록) 창업지원주택 입주자 모집[인정업종 확대, 선착순동호지정, 선계약후검증](입주자모집공고일 : 2026.11.19.)",
+      "region": "인천광역시",
+      "units": null,
+      "target": "자가검증체크리스트.hwpx 바로보기 점자뷰어 [양식2-3]개인정보수집이용및제3자제공동의서(LH양식).hwpx 바로보기 점자뷰어 [양식2-4]금융정보등(금융,신용,보험정보)제공동의서.hwpx 바로보기 점자뷰어 [양식2-5]자산보유사실확인서.hwpx 바로보기 점자뷰어 [양식3]위임장양식(대",
+      "rcritStart": "2026-12-02",
+      "rcritEnd": "2026-12-02",
+      "winnerDate": "2027-03-31",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021121&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=10&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -498,6 +498,21 @@
       "_src": "lh-api"
     },
     {
+      "id": "LH-2015122300021056",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "전남광주통합특별시(남구,광산구) 국민임대주택 예비입주자 모집(2026.11.16.공고)",
+      "region": "전남광주통합특별시",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-12-01",
+      "rcritEnd": "2026-12-02",
+      "winnerDate": "2027-03-31",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021056&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
       "id": "LH-2015122300021048",
       "provider": "LH",
       "ltype": "국민임대",
@@ -554,21 +569,6 @@
       "rcritEnd": "2026-12-02",
       "winnerDate": "2027-03-31",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021040&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300021056",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "전남광주통합특별시(남구,광산구) 국민임대주택 예비입주자 모집(2026.11.16.공고)",
-      "region": "전남광주통합특별시",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-12-01",
-      "rcritEnd": "2026-12-02",
-      "winnerDate": "2027-03-31",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021056&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
