@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-26T18:51:09.196Z",
+  "updatedAt": "2026-11-27T05:34:46.386Z",
   "source": "collect-rental.mjs (HUG 든든전세·LH 공식 API + SH 공고 게시판 + 수동 큐레이션)",
-  "count": 65,
+  "count": 64,
   "schema": {
     "id": "고유 id (provider+식별자)",
     "provider": "HUG | LH | SH | GH | BMC | ETC",
@@ -44,21 +44,6 @@
       "rcritEnd": "2026-11-27",
       "winnerDate": "2027-03-25",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021067&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
-      "id": "LH-2015122300021019",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "천안백석3 국민임대주택 예비입주자 모집공고(2026.11.16)",
-      "region": "충청남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-11-26",
-      "rcritEnd": "2026-11-27",
-      "winnerDate": "2027-03-17",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021019&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
@@ -288,21 +273,6 @@
       "_src": "lh-api"
     },
     {
-      "id": "LH-2015122300021094",
-      "provider": "LH",
-      "ltype": "국민임대",
-      "name": "[정정공고]양산시 국민임대주택 예비입주자 완화 모집('26.11.16)_소득, 자산, 무주택 요건 완화 / 계약금 인하",
-      "region": "경상남도",
-      "units": null,
-      "target": "무주택 등 · 자격은 공고문 확인",
-      "rcritStart": "2026-12-01",
-      "rcritEnd": "2026-12-02",
-      "winnerDate": "2027-02-26",
-      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021094&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
-      "note": null,
-      "_src": "lh-api"
-    },
-    {
       "id": "LH-2015122300021069",
       "provider": "LH",
       "ltype": "국민임대",
@@ -314,6 +284,21 @@
       "rcritEnd": "2026-12-02",
       "winnerDate": "2027-02-26",
       "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021069&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
+      "note": null,
+      "_src": "lh-api"
+    },
+    {
+      "id": "LH-2015122300021094",
+      "provider": "LH",
+      "ltype": "국민임대",
+      "name": "[정정공고]양산시 국민임대주택 예비입주자 완화 모집('26.11.16)_소득, 자산, 무주택 요건 완화 / 계약금 인하",
+      "region": "경상남도",
+      "units": null,
+      "target": "무주택 등 · 자격은 공고문 확인",
+      "rcritStart": "2026-12-01",
+      "rcritEnd": "2026-12-02",
+      "winnerDate": "2027-02-26",
+      "url": "https://apply.lh.or.kr/lhapply/apply/wt/wrtanc/selectWrtancInfo.do?panId=2015122300021094&ccrCnntSysDsCd=03&uppAisTpCd=06&aisTpCd=07&mi=1026",
       "note": null,
       "_src": "lh-api"
     },
